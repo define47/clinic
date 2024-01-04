@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts"
+  },
+  "dependencies": {
+    "@types/node": "^20.10.6",
+    "@types/pg": "^8.10.9",
+    "drizzle-kit": "^0.20.9",
+    "drizzle-orm": "^0.29.3",
+    "fastify": "^4.25.2",
+    "pg": "^8.11.3",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
