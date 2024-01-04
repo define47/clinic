@@ -24,3 +24,8 @@ git push -u origin main
 client:
 yarn create vite . --template react-swc-ts
 yarn install
+
+
+yarn build
+cd client/dist
+serve -s
