@@ -1,4 +1,4 @@
-import { fastifyServer } from "../server";
+import { fastifyServer } from "../server.js";
 
 export const schema = {
   type: "object",
@@ -11,6 +11,7 @@ export const schema = {
     "DATABASE_USERNAME",
     "DATABASE_PASSWORD",
     "DATABASE_NAME",
+    "DATABASE_SCHEMA",
     "REACT_CLIENT_PORT",
     "REACT_CLIENT_IP_ADDRESS",
     "ADMIN_ROLE_ID",
@@ -43,6 +44,9 @@ export const schema = {
     DATABASE_NAME: {
       type: "string",
     },
+    DATABASE_SCHEMA: {
+      type: "string",
+    },
     REACT_CLIENT_PORT: {
       type: "string",
     },
@@ -71,46 +75,58 @@ export const options = {
   data: process.env,
 };
 
-export const getReactClientIPAddressEnv = () => {
+export const getServerIPAddressEnv = (): string => {
+  return fastifyServer.config.SERVER_IP_ADDRESS;
+};
+
+export const getServerPortEnv = (): number => {
+  return fastifyServer.config.SERVER_PORT;
+};
+
+export const getReactClientIPAddressEnv = (): string => {
   return fastifyServer.config.REACT_CLIENT_IP_ADDRESS;
 };
 
-export const getReactClientPortEnv = () => {
+export const getReactClientPortEnv = (): number => {
   return fastifyServer.config.REACT_CLIENT_PORT;
 };
 
-export const getDatabaseNameEnv = () => {
+export const getDatabaseSchemaEnv = async (): Promise<string> => {
+  return fastifyServer.config.DATABASE_SCHEMA;
+};
+
+export const getDatabaseNameEnv = async (): Promise<string> => {
   return fastifyServer.config.DATABASE_NAME;
 };
 
-export const getDatabasePasswordEnv = () => {
+export const getDatabasePasswordEnv = async (): Promise<string> => {
   return fastifyServer.config.DATABASE_PASSWORD;
 };
 
-export const getDatabaseUsernameEnv = () => {
+export const getDatabaseUsernameEnv = async (): Promise<string> => {
   return fastifyServer.config.DATABASE_USERNAME;
 };
 
-export const getDatabasePort = () => {
+export const getDatabasePort = (): number => {
   return fastifyServer.config.DATABASE_PORT;
 };
 
-export const getDatabaseHostEnv = () => {
+export const getDatabaseHostEnv = (): string => {
   return fastifyServer.config.DATABASE_HOST;
 };
 
-export const getAdminRoleIdEnv = () => {
+export const getAdminRoleIdEnv = (): string => {
   return fastifyServer.config.ADMIN_ROLE_ID;
 };
 
-export const getDoctorRoleIdEnv = () => {
+export const getDoctorRoleIdEnv = (): string => {
   return fastifyServer.config.DOCTOR_ROLE_ID;
 };
 
-export const getReceptionistRoleIdEnv = () => {
+export const getReceptionistRoleIdEnv = (): string => {
   return fastifyServer.config.RECEPTIONIST_ROLE_ID;
 };
 
-export const getPatientRoleIdEnv = () => {
+export const getPatientRoleIdEnv = (): string => {
   return fastifyServer.config.PATIENT_ROLE_ID;
 };

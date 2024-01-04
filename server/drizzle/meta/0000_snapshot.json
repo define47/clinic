@@ -1,0 +1,360 @@
+{
+  "id": "fcaabbf7-c2aa-41be-b116-c136a97e83f8",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "DoctorSpecialitiesMapping": {
+      "name": "DoctorSpecialitiesMapping",
+      "schema": "clinicschema",
+      "columns": {
+        "doctorSpecialityMappingId": {
+          "name": "doctorSpecialityMappingId",
+          "type": "varchar(256)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "doctorId": {
+          "name": "doctorId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "specialityId": {
+          "name": "specialityId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isPrimarySpeciality": {
+          "name": "isPrimarySpeciality",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isSecondarySpeciality": {
+          "name": "isSecondarySpeciality",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isTertiarySpeciality": {
+          "name": "isTertiarySpeciality",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "DoctorSpecialitiesMapping_doctorId_User_userId_fk": {
+          "name": "DoctorSpecialitiesMapping_doctorId_User_userId_fk",
+          "tableFrom": "DoctorSpecialitiesMapping",
+          "tableTo": "User",
+          "columnsFrom": [
+            "doctorId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "DoctorSpecialitiesMapping_specialityId_Speciality_specialityId_fk": {
+          "name": "DoctorSpecialitiesMapping_specialityId_Speciality_specialityId_fk",
+          "tableFrom": "DoctorSpecialitiesMapping",
+          "tableTo": "Speciality",
+          "columnsFrom": [
+            "specialityId"
+          ],
+          "columnsTo": [
+            "specialityId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "Role": {
+      "name": "Role",
+      "schema": "clinicschema",
+      "columns": {
+        "roleId": {
+          "name": "roleId",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "roleName": {
+          "name": "roleName",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Role_roleName_unique": {
+          "name": "Role_roleName_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "roleName"
+          ]
+        }
+      }
+    },
+    "Speciality": {
+      "name": "Speciality",
+      "schema": "clinicschema",
+      "columns": {
+        "specialityId": {
+          "name": "specialityId",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "specialityName": {
+          "name": "specialityName",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Speciality_specialityName_unique": {
+          "name": "Speciality_specialityName_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "specialityName"
+          ]
+        }
+      }
+    },
+    "User": {
+      "name": "User",
+      "schema": "clinicschema",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userForename": {
+          "name": "userForename",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userSurname": {
+          "name": "userSurname",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userEmail": {
+          "name": "userEmail",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userPhoneNumber": {
+          "name": "userPhoneNumber",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userGender": {
+          "name": "userGender",
+          "type": "userGender",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userDateOfBirth": {
+          "name": "userDateOfBirth",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userAddress": {
+          "name": "userAddress",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userEncryptedPassword": {
+          "name": "userEncryptedPassword",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "User_userEmail_unique": {
+          "name": "User_userEmail_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "userEmail"
+          ]
+        },
+        "User_userPhoneNumber_unique": {
+          "name": "User_userPhoneNumber_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "userPhoneNumber"
+          ]
+        }
+      }
+    },
+    "UserRolesMapping": {
+      "name": "UserRolesMapping",
+      "schema": "clinicschema",
+      "columns": {
+        "userRoleMappingId": {
+          "name": "userRoleMappingId",
+          "type": "varchar(256)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "roleId": {
+          "name": "roleId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UserRolesMapping_userId_User_userId_fk": {
+          "name": "UserRolesMapping_userId_User_userId_fk",
+          "tableFrom": "UserRolesMapping",
+          "tableTo": "User",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "UserRolesMapping_roleId_Role_roleId_fk": {
+          "name": "UserRolesMapping_roleId_Role_roleId_fk",
+          "tableFrom": "UserRolesMapping",
+          "tableTo": "Role",
+          "columnsFrom": [
+            "roleId"
+          ],
+          "columnsTo": [
+            "roleId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "userGender": {
+      "name": "userGender",
+      "values": {
+        "male": "male",
+        "female": "female"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

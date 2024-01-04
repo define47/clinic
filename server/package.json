@@ -6,7 +6,9 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/server.js",
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "migration:generate": "drizzle-kit generate:pg",
+    "migration:push": "node -r esbuild-register src/models/migrate.ts"
   },
   "dependencies": {
     "@fastify/env": "^4.3.0",
