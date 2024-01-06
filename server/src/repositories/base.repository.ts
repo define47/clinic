@@ -67,16 +67,39 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     )[0] as T;
   }
 
-  private getAttributesForUUIDv5 = () => {
-    let id;
+  private getAttributesForUUIDv5(): keyof (
+    | UserCreationAttributes
+    | RoleCreationAttributes
+    | SpecialityCreationAttributes
+  ) {
     if (this._table === userTable) {
-      return "userEmail";
+      return "userEmail" as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | SpecialityCreationAttributes
+      );
     } else if (this._table === roleTable) {
-      return "roleName";
+      return "roleName" as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | SpecialityCreationAttributes
+      );
     } else if (this._table === specialityTable) {
-      return "specialityName";
+      return "specialityName" as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | SpecialityCreationAttributes
+      );
+    } else {
+      return "" as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | SpecialityCreationAttributes
+      );
     }
-  };
+
+    // return "userEmail" as keyof (UserCreationAttributes | RoleCreationAttributes | SpecialityCreationAttributes);
+  }
 
   public async create(
     creationAttributes:
@@ -85,19 +108,23 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | SpecialityCreationAttributes
   ): Promise<void> {
     let id;
-    if (this._table === userTable) {
-      creationAttributes = creationAttributes as UserCreationAttributes;
-      id = uuidv5(creationAttributes.userEmail, getUUIDv5NamespaceEnv());
-    } else if (this._table === roleTable) {
-      creationAttributes = creationAttributes as RoleCreationAttributes;
-      id = uuidv5(creationAttributes.roleName, getUUIDv5NamespaceEnv());
-    } else if (this._table === specialityTable) {
-      creationAttributes = creationAttributes as SpecialityCreationAttributes;
-      id = uuidv5(creationAttributes.specialityName, getUUIDv5NamespaceEnv());
-    }
+    let UUIDv5Attribute = this.getAttributesForUUIDv5();
+    // if (this._table === userTable) {
+    //   creationAttributes = creationAttributes as UserCreationAttributes;
+    //   id = uuidv5(creationAttributes.userEmail, getUUIDv5NamespaceEnv());
+    // } else if (this._table === roleTable) {
+    //   creationAttributes = creationAttributes as RoleCreationAttributes;
+    //   id = uuidv5(creationAttributes.roleName, getUUIDv5NamespaceEnv());
+    // } else if (this._table === specialityTable) {
+    //   creationAttributes = creationAttributes as SpecialityCreationAttributes;
+    //   id = uuidv5(creationAttributes.specialityName, getUUIDv5NamespaceEnv());
+    // }
 
-    await this._drizzle
-      .insert(this._table)
-      .values({ [this._tableColumns[0]]: id, ...creationAttributes });
+    id = uuidv5(creationAttributes[UUIDv5Attribute], getUUIDv5NamespaceEnv());
+    console.log(id);
+
+    // await this._drizzle
+    //   .insert(this._table)
+    //   .values({ [this._tableColumns[0]]: id, ...creationAttributes });
   }
 }

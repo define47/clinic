@@ -50,26 +50,26 @@ const start = async () => {
 
     // console.log(fastifyServer.config);
 
-    // const baseRepositoryUsers = new BaseRepository(drizzleInstance, userTable);
-    // await baseRepositoryUsers.create({
-    //   userForename: "test1fn",
-    //   userSurname: "test1ln",
-    //   userEmail: "test1em",
-    //   userPhoneNumber: "test1ph",
-    //   userGender: "male",
-    //   userDateOfBirth: "1234-01-01",
-    //   userAddress: "test1addr",
-    //   userEncryptedPassword: "test1pass",
-    // });
+    const baseRepositoryUsers = new BaseRepository(drizzleInstance, userTable);
+    await baseRepositoryUsers.create({
+      userForename: "test1fn",
+      userSurname: "test1ln",
+      userEmail: "test1em",
+      userPhoneNumber: "test1ph",
+      userGender: "male",
+      userDateOfBirth: "1234-01-01",
+      userAddress: "test1addr",
+      userEncryptedPassword: "test1pass",
+    });
 
     const baseRepositoryRoles = new BaseRepository(drizzleInstance, roleTable);
-    // await baseRepositoryRoles.create({ roleName: "patient" });
+    await baseRepositoryRoles.create({ roleName: "patient" });
 
     const baseRepositorySpecialities = new BaseRepository(
       drizzleInstance,
       specialityTable
     );
-    // baseRepositorySpecialities.create({ specialityName: "Neurology" });
+    baseRepositorySpecialities.create({ specialityName: "Neurology" });
 
     await migrateToDb();
 
