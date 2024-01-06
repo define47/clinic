@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fastify/env": "^4.3.0",
+    "@fastify/redis": "^6.1.1",
     "@types/node": "^20.10.6",
     "@types/pg": "^8.10.9",
     "@types/uuid": "^9.0.7",

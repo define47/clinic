@@ -1,5 +1,7 @@
 import fastifyEnv from "@fastify/env";
 import Fastify from "fastify";
+import fastifyRedis from "@fastify/redis";
+
 import {
   getAdminRoleIdEnv,
   getDatabaseSchemaEnv,
@@ -48,6 +50,12 @@ fastifyServer.get("/", async (request, reply) => {
 const start = async () => {
   try {
     fastifyServer.register(fastifyEnv, options);
+    fastifyServer.register(fastifyRedis, {
+      host: "127.0.0.1",
+      // password: "your strong password here",
+      port: 6379, // Redis port
+      family: 4, // 4 (IPv4) or 6 (IPv6)
+    });
     await fastifyServer;
 
     // console.log(fastifyServer.config);
@@ -82,6 +90,11 @@ const start = async () => {
         "0f6c88ca-a4b3-55d3-814b-4cd4daf3cac8"
       )
     );
+
+    const { redis } = fastifyServer;
+    await redis.set("key", "value");
+
+    console.log(await redis.get("key"));
 
     // await baseRepositoryUserRolesMapping.create({ userId: "", roleId: "" });
 
