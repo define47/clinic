@@ -48,6 +48,12 @@ fastifyServer.get("/non-blocking", async (request, reply) => {
   const { redis } = fastifyServer;
   const userRepo = new BaseRepository(drizzleInstance, userTable);
   // await redis.set("mykey2024get", JSON.stringify(request));
+
+  const workerID = cluster.worker
+    ? cluster.worker.id
+    : "Not in cluster environment";
+
+  console.log(`Request handled by worker #${workerID}`);
   return {
     hello: "world fastify",
     redis: await redis.get("mykey2024get"),
@@ -59,9 +65,15 @@ fastifyServer.get("/blocking", async (request, reply) => {
   const { redis } = fastifyServer;
   // await redis.set("mykey2024get", JSON.stringify(request));
   let counter = 0;
-  for (let i = 0; i < 6_000_000_000; i++) {
+  for (let i = 0; i < 2_000_000_000; i++) {
     counter = counter + 1;
   }
+
+  const workerID = cluster.worker
+    ? cluster.worker.id
+    : "Not in cluster environment";
+
+  console.log(`Request handled by worker #${workerID}`);
 
   return { counter };
 });
@@ -105,6 +117,7 @@ const start = async () => {
     });
   } else {
     try {
+      console.log("I am worker #" + cluster.worker?.id);
       fastifyServer.register(fastifyEnv, options);
       fastifyServer.register(fastifyRedis, {
         host: "127.0.0.1",
