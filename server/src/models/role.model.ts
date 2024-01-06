@@ -18,6 +18,8 @@ export type RoleCreationAttributes = {
   roleName: string;
 };
 
+export type RoleUpdateAttributes = RoleCreationAttributes;
+
 export const roleTable = clinicSchema.table("Role", {
   roleId: varchar("roleId").primaryKey(),
   roleName: varchar("roleName", { length: 50 }).notNull().unique(),

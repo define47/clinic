@@ -1,4 +1,4 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { NodePgDatabase, drizzle } from "drizzle-orm/node-postgres";
 import { IBaseRepository } from "./base.irepository";
 import { PgInsertValue, PgTableWithColumns } from "drizzle-orm/pg-core";
 import { User, UserCreationAttributes, userTable } from "../models/user.model";
@@ -58,15 +58,6 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     // console.log("here", Object.keys(dummyVariable));
   }
 
-  public async getById(id: string): Promise<T> {
-    return (
-      await this._drizzle
-        .select()
-        .from(this._table)
-        .where(eq(this._table[this._tableColumns[0]], id))
-    )[0] as T;
-  }
-
   private getAttributesForUUIDv5(): keyof (
     | UserCreationAttributes
     | RoleCreationAttributes
@@ -97,8 +88,15 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | SpecialityCreationAttributes
       );
     }
+  }
 
-    // return "userEmail" as keyof (UserCreationAttributes | RoleCreationAttributes | SpecialityCreationAttributes);
+  public async getById(id: string): Promise<T> {
+    return (
+      await this._drizzle
+        .select()
+        .from(this._table)
+        .where(eq(this._table[this._tableColumns[0]], id))
+    )[0] as T;
   }
 
   public async create(
@@ -106,9 +104,9 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | UserCreationAttributes
       | RoleCreationAttributes
       | SpecialityCreationAttributes
-  ): Promise<void> {
+  ): Promise<T> {
     let id;
-    let UUIDv5Attribute = this.getAttributesForUUIDv5();
+    const UUIDv5Attribute = this.getAttributesForUUIDv5();
     // if (this._table === userTable) {
     //   creationAttributes = creationAttributes as UserCreationAttributes;
     //   id = uuidv5(creationAttributes.userEmail, getUUIDv5NamespaceEnv());
@@ -121,10 +119,56 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     // }
 
     id = uuidv5(creationAttributes[UUIDv5Attribute], getUUIDv5NamespaceEnv());
-    console.log(id);
 
-    // await this._drizzle
-    //   .insert(this._table)
-    //   .values({ [this._tableColumns[0]]: id, ...creationAttributes });
+    const entityAttributes: Record<string, any> = {};
+
+    entityAttributes[this._tableColumns[0]] =
+      this._table[this._tableColumns[0] as keyof T];
+
+    for (const key in creationAttributes) {
+      entityAttributes[key] = this._table[key as keyof T];
+    }
+
+    // console.log(returningObject);
+
+    return (
+      await this._drizzle
+        .insert(this._table)
+        .values({ [this._tableColumns[0]]: id, ...creationAttributes })
+        .returning(entityAttributes)
+    )[0] as T;
+  }
+
+  public async update(
+    id: string,
+    updateAttributes:
+      | UserCreationAttributes
+      | RoleCreationAttributes
+      | SpecialityCreationAttributes
+  ): Promise<T> {
+    const entityAttributes: Record<string, any> = {};
+
+    entityAttributes[this._tableColumns[0]] =
+      this._table[this._tableColumns[0] as keyof T];
+
+    for (const key in updateAttributes) {
+      entityAttributes[key] = this._table[key as keyof T];
+    }
+
+    return (
+      await this._drizzle
+        .update(this._table)
+        .set(updateAttributes)
+        .where(eq(this._table[this._tableColumns[0]], id))
+        .returning(entityAttributes)
+    )[0] as T;
+  }
+
+  public async delete(id: string): Promise<string> {
+    await this._drizzle
+      .delete(this._table)
+      .where(eq(this._table[this._tableColumns[0]], id));
+
+    return id;
   }
 }
