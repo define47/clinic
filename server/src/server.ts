@@ -69,15 +69,15 @@ const start = async () => {
     });
     console.log(user);
 
-    // const patientRole = await baseRepositoryRoles.create({
-    //   roleName: "patient",
-    // });
-    // console.log(patientRole);
+    const patientRole = await baseRepositoryRoles.create({
+      roleName: "patient",
+    });
+    console.log(patientRole);
 
-    // const neurologySpeciality = await baseRepositorySpecialities.create({
-    //   specialityName: "Neurology",
-    // });
-    // console.log(neurologySpeciality);
+    const neurologySpeciality = await baseRepositorySpecialities.create({
+      specialityName: "Neurology",
+    });
+    console.log(neurologySpeciality);
 
     // console.log(
     //   await baseRepositoryUsers.getById("48631bef-8a77-51ca-b719-dfe17b719081")

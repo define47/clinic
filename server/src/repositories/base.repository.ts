@@ -104,39 +104,43 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | UserCreationAttributes
       | RoleCreationAttributes
       | SpecialityCreationAttributes
-  ): Promise<T> {
-    let id;
-    const UUIDv5Attribute = this.getAttributesForUUIDv5();
-    // if (this._table === userTable) {
-    //   creationAttributes = creationAttributes as UserCreationAttributes;
-    //   id = uuidv5(creationAttributes.userEmail, getUUIDv5NamespaceEnv());
-    // } else if (this._table === roleTable) {
-    //   creationAttributes = creationAttributes as RoleCreationAttributes;
-    //   id = uuidv5(creationAttributes.roleName, getUUIDv5NamespaceEnv());
-    // } else if (this._table === specialityTable) {
-    //   creationAttributes = creationAttributes as SpecialityCreationAttributes;
-    //   id = uuidv5(creationAttributes.specialityName, getUUIDv5NamespaceEnv());
-    // }
+  ): Promise<T | undefined> {
+    try {
+      let id;
+      const UUIDv5Attribute = this.getAttributesForUUIDv5();
+      // if (this._table === userTable) {
+      //   creationAttributes = creationAttributes as UserCreationAttributes;
+      //   id = uuidv5(creationAttributes.userEmail, getUUIDv5NamespaceEnv());
+      // } else if (this._table === roleTable) {
+      //   creationAttributes = creationAttributes as RoleCreationAttributes;
+      //   id = uuidv5(creationAttributes.roleName, getUUIDv5NamespaceEnv());
+      // } else if (this._table === specialityTable) {
+      //   creationAttributes = creationAttributes as SpecialityCreationAttributes;
+      //   id = uuidv5(creationAttributes.specialityName, getUUIDv5NamespaceEnv());
+      // }
 
-    id = uuidv5(creationAttributes[UUIDv5Attribute], getUUIDv5NamespaceEnv());
+      id = uuidv5(creationAttributes[UUIDv5Attribute], getUUIDv5NamespaceEnv());
 
-    const entityAttributes: Record<string, any> = {};
+      const entityAttributes: Record<string, any> = {};
 
-    entityAttributes[this._tableColumns[0]] =
-      this._table[this._tableColumns[0] as keyof T];
+      entityAttributes[this._tableColumns[0]] =
+        this._table[this._tableColumns[0] as keyof T];
 
-    for (const key in creationAttributes) {
-      entityAttributes[key] = this._table[key as keyof T];
+      for (const key in creationAttributes) {
+        entityAttributes[key] = this._table[key as keyof T];
+      }
+
+      // console.log(returningObject);
+
+      return (
+        await this._drizzle
+          .insert(this._table)
+          .values({ [this._tableColumns[0]]: id, ...creationAttributes })
+          .returning(entityAttributes)
+      )[0] as T;
+    } catch (error) {
+      console.log(error);
     }
-
-    // console.log(returningObject);
-
-    return (
-      await this._drizzle
-        .insert(this._table)
-        .values({ [this._tableColumns[0]]: id, ...creationAttributes })
-        .returning(entityAttributes)
-    )[0] as T;
   }
 
   public async update(
@@ -145,30 +149,38 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | UserCreationAttributes
       | RoleCreationAttributes
       | SpecialityCreationAttributes
-  ): Promise<T> {
-    const entityAttributes: Record<string, any> = {};
+  ): Promise<T | undefined> {
+    try {
+      const entityAttributes: Record<string, any> = {};
 
-    entityAttributes[this._tableColumns[0]] =
-      this._table[this._tableColumns[0] as keyof T];
+      entityAttributes[this._tableColumns[0]] =
+        this._table[this._tableColumns[0] as keyof T];
 
-    for (const key in updateAttributes) {
-      entityAttributes[key] = this._table[key as keyof T];
+      for (const key in updateAttributes) {
+        entityAttributes[key] = this._table[key as keyof T];
+      }
+
+      return (
+        await this._drizzle
+          .update(this._table)
+          .set(updateAttributes)
+          .where(eq(this._table[this._tableColumns[0]], id))
+          .returning(entityAttributes)
+      )[0] as T;
+    } catch (error) {
+      console.log(error);
     }
-
-    return (
-      await this._drizzle
-        .update(this._table)
-        .set(updateAttributes)
-        .where(eq(this._table[this._tableColumns[0]], id))
-        .returning(entityAttributes)
-    )[0] as T;
   }
 
-  public async delete(id: string): Promise<string> {
-    await this._drizzle
-      .delete(this._table)
-      .where(eq(this._table[this._tableColumns[0]], id));
+  public async delete(id: string): Promise<string | undefined> {
+    try {
+      await this._drizzle
+        .delete(this._table)
+        .where(eq(this._table[this._tableColumns[0]], id));
 
-    return id;
+      return id;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
