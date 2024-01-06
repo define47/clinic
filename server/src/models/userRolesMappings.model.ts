@@ -32,6 +32,8 @@ export type UserRoleMappingCreationAttributes = {
   roleId: string;
 };
 
+export type UserRoleMappingUpdateAttributes = UserRoleMappingCreationAttributes;
+
 export const userRolesMappingsTable = clinicSchema.table("UserRolesMapping", {
   userRoleMappingId: varchar("userRoleMappingId", { length: 256 }).primaryKey(),
   userId: varchar("userId")

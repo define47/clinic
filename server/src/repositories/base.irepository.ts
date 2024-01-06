@@ -1,4 +1,8 @@
 import {
+  DoctorSpecialityMappingCreationAttributes,
+  DoctorSpecialityMappingUpdateAttributes,
+} from "../models/doctorSpecialitiesMappings";
+import {
   RoleCreationAttributes,
   RoleUpdateAttributes,
 } from "../models/role.model";
@@ -10,6 +14,10 @@ import {
   UserCreationAttributes,
   UserUpdateAttributes,
 } from "../models/user.model";
+import {
+  UserRoleMappingCreationAttributes,
+  UserRoleMappingUpdateAttributes,
+} from "../models/userRolesMappings.model";
 
 export interface IBaseRepository<T> {
   getById(id: string): Promise<T | undefined>;
@@ -18,6 +26,8 @@ export interface IBaseRepository<T> {
       | UserCreationAttributes
       | RoleCreationAttributes
       | SpecialityCreationAttributes
+      | UserRoleMappingCreationAttributes
+      | DoctorSpecialityMappingCreationAttributes
   ): Promise<T | undefined>;
 
   update(
@@ -26,6 +36,8 @@ export interface IBaseRepository<T> {
       | UserUpdateAttributes
       | RoleUpdateAttributes
       | SpecialityUpdateAttributes
+      | UserRoleMappingUpdateAttributes
+      | DoctorSpecialityMappingUpdateAttributes
   ): Promise<T | undefined>;
 
   delete(id: string): Promise<string | undefined>;

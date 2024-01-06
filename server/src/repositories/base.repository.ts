@@ -1,15 +1,35 @@
 import { NodePgDatabase, drizzle } from "drizzle-orm/node-postgres";
 import { IBaseRepository } from "./base.irepository";
 import { PgInsertValue, PgTableWithColumns } from "drizzle-orm/pg-core";
-import { User, UserCreationAttributes, userTable } from "../models/user.model";
+import {
+  User,
+  UserCreationAttributes,
+  UserUpdateAttributes,
+  userTable,
+} from "../models/user.model";
 import { eq } from "drizzle-orm";
 import { v5 as uuidv5 } from "uuid";
 import { getUUIDv5NamespaceEnv } from "../utils/dotenv";
-import { RoleCreationAttributes, roleTable } from "../models/role.model";
+import {
+  RoleCreationAttributes,
+  RoleUpdateAttributes,
+  roleTable,
+} from "../models/role.model";
 import {
   SpecialityCreationAttributes,
+  SpecialityUpdateAttributes,
   specialityTable,
 } from "../models/speciality.model";
+import {
+  UserRoleMappingCreationAttributes,
+  UserRoleMappingUpdateAttributes,
+  userRolesMappingsTable,
+} from "../models/userRolesMappings.model";
+import {
+  DoctorSpecialityMappingCreationAttributes,
+  DoctorSpecialityMappingUpdateAttributes,
+  doctorSpecialitiesMappingsTable,
+} from "../models/doctorSpecialitiesMappings";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
@@ -37,6 +57,17 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     else if (table === roleTable) this._tableColumns = ["roleId", "roleName"];
     else if (table === specialityTable)
       this._tableColumns = ["specialityId", "specialityName"];
+    else if (table === userRolesMappingsTable)
+      this._tableColumns = ["userRoleMappingId", "userId", "roleId"];
+    else if (table === doctorSpecialitiesMappingsTable)
+      this._tableColumns = [
+        "doctorSpecialityMappingId",
+        "doctorId",
+        "specialityId",
+        "isPrimarySpeciality",
+        "isSecondarySpeciality",
+        "isTertiarySpeciality",
+      ];
     else this._tableColumns = [];
 
     // type MyKeys = keyof typeof this._table.$inferSelect;
@@ -58,34 +89,60 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     // console.log("here", Object.keys(dummyVariable));
   }
 
-  private getAttributesForUUIDv5(): keyof (
-    | UserCreationAttributes
-    | RoleCreationAttributes
-    | SpecialityCreationAttributes
-  ) {
+  private getAttributesForUUIDv5(): Array<
+    keyof (
+      | UserCreationAttributes
+      | RoleCreationAttributes
+      | SpecialityCreationAttributes
+      | UserRoleMappingCreationAttributes
+      | DoctorSpecialityMappingCreationAttributes
+    )
+  > {
     if (this._table === userTable) {
-      return "userEmail" as keyof (
+      return ["userEmail"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
         | SpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
       );
     } else if (this._table === roleTable) {
-      return "roleName" as keyof (
+      return ["roleName"] as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | SpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
+      );
+    } else if (this._table === specialityTable) {
+      return ["specialityName"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
         | SpecialityCreationAttributes
       );
-    } else if (this._table === specialityTable) {
-      return "specialityName" as keyof (
+    } else if (this._table === userRolesMappingsTable) {
+      return ["userId", "roleId"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
         | SpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
+      );
+    } else if (this._table === doctorSpecialitiesMappingsTable) {
+      return ["doctorId", "specialityId"] as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | SpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
       );
     } else {
       return "" as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
         | SpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
       );
     }
   }
@@ -104,22 +161,27 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | UserCreationAttributes
       | RoleCreationAttributes
       | SpecialityCreationAttributes
+      | UserRoleMappingCreationAttributes
+      | DoctorSpecialityMappingCreationAttributes
   ): Promise<T | undefined> {
     try {
       let id;
-      const UUIDv5Attribute = this.getAttributesForUUIDv5();
-      // if (this._table === userTable) {
-      //   creationAttributes = creationAttributes as UserCreationAttributes;
-      //   id = uuidv5(creationAttributes.userEmail, getUUIDv5NamespaceEnv());
-      // } else if (this._table === roleTable) {
-      //   creationAttributes = creationAttributes as RoleCreationAttributes;
-      //   id = uuidv5(creationAttributes.roleName, getUUIDv5NamespaceEnv());
-      // } else if (this._table === specialityTable) {
-      //   creationAttributes = creationAttributes as SpecialityCreationAttributes;
-      //   id = uuidv5(creationAttributes.specialityName, getUUIDv5NamespaceEnv());
-      // }
+      const UUIDv5Attributes = this.getAttributesForUUIDv5();
 
-      id = uuidv5(creationAttributes[UUIDv5Attribute], getUUIDv5NamespaceEnv());
+      console.log(UUIDv5Attributes);
+
+      if (UUIDv5Attributes.length === 1)
+        id = uuidv5(
+          creationAttributes[UUIDv5Attributes[0]],
+          getUUIDv5NamespaceEnv()
+        );
+      else if (UUIDv5Attributes.length === 2)
+        id = uuidv5(
+          `${creationAttributes[UUIDv5Attributes[0]]} ${
+            creationAttributes[UUIDv5Attributes[1]]
+          }`,
+          getUUIDv5NamespaceEnv()
+        );
 
       const entityAttributes: Record<string, any> = {};
 
@@ -146,9 +208,11 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   public async update(
     id: string,
     updateAttributes:
-      | UserCreationAttributes
-      | RoleCreationAttributes
-      | SpecialityCreationAttributes
+      | UserUpdateAttributes
+      | RoleUpdateAttributes
+      | SpecialityUpdateAttributes
+      | UserRoleMappingUpdateAttributes
+      | DoctorSpecialityMappingUpdateAttributes
   ): Promise<T | undefined> {
     try {
       const entityAttributes: Record<string, any> = {};

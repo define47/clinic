@@ -12,6 +12,8 @@ import { BaseRepository } from "./repositories/base.repository.js";
 import { User, userTable } from "./models/user.model.js";
 import { roleTable } from "./models/role.model.js";
 import { specialityTable } from "./models/speciality.model.js";
+import { userRolesMappingsTable } from "./models/userRolesMappings.model.js";
+import { doctorSpecialitiesMappingsTable } from "./models/doctorSpecialitiesMappings.js";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -56,28 +58,54 @@ const start = async () => {
       drizzleInstance,
       specialityTable
     );
+    const baseRepositoryUserRolesMapping = new BaseRepository(
+      drizzleInstance,
+      userRolesMappingsTable
+    );
+    const baseRepositoryDoctorSpecialitiesMapping = new BaseRepository(
+      drizzleInstance,
+      doctorSpecialitiesMappingsTable
+    );
 
-    const user = await baseRepositoryUsers.create({
-      userForename: "test1fn",
-      userSurname: "test1ln",
-      userEmail: "test1em",
-      userPhoneNumber: "test1ph",
-      userGender: "male",
-      userDateOfBirth: "1234-01-01",
-      userAddress: "test1addr",
-      userEncryptedPassword: "test1pass",
-    });
-    console.log(user);
+    // await baseRepositoryUserRolesMapping.create({ userId: "", roleId: "" });
 
-    const patientRole = await baseRepositoryRoles.create({
-      roleName: "patient",
-    });
-    console.log(patientRole);
+    // const user = await baseRepositoryUsers.create({
+    //   userForename: "test1fn",
+    //   userSurname: "test1ln",
+    //   userEmail: "test1em",
+    //   userPhoneNumber: "test1ph",
+    //   userGender: "male",
+    //   userDateOfBirth: "1234-01-01",
+    //   userAddress: "test1addr",
+    //   userEncryptedPassword: "test1pass",
+    // });
+    // console.log(user);
 
-    const neurologySpeciality = await baseRepositorySpecialities.create({
-      specialityName: "Neurology",
-    });
-    console.log(neurologySpeciality);
+    // const patientRole = await baseRepositoryRoles.create({
+    //   roleName: "patient",
+    // });
+    // console.log(patientRole);
+
+    // const neurologySpeciality = await baseRepositorySpecialities.create({
+    //   specialityName: "Neurology",
+    // });
+    // console.log(neurologySpeciality);
+
+    // const userRoleMapping = await baseRepositoryUserRolesMapping.create({
+    //   userId: "48631bef-8a77-51ca-b719-dfe17b719081",
+    //   roleId: "0f6c88ca-a4b3-55d3-814b-4cd4daf3cac8",
+    // });
+    // console.log(userRoleMapping);
+
+    // const doctorSpecialityMapping =
+    //   await baseRepositoryDoctorSpecialitiesMapping.create({
+    //     doctorId: "48631bef-8a77-51ca-b719-dfe17b719081",
+    //     specialityId: "108aa19f-40e9-561c-a88a-53ad20a6c99e",
+    //     isPrimarySpeciality: true,
+    //     isSecondarySpeciality: false,
+    //     isTertiarySpeciality: false,
+    //   });
+    // console.log(doctorSpecialityMapping);
 
     // console.log(
     //   await baseRepositoryUsers.getById("48631bef-8a77-51ca-b719-dfe17b719081")
