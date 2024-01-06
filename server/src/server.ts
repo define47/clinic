@@ -10,6 +10,8 @@ import {
 import { drizzleInstance, migrateToDb } from "./utils/drizzle.js";
 import { BaseRepository } from "./repositories/base.repository.js";
 import { userTable } from "./models/user.model.js";
+import { roleTable } from "./models/role.model.js";
+import { specialityTable } from "./models/speciality.model.js";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -48,17 +50,26 @@ const start = async () => {
 
     // console.log(fastifyServer.config);
 
-    const baseRepository = new BaseRepository(drizzleInstance, userTable);
-    await baseRepository.create({
-      userForename: "test1fn",
-      userSurname: "test1ln",
-      userEmail: "test1em",
-      userPhoneNumber: "test1ph",
-      userGender: "male",
-      userDateOfBirth: "1234-01-01",
-      userAddress: "test1addr",
-      userEncryptedPassword: "test1pass",
-    });
+    // const baseRepositoryUsers = new BaseRepository(drizzleInstance, userTable);
+    // await baseRepositoryUsers.create({
+    //   userForename: "test1fn",
+    //   userSurname: "test1ln",
+    //   userEmail: "test1em",
+    //   userPhoneNumber: "test1ph",
+    //   userGender: "male",
+    //   userDateOfBirth: "1234-01-01",
+    //   userAddress: "test1addr",
+    //   userEncryptedPassword: "test1pass",
+    // });
+
+    const baseRepositoryRoles = new BaseRepository(drizzleInstance, roleTable);
+    // await baseRepositoryRoles.create({ roleName: "patient" });
+
+    const baseRepositorySpecialities = new BaseRepository(
+      drizzleInstance,
+      specialityTable
+    );
+    // baseRepositorySpecialities.create({ specialityName: "Neurology" });
 
     await migrateToDb();
 

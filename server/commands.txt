@@ -15,7 +15,7 @@ git init
 git branch -M main
 git remote add origin https://github.com/define47/clinic.git
 
-git add /server
+git add server/
 git commit -m "message_here"
 git push -u origin main
 
