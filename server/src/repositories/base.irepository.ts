@@ -1,4 +1,8 @@
 import {
+  AppointmentCreationAttributes,
+  AppointmentUpdateAttributes,
+} from "../models/appointment.model";
+import {
   DoctorSpecialityMappingCreationAttributes,
   DoctorSpecialityMappingUpdateAttributes,
 } from "../models/doctorSpecialitiesMappings";
@@ -21,11 +25,15 @@ import {
 
 export interface IBaseRepository<T> {
   getById(id: string): Promise<T | undefined>;
+
+  getByAttribute(key: any, value: any): Promise<T | undefined>;
+
   create(
     creationAttributes:
       | UserCreationAttributes
       | RoleCreationAttributes
       | SpecialityCreationAttributes
+      | AppointmentCreationAttributes
       | UserRoleMappingCreationAttributes
       | DoctorSpecialityMappingCreationAttributes
   ): Promise<T | undefined>;
@@ -36,6 +44,7 @@ export interface IBaseRepository<T> {
       | UserUpdateAttributes
       | RoleUpdateAttributes
       | SpecialityUpdateAttributes
+      | AppointmentUpdateAttributes
       | UserRoleMappingUpdateAttributes
       | DoctorSpecialityMappingUpdateAttributes
   ): Promise<T | undefined>;

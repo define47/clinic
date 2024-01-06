@@ -67,6 +67,22 @@ const start = async () => {
       doctorSpecialitiesMappingsTable
     );
 
+    console.log(
+      "herenow",
+      await baseRepositoryUsers.getByAttribute(
+        "userId",
+        "48631bef-8a77-51ca-b719-dfe17b719081"
+      )
+    );
+
+    console.log(
+      "herenow",
+      await baseRepositoryRoles.getByAttribute(
+        "roleId",
+        "0f6c88ca-a4b3-55d3-814b-4cd4daf3cac8"
+      )
+    );
+
     // await baseRepositoryUserRolesMapping.create({ userId: "", roleId: "" });
 
     // const user = await baseRepositoryUsers.create({

@@ -30,11 +30,17 @@ import {
   DoctorSpecialityMappingUpdateAttributes,
   doctorSpecialitiesMappingsTable,
 } from "../models/doctorSpecialitiesMappings";
+import {
+  AppointmentCreationAttributes,
+  AppointmentUpdateAttributes,
+  appointmentTable,
+} from "../models/appointment.model";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
   protected readonly _table: PgTableWithColumns<any>;
   protected readonly _tableColumns: string[];
+
   public constructor(
     drizzle: NodePgDatabase<Record<string, never>>,
     table: PgTableWithColumns<any>
@@ -67,6 +73,16 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "isPrimarySpeciality",
         "isSecondarySpeciality",
         "isTertiarySpeciality",
+      ];
+    else if (table === appointmentTable)
+      this._tableColumns = [
+        "appointmentId",
+        "doctorId",
+        "patientId",
+        "appointmentReason",
+        "appointmentCancellationReason",
+        "appointmentDateTime",
+        "appointmentStatus",
       ];
     else this._tableColumns = [];
 
@@ -156,11 +172,21 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     )[0] as T;
   }
 
+  public async getByAttribute(key: any, value: any): Promise<T | undefined> {
+    return (
+      await this._drizzle
+        .select()
+        .from(this._table)
+        .where(eq(this._table[key], value))
+    )[0] as T;
+  }
+
   public async create(
     creationAttributes:
       | UserCreationAttributes
       | RoleCreationAttributes
       | SpecialityCreationAttributes
+      | AppointmentCreationAttributes
       | UserRoleMappingCreationAttributes
       | DoctorSpecialityMappingCreationAttributes
   ): Promise<T | undefined> {
@@ -211,6 +237,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | UserUpdateAttributes
       | RoleUpdateAttributes
       | SpecialityUpdateAttributes
+      | AppointmentUpdateAttributes
       | UserRoleMappingUpdateAttributes
       | DoctorSpecialityMappingUpdateAttributes
   ): Promise<T | undefined> {
