@@ -14,11 +14,13 @@
     "@fastify/env": "^4.3.0",
     "@types/node": "^20.10.6",
     "@types/pg": "^8.10.9",
+    "@types/uuid": "^9.0.7",
     "drizzle-kit": "^0.20.9",
     "drizzle-orm": "^0.29.3",
     "fastify": "^4.25.2",
     "pg": "^8.11.3",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "uuid": "^9.0.1"
   }
 }

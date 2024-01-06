@@ -75,6 +75,10 @@ export const options = {
   data: process.env,
 };
 
+export const getUUIDv5NamespaceEnv = (): string => {
+  return fastifyServer.config.UUID_V5_NAMESPACE;
+};
+
 export const getServerIPAddressEnv = (): string => {
   return fastifyServer.config.SERVER_IP_ADDRESS;
 };
