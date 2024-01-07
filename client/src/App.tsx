@@ -1,35 +1,83 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [events, setEvents] = useState<string[]>([]);
+  const [counterEvents, setCounterEvents] = useState<number>(0);
+
+  const connectToSSE = () => {
+    const eventSource = new EventSource("http://192.168.2.16:40587/sse");
+
+    eventSource.onmessage = (event) => {
+      const eventData = JSON.parse(event.data);
+      // setEvents((prevEvents) => [
+      //   ...prevEvents,
+      //   `Notification received: ${eventData.notification}`,
+      // ]);
+      console.log(JSON.parse(event.data).counter);
+
+      if (JSON.parse(event.data).type === "counter")
+        setCounterEvents(JSON.parse(event.data).counter);
+      else if (JSON.parse(event.data).type === "other")
+        setEvents((prevEvents) => [
+          ...prevEvents,
+          `Notification received: ${eventData.notification}`,
+        ]);
+    };
+
+    return eventSource;
+  };
+
+  useEffect(() => {
+    connectToSSE();
+  }, []);
+
+  const handleButtonClick = async () => {
+    try {
+      const response = await fetch("http://192.168.2.16:40587/notify-clients", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        // Notification sent to server, awaiting response
+        console.log("Notification sent successfully");
+      } else {
+        throw new Error("Failed to send notification");
+      }
+    } catch (error) {
+      console.error("Error sending notification:", error);
+    }
+  };
+
+  const handleIncrementCounterClick = async () => {
+    try {
+      const response = await fetch("http://192.168.2.16:40587/counter", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        // Notification sent to server, awaiting response
+        console.log("Notification sent successfully", response);
+      } else {
+        throw new Error("Failed to send notification");
+      }
+    } catch (error) {
+      console.error("Error sending notification:", error);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h1>Real-time Events from Fastify Server</h1>
+      <button onClick={handleButtonClick}>Notify Clients</button>
+      <ul>
+        {events.map((event, index) => (
+          <li key={index}>{event}</li>
+        ))}
+      </ul>
+      <button onClick={handleIncrementCounterClick}>Increment</button>
+      {counterEvents}
+    </div>
+  );
+};
 
-export default App
+export default App;
