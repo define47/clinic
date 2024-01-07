@@ -11,6 +11,7 @@
     "migration:push": "node -r esbuild-register src/models/migrate.ts"
   },
   "dependencies": {
+    "@fastify/cors": "^8.5.0",
     "@fastify/env": "^4.3.0",
     "@fastify/redis": "^6.1.1",
     "@types/node": "^20.10.6",
