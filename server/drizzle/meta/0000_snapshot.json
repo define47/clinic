@@ -1,5 +1,5 @@
 {
-  "id": "fa5ce99f-256d-412b-a1b6-32179f3812c5",
+  "id": "0952b609-0da0-4f61-8528-ca868594a726",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -369,12 +369,6 @@
       "name": "UserRoleMapping",
       "schema": "clinicschema",
       "columns": {
-        "userRoleMappingId": {
-          "name": "userRoleMappingId",
-          "type": "varchar(256)",
-          "primaryKey": true,
-          "notNull": true
-        },
         "userId": {
           "name": "userId",
           "type": "varchar",
@@ -431,7 +425,15 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "UserRoleMapping_userId_roleId_pk": {
+          "name": "UserRoleMapping_userId_roleId_pk",
+          "columns": [
+            "userId",
+            "roleId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     }
   },

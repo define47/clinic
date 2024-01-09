@@ -64,7 +64,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     else if (table === specialityTable)
       this._tableColumns = ["specialityId", "specialityName"];
     else if (table === userRoleMappingTable)
-      this._tableColumns = ["userRoleMappingId", "userId", "roleId"];
+      this._tableColumns = ["userId", "roleId"];
     else if (table === doctorSpecialityMappingTable)
       this._tableColumns = [
         "doctorSpecialityMappingId",
@@ -246,6 +246,14 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       }
 
       // console.log(returningObject);
+
+      if (this._table === userRoleMappingTable)
+        return (
+          await this._drizzle
+            .insert(this._table)
+            .values({ ...creationAttributes })
+            .returning(entityAttributes)
+        )[0] as T;
 
       return (
         await this._drizzle

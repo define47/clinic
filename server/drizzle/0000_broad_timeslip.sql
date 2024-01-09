@@ -66,11 +66,11 @@ CREATE TABLE IF NOT EXISTS "clinicschema"."User" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "clinicschema"."UserRoleMapping" (
-	"userRoleMappingId" varchar(256) PRIMARY KEY NOT NULL,
 	"userId" varchar NOT NULL,
 	"roleId" varchar NOT NULL,
 	"createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
+	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "UserRoleMapping_userId_roleId_pk" PRIMARY KEY("userId","roleId")
 );
 --> statement-breakpoint
 DO $$ BEGIN

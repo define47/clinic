@@ -4,6 +4,12 @@ import { userRoleMappingTable } from "../models/userRoleMapping.model";
 import { RoleRepository } from "../repositories/role.repository";
 import { UserRepository } from "../repositories/user.repository";
 import { UserRoleMappingRepository } from "../repositories/userRoleMapping.repository";
+import {
+  getAdminRoleIdEnv,
+  getDoctorRoleIdEnv,
+  getPatientRoleIdEnv,
+  getReceptionistRoleIdEnv,
+} from "./dotenv";
 import { drizzleInstance } from "./drizzle";
 
 const userRepository = new UserRepository(drizzleInstance, userTable);
@@ -22,7 +28,10 @@ export const createUser = async (
   userGender: string,
   userAddress: string,
   userEncryptedPassword: string,
-  roleId: string
+  isAdmin: boolean,
+  isDoctor: boolean,
+  isReceptionist: boolean,
+  isPatient: boolean
 ) => {
   let user = await userRepository.createUser({
     userForename,
@@ -37,10 +46,31 @@ export const createUser = async (
 
   user = user as User;
 
-  await userRoleMappingRepository.createUserRoleMapping({
-    userId: user.userId,
-    roleId,
-  });
+  if (isAdmin)
+    await userRoleMappingRepository.createUserRoleMapping({
+      userId: user.userId,
+      roleId: getAdminRoleIdEnv(),
+    });
+
+  if (isDoctor)
+    await userRoleMappingRepository.createUserRoleMapping({
+      userId: user.userId,
+      roleId: getDoctorRoleIdEnv(),
+    });
+
+  if (isReceptionist)
+    await userRoleMappingRepository.createUserRoleMapping({
+      userId: user.userId,
+      roleId: getReceptionistRoleIdEnv(),
+    });
+
+  if (isPatient)
+    await userRoleMappingRepository.createUserRoleMapping({
+      userId: user.userId,
+      roleId: getPatientRoleIdEnv(),
+    });
+
+  // console.log(getDoctorRoleIdEnv());
 };
 
 export const createRoles = async () => {
@@ -49,4 +79,16 @@ export const createRoles = async () => {
   await roleRepository.createRole({ roleName: "patient" });
   await roleRepository.createRole({ roleName: "receptionist" });
   await roleRepository.createRole({ roleName: "nurse" });
+};
+
+export const getUserRoleMappings = async () => {
+  console.log(
+    await userRoleMappingRepository.getUserRoleMappingsByUserId(
+      "97d1ead3-9db0-5fa0-9903-1ea801b8196b"
+    )
+  );
+};
+
+export const deleteUserRolesMappingById = async (userId: string) => {
+  await userRoleMappingRepository.deleteUserRoleMappingsByUserId(userId);
 };

@@ -21,7 +21,12 @@ import { doctorSpecialityMappingTable } from "./models/doctorSpecialityMapping.j
 import fastifyCors from "@fastify/cors";
 import { channel } from "node:diagnostics_channel";
 import { UserRepository } from "./repositories/user.repository.js";
-import { createRoles, createUser } from "./utils/databaseInteractions.js";
+import {
+  createRoles,
+  createUser,
+  deleteUserRolesMappingById,
+  getUserRoleMappings,
+} from "./utils/databaseInteractions.js";
 
 const redisChannel = "sseChannel";
 
@@ -200,8 +205,15 @@ const startServer = async () => {
   //   "male",
   //   "doctor1addr",
   //   "doctor1pass",
-  //   getDoctorRoleIdEnv()
+  //   true,
+  //   true,
+  //   true,
+  //   true
   // );
+
+  await getUserRoleMappings();
+
+  await deleteUserRolesMappingById("97d1ead3-9db0-5fa0-9903-1ea801b8196b");
 
   // await createRoles();
 
