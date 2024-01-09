@@ -17,14 +17,20 @@ import { User, userTable } from "./models/user.model.js";
 import { roleTable } from "./models/role.model.js";
 import { specialityTable } from "./models/speciality.model.js";
 import { userRoleMappingTable } from "./models/userRoleMapping.model.js";
-import { doctorSpecialityMappingTable } from "./models/doctorSpecialityMapping.js";
+import { doctorSpecialityMappingTable } from "./models/doctorSpecialityMapping.model.js";
 import fastifyCors from "@fastify/cors";
 import { channel } from "node:diagnostics_channel";
 import { UserRepository } from "./repositories/user.repository.js";
 import {
+  createDoctorSpecialityMapping,
   createRoles,
+  createSpecialities,
   createUser,
+  createUsers,
+  deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId,
+  deleteDoctorSpecialityMappingsByDoctorId,
   deleteUserRolesMappingById,
+  getDoctorSpecialityMappings,
   getUserRoleMappings,
 } from "./utils/databaseInteractions.js";
 
@@ -211,11 +217,49 @@ const startServer = async () => {
   //   true
   // );
 
-  await getUserRoleMappings();
+  // await getUserRoleMappings();
 
-  await deleteUserRolesMappingById("97d1ead3-9db0-5fa0-9903-1ea801b8196b");
+  // await deleteUserRolesMappingById("97d1ead3-9db0-5fa0-9903-1ea801b8196b");
 
+  // await createSpecialities();
   // await createRoles();
+
+  // await createDoctorSpecialityMapping(
+  //   "97d1ead3-9db0-5fa0-9903-1ea801b8196b",
+  //   "08721aa2-0b17-5173-8fa2-746443d2aa5f",
+  //   true,
+  //   false,
+  //   false
+  // );
+
+  // await createDoctorSpecialityMapping(
+  //   "97d1ead3-9db0-5fa0-9903-1ea801b8196b",
+  //   "108aa19f-40e9-561c-a88a-53ad20a6c99e",
+  //   false,
+  //   true,
+  //   false
+  // );
+
+  // const doctorSpecialityMappings = await getDoctorSpecialityMappings(
+  //   "97d1ead3-9db0-5fa0-9903-1ea801b8196b"
+  // );
+
+  // console.log(doctorSpecialityMappings);
+
+  // await deleteDoctorSpecialityMappingsByDoctorId(
+  //   "97d1ead3-9db0-5fa0-9903-1ea801b8196b"
+  // );
+
+  // const doctorSpecialityMappingToDelete =
+  //   await deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId(
+  //     "97d1ead3-9db0-5fa0-9903-1ea801b8196b",
+  //     "08721aa2-0b17-5173-8fa2-746443d2aa5f"
+  //   );
+
+  // console.log("deleted mapping doc spec", doctorSpecialityMappingToDelete);
+
+  // await createUsers(3, "doctor");
+  // await createUsers(10, "patient");
 
   const fastifyServerIPAddress = getServerIPAddressEnv();
   const fastifyServerPort = getServerPortEnv();

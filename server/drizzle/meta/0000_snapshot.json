@@ -1,5 +1,5 @@
 {
-  "id": "0952b609-0da0-4f61-8528-ca868594a726",
+  "id": "d40588c6-ee71-4401-81ab-372b45b1c19f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -101,12 +101,6 @@
       "name": "DoctorSpecialityMapping",
       "schema": "clinicschema",
       "columns": {
-        "doctorSpecialityMappingId": {
-          "name": "doctorSpecialityMappingId",
-          "type": "varchar(256)",
-          "primaryKey": true,
-          "notNull": true
-        },
         "doctorId": {
           "name": "doctorId",
           "type": "varchar",
@@ -181,7 +175,15 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "DoctorSpecialityMapping_doctorId_specialityId_pk": {
+          "name": "DoctorSpecialityMapping_doctorId_specialityId_pk",
+          "columns": [
+            "doctorId",
+            "specialityId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "Role": {

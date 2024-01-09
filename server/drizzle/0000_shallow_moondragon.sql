@@ -23,14 +23,14 @@ CREATE TABLE IF NOT EXISTS "clinicschema"."Appointment" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "clinicschema"."DoctorSpecialityMapping" (
-	"doctorSpecialityMappingId" varchar(256) PRIMARY KEY NOT NULL,
 	"doctorId" varchar NOT NULL,
 	"specialityId" varchar NOT NULL,
 	"isPrimarySpeciality" boolean NOT NULL,
 	"isSecondarySpeciality" boolean NOT NULL,
 	"isTertiarySpeciality" boolean NOT NULL,
 	"createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
+	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "DoctorSpecialityMapping_doctorId_specialityId_pk" PRIMARY KEY("doctorId","specialityId")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "clinicschema"."Role" (

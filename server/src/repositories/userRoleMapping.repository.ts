@@ -37,15 +37,18 @@ export class UserRoleMappingRepository
   public async deleteUserRoleMappingByUserIdAndRoleId(
     userId: string,
     roleId: string
-  ): Promise<void> {
-    await this._drizzle
-      .delete(userRoleMappingTable)
-      .where(
-        and(
-          eq(userRoleMappingTable.userId, userId),
-          eq(userRoleMappingTable.roleId, roleId)
+  ): Promise<string> {
+    return (
+      await this._drizzle
+        .delete(userRoleMappingTable)
+        .where(
+          and(
+            eq(userRoleMappingTable.userId, userId),
+            eq(userRoleMappingTable.roleId, roleId)
+          )
         )
-      );
+        .returning({ roleId: userRoleMappingTable.roleId })
+    )[0]?.roleId;
   }
 
   public async deleteUserRoleMappingsByUserId(userId: string): Promise<void> {

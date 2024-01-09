@@ -19,5 +19,5 @@ export interface IUserRoleMappingRepository
   deleteUserRoleMappingByUserIdAndRoleId(
     userId: string,
     roleId: string
-  ): Promise<void>;
+  ): Promise<string>;
 }

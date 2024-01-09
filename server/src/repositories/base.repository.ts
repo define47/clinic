@@ -29,7 +29,7 @@ import {
   DoctorSpecialityMappingCreationAttributes,
   DoctorSpecialityMappingUpdateAttributes,
   doctorSpecialityMappingTable,
-} from "../models/doctorSpecialityMapping";
+} from "../models/doctorSpecialityMapping.model";
 import {
   AppointmentCreationAttributes,
   AppointmentUpdateAttributes,
@@ -67,7 +67,6 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       this._tableColumns = ["userId", "roleId"];
     else if (table === doctorSpecialityMappingTable)
       this._tableColumns = [
-        "doctorSpecialityMappingId",
         "doctorId",
         "specialityId",
         "isPrimarySpeciality",
@@ -214,8 +213,6 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       let id;
       const UUIDv5Attributes = this.getAttributesForUUIDv5();
 
-      console.log(UUIDv5Attributes);
-
       if (UUIDv5Attributes.length === 1)
         id = uuidv5(
           creationAttributes[UUIDv5Attributes[0]],
@@ -247,7 +244,10 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 
       // console.log(returningObject);
 
-      if (this._table === userRoleMappingTable)
+      if (
+        this._table === userRoleMappingTable ||
+        this._table === doctorSpecialityMappingTable
+      )
         return (
           await this._drizzle
             .insert(this._table)

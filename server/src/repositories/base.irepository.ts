@@ -5,7 +5,7 @@ import {
 import {
   DoctorSpecialityMappingCreationAttributes,
   DoctorSpecialityMappingUpdateAttributes,
-} from "../models/doctorSpecialityMapping";
+} from "../models/doctorSpecialityMapping.model";
 import {
   RoleCreationAttributes,
   RoleUpdateAttributes,

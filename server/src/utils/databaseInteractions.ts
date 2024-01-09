@@ -1,7 +1,13 @@
+import { appointmentTable } from "../models/appointment.model";
+import { doctorSpecialityMappingTable } from "../models/doctorSpecialityMapping.model";
 import { roleTable } from "../models/role.model";
+import { specialityTable } from "../models/speciality.model";
 import { User, userTable } from "../models/user.model";
 import { userRoleMappingTable } from "../models/userRoleMapping.model";
+import { AppointmentRepository } from "../repositories/appointment.repository";
+import { DoctorSpecialityMappingRepository } from "../repositories/doctorSpecialityMapping.repository";
 import { RoleRepository } from "../repositories/role.repository";
+import { SpecialityRepository } from "../repositories/speciality.repository";
 import { UserRepository } from "../repositories/user.repository";
 import { UserRoleMappingRepository } from "../repositories/userRoleMapping.repository";
 import {
@@ -17,6 +23,18 @@ const roleRepository = new RoleRepository(drizzleInstance, roleTable);
 const userRoleMappingRepository = new UserRoleMappingRepository(
   drizzleInstance,
   userRoleMappingTable
+);
+const specialityRepository = new SpecialityRepository(
+  drizzleInstance,
+  specialityTable
+);
+const doctorSpecialityMappingRepository = new DoctorSpecialityMappingRepository(
+  drizzleInstance,
+  doctorSpecialityMappingTable
+);
+const appointmentRepository = new AppointmentRepository(
+  drizzleInstance,
+  appointmentTable
 );
 
 export const createUser = async (
@@ -81,6 +99,19 @@ export const createRoles = async () => {
   await roleRepository.createRole({ roleName: "nurse" });
 };
 
+export const createSpecialities = async () => {
+  await specialityRepository.createSpeciality({ specialityName: "Neurology" });
+  await specialityRepository.createSpeciality({
+    specialityName: "Internal Medicine",
+  });
+  await specialityRepository.createSpeciality({
+    specialityName: "Anesthesiology",
+  });
+  await specialityRepository.createSpeciality({
+    specialityName: "Dermatology",
+  });
+};
+
 export const getUserRoleMappings = async () => {
   console.log(
     await userRoleMappingRepository.getUserRoleMappingsByUserId(
@@ -89,6 +120,81 @@ export const getUserRoleMappings = async () => {
   );
 };
 
+export const getDoctorSpecialityMappings = async (doctorId: string) => {
+  return await doctorSpecialityMappingRepository.getDoctorSpecialityMappingsByDoctorId(
+    doctorId
+  );
+};
+
 export const deleteUserRolesMappingById = async (userId: string) => {
   await userRoleMappingRepository.deleteUserRoleMappingsByUserId(userId);
+};
+
+export const deleteDoctorSpecialityMappingsByDoctorId = async (
+  doctorId: string
+) => {
+  await doctorSpecialityMappingRepository.deleteDoctorSpecialityMappingsByDoctorId(
+    doctorId
+  );
+};
+
+export const deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId = async (
+  doctorId: string,
+  specialityId: string
+) => {
+  return await doctorSpecialityMappingRepository.deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId(
+    doctorId,
+    specialityId
+  );
+};
+
+export const createDoctorSpecialityMapping = async (
+  doctorId: string,
+  specialityId: string,
+  isPrimarySpeciality: boolean,
+  isSecondarySpeciality: boolean,
+  isTertiarySpeciality: boolean
+) => {
+  await doctorSpecialityMappingRepository.createDoctorSpecialityMapping({
+    doctorId,
+    specialityId,
+    isPrimarySpeciality,
+    isSecondarySpeciality,
+    isTertiarySpeciality,
+  });
+};
+
+export const createAppointment = async (
+  appointmentDoctorId: string,
+  appointmentPatientId: string,
+  appointmentReason: string,
+  appointmentDateTime: string,
+  appointmentStatus: string
+) => {
+  return await appointmentRepository.createAppointment({
+    appointmentDoctorId,
+    appointmentPatientId,
+    appointmentDateTime,
+    appointmentReason,
+    appointmentStatus,
+  });
+};
+
+export const createUsers = async (amount: number, roleName: string) => {
+  for (let i = 0; i < amount; i++) {
+    createUser(
+      `${roleName}fn${i}`,
+      `${roleName}ln${i}`,
+      `${roleName}em${i}`,
+      `${roleName}ph${i}`,
+      "1234-01-01",
+      "male",
+      `${roleName}addr${i}`,
+      `${roleName}pass${i}`,
+      roleName === "admin",
+      roleName === "doctor",
+      roleName === "receptionist",
+      roleName === "patient"
+    );
+  }
 };
