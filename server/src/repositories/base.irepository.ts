@@ -5,7 +5,7 @@ import {
 import {
   DoctorSpecialityMappingCreationAttributes,
   DoctorSpecialityMappingUpdateAttributes,
-} from "../models/doctorSpecialitiesMappings";
+} from "../models/doctorSpecialityMapping";
 import {
   RoleCreationAttributes,
   RoleUpdateAttributes,
@@ -21,7 +21,7 @@ import {
 import {
   UserRoleMappingCreationAttributes,
   UserRoleMappingUpdateAttributes,
-} from "../models/userRoleMappings.model";
+} from "../models/userRoleMapping.model";
 
 export interface IBaseRepository<T> {
   getById(id: string): Promise<T | undefined>;

@@ -24,12 +24,12 @@ import {
   UserRoleMappingCreationAttributes,
   UserRoleMappingUpdateAttributes,
   userRoleMappingTable,
-} from "../models/userRoleMappings.model";
+} from "../models/userRoleMapping.model";
 import {
   DoctorSpecialityMappingCreationAttributes,
   DoctorSpecialityMappingUpdateAttributes,
-  doctorSpecialitiesMappingsTable,
-} from "../models/doctorSpecialitiesMappings";
+  doctorSpecialityMappingTable,
+} from "../models/doctorSpecialityMapping";
 import {
   AppointmentCreationAttributes,
   AppointmentUpdateAttributes,
@@ -65,7 +65,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       this._tableColumns = ["specialityId", "specialityName"];
     else if (table === userRoleMappingTable)
       this._tableColumns = ["userRoleMappingId", "userId", "roleId"];
-    else if (table === doctorSpecialitiesMappingsTable)
+    else if (table === doctorSpecialityMappingTable)
       this._tableColumns = [
         "doctorSpecialityMappingId",
         "doctorId",
@@ -149,7 +149,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
       );
-    } else if (this._table === doctorSpecialitiesMappingsTable) {
+    } else if (this._table === doctorSpecialityMappingTable) {
       return ["doctorId", "specialityId"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes

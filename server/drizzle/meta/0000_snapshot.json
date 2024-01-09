@@ -1,5 +1,5 @@
 {
-  "id": "9175bdbe-abba-41d4-9da8-604251ce22f3",
+  "id": "fa5ce99f-256d-412b-a1b6-32179f3812c5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -97,8 +97,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "DoctorSpecialitiesMapping": {
-      "name": "DoctorSpecialitiesMapping",
+    "DoctorSpecialityMapping": {
+      "name": "DoctorSpecialityMapping",
       "schema": "clinicschema",
       "columns": {
         "doctorSpecialityMappingId": {
@@ -154,9 +154,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "DoctorSpecialitiesMapping_doctorId_User_userId_fk": {
-          "name": "DoctorSpecialitiesMapping_doctorId_User_userId_fk",
-          "tableFrom": "DoctorSpecialitiesMapping",
+        "DoctorSpecialityMapping_doctorId_User_userId_fk": {
+          "name": "DoctorSpecialityMapping_doctorId_User_userId_fk",
+          "tableFrom": "DoctorSpecialityMapping",
           "tableTo": "User",
           "columnsFrom": [
             "doctorId"
@@ -167,9 +167,9 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "DoctorSpecialitiesMapping_specialityId_Speciality_specialityId_fk": {
-          "name": "DoctorSpecialitiesMapping_specialityId_Speciality_specialityId_fk",
-          "tableFrom": "DoctorSpecialitiesMapping",
+        "DoctorSpecialityMapping_specialityId_Speciality_specialityId_fk": {
+          "name": "DoctorSpecialityMapping_specialityId_Speciality_specialityId_fk",
+          "tableFrom": "DoctorSpecialityMapping",
           "tableTo": "Speciality",
           "columnsFrom": [
             "specialityId"
@@ -365,8 +365,8 @@
         }
       }
     },
-    "UserRolesMapping": {
-      "name": "UserRolesMapping",
+    "UserRoleMapping": {
+      "name": "UserRoleMapping",
       "schema": "clinicschema",
       "columns": {
         "userRoleMappingId": {
@@ -404,9 +404,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "UserRolesMapping_userId_User_userId_fk": {
-          "name": "UserRolesMapping_userId_User_userId_fk",
-          "tableFrom": "UserRolesMapping",
+        "UserRoleMapping_userId_User_userId_fk": {
+          "name": "UserRoleMapping_userId_User_userId_fk",
+          "tableFrom": "UserRoleMapping",
           "tableTo": "User",
           "columnsFrom": [
             "userId"
@@ -417,9 +417,9 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "UserRolesMapping_roleId_Role_roleId_fk": {
-          "name": "UserRolesMapping_roleId_Role_roleId_fk",
-          "tableFrom": "UserRolesMapping",
+        "UserRoleMapping_roleId_Role_roleId_fk": {
+          "name": "UserRoleMapping_roleId_Role_roleId_fk",
+          "tableFrom": "UserRoleMapping",
           "tableTo": "Role",
           "columnsFrom": [
             "roleId"

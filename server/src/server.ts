@@ -16,8 +16,8 @@ import { BaseRepository } from "./repositories/base.repository.js";
 import { User, userTable } from "./models/user.model.js";
 import { roleTable } from "./models/role.model.js";
 import { specialityTable } from "./models/speciality.model.js";
-import { userRoleMappingTable } from "./models/userRoleMappings.model.js";
-import { doctorSpecialitiesMappingsTable } from "./models/doctorSpecialitiesMappings.js";
+import { userRoleMappingTable } from "./models/userRoleMapping.model.js";
+import { doctorSpecialityMappingTable } from "./models/doctorSpecialityMapping.js";
 import fastifyCors from "@fastify/cors";
 import { channel } from "node:diagnostics_channel";
 import { UserRepository } from "./repositories/user.repository.js";
@@ -189,21 +189,9 @@ const startServer = async () => {
 
   await migrateToDb();
 
-  // await createUser(
-  //   "doctor1fn",
-  //   "doctor1ln",
-  //   "doctor1em",
-  //   "doctor1ph",
-  //   "male",
-  //   "1980-12-31",
-  //   "doctor1addr",
-  //   "doctor1pass",
-  //   "doctor"
-  // );
-
   const { redis } = fastifyServer;
 
-  // createUser(
+  // await createUser(
   //   "doctor1fn",
   //   "doctor1ln",
   //   "doctor1em",

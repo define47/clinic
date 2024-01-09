@@ -1,9 +1,9 @@
 import {
   UserRoleMapping,
   UserRoleMappingCreationAttributes,
-} from "../models/userRoleMappings.model";
+} from "../models/userRoleMapping.model";
 import { BaseRepository } from "./base.repository";
-import { IUserRoleMappingRepository } from "./userRolesMapping.irepository";
+import { IUserRoleMappingRepository } from "./userRoleMapping.irepository";
 
 export class UserRoleMappingRepository
   extends BaseRepository<UserRoleMapping>

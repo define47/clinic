@@ -1,7 +1,7 @@
 import {
   UserRoleMapping,
   UserRoleMappingCreationAttributes,
-} from "../models/userRoleMappings.model";
+} from "../models/userRoleMapping.model";
 import { IBaseRepository } from "./base.irepository";
 
 export interface IUserRoleMappingRepository

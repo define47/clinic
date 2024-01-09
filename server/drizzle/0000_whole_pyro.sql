@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS "clinicschema"."Appointment" (
 	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "clinicschema"."DoctorSpecialitiesMapping" (
+CREATE TABLE IF NOT EXISTS "clinicschema"."DoctorSpecialityMapping" (
 	"doctorSpecialityMappingId" varchar(256) PRIMARY KEY NOT NULL,
 	"doctorId" varchar NOT NULL,
 	"specialityId" varchar NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS "clinicschema"."User" (
 	CONSTRAINT "User_userPhoneNumber_unique" UNIQUE("userPhoneNumber")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "clinicschema"."UserRolesMapping" (
+CREATE TABLE IF NOT EXISTS "clinicschema"."UserRoleMapping" (
 	"userRoleMappingId" varchar(256) PRIMARY KEY NOT NULL,
 	"userId" varchar NOT NULL,
 	"roleId" varchar NOT NULL,
@@ -86,25 +86,25 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "clinicschema"."DoctorSpecialitiesMapping" ADD CONSTRAINT "DoctorSpecialitiesMapping_doctorId_User_userId_fk" FOREIGN KEY ("doctorId") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "clinicschema"."DoctorSpecialityMapping" ADD CONSTRAINT "DoctorSpecialityMapping_doctorId_User_userId_fk" FOREIGN KEY ("doctorId") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "clinicschema"."DoctorSpecialitiesMapping" ADD CONSTRAINT "DoctorSpecialitiesMapping_specialityId_Speciality_specialityId_fk" FOREIGN KEY ("specialityId") REFERENCES "clinicschema"."Speciality"("specialityId") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "clinicschema"."DoctorSpecialityMapping" ADD CONSTRAINT "DoctorSpecialityMapping_specialityId_Speciality_specialityId_fk" FOREIGN KEY ("specialityId") REFERENCES "clinicschema"."Speciality"("specialityId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "clinicschema"."UserRolesMapping" ADD CONSTRAINT "UserRolesMapping_userId_User_userId_fk" FOREIGN KEY ("userId") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "clinicschema"."UserRoleMapping" ADD CONSTRAINT "UserRoleMapping_userId_User_userId_fk" FOREIGN KEY ("userId") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "clinicschema"."UserRolesMapping" ADD CONSTRAINT "UserRolesMapping_roleId_Role_roleId_fk" FOREIGN KEY ("roleId") REFERENCES "clinicschema"."Role"("roleId") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "clinicschema"."UserRoleMapping" ADD CONSTRAINT "UserRoleMapping_roleId_Role_roleId_fk" FOREIGN KEY ("roleId") REFERENCES "clinicschema"."Role"("roleId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

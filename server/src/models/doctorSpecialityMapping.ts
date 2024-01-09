@@ -44,8 +44,8 @@ export type DoctorSpecialityMappingCreationAttributes = {
 export type DoctorSpecialityMappingUpdateAttributes =
   DoctorSpecialityMappingCreationAttributes;
 
-export const doctorSpecialitiesMappingsTable = clinicSchema.table(
-  "DoctorSpecialitiesMapping",
+export const doctorSpecialityMappingTable = clinicSchema.table(
+  "DoctorSpecialityMapping",
   {
     doctorSpecialityMappingId: varchar("doctorSpecialityMappingId", {
       length: 256,

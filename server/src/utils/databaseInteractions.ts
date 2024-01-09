@@ -1,9 +1,9 @@
 import { roleTable } from "../models/role.model";
 import { User, userTable } from "../models/user.model";
-import { userRoleMappingTable } from "../models/userRoleMappings.model";
+import { userRoleMappingTable } from "../models/userRoleMapping.model";
 import { RoleRepository } from "../repositories/role.repository";
 import { UserRepository } from "../repositories/user.repository";
-import { UserRoleMappingRepository } from "../repositories/userRolesMapping.repository";
+import { UserRoleMappingRepository } from "../repositories/userRoleMapping.repository";
 import { drizzleInstance } from "./drizzle";
 
 const userRepository = new UserRepository(drizzleInstance, userTable);
