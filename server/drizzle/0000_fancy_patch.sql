@@ -1,8 +1,26 @@
 DO $$ BEGIN
+ CREATE TYPE "appointmentStatus" AS ENUM('rescheduled', 'scheduled', 'completed', 'no-show', 'canceled');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  CREATE TYPE "userGender" AS ENUM('male', 'female');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "clinicschema"."Appointment" (
+	"appointmentId" varchar PRIMARY KEY NOT NULL,
+	"appointmentDoctorId" varchar(100) NOT NULL,
+	"appointmentPatientId" varchar(100) NOT NULL,
+	"appointmentReason" varchar(256) NOT NULL,
+	"appointmentCancellationReason" varchar(256) NOT NULL,
+	"appointmentDateTime" timestamp,
+	"appointmentStatus" "appointmentStatus" NOT NULL,
+	"createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
+);
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "clinicschema"."DoctorSpecialitiesMapping" (
 	"doctorSpecialityMappingId" varchar(256) PRIMARY KEY NOT NULL,
@@ -54,6 +72,18 @@ CREATE TABLE IF NOT EXISTS "clinicschema"."UserRolesMapping" (
 	"createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
 );
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "clinicschema"."Appointment" ADD CONSTRAINT "Appointment_appointmentDoctorId_User_userId_fk" FOREIGN KEY ("appointmentDoctorId") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "clinicschema"."Appointment" ADD CONSTRAINT "Appointment_appointmentPatientId_User_userId_fk" FOREIGN KEY ("appointmentPatientId") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "clinicschema"."DoctorSpecialitiesMapping" ADD CONSTRAINT "DoctorSpecialitiesMapping_doctorId_User_userId_fk" FOREIGN KEY ("doctorId") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;

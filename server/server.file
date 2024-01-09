@@ -6,7 +6,6 @@ import cluster from "node:cluster";
 import {
   getAdminRoleIdEnv,
   getDatabaseSchemaEnv,
-  getDoctorRoleIdEnv,
   getServerIPAddressEnv,
   getServerPortEnv,
   options,
@@ -16,12 +15,10 @@ import { BaseRepository } from "./repositories/base.repository.js";
 import { User, userTable } from "./models/user.model.js";
 import { roleTable } from "./models/role.model.js";
 import { specialityTable } from "./models/speciality.model.js";
-import { userRoleMappingTable } from "./models/userRoleMappings.model.js";
+import { userRolesMappingsTable } from "./models/userRolesMappings.model.js";
 import { doctorSpecialitiesMappingsTable } from "./models/doctorSpecialitiesMappings.js";
 import fastifyCors from "@fastify/cors";
 import { channel } from "node:diagnostics_channel";
-import { UserRepository } from "./repositories/user.repository.js";
-import { createRoles, createUser } from "./utils/databaseInteractions.js";
 
 const redisChannel = "sseChannel";
 
@@ -48,25 +45,37 @@ declare module "fastify" {
 }
 
 export const fastifyServer = Fastify({
-  logger: true,
+  // logger: true,
 });
 
 fastifyServer.get("/non-blocking", async (request, reply) => {
+  // const { redis } = fastifyServer;
   const userRepo = new BaseRepository(drizzleInstance, userTable);
+  // await redis.set("mykey2024get", JSON.stringify(request));
 
   const workerID = cluster.worker
     ? cluster.worker.id
     : "Not in cluster environment";
 
+  const { redis } = fastifyServer;
+
+  // const requestData = JSON.stringify(request.raw);
+  console.log(request);
+
+  await redis.main.set("mykey2024get", "requestData");
+
   console.log(`Request handled by worker #${workerID}`);
   return {
     hello: "world fastify",
+    // redis: await redis.get("mykey2024get"),
     testUser: await userRepo.getById("48631bef-8a77-51ca-b719-dfe17b719081"),
+    // requestData,
   };
 });
 
 fastifyServer.get("/blocking", async (request, reply) => {
   const { redis } = fastifyServer;
+  // await redis.set("mykey2024get", JSON.stringify(request));
   let counter = 0;
   for (let i = 0; i < 2_000_000_000; i++) {
     counter = counter + 1;
@@ -87,11 +96,29 @@ const corsOptions = {
 
 // SSE
 let clients: any[] = [];
+import safeStringify from "safe-stringify";
 
-function sendEventToClients(eventData: string) {
+async function sendEventToClients(eventData: string) {
   clients.forEach((client) => {
     client.response.raw.write(`data: ${eventData}\n\n`);
   });
+
+  const { redis } = fastifyServer;
+
+  // console.log(await redis.main.keys("connected_clients:*"));
+
+  // const keys = await redis.main.keys("connected_clients:*");
+
+  // for (let i = 0; i < keys.length; i++) {
+  //   // console.log("key:" + keys[i]);
+  //   // console.log(await redis.main.get(keys[i]));
+  //   let client = await redis.main.get(keys[i]);
+  //   if (client !== null) {
+  //     let jsonClient:FastifyReply = JSON.parse(client);
+
+  //     jsonClient!.response.raw.write(`data: ${eventData}\n\n`);
+  //   }
+  // }
 }
 
 function eventsHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -114,6 +141,24 @@ function eventsHandler(req: FastifyRequest, reply: FastifyReply) {
 
   clients.push(newClient);
 
+  const { redis } = fastifyServer;
+
+  redis.main.set(`connected_clients:${clientId}`, safeStringify(reply));
+
+  // console.log(reply);
+
+  // const workerID = cluster.worker
+  //   ? cluster.worker.id
+  //   : "Not in cluster environment";
+
+  // let messageToSend;
+  // redis.subscriber.on("message", (channel, message) => {
+  //   messageToSend = message;
+  //   console.log(
+  //     `[server#${cluster.worker?.id}]: Received message from ${channel}: ${message}`
+  //   );
+  // });
+
   req.raw.on("close", () => {
     console.log(`${clientId} connection closed`);
     clients = clients.filter((client) => client.id !== clientId);
@@ -133,7 +178,7 @@ fastifyServer.post("/notify-clients", (req, reply) => {
 
 let counter = 0;
 
-fastifyServer.get("/counter", (req, reply) => {
+fastifyServer.post("/counter", (req, reply) => {
   const workerID = cluster.worker
     ? cluster.worker.id
     : "Not in cluster environment";
@@ -154,13 +199,46 @@ fastifyServer.get("/counter", (req, reply) => {
     console.log(`Message published to ${redisChannel}: ${eventData}`);
   });
 
+  // redis.subscribe(testChannel);
+
+  let messageToSend;
+  redis.subscriber.on("message", (channel, message) => {
+    messageToSend = message;
+    console.log(`Received message from ${channel}: ${message}`);
+  });
+
   sendEventToClients(eventData);
 
-  reply.code(200).send("Notification sent successfully");
+  reply.code(200).send({ counter });
 });
 // /SSE
 
 const startServer = async () => {
+  // try {
+  //   fastifyServer.register(fastifyCors, corsOptions);
+  //   fastifyServer.register(fastifyEnv, options);
+  //   fastifyServer.register(fastifyRedis, {
+  //     host: "127.0.0.1",
+  //     // password: "your strong password here",
+  //     port: 6379,
+  //     family: 4,
+  //   });
+  //   await fastifyServer;
+
+  //   await migrateToDb();
+
+  //   const fastifyServerIPAddress = getServerIPAddressEnv();
+  //   const fastifyServerPort = getServerPortEnv();
+
+  //   await fastifyServer.listen({
+  //     port: fastifyServerPort,
+  //     host: fastifyServerIPAddress,
+  //   });
+  // } catch (error) {
+  //   console.log(error);
+  // }
+
+  // console.log("I am worker #" + cluster.worker?.id);
   fastifyServer.register(fastifyCors, corsOptions);
   fastifyServer.register(fastifyEnv, options);
   fastifyServer
@@ -169,7 +247,7 @@ const startServer = async () => {
       // password: "your strong password here",
       port: 6379,
       family: 4,
-      namespace: "sessionRedis",
+      namespace: "main",
     })
     .register(fastifyRedis, {
       host: "127.0.0.1",
@@ -189,33 +267,38 @@ const startServer = async () => {
 
   await migrateToDb();
 
-  // await createUser(
-  //   "doctor1fn",
-  //   "doctor1ln",
-  //   "doctor1em",
-  //   "doctor1ph",
-  //   "male",
-  //   "1980-12-31",
-  //   "doctor1addr",
-  //   "doctor1pass",
-  //   "doctor"
-  // );
-
   const { redis } = fastifyServer;
 
-  // createUser(
-  //   "doctor1fn",
-  //   "doctor1ln",
-  //   "doctor1em",
-  //   "doctor1ph",
-  //   "1234-12-31",
-  //   "male",
-  //   "doctor1addr",
-  //   "doctor1pass",
-  //   getDoctorRoleIdEnv()
+  // redis.publisher.publish(
+  //   "sseChannel",
+  //   "this is a global message",
+  //   (err, reply) => {
+  //     if (err) {
+  //       console.error("Error publishing message:", err);
+  //       return;
+  //     }
+  //   }
   // );
 
-  // await createRoles();
+  redis.subscriber.subscribe(redisChannel, (err) => {
+    if (err) {
+      console.error("Error subscribing to channel:", err);
+      return;
+    }
+    console.log(`Subscribed to ${redisChannel} (server#${cluster.worker?.id})`);
+  });
+
+  // redis.subscriber.on("message", (channel, message) => {
+  //   console.log(`Received message from ${channel}: ${message}`);
+  // });
+
+  let messageToSend;
+  redis.subscriber.on("message", (channel, message) => {
+    messageToSend = message;
+    console.log(
+      `[server#${cluster.worker?.id}]: Received message from ${channel}: ${message}`
+    );
+  });
 
   const fastifyServerIPAddress = getServerIPAddressEnv();
   const fastifyServerPort = getServerPortEnv();

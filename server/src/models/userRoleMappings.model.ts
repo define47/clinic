@@ -34,7 +34,7 @@ export type UserRoleMappingCreationAttributes = {
 
 export type UserRoleMappingUpdateAttributes = UserRoleMappingCreationAttributes;
 
-export const userRolesMappingsTable = clinicSchema.table("UserRolesMapping", {
+export const userRoleMappingTable = clinicSchema.table("UserRoleMapping", {
   userRoleMappingId: varchar("userRoleMappingId", { length: 256 }).primaryKey(),
   userId: varchar("userId")
     .notNull()

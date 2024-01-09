@@ -12,16 +12,16 @@ import { userTable } from "./user.model";
 
 export type Appointment = {
   appointmentId: string;
-  doctorId: string;
-  patientId: string;
+  appointmentDoctorId: string;
+  appointmentPatientId: string;
   appointmentReason: string;
   appointmentDateTime: string;
   appointmentStatus: string;
 };
 
 export type AppointmentCreationAttributes = {
-  doctorId: string;
-  patientId: string;
+  appointmentDoctorId: string;
+  appointmentPatientId: string;
   appointmentReason: string;
   appointmentDateTime: string;
   appointmentStatus: string;
@@ -39,10 +39,10 @@ export const StatusEnum = pgEnum("appointmentStatus", [
 
 export const appointmentTable = clinicSchema.table("Appointment", {
   appointmentId: varchar("appointmentId").primaryKey(),
-  doctorId: varchar("doctorId", { length: 100 })
+  appointmentDoctorId: varchar("appointmentDoctorId", { length: 100 })
     .notNull()
     .references(() => userTable.userId),
-  patientId: varchar("patientId", { length: 100 })
+  appointmentPatientId: varchar("appointmentPatientId", { length: 100 })
     .notNull()
     .references(() => userTable.userId),
   appointmentReason: varchar("appointmentReason", { length: 256 }).notNull(),
