@@ -3,9 +3,8 @@ import {
   SpecialityCreationAttributes,
   SpecialityUpdateAttributes,
 } from "../models/speciality.model";
-import { IBaseRepository } from "./base.irepository";
 
-export interface ISpecialityRepository extends IBaseRepository<Speciality> {
+export interface ISpecialityService {
   getSpecialityById(specialityId: string): Promise<Speciality | undefined>;
 
   getSpecialityByName(specialityName: string): Promise<Speciality | undefined>;

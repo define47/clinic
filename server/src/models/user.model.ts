@@ -32,7 +32,16 @@ export type UserCreationAttributes = {
   userEncryptedPassword: string;
 };
 
-export type UserUpdateAttributes = UserCreationAttributes;
+export type UserUpdateAttributes = {
+  userForename: string;
+  userSurname: string;
+  userEmail: string;
+  userPhoneNumber: string;
+  userGender: string;
+  userDateOfBirth: string;
+  userAddress: string;
+  userEncryptedPassword?: string;
+};
 
 export const GenderEnum = pgEnum("userGender", ["male", "female"]);
 

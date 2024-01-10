@@ -1,5 +1,9 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { User, UserCreationAttributes } from "../models/user.model";
+import {
+  User,
+  UserCreationAttributes,
+  UserUpdateAttributes,
+} from "../models/user.model";
 import { BaseRepository } from "./base.repository";
 import { IUserRepository } from "./user.irepository";
 import { Table } from "drizzle-orm";
@@ -37,7 +41,7 @@ export class UserRepository
 
   public async updateUser(
     userId: string,
-    userUpdateAttributes: UserCreationAttributes
+    userUpdateAttributes: UserUpdateAttributes
   ): Promise<User | undefined> {
     return await this.update(userId, userUpdateAttributes);
   }

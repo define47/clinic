@@ -34,6 +34,7 @@ import {
   getUserRoleMappings,
 } from "./utils/databaseInteractions.js";
 import { UserRoleMappingRepository } from "./repositories/userRoleMapping.repository.js";
+import { userRoutes } from "./routes/user.routes.js";
 
 const redisChannel = "sseChannel";
 
@@ -197,6 +198,7 @@ const startServer = async () => {
       family: 4,
       namespace: "subscriber",
     });
+  await fastifyServer.register(userRoutes, { prefix: "api/users" });
   await fastifyServer;
 
   await migrateToDb();

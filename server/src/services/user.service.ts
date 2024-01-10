@@ -1,4 +1,9 @@
-import { User, UserCreationAttributes, userTable } from "../models/user.model";
+import {
+  User,
+  UserCreationAttributes,
+  UserUpdateAttributes,
+  userTable,
+} from "../models/user.model";
 import { UserRepository } from "../repositories/user.repository";
 import { drizzleInstance } from "../utils/drizzle";
 import { IUserService } from "./user.iservice";
@@ -32,7 +37,7 @@ export class UserService implements IUserService {
 
   public async updateUser(
     userId: string,
-    userUpdateAttributes: UserCreationAttributes
+    userUpdateAttributes: UserUpdateAttributes
   ): Promise<User | undefined> {
     return await this._userRepository.updateUser(userId, userUpdateAttributes);
   }

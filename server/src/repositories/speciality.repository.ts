@@ -37,12 +37,13 @@ export class SpecialityRepository
   }
 
   public async updateSpeciality(
+    specialityId: string,
     specialityUpdateAttributes: SpecialityCreationAttributes
   ): Promise<Speciality | undefined> {
-    return await this.create(specialityUpdateAttributes);
+    return await this.update(specialityId, specialityUpdateAttributes);
   }
 
-  public async deleteSpeciality(
+  public async deleteSpecialityById(
     specialityId: string
   ): Promise<string | undefined> {
     return await this.delete(specialityId);
