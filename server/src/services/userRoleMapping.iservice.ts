@@ -2,10 +2,8 @@ import {
   UserRoleMapping,
   UserRoleMappingCreationAttributes,
 } from "../models/userRoleMapping.model";
-import { IBaseRepository } from "./base.irepository";
 
-export interface IUserRoleMappingRepository
-  extends IBaseRepository<UserRoleMapping> {
+export interface IUserRoleMappingService {
   getUserRoleMappingByUserIdAndRoleId(
     userId: string,
     roleId: string

@@ -14,6 +14,15 @@ export interface IDoctorSpecialityMappingRepository
     doctorSpecialityMappingCreationAttributes: DoctorSpecialityMappingCreationAttributes
   ): Promise<DoctorSpecialityMapping | undefined>;
 
+  updateDoctorSpecialityMapping(
+    doctorId: string,
+    currentSpecialityId: string,
+    newSpecialityId: string,
+    isPrimarySpeciality: boolean,
+    isSecondarySpeciality: boolean,
+    isTertiarySpeciality: boolean
+  ): Promise<void>;
+
   deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId(
     doctorId: string,
     specialityId: string

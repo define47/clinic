@@ -23,4 +23,17 @@ export class AppointmentRepository
   ): Promise<Appointment | undefined> {
     return await this.create(appointmentCreationAttributes);
   }
+
+  public async updateAppointment(
+    appointmentId: string,
+    appointmentUpdateAttributes: AppointmentCreationAttributes
+  ): Promise<Appointment | undefined> {
+    return await this.update(appointmentId, appointmentUpdateAttributes);
+  }
+
+  public async deleteAppointment(
+    appointmentId: string
+  ): Promise<string | undefined> {
+    return await this.delete(appointmentId);
+  }
 }

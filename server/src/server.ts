@@ -33,6 +33,7 @@ import {
   getDoctorSpecialityMappings,
   getUserRoleMappings,
 } from "./utils/databaseInteractions.js";
+import { UserRoleMappingRepository } from "./repositories/userRoleMapping.repository.js";
 
 const redisChannel = "sseChannel";
 
@@ -260,6 +261,17 @@ const startServer = async () => {
 
   // await createUsers(3, "doctor");
   // await createUsers(10, "patient");
+
+  const userRoleRepo = new UserRoleMappingRepository(
+    drizzleInstance,
+    userRoleMappingTable
+  );
+
+  await userRoleRepo.updateUserRoleMapping(
+    "003d1785-f7d1-51f4-9a5f-ebeb8985938c",
+    "0f6c88ca-a4b3-55d3-814b-4cd4daf3cac8",
+    "1c2c0a95-54db-56cd-9150-f0ae663be0c5"
+  );
 
   const fastifyServerIPAddress = getServerIPAddressEnv();
   const fastifyServerPort = getServerPortEnv();

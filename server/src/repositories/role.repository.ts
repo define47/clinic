@@ -15,6 +15,14 @@ export class RoleRepository
     super(drizzle, table);
   }
 
+  public async getRoleById(roleId: string): Promise<Role | undefined> {
+    return this.getById(roleId);
+  }
+
+  public async getRoleByName(roleName: string): Promise<Role | undefined> {
+    return await this.getByAttribute("roleName", roleName);
+  }
+
   public async createRole(
     roleCreationAttributes: RoleCreationAttributes
   ): Promise<Role | undefined> {

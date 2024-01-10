@@ -19,6 +19,24 @@ export class UserRoleMappingRepository
     super(drizzle, table);
   }
 
+  public async getUserRoleMappingByUserIdAndRoleId(
+    userId: string,
+    roleId: string
+  ): Promise<UserRoleMapping[] | undefined> {
+    return this._drizzle
+      .select()
+      .from(userRoleMappingTable)
+      .where(
+        and(
+          eq(userRoleMappingTable.userId, userId),
+          eq(userRoleMappingTable.roleId, roleId)
+        )
+      );
+  }
+
+  /*
+   * getting all roles for a certain user
+   */
   public async getUserRoleMappingsByUserId(
     userId: string
   ): Promise<UserRoleMapping[] | undefined> {
@@ -34,10 +52,35 @@ export class UserRoleMappingRepository
     return await this.create(userRoleMappingCreationAttributes);
   }
 
+  /*
+   * updating a role for a certain user
+   */
+  public async updateUserRoleMapping(
+    userId: string,
+    currentRoleId: string,
+    newRoleId: string
+  ): Promise<UserRoleMapping | undefined> {
+    return (
+      await this._drizzle
+        .update(userRoleMappingTable)
+        .set({ roleId: newRoleId })
+        .where(
+          and(
+            eq(userRoleMappingTable.userId, userId),
+            eq(userRoleMappingTable.roleId, currentRoleId)
+          )
+        )
+        .returning({
+          userId: userRoleMappingTable.userId,
+          roleId: userRoleMappingTable.roleId,
+        })
+    )[0];
+  }
+
   public async deleteUserRoleMappingByUserIdAndRoleId(
     userId: string,
     roleId: string
-  ): Promise<string> {
+  ): Promise<UserRoleMapping | undefined> {
     return (
       await this._drizzle
         .delete(userRoleMappingTable)
@@ -47,8 +90,11 @@ export class UserRoleMappingRepository
             eq(userRoleMappingTable.roleId, roleId)
           )
         )
-        .returning({ roleId: userRoleMappingTable.roleId })
-    )[0]?.roleId;
+        .returning({
+          userId: userRoleMappingTable.userId,
+          roleId: userRoleMappingTable.roleId,
+        })
+    )[0];
   }
 
   public async deleteUserRoleMappingsByUserId(userId: string): Promise<void> {

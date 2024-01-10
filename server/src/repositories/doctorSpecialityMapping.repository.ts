@@ -51,6 +51,30 @@ export class DoctorSpecialityMappingRepository
     )[0]?.specialityId;
   }
 
+  public async updateDoctorSpecialityMapping(
+    doctorId: string,
+    currentSpecialityId: string,
+    newSpecialityId: string,
+    isPrimarySpeciality: boolean,
+    isSecondarySpeciality: boolean,
+    isTertiarySpeciality: boolean
+  ): Promise<void> {
+    await this._drizzle
+      .update(doctorSpecialityMappingTable)
+      .set({
+        specialityId: newSpecialityId,
+        isPrimarySpeciality,
+        isSecondarySpeciality,
+        isTertiarySpeciality,
+      })
+      .where(
+        and(
+          eq(doctorSpecialityMappingTable.doctorId, doctorId),
+          eq(doctorSpecialityMappingTable.specialityId, currentSpecialityId)
+        )
+      );
+  }
+
   public async deleteDoctorSpecialityMappingsByDoctorId(
     doctorId: string
   ): Promise<void> {

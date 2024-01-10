@@ -1,7 +1,6 @@
 import { Role, RoleCreationAttributes } from "../models/role.model";
-import { IBaseRepository } from "./base.irepository";
 
-export interface IRoleRepository extends IBaseRepository<Role> {
+export interface IRoleService {
   getRoleById(roleId: string): Promise<Role | undefined>;
 
   getRoleByName(roleName: string): Promise<Role | undefined>;
