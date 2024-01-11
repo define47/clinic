@@ -1,5 +1,5 @@
 {
-  "id": "8fb53f51-96bf-44db-81c5-593a6169217f",
+  "id": "fb9fc7d9-5537-41fc-b77f-98065a3499b4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -336,6 +336,62 @@
           ]
         }
       },
+      "uniqueConstraints": {}
+    },
+    "MedicalRecordPatient": {
+      "name": "MedicalRecordPatient",
+      "schema": "clinicschema",
+      "columns": {
+        "medicalRecordPatientId": {
+          "name": "medicalRecordPatientId",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "appointmentId": {
+          "name": "appointmentId",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "symptoms": {
+          "name": "symptoms",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "medicalRecordPatientCreatedAt": {
+          "name": "medicalRecordPatientCreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "medicalRecordPatientUpdatedAt": {
+          "name": "medicalRecordPatientUpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "MedicalRecordPatient_appointmentId_Appointment_appointmentId_fk": {
+          "name": "MedicalRecordPatient_appointmentId_Appointment_appointmentId_fk",
+          "tableFrom": "MedicalRecordPatient",
+          "tableTo": "Appointment",
+          "columnsFrom": [
+            "appointmentId"
+          ],
+          "columnsTo": [
+            "appointmentId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "Role": {

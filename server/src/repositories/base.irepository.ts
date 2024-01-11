@@ -8,6 +8,10 @@ import {
   DoctorSpecialityMappingUpdateAttributes,
 } from "../models/doctorSpecialityMapping.model";
 import {
+  MedicalRecordPatientCreationAttributes,
+  MedicalRecordPatientUpdateAttributes,
+} from "../models/medicalRecordPatient.model";
+import {
   RoleCreationAttributes,
   RoleUpdateAttributes,
 } from "../models/role.model";
@@ -39,6 +43,7 @@ export interface IBaseRepository<T> {
       | DoctorSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
       | AppointmentHistoryCreationAttributes
+      | MedicalRecordPatientCreationAttributes
   ): Promise<T | undefined>;
 
   update(
@@ -51,6 +56,7 @@ export interface IBaseRepository<T> {
       | UserRoleMappingUpdateAttributes
       | DoctorSpecialityMappingUpdateAttributes
       | AppointmentUpdateAttributes
+      | MedicalRecordPatientUpdateAttributes
   ): Promise<T | undefined>;
 
   delete(id: string): Promise<string | undefined>;

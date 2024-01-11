@@ -39,6 +39,11 @@ import {
   AppointmentHistoryCreationAttributes,
   appointmentHistoryTable,
 } from "../models/appointmentHistory.model";
+import {
+  MedicalRecordPatientCreationAttributes,
+  MedicalRecordPatientUpdateAttributes,
+  medicalRecordPatientTable,
+} from "../models/medicalRecordPatient.model";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
@@ -101,6 +106,15 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "appointmentHistoryUpdatedAt",
         "appointmentHistoryCreatedBy",
         "appointmentHistoryUpdatedBy",
+      ];
+    else if (table === medicalRecordPatientTable)
+      this._tableColumns = [
+        "medicalRecordPatientId",
+        "appointmentId",
+        "symptoms",
+        "conductedTests",
+        "diagnosis",
+        "recommendations",
       ];
     else this._tableColumns = [];
 
@@ -244,6 +258,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | DoctorSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
       | AppointmentHistoryCreationAttributes
+      | MedicalRecordPatientCreationAttributes
   ): Promise<T | undefined> {
     try {
       let id;
@@ -312,6 +327,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | UserRoleMappingUpdateAttributes
       | DoctorSpecialityMappingUpdateAttributes
       | AppointmentUpdateAttributes
+      | MedicalRecordPatientUpdateAttributes
   ): Promise<T | undefined> {
     try {
       const entityAttributes: Record<string, any> = {};

@@ -48,6 +48,14 @@ CREATE TABLE IF NOT EXISTS "clinicschema"."DoctorSpecialityMapping" (
 	CONSTRAINT "DoctorSpecialityMapping_doctorId_specialityId_pk" PRIMARY KEY("doctorId","specialityId")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "clinicschema"."MedicalRecordPatient" (
+	"medicalRecordPatientId" varchar PRIMARY KEY NOT NULL,
+	"appointmentId" varchar(100) NOT NULL,
+	"symptoms" varchar(256) NOT NULL,
+	"medicalRecordPatientCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"medicalRecordPatientUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "clinicschema"."Role" (
 	"roleId" varchar PRIMARY KEY NOT NULL,
 	"roleName" varchar(50) NOT NULL,
@@ -138,6 +146,12 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "clinicschema"."DoctorSpecialityMapping" ADD CONSTRAINT "DoctorSpecialityMapping_specialityId_Speciality_specialityId_fk" FOREIGN KEY ("specialityId") REFERENCES "clinicschema"."Speciality"("specialityId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "clinicschema"."MedicalRecordPatient" ADD CONSTRAINT "MedicalRecordPatient_appointmentId_Appointment_appointmentId_fk" FOREIGN KEY ("appointmentId") REFERENCES "clinicschema"."Appointment"("appointmentId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

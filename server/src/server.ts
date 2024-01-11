@@ -36,6 +36,7 @@ import {
 import { UserRoleMappingRepository } from "./repositories/userRoleMapping.repository.js";
 import { userRoutes } from "./routes/user.routes.js";
 import { appointmentRoutes } from "./routes/appointment.routes.js";
+import { medicalRecordPatientRoutes } from "./routes/medicalRecordPatient.routes.js";
 
 const redisChannel = "sseChannel";
 
@@ -202,6 +203,9 @@ const startServer = async () => {
   await fastifyServer.register(userRoutes, { prefix: "api/users" });
   await fastifyServer.register(appointmentRoutes, {
     prefix: "api/appointments",
+  });
+  await fastifyServer.register(medicalRecordPatientRoutes, {
+    prefix: "api/medicalRecordsPatients",
   });
   await fastifyServer;
 
