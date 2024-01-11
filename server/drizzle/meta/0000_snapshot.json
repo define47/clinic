@@ -1,5 +1,5 @@
 {
-  "id": "fb9fc7d9-5537-41fc-b77f-98065a3499b4",
+  "id": "ba04838e-cb4f-4c61-b22f-2eec1b120126",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -356,6 +356,24 @@
         },
         "symptoms": {
           "name": "symptoms",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conductedTests": {
+          "name": "conductedTests",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "diagnosis": {
+          "name": "diagnosis",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recommendations": {
+          "name": "recommendations",
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": true

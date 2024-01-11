@@ -294,7 +294,7 @@ const startServer = async () => {
 
 startServer();
 
-// const numClusterWorkers = 3;
+// const numClusterWorkers = 8;
 // if (cluster.isPrimary) {
 //   console.log(`Primary ${process.pid} is running`);
 //   for (let i = 0; i < numClusterWorkers; i++) {

@@ -37,9 +37,9 @@ export const medicalRecordPatientTable = clinicSchema.table(
       .notNull()
       .references(() => appointmentTable.appointmentId),
     symptoms: varchar("symptoms", { length: 256 }).notNull(),
-    conductedTests: varchar("symptoms", { length: 256 }).notNull(),
-    diagnosis: varchar("symptoms", { length: 256 }).notNull(),
-    recommendations: varchar("symptoms", { length: 256 }).notNull(),
+    conductedTests: varchar("conductedTests", { length: 256 }).notNull(),
+    diagnosis: varchar("diagnosis", { length: 256 }).notNull(),
+    recommendations: varchar("recommendations", { length: 256 }).notNull(),
     medicalRecordPatientCreatedAt: timestamp(
       "medicalRecordPatientCreatedAt"
     ).default(sql`CURRENT_TIMESTAMP`),

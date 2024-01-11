@@ -43,12 +43,13 @@ export const StatusEnum = pgEnum("appointmentStatus", [
   // scheduled => confirmed by patient => completed
   "scheduled",
   "rescheduled",
-  "completed",
+  "completed", // * by doctors to set
   "no-show",
   "pending approval", // * from reception or admin in the event that patient made appointment from their account
   "waiting", // * patient waiting
   "confirmed by patient",
   "canceled by patient",
+  "paid",
 ]);
 
 export const appointmentTable = clinicSchema.table("Appointment", {

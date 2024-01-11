@@ -43,6 +43,17 @@ export class UserController {
     try {
       const body: any = request.body;
 
+      const roleNames: string[] = body.roleNames;
+
+      for (let i = 0; i < roleNames.length; i++) {
+        const role = await this._roleService.getRoleByName(roleNames[i]);
+        if (!role)
+          return reply.code(200).send({
+            success: false,
+            message: `role ${roleNames[i]} not found`,
+          });
+      }
+
       const isUserEmailValid = await this.checkUserEmailValidity(
         body.userEmail
       );
@@ -66,8 +77,6 @@ export class UserController {
       });
 
       postUser = postUser as User;
-
-      const roleNames: string[] = body.roleNames;
 
       for (let i = 0; i < roleNames.length; i++) {
         const role = await this._roleService.getRoleByName(roleNames[i]);

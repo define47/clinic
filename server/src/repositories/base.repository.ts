@@ -146,6 +146,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | DoctorSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
       | AppointmentHistoryCreationAttributes
+      | MedicalRecordPatientCreationAttributes
     )
   > {
     if (this._table === userTable) {
@@ -218,7 +219,18 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
       );
-    } else {
+    } else if (this._table === medicalRecordPatientTable)
+      return ["appointmentId"] as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | SpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
+        | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+      );
+    else {
       return "" as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
@@ -372,7 +384,10 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 
   public async delete(id: string): Promise<string | undefined> {
     try {
-      if (this._table === appointmentHistoryTable)
+      if (
+        this._table === appointmentHistoryTable ||
+        this._table === medicalRecordPatientTable
+      )
         await this._drizzle
           .delete(this._table)
           .where(eq(this._table[this._tableColumns[1]], id));

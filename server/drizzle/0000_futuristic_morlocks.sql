@@ -52,6 +52,9 @@ CREATE TABLE IF NOT EXISTS "clinicschema"."MedicalRecordPatient" (
 	"medicalRecordPatientId" varchar PRIMARY KEY NOT NULL,
 	"appointmentId" varchar(100) NOT NULL,
 	"symptoms" varchar(256) NOT NULL,
+	"conductedTests" varchar(256) NOT NULL,
+	"diagnosis" varchar(256) NOT NULL,
+	"recommendations" varchar(256) NOT NULL,
 	"medicalRecordPatientCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	"medicalRecordPatientUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
 );

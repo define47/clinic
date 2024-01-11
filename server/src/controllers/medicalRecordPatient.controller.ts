@@ -27,4 +27,44 @@ export class MedicalRecordPatientController {
       reply.code(200).send({ medicalRecordPatientToCreate });
     } catch (error) {}
   };
+
+  public putMedicalRecordPatient = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const body: any = request.body;
+
+      const medicalRecordPatientToUpdate =
+        await this._medicalRecordPatientService.updateMedicalRecordPatient(
+          body.appointmentId,
+          {
+            symptoms: body.symptoms,
+            conductedTests: body.conductedTests,
+            diagnosis: body.diagnosis,
+            recommendations: body.recommendations,
+          }
+        );
+
+      reply
+        .code(200)
+        .send({ medicalRecordPatientToCreate: medicalRecordPatientToUpdate });
+    } catch (error) {}
+  };
+
+  public deleteMedicalRecordPatient = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const body: any = request.body;
+
+      const medicalRecordPatientToDelete =
+        await this._medicalRecordPatientService.deleteMedicalRecordPatient(
+          body.appointmentId
+        );
+
+      reply.code(200).send({ medicalRecordPatientToDelete });
+    } catch (error) {}
+  };
 }
