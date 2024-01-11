@@ -2,6 +2,7 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import {
   Appointment,
   AppointmentCreationAttributes,
+  AppointmentUpdateAttributes,
 } from "../models/appointment.model";
 import { IAppointmentRepository } from "./appointment.irepository";
 import { BaseRepository } from "./base.repository";
@@ -26,7 +27,7 @@ export class AppointmentRepository
 
   public async updateAppointment(
     appointmentId: string,
-    appointmentUpdateAttributes: AppointmentCreationAttributes
+    appointmentUpdateAttributes: AppointmentUpdateAttributes
   ): Promise<Appointment | undefined> {
     return await this.update(appointmentId, appointmentUpdateAttributes);
   }

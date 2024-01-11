@@ -1,4 +1,5 @@
 import {
+  boolean,
   date,
   pgEnum,
   pgSchema,
@@ -17,6 +18,7 @@ export type Appointment = {
   appointmentReason: string;
   appointmentDateTime: string;
   appointmentStatus: string;
+  appointmentCancellationReason: string;
 };
 
 export type AppointmentCreationAttributes = {
@@ -27,14 +29,26 @@ export type AppointmentCreationAttributes = {
   appointmentStatus: string;
 };
 
-export type AppointmentUpdateAttributes = AppointmentCreationAttributes;
+export type AppointmentUpdateAttributes = {
+  // appointmentDoctorId: string;
+  // appointmentPatientId: string;
+  // appointmentReason: string;
+  // appointmentDateTime: string;
+  appointmentStatus: string;
+  appointmentCancellationReason: string;
+};
 
 export const StatusEnum = pgEnum("appointmentStatus", [
-  "rescheduled",
+  // pending approval => scheduled => confirmed by patient => completed (if patient makes appointment from their account)
+  // scheduled => confirmed by patient => completed
   "scheduled",
+  "rescheduled",
   "completed",
   "no-show",
-  "canceled",
+  "pending approval", // * from reception or admin in the event that patient made appointment from their account
+  "waiting", // * patient waiting
+  "confirmed by patient",
+  "canceled by patient",
 ]);
 
 export const appointmentTable = clinicSchema.table("Appointment", {
@@ -46,12 +60,13 @@ export const appointmentTable = clinicSchema.table("Appointment", {
     .notNull()
     .references(() => userTable.userId),
   appointmentReason: varchar("appointmentReason", { length: 256 }).notNull(),
+  appointmentDateTime: timestamp("appointmentDateTime").notNull(),
+  appointmentStatus: StatusEnum("appointmentStatus")
+    .default("scheduled")
+    .notNull(),
   appointmentCancellationReason: varchar("appointmentCancellationReason", {
     length: 256,
-  }).notNull(),
-  appointmentDateTime: timestamp("appointmentDateTime"),
-  appointmentStatus: StatusEnum("appointmentStatus").notNull(),
-
+  }),
   createdAt: timestamp("createdAt").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: timestamp("updatedAt").default(sql`CURRENT_TIMESTAMP`),
 });
