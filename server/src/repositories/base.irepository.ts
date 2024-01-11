@@ -2,6 +2,7 @@ import {
   AppointmentCreationAttributes,
   AppointmentUpdateAttributes,
 } from "../models/appointment.model";
+import { AppointmentHistoryCreationAttributes } from "../models/appointmentHistory.model";
 import {
   DoctorSpecialityMappingCreationAttributes,
   DoctorSpecialityMappingUpdateAttributes,
@@ -37,6 +38,7 @@ export interface IBaseRepository<T> {
       | UserRoleMappingCreationAttributes
       | DoctorSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
+      | AppointmentHistoryCreationAttributes
   ): Promise<T | undefined>;
 
   update(

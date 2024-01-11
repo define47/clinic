@@ -22,6 +22,21 @@ CREATE TABLE IF NOT EXISTS "clinicschema"."Appointment" (
 	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "clinicschema"."AppointmentHistory" (
+	"appointmentHistoryId" varchar PRIMARY KEY NOT NULL,
+	"appointmentId" varchar(100) NOT NULL,
+	"appointmentHistoryDoctorId" varchar(100) NOT NULL,
+	"appointmentHistoryPatientId" varchar(100) NOT NULL,
+	"appointmentHistoryReason" varchar(256) NOT NULL,
+	"appointmentHistoryDateTime" timestamp NOT NULL,
+	"appointmentHistoryStatus" "appointmentStatus" DEFAULT 'scheduled' NOT NULL,
+	"appointmentHistoryCancellationReason" varchar(256),
+	"appointmentHistoryCreatedBy" varchar(100),
+	"appointmentHistoryUpdatedBy" varchar(100),
+	"appointmentHistoryCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"appointmentHistoryUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "clinicschema"."DoctorSpecialityMapping" (
 	"doctorId" varchar NOT NULL,
 	"specialityId" varchar NOT NULL,
@@ -81,6 +96,36 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "clinicschema"."Appointment" ADD CONSTRAINT "Appointment_appointmentPatientId_User_userId_fk" FOREIGN KEY ("appointmentPatientId") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "clinicschema"."AppointmentHistory" ADD CONSTRAINT "AppointmentHistory_appointmentId_Appointment_appointmentId_fk" FOREIGN KEY ("appointmentId") REFERENCES "clinicschema"."Appointment"("appointmentId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "clinicschema"."AppointmentHistory" ADD CONSTRAINT "AppointmentHistory_appointmentHistoryDoctorId_User_userId_fk" FOREIGN KEY ("appointmentHistoryDoctorId") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "clinicschema"."AppointmentHistory" ADD CONSTRAINT "AppointmentHistory_appointmentHistoryPatientId_User_userId_fk" FOREIGN KEY ("appointmentHistoryPatientId") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "clinicschema"."AppointmentHistory" ADD CONSTRAINT "AppointmentHistory_appointmentHistoryCreatedBy_User_userId_fk" FOREIGN KEY ("appointmentHistoryCreatedBy") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "clinicschema"."AppointmentHistory" ADD CONSTRAINT "AppointmentHistory_appointmentHistoryUpdatedBy_User_userId_fk" FOREIGN KEY ("appointmentHistoryUpdatedBy") REFERENCES "clinicschema"."User"("userId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

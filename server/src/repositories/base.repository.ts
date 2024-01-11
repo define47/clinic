@@ -35,6 +35,10 @@ import {
   AppointmentUpdateAttributes,
   appointmentTable,
 } from "../models/appointment.model";
+import {
+  AppointmentHistoryCreationAttributes,
+  appointmentHistoryTable,
+} from "../models/appointmentHistory.model";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
@@ -76,12 +80,27 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     else if (table === appointmentTable)
       this._tableColumns = [
         "appointmentId",
-        "doctorId",
-        "patientId",
+        "appointmentDoctorId",
+        "appointmentPatientId",
         "appointmentReason",
         "appointmentCancellationReason",
         "appointmentDateTime",
         "appointmentStatus",
+      ];
+    else if (table === appointmentHistoryTable)
+      this._tableColumns = [
+        "appointmentHistoryId",
+        "appointmentId",
+        "appointmentHistoryDoctorId",
+        "appointmentHistoryPatientId",
+        "appointmentHistoryDateTime",
+        "appointmentHistoryStatus",
+        "appointmentHistoryReason",
+        "appointmentHistoryCancellationReason",
+        "appointmentHistoryCreatedAt",
+        "appointmentHistoryUpdatedAt",
+        "appointmentHistoryCreatedBy",
+        "appointmentHistoryUpdatedBy",
       ];
     else this._tableColumns = [];
 
@@ -112,6 +131,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | UserRoleMappingCreationAttributes
       | DoctorSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
+      | AppointmentHistoryCreationAttributes
     )
   > {
     if (this._table === userTable) {
@@ -170,6 +190,20 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
       );
+    } else if (this._table === appointmentHistoryTable) {
+      return [
+        "appointmentId",
+        "appointmentHistoryCreatedAt",
+        "appointmentHistoryUpdatedAt",
+      ] as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | SpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
+        | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+      );
     } else {
       return "" as keyof (
         | UserCreationAttributes
@@ -178,6 +212,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | UserRoleMappingCreationAttributes
         | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
       );
     }
   }
@@ -208,6 +243,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | UserRoleMappingCreationAttributes
       | DoctorSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
+      | AppointmentHistoryCreationAttributes
   ): Promise<T | undefined> {
     try {
       let id;
@@ -280,12 +316,31 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     try {
       const entityAttributes: Record<string, any> = {};
 
-      entityAttributes[this._tableColumns[0]] =
-        this._table[this._tableColumns[0] as keyof T];
+      // entityAttributes[this._tableColumns[0]] =
+      //   this._table[this._tableColumns[0] as keyof T];
 
-      for (const key in updateAttributes) {
-        entityAttributes[key] = this._table[key as keyof T];
+      // for (const key in updateAttributes) {
+      //   entityAttributes[key] = this._table[key as keyof T];
+      // }
+
+      // const dummyObject: Appointment = {
+      //   appointmentId: "",
+      //   appointmentDoctorId: "",
+      //   appointmentPatientId: "",
+      //   appointmentReason: "",
+      //   appointmentDateTime: new Date(),
+      //   appointmentStatus: "",
+      //   appointmentCancellationReason: "",
+      // };
+
+      for (const key in this._tableColumns) {
+        // console.log(key);
+
+        entityAttributes[this._tableColumns[key]] =
+          this._table[this._tableColumns[key] as keyof T];
       }
+
+      // console.log(entityAttributes[0]);
 
       return (
         await this._drizzle
@@ -301,6 +356,10 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 
   public async delete(id: string): Promise<string | undefined> {
     try {
+      if (this._table === appointmentHistoryTable)
+        await this._drizzle
+          .delete(this._table)
+          .where(eq(this._table[this._tableColumns[1]], id));
       await this._drizzle
         .delete(this._table)
         .where(eq(this._table[this._tableColumns[0]], id));

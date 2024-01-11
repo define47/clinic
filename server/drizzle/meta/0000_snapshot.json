@@ -1,5 +1,5 @@
 {
-  "id": "c1262dbb-ebd2-472a-8b14-865e88afa04f",
+  "id": "8fb53f51-96bf-44db-81c5-593a6169217f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -87,6 +87,157 @@
           "tableTo": "User",
           "columnsFrom": [
             "appointmentPatientId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "AppointmentHistory": {
+      "name": "AppointmentHistory",
+      "schema": "clinicschema",
+      "columns": {
+        "appointmentHistoryId": {
+          "name": "appointmentHistoryId",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "appointmentId": {
+          "name": "appointmentId",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appointmentHistoryDoctorId": {
+          "name": "appointmentHistoryDoctorId",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appointmentHistoryPatientId": {
+          "name": "appointmentHistoryPatientId",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appointmentHistoryReason": {
+          "name": "appointmentHistoryReason",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appointmentHistoryDateTime": {
+          "name": "appointmentHistoryDateTime",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appointmentHistoryStatus": {
+          "name": "appointmentHistoryStatus",
+          "type": "appointmentStatus",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'scheduled'"
+        },
+        "appointmentHistoryCancellationReason": {
+          "name": "appointmentHistoryCancellationReason",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "appointmentHistoryCreatedBy": {
+          "name": "appointmentHistoryCreatedBy",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "appointmentHistoryUpdatedBy": {
+          "name": "appointmentHistoryUpdatedBy",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "appointmentHistoryCreatedAt": {
+          "name": "appointmentHistoryCreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "appointmentHistoryUpdatedAt": {
+          "name": "appointmentHistoryUpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "AppointmentHistory_appointmentId_Appointment_appointmentId_fk": {
+          "name": "AppointmentHistory_appointmentId_Appointment_appointmentId_fk",
+          "tableFrom": "AppointmentHistory",
+          "tableTo": "Appointment",
+          "columnsFrom": [
+            "appointmentId"
+          ],
+          "columnsTo": [
+            "appointmentId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "AppointmentHistory_appointmentHistoryDoctorId_User_userId_fk": {
+          "name": "AppointmentHistory_appointmentHistoryDoctorId_User_userId_fk",
+          "tableFrom": "AppointmentHistory",
+          "tableTo": "User",
+          "columnsFrom": [
+            "appointmentHistoryDoctorId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "AppointmentHistory_appointmentHistoryPatientId_User_userId_fk": {
+          "name": "AppointmentHistory_appointmentHistoryPatientId_User_userId_fk",
+          "tableFrom": "AppointmentHistory",
+          "tableTo": "User",
+          "columnsFrom": [
+            "appointmentHistoryPatientId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "AppointmentHistory_appointmentHistoryCreatedBy_User_userId_fk": {
+          "name": "AppointmentHistory_appointmentHistoryCreatedBy_User_userId_fk",
+          "tableFrom": "AppointmentHistory",
+          "tableTo": "User",
+          "columnsFrom": [
+            "appointmentHistoryCreatedBy"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "AppointmentHistory_appointmentHistoryUpdatedBy_User_userId_fk": {
+          "name": "AppointmentHistory_appointmentHistoryUpdatedBy_User_userId_fk",
+          "tableFrom": "AppointmentHistory",
+          "tableTo": "User",
+          "columnsFrom": [
+            "appointmentHistoryUpdatedBy"
           ],
           "columnsTo": [
             "userId"
