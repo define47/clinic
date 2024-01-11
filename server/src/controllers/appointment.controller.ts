@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { AppointmentService } from "../services/appointment.service";
+import { request } from "node:http";
 
 export class AppointmentController {
   private readonly _appointmentService: AppointmentService;
@@ -17,9 +18,9 @@ export class AppointmentController {
 
       const appointmentToCreate =
         await this._appointmentService.createAppointment({
-          appointmentDoctorId: body.doctorId,
-          appointmentPatientId: body.patientId,
-          appointmentDateTime: body.appointmentDateTime,
+          appointmentDoctorId: body.appointmentDoctorId,
+          appointmentPatientId: body.appointmentPatientId,
+          appointmentDateTime: new Date(body.appointmentDateTime),
           appointmentReason: body.appointmentReason,
           appointmentStatus: body.appointmentStatus,
         });
@@ -34,14 +35,32 @@ export class AppointmentController {
   ) => {
     try {
       const body: any = request.body;
+      let appointmentToUpdate;
 
-      const appointmentToUpdate =
-        await this._appointmentService.updateAppointment(body.appointmentId, {
+      appointmentToUpdate = await this._appointmentService.updateAppointment(
+        body.appointmentId,
+        {
           appointmentStatus: body.appointmentStatus,
+          appointmentDateTime: new Date(body.appointmentDateTime),
           appointmentCancellationReason: body.appointmentCancellationReason,
-        });
+        }
+      );
 
       reply.code(200).send({ success: true, appointmentToUpdate });
+    } catch (error) {}
+  };
+
+  public deleteAppointment = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const body: any = request.body;
+
+      const appointmentToDelete =
+        await this._appointmentService.deleteAppointment(body.appointmentId);
+
+      reply.code(200).send({ success: true, appointmentToDelete });
     } catch (error) {}
   };
 }

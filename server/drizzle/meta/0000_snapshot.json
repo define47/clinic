@@ -1,5 +1,5 @@
 {
-  "id": "d40588c6-ee71-4401-81ab-372b45b1c19f",
+  "id": "c1262dbb-ebd2-472a-8b14-865e88afa04f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -32,23 +32,24 @@
           "primaryKey": false,
           "notNull": true
         },
-        "appointmentCancellationReason": {
-          "name": "appointmentCancellationReason",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "appointmentDateTime": {
           "name": "appointmentDateTime",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "appointmentStatus": {
           "name": "appointmentStatus",
           "type": "appointmentStatus",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'scheduled'"
+        },
+        "appointmentCancellationReason": {
+          "name": "appointmentCancellationReason",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
         },
         "createdAt": {
           "name": "createdAt",
@@ -443,11 +444,14 @@
     "appointmentStatus": {
       "name": "appointmentStatus",
       "values": {
-        "rescheduled": "rescheduled",
         "scheduled": "scheduled",
+        "rescheduled": "rescheduled",
         "completed": "completed",
         "no-show": "no-show",
-        "canceled": "canceled"
+        "pending approval": "pending approval",
+        "waiting": "waiting",
+        "confirmed by patient": "confirmed by patient",
+        "canceled by patient": "canceled by patient"
       }
     },
     "userGender": {

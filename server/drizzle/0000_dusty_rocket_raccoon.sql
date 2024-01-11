@@ -1,5 +1,5 @@
 DO $$ BEGIN
- CREATE TYPE "appointmentStatus" AS ENUM('rescheduled', 'scheduled', 'completed', 'no-show', 'canceled');
+ CREATE TYPE "appointmentStatus" AS ENUM('scheduled', 'rescheduled', 'completed', 'no-show', 'pending approval', 'waiting', 'confirmed by patient', 'canceled by patient');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -15,9 +15,9 @@ CREATE TABLE IF NOT EXISTS "clinicschema"."Appointment" (
 	"appointmentDoctorId" varchar(100) NOT NULL,
 	"appointmentPatientId" varchar(100) NOT NULL,
 	"appointmentReason" varchar(256) NOT NULL,
-	"appointmentCancellationReason" varchar(256) NOT NULL,
-	"appointmentDateTime" timestamp,
-	"appointmentStatus" "appointmentStatus" NOT NULL,
+	"appointmentDateTime" timestamp NOT NULL,
+	"appointmentStatus" "appointmentStatus" DEFAULT 'scheduled' NOT NULL,
+	"appointmentCancellationReason" varchar(256),
 	"createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
 );

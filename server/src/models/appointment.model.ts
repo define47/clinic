@@ -16,7 +16,7 @@ export type Appointment = {
   appointmentDoctorId: string;
   appointmentPatientId: string;
   appointmentReason: string;
-  appointmentDateTime: string;
+  appointmentDateTime: Date;
   appointmentStatus: string;
   appointmentCancellationReason: string;
 };
@@ -25,7 +25,7 @@ export type AppointmentCreationAttributes = {
   appointmentDoctorId: string;
   appointmentPatientId: string;
   appointmentReason: string;
-  appointmentDateTime: string;
+  appointmentDateTime: Date;
   appointmentStatus: string;
 };
 
@@ -33,7 +33,7 @@ export type AppointmentUpdateAttributes = {
   // appointmentDoctorId: string;
   // appointmentPatientId: string;
   // appointmentReason: string;
-  // appointmentDateTime: string;
+  appointmentDateTime: Date;
   appointmentStatus: string;
   appointmentCancellationReason: string;
 };
