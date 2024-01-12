@@ -1,8 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { fastifyServer } from "../server";
 
 declare module "fastify" {
   interface FastifyRequest {
     sessionId?: any;
+    userData?: any;
   }
 }
 

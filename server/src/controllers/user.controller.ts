@@ -190,7 +190,10 @@ export class UserController {
   public putUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body: any = request.body;
-
+      const { redis } = fastifyServer;
+      const userSessionData = await redis.sessionRedis.get(
+        `sessionId:${request.sessionId.value}`
+      );
       const putUser = await this._userService.updateUser(body.userId, {
         userForename: body.userForename,
         userSurname: body.userSurname,
@@ -231,7 +234,9 @@ export class UserController {
         }
       }
 
-      return reply.code(200).send({ success: true, message: "" });
+      return reply
+        .code(200)
+        .send({ success: true, message: "", userSessionData });
     } catch (error) {
       console.log(error);
       return reply.code(400).send({ error: (error as Error).message });
