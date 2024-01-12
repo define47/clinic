@@ -2,6 +2,7 @@ import fastifyEnv from "@fastify/env";
 import Fastify, { FastifyReply, FastifyRequest } from "fastify";
 import fastifyRedis from "@fastify/redis";
 import cluster from "node:cluster";
+import cookie, { FastifyCookieOptions } from "@fastify/cookie";
 
 import {
   getAdminRoleIdEnv,
@@ -37,6 +38,8 @@ import { UserRoleMappingRepository } from "./repositories/userRoleMapping.reposi
 import { userRoutes } from "./routes/user.routes.js";
 import { appointmentRoutes } from "./routes/appointment.routes.js";
 import { medicalRecordPatientRoutes } from "./routes/medicalRecordPatient.routes.js";
+import { authRoutes } from "./routes/auth.routes.js";
+import { authenticate } from "./middlewares/auth.middleware.js";
 
 const redisChannel = "sseChannel";
 
@@ -175,6 +178,15 @@ fastifyServer.get("/counter", (req, reply) => {
 });
 // /SSE
 
+// fastifyServer.get("/api/auth/read-signed-cookie", (request, reply) => {
+//   const signedCookieValue = request.unsignCookie(request.cookies.userSession!);
+//   // console.log("read", request.authToken);
+
+//   reply
+//     .code(200)
+//     .send(`Signed Cookie Value:  ${JSON.stringify(signedCookieValue)}`);
+// });
+
 const startServer = async () => {
   fastifyServer.register(fastifyCors, corsOptions);
   fastifyServer.register(fastifyEnv, options);
@@ -200,6 +212,12 @@ const startServer = async () => {
       family: 4,
       namespace: "subscriber",
     });
+  await fastifyServer.register(cookie, {
+    secret: "my-secret", // for cookies signature
+    parseOptions: {}, // options for parsing cookies
+  } as FastifyCookieOptions);
+  fastifyServer.addHook("onRequest", authenticate);
+  await fastifyServer.register(authRoutes, { prefix: "api/auth" });
   await fastifyServer.register(userRoutes, { prefix: "api/users" });
   await fastifyServer.register(appointmentRoutes, {
     prefix: "api/appointments",

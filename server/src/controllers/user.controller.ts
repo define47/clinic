@@ -1,5 +1,7 @@
-import * as argon2 from "argon2";
 import { FastifyReply, FastifyRequest } from "fastify";
+import * as argon2 from "argon2";
+import { v4 as uuidv4 } from "uuid";
+
 import { RoleService } from "../services/role.service";
 import { UserService } from "../services/user.service";
 import { UserRoleMappingService } from "../services/userRoleMapping.service";
@@ -9,6 +11,7 @@ import { SpecialityService } from "../services/speciality.service";
 import { DoctorSpecialityMapping } from "../models/doctorSpecialityMapping.model";
 import { UserRoleMapping } from "../models/userRoleMapping.model";
 import { getDoctorRoleIdEnv } from "../utils/dotenv";
+import { fastifyServer } from "../server";
 
 export class UserController {
   private readonly _userService: UserService;
@@ -37,6 +40,77 @@ export class UserController {
 
     if (!user) return true;
     return false;
+  };
+
+  public logoutUser = async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const { redis } = fastifyServer;
+
+      console.log("sessionId logout", request.sessionId.value);
+
+      redis.sessionRedis.del(`sessionId:${request.sessionId.value}`);
+      reply.clearCookie("sessionId");
+
+      reply.code(200).send({ success: true, message: "logged out" });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  public verifyUser = async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const signedCookieValue = request.unsignCookie(
+        request.cookies.userSession!
+      );
+
+      console.log("reading", request.sessionId);
+
+      reply
+        .code(200)
+        .send(`Signed Cookie Value:  ${JSON.stringify(signedCookieValue)}`);
+    } catch (error) {}
+  };
+
+  public loginUser = async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const body: any = request.body;
+
+      const userToLogin = await this._userService.getUserByEmail(
+        body.userEmail
+      );
+
+      if (!userToLogin)
+        reply.code(200).send({ success: false, message: "Failed Login email" });
+
+      const passwordsMatch = await argon2.verify(
+        userToLogin?.userEncryptedPassword!,
+        body.userPassword
+      );
+
+      if (!passwordsMatch)
+        reply
+          .code(200)
+          .send({ success: false, message: "Failed Login password" });
+
+      const { redis } = fastifyServer;
+
+      const sessionId = uuidv4();
+      console.log("created session id:", sessionId);
+
+      redis.sessionRedis.set(
+        `sessionId:${sessionId}`,
+        `${userToLogin?.userForename} ${userToLogin?.userSurname} (${userToLogin?.userEmail})`
+      );
+
+      reply.setCookie("sessionId", sessionId, {
+        signed: true,
+        domain: "192.168.2.16",
+        path: "/",
+        expires: new Date(Date.now() + 80_400_000),
+      });
+
+      reply.code(200).send({ success: true, message: "login successful" });
+    } catch (error) {}
   };
 
   public postUser = async (request: FastifyRequest, reply: FastifyReply) => {
