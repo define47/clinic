@@ -162,6 +162,7 @@ const buildServer = async () => {
       console.log(
         `[client from server#${cluster.worker?.id}]: Client Received message from ${channel}: ${message} through [server#${cluster.worker?.id}]:`
       );
+      io.emit("testmessage", message);
     });
 
     io.on("disconnect", async () => {
