@@ -20,28 +20,19 @@ import { specialityTable } from "./models/speciality.model.js";
 import { userRoleMappingTable } from "./models/userRoleMapping.model.js";
 import { doctorSpecialityMappingTable } from "./models/doctorSpecialityMapping.model.js";
 import fastifyCors from "@fastify/cors";
-import { channel } from "node:diagnostics_channel";
-import { UserRepository } from "./repositories/user.repository.js";
-import {
-  createDoctorSpecialityMapping,
-  createRoles,
-  createSpecialities,
-  createUser,
-  createUsers,
-  deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId,
-  deleteDoctorSpecialityMappingsByDoctorId,
-  deleteUserRolesMappingById,
-  getDoctorSpecialityMappings,
-  getUserRoleMappings,
-} from "./utils/databaseInteractions.js";
 import { UserRoleMappingRepository } from "./repositories/userRoleMapping.repository.js";
 import { userRoutes } from "./routes/user.routes.js";
 import { appointmentRoutes } from "./routes/appointment.routes.js";
 import { medicalRecordPatientRoutes } from "./routes/medicalRecordPatient.routes.js";
 import { authRoutes } from "./routes/auth.routes.js";
 import { authenticate } from "./middlewares/auth.middleware.js";
+import fastifySocketIO from "fastify-socket.io";
 
-const redisChannel = "sseChannel";
+const redisChannel = "socketChannel";
+const countChannel = "countChannel";
+const CONNECTION_COUNT_UPDATED_CHANNEL = "chat:connection-count-updated";
+const countChannelKey = "chat-connection-count";
+const MESSAGE_CHANNEL = "chat:message-channel";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -62,135 +53,40 @@ declare module "fastify" {
       RECEPTIONIST_ROLE_ID: string;
       PATIENT_ROLE_ID: string;
     };
+    io: any;
   }
 }
 
 export const fastifyServer = Fastify({
-  logger: true,
+  // logger: true,
 });
 
-fastifyServer.get("/non-blocking", async (request, reply) => {
-  const userRepo = new BaseRepository(drizzleInstance, userTable);
-
-  const workerID = cluster.worker
-    ? cluster.worker.id
-    : "Not in cluster environment";
-
-  console.log(`Request handled by worker #${workerID}`);
-  return {
-    hello: "world fastify",
-    testUser: await userRepo.getById("48631bef-8a77-51ca-b719-dfe17b719081"),
-  };
-});
-
-fastifyServer.get("/blocking", async (request, reply) => {
+fastifyServer.post("/broadcast-message", async (request, reply) => {
   const { redis } = fastifyServer;
-  let counter = 0;
-  for (let i = 0; i < 2_000_000_000; i++) {
-    counter = counter + 1;
-  }
+  const body: any = request.body;
 
-  const workerID = cluster.worker
-    ? cluster.worker.id
-    : "Not in cluster environment";
+  // Publish the message to the message channel
+  await redis.publisher.publish(MESSAGE_CHANNEL, body.message);
 
-  console.log(`Request handled by worker #${workerID}`);
-
-  return { counter };
+  return { status: "Message sent successfully" };
 });
 
-const corsOptions = {
-  origin: "*",
-};
-
-// SSE
-let clients: any[] = [];
-
-function sendEventToClients(eventData: string) {
-  clients.forEach((client) => {
-    client.response.raw.write(`data: ${eventData}\n\n`);
-  });
-}
-
-function eventsHandler(req: FastifyRequest, reply: FastifyReply) {
-  const headers = {
-    "Content-Type": "text/event-stream",
-    Connection: "keep-alive",
-    "Cache-Control": "no-cache",
-    "Access-Control-Allow-Origin": `http://192.168.2.16:3000`,
-    "Access-Control-Expose-Headers": "*",
+const buildServer = async () => {
+  const corsOptions = {
+    origin: "*",
+    // origin: "http://192.168.2.16:3000",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   };
 
-  reply.raw.writeHead(200, headers);
-
-  const clientId = req.id;
-
-  const newClient = {
-    id: clientId,
-    response: reply,
+  const socketIOOptions = {
+    // origin: "*",
+    origin: "http://192.168.2.16:3000",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   };
 
-  clients.push(newClient);
-
-  req.raw.on("close", () => {
-    console.log(`${clientId} connection closed`);
-    clients = clients.filter((client) => client.id !== clientId);
-  });
-}
-
-fastifyServer.get("/sse", eventsHandler);
-
-fastifyServer.post("/notify-clients", (req, reply) => {
-  const eventData = JSON.stringify({
-    type: "other",
-    notification: "Button clicked! here",
-  });
-  sendEventToClients(eventData);
-  reply.send("Notification sent to clients");
-});
-
-let counter = 0;
-
-fastifyServer.get("/counter", (req, reply) => {
-  const workerID = cluster.worker
-    ? cluster.worker.id
-    : "Not in cluster environment";
-
-  console.log(`Request handled by worker #${workerID}`);
-
-  const { redis } = fastifyServer;
-
-  counter = counter + 1;
-
-  const eventData = JSON.stringify({ type: "counter", counter });
-
-  redis.publisher.publish(redisChannel, eventData, (err, reply) => {
-    if (err) {
-      console.error("Error publishing message:", err);
-      return;
-    }
-    console.log(`Message published to ${redisChannel}: ${eventData}`);
-  });
-
-  sendEventToClients(eventData);
-
-  reply.code(200).send("Notification sent successfully");
-});
-// /SSE
-
-// fastifyServer.get("/api/auth/read-signed-cookie", (request, reply) => {
-//   const signedCookieValue = request.unsignCookie(request.cookies.userSession!);
-//   // console.log("read", request.authToken);
-
-//   reply
-//     .code(200)
-//     .send(`Signed Cookie Value:  ${JSON.stringify(signedCookieValue)}`);
-// });
-
-const startServer = async () => {
-  fastifyServer.register(fastifyCors, corsOptions);
-  fastifyServer.register(fastifyEnv, options);
-  fastifyServer
+  await fastifyServer.register(fastifyCors, corsOptions);
+  await fastifyServer.register(fastifyEnv, options);
+  await fastifyServer
     .register(fastifyRedis, {
       host: "127.0.0.1",
       // password: "your strong password here",
@@ -216,6 +112,12 @@ const startServer = async () => {
     secret: "my-secret", // for cookies signature
     parseOptions: {}, // options for parsing cookies
   } as FastifyCookieOptions);
+  await fastifyServer.register(fastifySocketIO, {
+    cors: {
+      origin: "http://192.168.2.16:3000",
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    },
+  });
   fastifyServer.addHook("onRequest", authenticate);
   await fastifyServer.register(authRoutes, { prefix: "api/auth" });
   await fastifyServer.register(userRoutes, { prefix: "api/users" });
@@ -227,109 +129,121 @@ const startServer = async () => {
   });
   await fastifyServer;
 
-  await migrateToDb();
+  // await migrateToDb();
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// * sockets
   const { redis } = fastifyServer;
 
-  // await createUser(
-  //   "doctor1fn",
-  //   "doctor1ln",
-  //   "doctor1em",
-  //   "doctor1ph",
-  //   "1234-12-31",
-  //   "male",
-  //   "doctor1addr",
-  //   "doctor1pass",
-  //   true,
-  //   true,
-  //   true,
-  //   true
-  // );
+  fastifyServer.io.on("connection", async (io: any) => {
+    console.log(
+      `[server#${cluster.worker?.id}]: Client Connected via [server#${cluster.worker?.id}]:`
+    );
+    // connectedClients++;
+    // console.log(connectedClients);
 
-  // await getUserRoleMappings();
+    // await redis.publisher.publish(
+    //   CONNECTION_COUNT_UPDATED_CHANNEL,
+    //   String(connectedClients)
+    // );
 
-  // await deleteUserRolesMappingById("97d1ead3-9db0-5fa0-9903-1ea801b8196b");
+    io.emit("welcome", "A warm welcome from the server!");
 
-  // await createSpecialities();
-  // await createRoles();
+    redis.subscriber.subscribe(MESSAGE_CHANNEL, (err) => {
+      if (err) {
+        console.error("Error subscribing to channel:", err);
+        return;
+      }
+      console.log(
+        `[server#${cluster.worker?.id}]: Client Subscribed to ${MESSAGE_CHANNEL} via [server#${cluster.worker?.id}]:`
+      );
+    });
 
-  // await createDoctorSpecialityMapping(
-  //   "97d1ead3-9db0-5fa0-9903-1ea801b8196b",
-  //   "08721aa2-0b17-5173-8fa2-746443d2aa5f",
-  //   true,
-  //   false,
-  //   false
-  // );
+    redis.subscriber.on("message", (channel, message) => {
+      console.log(
+        `[client from server#${cluster.worker?.id}]: Client Received message from ${channel}: ${message} through [server#${cluster.worker?.id}]:`
+      );
+    });
 
-  // await createDoctorSpecialityMapping(
-  //   "97d1ead3-9db0-5fa0-9903-1ea801b8196b",
-  //   "108aa19f-40e9-561c-a88a-53ad20a6c99e",
-  //   false,
-  //   true,
-  //   false
-  // );
-
-  // const doctorSpecialityMappings = await getDoctorSpecialityMappings(
-  //   "97d1ead3-9db0-5fa0-9903-1ea801b8196b"
-  // );
-
-  // console.log(doctorSpecialityMappings);
-
-  // await deleteDoctorSpecialityMappingsByDoctorId(
-  //   "97d1ead3-9db0-5fa0-9903-1ea801b8196b"
-  // );
-
-  // const doctorSpecialityMappingToDelete =
-  //   await deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId(
-  //     "97d1ead3-9db0-5fa0-9903-1ea801b8196b",
-  //     "08721aa2-0b17-5173-8fa2-746443d2aa5f"
-  //   );
-
-  // console.log("deleted mapping doc spec", doctorSpecialityMappingToDelete);
-
-  // await createUsers(3, "doctor");
-  // await createUsers(10, "patient");
-
-  // const userRoleRepo = new UserRoleMappingRepository(
-  //   drizzleInstance,
-  //   userRoleMappingTable
-  // );
-
-  // await userRoleRepo.updateUserRoleMapping(
-  //   "003d1785-f7d1-51f4-9a5f-ebeb8985938c",
-  //   "0f6c88ca-a4b3-55d3-814b-4cd4daf3cac8",
-  //   "1c2c0a95-54db-56cd-9150-f0ae663be0c5"
-  // );
-
-  const fastifyServerIPAddress = getServerIPAddressEnv();
-  const fastifyServerPort = getServerPortEnv();
-
-  await fastifyServer.listen({
-    port: fastifyServerPort,
-    host: fastifyServerIPAddress,
+    io.on("disconnect", async () => {
+      console.log(
+        `[server#${cluster.worker?.id}]: Client Disconnected from server#${cluster.worker?.id}:`
+      );
+    });
   });
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// * /sockets
+
+  fastifyServer.get("/non-blocking", async (request, reply) => {
+    const userRepo = new BaseRepository(drizzleInstance, userTable);
+
+    const workerID = cluster.worker
+      ? cluster.worker.id
+      : "Not in cluster environment";
+
+    console.log(`Request handled by worker #${workerID}`);
+    return {
+      hello: "world fastify",
+      testUser: await userRepo.getById("48631bef-8a77-51ca-b719-dfe17b719081"),
+    };
+  });
+
+  fastifyServer.get("/blocking", async (request, reply) => {
+    const { redis } = fastifyServer;
+    let counter = 0;
+    for (let i = 0; i < 2_000_000_000; i++) {
+      counter = counter + 1;
+    }
+
+    const workerID = cluster.worker
+      ? cluster.worker.id
+      : "Not in cluster environment";
+
+    console.log(`Request handled by worker #${workerID}`);
+
+    return { counter };
+  });
+
+  return fastifyServer;
 };
 
-startServer();
+async function main() {
+  try {
+    const fastifyServer = await buildServer();
 
-// const numClusterWorkers = 8;
-// if (cluster.isPrimary) {
-//   console.log(`Primary ${process.pid} is running`);
-//   for (let i = 0; i < numClusterWorkers; i++) {
-//     cluster.fork();
-//   }
+    const fastifyServerIPAddress = getServerIPAddressEnv();
+    const fastifyServerPort = getServerPortEnv();
 
-//   cluster.on("exit", (worker, code, signal) =>
-//     console.log(`worker ${worker.process.pid} died`)
-//   );
+    console.log("Listening");
 
-//   cluster.on("online", (worker) => {
-//     // console.log("Yay, the worker responded after it was forked");
-//   });
-// } else {
-//   try {
-//     startServer();
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+    await fastifyServer.listen({
+      port: fastifyServerPort,
+      host: fastifyServerIPAddress,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// main();
+
+const numClusterWorkers = 3;
+if (cluster.isPrimary) {
+  console.log(`Primary ${process.pid} is running`);
+  for (let i = 0; i < numClusterWorkers; i++) {
+    cluster.fork();
+  }
+
+  cluster.on("exit", (worker, code, signal) =>
+    console.log(`worker ${worker.process.pid} died`)
+  );
+
+  cluster.on("online", (worker) => {
+    console.log("Yay, the worker responded after it was forked");
+  });
+} else {
+  try {
+    main();
+  } catch (error) {
+    console.log(error);
+  }
+}

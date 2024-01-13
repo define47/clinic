@@ -1,83 +1,70 @@
 import React, { useEffect, useState } from "react";
+// import { io } from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 
-const App: React.FC = () => {
-  const [events, setEvents] = useState<string[]>([]);
-  const [counterEvents, setCounterEvents] = useState<number>(0);
-
-  const connectToSSE = () => {
-    const eventSource = new EventSource("http://192.168.2.16:40587/sse");
-
-    eventSource.onmessage = (event) => {
-      const eventData = JSON.parse(event.data);
-      // setEvents((prevEvents) => [
-      //   ...prevEvents,
-      //   `Notification received: ${eventData.notification}`,
-      // ]);
-      console.log(JSON.parse(event.data).counter);
-
-      if (JSON.parse(event.data).type === "counter")
-        setCounterEvents(JSON.parse(event.data).counter);
-      else if (JSON.parse(event.data).type === "other")
-        setEvents((prevEvents) => [
-          ...prevEvents,
-          `Notification received: ${eventData.notification}`,
-        ]);
-    };
-
-    return eventSource;
-  };
+// const socket = io("http://192.168.2.16:40587", {
+//   autoConnect: true,
+// });
+function useSocket() {
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    connectToSSE();
+    const socketIo = io("http://192.168.2.16:40587", {
+      reconnection: true,
+      upgrade: true,
+      transports: ["websocket", "polling"],
+    });
+
+    setSocket(socketIo);
+
+    return function () {
+      socketIo.disconnect();
+    };
   }, []);
+  return socket;
+}
+const App: React.FC = () => {
+  const [welcome, setWelcome] = useState<string>("");
+  // const [socket, setSocket] = useState<Socket<
+  //   DefaultEventsMap,
+  //   DefaultEventsMap
+  // > | null>(null);
 
-  const handleButtonClick = async () => {
-    try {
-      const response = await fetch("http://192.168.2.16:40587/notify-clients", {
-        method: "POST",
+  // useEffect(() => {
+  //   const newSocket = io("http://192.168.2.16:40587");
+  //   setSocket(newSocket);
+
+  //   // return socket.disconnect()
+  // }, []);
+
+  // const [socket, setSocket] = useState(io.connect("ws://192.168.2.16:40587"));
+
+  const socket = useSocket();
+
+  socket?.on("welcome", (message) => {
+    console.log(`Received welcome message: ${message}`);
+    // setWelcome(welcome);
+    // Handle the welcome message as needed
+  });
+
+  useEffect(() => {
+    // Set up the event listener for "welcome" only once when the component mounts
+    if (socket) {
+      socket.on("welcome", (message) => {
+        console.log(`Received welcome message: ${message}`);
+        setWelcome(message); // Update the welcome state with the received message
       });
-
-      if (response.ok) {
-        // Notification sent to server, awaiting response
-        console.log("Notification sent successfully");
-      } else {
-        throw new Error("Failed to send notification");
-      }
-    } catch (error) {
-      console.error("Error sending notification:", error);
     }
-  };
 
-  const handleIncrementCounterClick = async () => {
-    try {
-      const response = await fetch("http://192.168.2.16:40587/counter", {
-        method: "POST",
-      });
-
-      if (response.ok) {
-        // Notification sent to server, awaiting response
-        console.log("Notification sent successfully", response);
-      } else {
-        throw new Error("Failed to send notification");
+    // Clean up the event listener when the component unmounts
+    return () => {
+      if (socket) {
+        socket.off("welcome"); // Remove the "welcome" event listener
       }
-    } catch (error) {
-      console.error("Error sending notification:", error);
-    }
-  };
+    };
+  }, [socket]); // Ensure that the effect runs when the socket changes
 
-  return (
-    <div>
-      <h1>Real-time Events from Fastify Server</h1>
-      <button onClick={handleButtonClick}>Notify Clients</button>
-      <ul>
-        {events.map((event, index) => (
-          <li key={index}>{event}</li>
-        ))}
-      </ul>
-      <button onClick={handleIncrementCounterClick}>Increment</button>
-      {counterEvents}
-    </div>
-  );
+  return <div>here:{welcome}</div>;
 };
 
 export default App;
