@@ -30,9 +30,141 @@ import fastifySocketIO from "fastify-socket.io";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
-const CONNECTION_COUNT_UPDATED_CHANNEL = "chat:connection-count-updated";
-const countChannelKey = "chat-connection-count";
+const CONNECTION_COUNT_CHANNEL = "chat:connection-count-updated";
+// const countChannelKey = "chat-connection-count";
 export const MESSAGE_CHANNEL = "chat:message-channel";
+
+import { SerialPort } from "serialport";
+let serialportgsm = require("serialport-gsm");
+
+// serialportgsm.list((err: any, result: any) => {
+//   console.log(result);
+// });
+
+const serialPort = new SerialPort({
+  path: "/dev/ttyUSB0",
+  baudRate: 9600,
+  dataBits: 8,
+  parity: "none",
+  stopBits: 1,
+});
+
+// serialPort.on("open", () => {
+//   serialPort.write("AT+CMGF=1");
+//   serialPort.write("\r");
+//   serialPort.write("AT+CMGS=0740405073");
+//   serialPort.write("\r");
+//   serialPort.write("test message");
+//   serialPort.write("\r");
+// });
+
+SerialPort.list().then(function (ports) {
+  ports.forEach(function (port) {
+    console.log("Port: ", port);
+  });
+});
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// serialPort.on("open", () => {
+//   // serialPort.write("AT+CPIN=0000\r\n");
+//   // delay(12000);
+//   serialPort.write("AT+CMGF=1\r\n");
+//   delay(12000);
+//   serialPort.write('AT+CSCS="GSM"\r\n'); // set SMS text mode
+//   delay(12000);
+//   serialPort.write('AT+CMGS="0740405073"\r\n'); // send sms message
+//   delay(12000);
+//   serialPort.write("my Test STring\r\n");
+//   delay(12000);
+//   serialPort.write("\x1A");
+//   delay(12000);
+//   // serialPort.write("^z");
+//   // delay(12000);
+// });
+
+serialPort.on("open", async () => {
+  serialPort.write("AT+CMGF=1\r\n");
+  await delay(2000);
+  serialPort.write('AT+CSCS="GSM"\r\n');
+  await delay(2000);
+  serialPort.write('AT+CMGS="0740405073"\r\n');
+  await delay(2000);
+  serialPort.write("Luni la 16:30, aveti programare la cabinet\r\n");
+  await delay(2000);
+  serialPort.write("\x1A");
+  await delay(2000);
+
+  // serialPort.write("AT+CMGF=1\r\n");
+  // serialPort.write('AT+CSCS="GSM"\r\n');
+  // serialPort.write('AT+CMGS="0740405073"\r\n');
+  // serialPort.write("my Test STring test test test\r\n");
+  // serialPort.write("\x1A");
+  //  setTimeout(() => {
+  //   serialPort.write("AT+CMGF=1\r\n");
+  // }, 10000);
+  // setTimeout(() => {
+  //   serialPort.write('AT+CSCS="GSM"\r\n');
+  // }, 10000);
+  // setTimeout(() => {
+  //   serialPort.write('AT+CMGS="0740405073"\r\n');
+  // }, 10000);
+  // setTimeout(() => {
+  //   serialPort.write("my Test STring test test test\r\n");
+  // }, 10000);
+  // setTimeout(() => {
+  //   serialPort.write("\x1A");
+  // }, 10000);
+});
+
+// serialPort.on("open", () => {
+//   console.log("Serial port opened");
+
+//   // Send AT command to check if the module is responding
+//   serialPort.write("AT\r\n", (err) => {
+//     if (err) {
+//       console.error("Error writing to serial port:", err.message);
+//     }
+//   });
+
+//   // Wait for data from the module
+//   serialPort.on("data", (data) => {
+//     console.log("Received data:", data.toString());
+
+//     // If the module responds correctly, send an SMS
+//     if (data.toString().includes("OK")) {
+//       // Send SMS
+//       serialPort.write("AT+CPIN=0000\r\n");
+//       serialPort.write("AT+CMGF=1\r\n"); // Set SMS text mode
+//       serialPort.write('AT+CMGS="40751958454"\r\n'); // Replace with the recipient's phone number
+//       serialPort.write("Hello, this is a test SMS!\x1A"); // The message text followed by Ctrl+Z (hex 1A)
+//     }
+//   });
+// });
+
+// serialPort.on("open", function () {
+//   console.log("Serial communication open");
+//   serialPort.write("AT^SYSCFG=13,1,3FFFFFFF,2,4");
+//   serialPort.write("\r");
+//   serialPort.on("data", function (data) {
+//     console.log("Received data: " + data);
+//   });
+//   gsm_message_sending(serialPort, "test2", "0751958454");
+// });
+
+// function gsm_message_sending(serial: any, message: any, phone_no: any) {
+//   serial.write("AT+CMGF=1");
+//   serial.write("\r");
+//   serial.write('AT+CMGS="');
+//   serial.write(phone_no);
+//   serial.write('"');
+//   serial.write("\r");
+//   serial.write(message);
+//   serial.write("\x1A");
+//   serial.write("^z");
+// }
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -134,11 +266,11 @@ const buildServer = async () => {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// * sockets
   const { redis } = fastifyServer;
 
-  fastifyServer.io.on("connection", async (io: any) => {
+  fastifyServer.io.on("connection", async (socket: any) => {
     console.log(
       `[server#${cluster.worker?.id}]: Client Connected via [server#${cluster.worker?.id}]:`
     );
-    const ioHandshake = io.handshake;
+    const ioHandshake = socket.handshake;
 
     // console.log(`User connected with ID: ${JSON.stringify(ioHandshake)}`);
     // connectedClients++;
@@ -149,7 +281,7 @@ const buildServer = async () => {
     //   String(connectedClients)
     // );
 
-    io.emit("welcome", "A warm welcome from the server!");
+    socket.emit("welcome", "A warm welcome from the server!");
 
     redis.subscriber.subscribe(MESSAGE_CHANNEL, (err) => {
       if (err) {
@@ -165,10 +297,10 @@ const buildServer = async () => {
       console.log(
         `[client from server#${cluster.worker?.id}]: Client Received message from ${channel}: ${message} through [server#${cluster.worker?.id}]:`
       );
-      io.emit("message", message);
+      socket.emit("message", message);
     });
 
-    io.on("disconnect", async () => {
+    socket.on("disconnect", async () => {
       console.log(
         `[server#${cluster.worker?.id}]: Client Disconnected from server#${cluster.worker?.id}:`
       );
@@ -230,28 +362,28 @@ async function main() {
   }
 }
 
-// main();
+main();
 
-const numClusterWorkers = 2;
-if (cluster.isPrimary) {
-  console.log(`Primary ${process.pid} is running`);
-  for (let i = 0; i < numClusterWorkers; i++) {
-    cluster.fork();
-  }
+// const numClusterWorkers = 2;
+// if (cluster.isPrimary) {
+//   console.log(`Primary ${process.pid} is running`);
+//   for (let i = 0; i < numClusterWorkers; i++) {
+//     cluster.fork();
+//   }
 
-  cluster.on("exit", (worker, code, signal) =>
-    console.log(`worker ${worker.process.pid} died`)
-  );
+//   cluster.on("exit", (worker, code, signal) =>
+//     console.log(`worker ${worker.process.pid} died`)
+//   );
 
-  cluster.on("online", (worker) => {
-    console.log(
-      `Yay, the worker ${worker.process.pid} responded after it was forked`
-    );
-  });
-} else {
-  try {
-    main();
-  } catch (error) {
-    console.log(error);
-  }
-}
+//   cluster.on("online", (worker) => {
+//     console.log(
+//       `Yay, the worker ${worker.process.pid} responded after it was forked`
+//     );
+//   });
+// } else {
+//   try {
+//     main();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
