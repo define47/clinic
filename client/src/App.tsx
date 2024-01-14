@@ -9,6 +9,8 @@ function useSocket() {
       reconnection: true,
       upgrade: true,
       transports: ["websocket", "polling"],
+      query: { query: "this is supposed to be query" },
+      auth: { userId: "userId auth" },
     });
 
     setSocket(socketIo);
@@ -35,12 +37,12 @@ const App: React.FC = () => {
         setIsSocketConnected(false);
       });
 
-      socket.on("welcome", (message) => {
-        console.log(`Received welcome message: ${message}`);
-        setWelcome(message);
+      socket.on("welcome", (welcome) => {
+        console.log(`Received welcome message: ${welcome}`);
+        setWelcome(welcome);
       });
 
-      socket.on("testmessage", (message) => {
+      socket.on("message", (message) => {
         console.log(`Received welcome message: ${message}`);
         setWelcome(message);
       });

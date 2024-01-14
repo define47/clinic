@@ -25,14 +25,14 @@ import { userRoutes } from "./routes/user.routes.js";
 import { appointmentRoutes } from "./routes/appointment.routes.js";
 import { medicalRecordPatientRoutes } from "./routes/medicalRecordPatient.routes.js";
 import { authRoutes } from "./routes/auth.routes.js";
-import { authenticate } from "./middlewares/auth.middleware.js";
+import { authenticationMiddleware } from "./middlewares/auth.middleware.js";
 import fastifySocketIO from "fastify-socket.io";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
 const CONNECTION_COUNT_UPDATED_CHANNEL = "chat:connection-count-updated";
 const countChannelKey = "chat-connection-count";
-const MESSAGE_CHANNEL = "chat:message-channel";
+export const MESSAGE_CHANNEL = "chat:message-channel";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -118,7 +118,7 @@ const buildServer = async () => {
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     },
   });
-  fastifyServer.addHook("onRequest", authenticate);
+  fastifyServer.addHook("onRequest", authenticationMiddleware);
   await fastifyServer.register(authRoutes, { prefix: "api/auth" });
   await fastifyServer.register(userRoutes, { prefix: "api/users" });
   await fastifyServer.register(appointmentRoutes, {
@@ -138,6 +138,9 @@ const buildServer = async () => {
     console.log(
       `[server#${cluster.worker?.id}]: Client Connected via [server#${cluster.worker?.id}]:`
     );
+    const ioHandshake = io.handshake;
+
+    // console.log(`User connected with ID: ${JSON.stringify(ioHandshake)}`);
     // connectedClients++;
     // console.log(connectedClients);
 
@@ -162,7 +165,7 @@ const buildServer = async () => {
       console.log(
         `[client from server#${cluster.worker?.id}]: Client Received message from ${channel}: ${message} through [server#${cluster.worker?.id}]:`
       );
-      io.emit("testmessage", message);
+      io.emit("message", message);
     });
 
     io.on("disconnect", async () => {
@@ -214,7 +217,9 @@ async function main() {
     const fastifyServerIPAddress = getServerIPAddressEnv();
     const fastifyServerPort = getServerPortEnv();
 
-    console.log("Listening");
+    console.log(
+      `Listening at http://${fastifyServerIPAddress}:${fastifyServerPort}`
+    );
 
     await fastifyServer.listen({
       port: fastifyServerPort,
@@ -227,7 +232,7 @@ async function main() {
 
 // main();
 
-const numClusterWorkers = 3;
+const numClusterWorkers = 2;
 if (cluster.isPrimary) {
   console.log(`Primary ${process.pid} is running`);
   for (let i = 0; i < numClusterWorkers; i++) {
@@ -239,7 +244,9 @@ if (cluster.isPrimary) {
   );
 
   cluster.on("online", (worker) => {
-    console.log("Yay, the worker responded after it was forked");
+    console.log(
+      `Yay, the worker ${worker.process.pid} responded after it was forked`
+    );
   });
 } else {
   try {

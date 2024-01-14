@@ -11,7 +11,7 @@ import { SpecialityService } from "../services/speciality.service";
 import { DoctorSpecialityMapping } from "../models/doctorSpecialityMapping.model";
 import { UserRoleMapping } from "../models/userRoleMapping.model";
 import { getDoctorRoleIdEnv } from "../utils/dotenv";
-import { fastifyServer } from "../server";
+import { MESSAGE_CHANNEL, fastifyServer } from "../server";
 
 export class UserController {
   private readonly _userService: UserService;
@@ -74,6 +74,7 @@ export class UserController {
   public loginUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body: any = request.body;
+      // console.log(body);
 
       const userToLogin = await this._userService.getUserByEmail(
         body.userEmail
@@ -108,6 +109,11 @@ export class UserController {
         path: "/",
         expires: new Date(Date.now() + 80_400_000),
       });
+
+      await redis.publisher.publish(
+        MESSAGE_CHANNEL,
+        `a user (${body.userEmail}) has logged in`
+      );
 
       reply.code(200).send({ success: true, message: "login successful" });
     } catch (error) {}
@@ -179,6 +185,10 @@ export class UserController {
           }
         }
       }
+
+      const { redis } = fastifyServer;
+
+      await redis.publisher.publish(MESSAGE_CHANNEL, JSON.stringify(postUser));
 
       return reply.code(200).send({ success: true, message: "" });
     } catch (error) {

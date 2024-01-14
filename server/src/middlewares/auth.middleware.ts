@@ -8,7 +8,7 @@ declare module "fastify" {
   }
 }
 
-export const authenticate = (
+export const authenticationMiddleware = (
   request: FastifyRequest,
   reply: FastifyReply,
   done: any
