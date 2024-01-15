@@ -68,6 +68,11 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "userDateOfBirth",
         "userAddress",
         "userEncryptedPassword",
+        "isUserActivated",
+        "isUserApprovedByAdmin",
+        "isUserBanned",
+        "userCreatedAt",
+        "userUpdatedAt",
       ];
     else if (table === roleTable) this._tableColumns = ["roleId", "roleName"];
     else if (table === specialityTable)

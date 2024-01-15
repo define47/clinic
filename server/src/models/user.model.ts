@@ -1,4 +1,5 @@
 import {
+  boolean,
   date,
   pgEnum,
   pgSchema,
@@ -19,6 +20,11 @@ export type User = {
   userDateOfBirth: string;
   userAddress: string;
   userEncryptedPassword?: string;
+  isUserActivated: boolean;
+  isUserApprovedByAdmin: boolean;
+  isUserBanned: boolean;
+  userCreatedAt: string;
+  userUpdatedAt: string;
 };
 
 export type UserCreationAttributes = {
@@ -30,6 +36,9 @@ export type UserCreationAttributes = {
   userDateOfBirth: string;
   userAddress: string;
   userEncryptedPassword: string;
+  isUserActivated?: boolean;
+  isUserApprovedByAdmin?: boolean;
+  isUserBanned?: boolean;
 };
 
 export type UserUpdateAttributes = {
@@ -41,6 +50,9 @@ export type UserUpdateAttributes = {
   userDateOfBirth: string;
   userAddress: string;
   userEncryptedPassword?: string;
+  isUserActivated?: boolean;
+  isUserApprovedByAdmin?: boolean;
+  isUserBanned?: boolean;
 };
 
 export const GenderEnum = pgEnum("userGender", ["male", "female"]);
@@ -59,6 +71,11 @@ export const userTable = clinicSchema.table("User", {
   userEncryptedPassword: varchar("userEncryptedPassword", {
     length: 256,
   }).notNull(),
-  createdAt: timestamp("createdAt").default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: timestamp("updatedAt").default(sql`CURRENT_TIMESTAMP`),
+  isUserActivated: boolean("isUserActivated").default(false).notNull(),
+  isUserApprovedByAdmin: boolean("isUserApprovedByAdmin")
+    .default(false)
+    .notNull(),
+  isUserBanned: boolean("isUserBanned").default(false).notNull(),
+  userCreatedAt: timestamp("userCreatedAt").default(sql`CURRENT_TIMESTAMP`),
+  userUpdatedAt: timestamp("userUpdatedAt").default(sql`CURRENT_TIMESTAMP`),
 });

@@ -95,12 +95,33 @@ export class UserController {
 
       const { redis } = fastifyServer;
 
-      const sessionId = uuidv4();
-      console.log("created session id:", sessionId);
+      let roles = [];
+      const userToLoginRoles =
+        await this._userRoleMappingService.getUserRoleMappingsByUserId(
+          userToLogin?.userId!
+        );
 
-      redis.sessionRedis.set(
+      for (let i = 0; i < userToLoginRoles!.length; i++) {
+        roles.push(
+          (await this._roleService.getRoleById(userToLoginRoles![i].roleId))
+            ?.roleName
+        );
+      }
+
+      const sessionId = uuidv4();
+      const sessionValue = {
+        userId: userToLogin?.userId,
+        userForename: userToLogin?.userForename,
+        userSurname: userToLogin?.userSurname,
+        userEmail: userToLogin?.userEmail,
+        roles,
+      };
+      // console.log("created session id:", sessionId);
+
+      await redis.sessionRedis.set(
         `sessionId:${sessionId}`,
-        `${userToLogin?.userForename} ${userToLogin?.userSurname} (${userToLogin?.userEmail})`
+        // `${userToLogin?.userForename} ${userToLogin?.userSurname} (${userToLogin?.userEmail})`
+        JSON.stringify(sessionValue)
       );
 
       reply.setCookie("sessionId", sessionId, {
@@ -115,7 +136,11 @@ export class UserController {
         `a user (${body.userEmail}) has logged in`
       );
 
-      reply.code(200).send({ success: true, message: "login successful" });
+      reply.code(200).send({
+        success: true,
+        message: "login successful",
+        userRoles: userToLoginRoles,
+      });
     } catch (error) {}
   };
 
@@ -190,7 +215,9 @@ export class UserController {
 
       await redis.publisher.publish(MESSAGE_CHANNEL, JSON.stringify(postUser));
 
-      return reply.code(200).send({ success: true, message: "" });
+      return reply
+        .code(200)
+        .send({ success: postUser !== undefined, message: "" });
     } catch (error) {
       console.log(error);
       return reply.code(400).send({ error: (error as Error).message });

@@ -1,12 +1,12 @@
 {
-  "id": "ba04838e-cb4f-4c61-b22f-2eec1b120126",
+  "id": "e150fb14-19af-422d-af6f-c6d67389bad3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
     "Appointment": {
       "name": "Appointment",
-      "schema": "clinicschema",
+      "schema": "arcadia",
       "columns": {
         "appointmentId": {
           "name": "appointmentId",
@@ -100,7 +100,7 @@
     },
     "AppointmentHistory": {
       "name": "AppointmentHistory",
-      "schema": "clinicschema",
+      "schema": "arcadia",
       "columns": {
         "appointmentHistoryId": {
           "name": "appointmentHistoryId",
@@ -251,7 +251,7 @@
     },
     "DoctorSpecialityMapping": {
       "name": "DoctorSpecialityMapping",
-      "schema": "clinicschema",
+      "schema": "arcadia",
       "columns": {
         "doctorId": {
           "name": "doctorId",
@@ -340,7 +340,7 @@
     },
     "MedicalRecordPatient": {
       "name": "MedicalRecordPatient",
-      "schema": "clinicschema",
+      "schema": "arcadia",
       "columns": {
         "medicalRecordPatientId": {
           "name": "medicalRecordPatientId",
@@ -414,7 +414,7 @@
     },
     "Role": {
       "name": "Role",
-      "schema": "clinicschema",
+      "schema": "arcadia",
       "columns": {
         "roleId": {
           "name": "roleId",
@@ -458,7 +458,7 @@
     },
     "Speciality": {
       "name": "Speciality",
-      "schema": "clinicschema",
+      "schema": "arcadia",
       "columns": {
         "specialityId": {
           "name": "specialityId",
@@ -502,7 +502,7 @@
     },
     "User": {
       "name": "User",
-      "schema": "clinicschema",
+      "schema": "arcadia",
       "columns": {
         "userId": {
           "name": "userId",
@@ -558,15 +558,36 @@
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
+        "isUserActivated": {
+          "name": "isUserActivated",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "isUserApprovedByAdmin": {
+          "name": "isUserApprovedByAdmin",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "isUserBanned": {
+          "name": "isUserBanned",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "userCreatedAt": {
+          "name": "userCreatedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "CURRENT_TIMESTAMP"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "userUpdatedAt": {
+          "name": "userUpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
@@ -595,7 +616,7 @@
     },
     "UserRoleMapping": {
       "name": "UserRoleMapping",
-      "schema": "clinicschema",
+      "schema": "arcadia",
       "columns": {
         "userId": {
           "name": "userId",

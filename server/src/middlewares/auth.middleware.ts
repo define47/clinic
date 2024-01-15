@@ -17,7 +17,12 @@ export const authenticationMiddleware = (
 
   const signedCookie = request.cookies?.sessionId;
 
-  if (!signedCookie && request.url !== "/api/auth/login")
+  if (
+    !signedCookie &&
+    request.url !== "/api/auth/login" &&
+    request.url !== "/blocking" &&
+    request.url !== "/non-blocking"
+  )
     return reply.code(401).send({ message: "No cookie" });
 
   const signedCookieValue = signedCookie
@@ -26,7 +31,12 @@ export const authenticationMiddleware = (
 
   //   console.log("sessionId:", signedCookieValue);
 
-  if (!signedCookieValue?.valid && request.url !== "/api/auth/login") {
+  if (
+    !signedCookieValue?.valid &&
+    request.url !== "/api/auth/login" &&
+    request.url !== "/blocking" &&
+    request.url !== "/non-blocking"
+  ) {
     return reply.code(401).send({ message: "Unauthorized: Token not good" });
   }
   //   console.log(signedCookie);
