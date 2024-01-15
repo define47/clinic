@@ -133,8 +133,6 @@ const buildServer = async () => {
   });
   await fastifyServer;
 
-  await migrateToDb();
-
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// * sockets
   const { redis } = fastifyServer;
 
@@ -210,6 +208,8 @@ const buildServer = async () => {
 
     return { counter };
   });
+
+  await migrateToDb();
 
   // await createRoles();
   // await createSpecialities();

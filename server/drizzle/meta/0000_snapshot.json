@@ -1,12 +1,12 @@
 {
-  "id": "e150fb14-19af-422d-af6f-c6d67389bad3",
+  "id": "e2b67d62-5451-4279-9dec-f3af273c5a47",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
     "Appointment": {
       "name": "Appointment",
-      "schema": "arcadia",
+      "schema": "iatropolis",
       "columns": {
         "appointmentId": {
           "name": "appointmentId",
@@ -100,7 +100,7 @@
     },
     "AppointmentHistory": {
       "name": "AppointmentHistory",
-      "schema": "arcadia",
+      "schema": "iatropolis",
       "columns": {
         "appointmentHistoryId": {
           "name": "appointmentHistoryId",
@@ -251,7 +251,7 @@
     },
     "DoctorSpecialityMapping": {
       "name": "DoctorSpecialityMapping",
-      "schema": "arcadia",
+      "schema": "iatropolis",
       "columns": {
         "doctorId": {
           "name": "doctorId",
@@ -340,7 +340,7 @@
     },
     "MedicalRecordPatient": {
       "name": "MedicalRecordPatient",
-      "schema": "arcadia",
+      "schema": "iatropolis",
       "columns": {
         "medicalRecordPatientId": {
           "name": "medicalRecordPatientId",
@@ -414,7 +414,7 @@
     },
     "Role": {
       "name": "Role",
-      "schema": "arcadia",
+      "schema": "iatropolis",
       "columns": {
         "roleId": {
           "name": "roleId",
@@ -458,7 +458,7 @@
     },
     "Speciality": {
       "name": "Speciality",
-      "schema": "arcadia",
+      "schema": "iatropolis",
       "columns": {
         "specialityId": {
           "name": "specialityId",
@@ -502,7 +502,7 @@
     },
     "User": {
       "name": "User",
-      "schema": "arcadia",
+      "schema": "iatropolis",
       "columns": {
         "userId": {
           "name": "userId",
@@ -616,7 +616,7 @@
     },
     "UserRoleMapping": {
       "name": "UserRoleMapping",
-      "schema": "arcadia",
+      "schema": "iatropolis",
       "columns": {
         "userId": {
           "name": "userId",

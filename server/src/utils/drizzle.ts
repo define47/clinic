@@ -4,7 +4,7 @@ const { Pool } = pg;
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { pgSchema } from "drizzle-orm/pg-core";
 
-export const clinicSchema = pgSchema("arcadia");
+export const clinicSchema = pgSchema("iatropolis");
 const pool = new Pool({
   host: "127.0.0.1",
   port: 5432,

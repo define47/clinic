@@ -20,7 +20,7 @@ export type User = {
   userDateOfBirth: string;
   userAddress: string;
   userEncryptedPassword?: string;
-  isUserActivated: boolean;
+  isUserEmailActivated: boolean;
   isUserApprovedByAdmin: boolean;
   isUserBanned: boolean;
   userCreatedAt: string;
@@ -36,7 +36,7 @@ export type UserCreationAttributes = {
   userDateOfBirth: string;
   userAddress: string;
   userEncryptedPassword: string;
-  isUserActivated?: boolean;
+  isUserEmailActivated?: boolean;
   isUserApprovedByAdmin?: boolean;
   isUserBanned?: boolean;
 };
@@ -50,7 +50,7 @@ export type UserUpdateAttributes = {
   userDateOfBirth: string;
   userAddress: string;
   userEncryptedPassword?: string;
-  isUserActivated?: boolean;
+  isUserEmailActivated?: boolean;
   isUserApprovedByAdmin?: boolean;
   isUserBanned?: boolean;
 };
@@ -71,7 +71,9 @@ export const userTable = clinicSchema.table("User", {
   userEncryptedPassword: varchar("userEncryptedPassword", {
     length: 256,
   }).notNull(),
-  isUserActivated: boolean("isUserActivated").default(false).notNull(),
+  isUserEmailActivated: boolean("isUserEmailActivated")
+    .default(false)
+    .notNull(),
   isUserApprovedByAdmin: boolean("isUserApprovedByAdmin")
     .default(false)
     .notNull(),

@@ -95,17 +95,35 @@ export class UserController {
 
       const { redis } = fastifyServer;
 
-      let roles = [];
+      let userRoleNames = [];
       const userToLoginRoles =
         await this._userRoleMappingService.getUserRoleMappingsByUserId(
           userToLogin?.userId!
         );
 
       for (let i = 0; i < userToLoginRoles!.length; i++) {
-        roles.push(
+        userRoleNames.push(
           (await this._roleService.getRoleById(userToLoginRoles![i].roleId))
             ?.roleName
         );
+      }
+
+      let doctorSpecialityNames = [];
+      if (userRoleNames[0] === "doctor" || userRoleNames[1] === "doctor") {
+        const userToLoginSpecialities =
+          await this._doctorSpecialityMappingService.getDoctorSpecialityMappingsByDoctorId(
+            userToLogin?.userId!
+          );
+
+        for (let i = 0; i < userToLoginSpecialities!.length; i++) {
+          doctorSpecialityNames.push(
+            (
+              await this._specialityService.getSpecialityById(
+                userToLoginSpecialities![i].specialityId
+              )
+            )?.specialityName
+          );
+        }
       }
 
       const sessionId = uuidv4();
@@ -114,9 +132,10 @@ export class UserController {
         userForename: userToLogin?.userForename,
         userSurname: userToLogin?.userSurname,
         userEmail: userToLogin?.userEmail,
-        roles,
+        roles: userRoleNames,
+        specialities: doctorSpecialityNames,
       };
-      // console.log("created session id:", sessionId);
+      console.log("created session:", `sessionId:${sessionId}`);
 
       await redis.sessionRedis.set(
         `sessionId:${sessionId}`,
@@ -227,10 +246,13 @@ export class UserController {
   public putUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body: any = request.body;
+
       const { redis } = fastifyServer;
+
       const userSessionData = await redis.sessionRedis.get(
         `sessionId:${request.sessionId.value}`
       );
+
       const putUser = await this._userService.updateUser(body.userId, {
         userForename: body.userForename,
         userSurname: body.userSurname,
