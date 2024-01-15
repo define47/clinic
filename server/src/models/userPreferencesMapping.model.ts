@@ -20,9 +20,10 @@ export type UserPreferencesMappingUpdateAttributes = {
   isDarkModeOn: boolean;
 };
 
-export const userPreferencesMapping = clinicSchema.table(
+export const userPreferencesMappingTable = clinicSchema.table(
   "UserPreferencesMapping",
   {
+    userPreferencesMappingId: varchar("userPreferencesMappingId").primaryKey(),
     userId: varchar("userId")
       .notNull()
       .references(() => userTable.userId),
@@ -30,10 +31,5 @@ export const userPreferencesMapping = clinicSchema.table(
       .notNull()
       .references(() => languageTable.languageId),
     isDarkModeOn: varchar("isDarkModeOn").notNull(),
-  },
-  (table) => {
-    return {
-      pk: primaryKey({ columns: [table.userId] }),
-    };
   }
 );

@@ -44,6 +44,15 @@ import {
   MedicalRecordPatientUpdateAttributes,
   medicalRecordPatientTable,
 } from "../models/medicalRecordPatient.model";
+import {
+  LanguageCreationAttributes,
+  languageTable,
+} from "../models/language.model";
+import {
+  UserPreferencesMappingCreationAttributes,
+  UserPreferencesMappingUpdateAttributes,
+  userPreferencesMappingTable,
+} from "../models/userPreferencesMapping.model";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
@@ -121,6 +130,15 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "diagnosis",
         "recommendations",
       ];
+    else if (table === languageTable)
+      this._tableColumns = ["languageId", "languageName"];
+    else if (table === userPreferencesMappingTable)
+      this._tableColumns = [
+        "userPreferencesMappingId",
+        "userId",
+        "languageId",
+        "isDarkModeOn",
+      ];
     else this._tableColumns = [];
 
     // type MyKeys = keyof typeof this._table.$inferSelect;
@@ -152,6 +170,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | AppointmentCreationAttributes
       | AppointmentHistoryCreationAttributes
       | MedicalRecordPatientCreationAttributes
+      | LanguageCreationAttributes
     )
   > {
     if (this._table === userTable) {
@@ -235,6 +254,18 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
       );
+    else if (this._table === languageTable)
+      return ["languageName"] as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | SpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
+        | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+      );
     else {
       return "" as keyof (
         | UserCreationAttributes
@@ -276,6 +307,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | AppointmentCreationAttributes
       | AppointmentHistoryCreationAttributes
       | MedicalRecordPatientCreationAttributes
+      | LanguageCreationAttributes
+      | UserPreferencesMappingCreationAttributes
   ): Promise<T | undefined> {
     try {
       let id;
@@ -345,6 +378,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | DoctorSpecialityMappingUpdateAttributes
       | AppointmentUpdateAttributes
       | MedicalRecordPatientUpdateAttributes
+      | UserPreferencesMappingUpdateAttributes
   ): Promise<T | undefined> {
     try {
       const entityAttributes: Record<string, any> = {};
