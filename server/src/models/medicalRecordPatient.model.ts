@@ -10,8 +10,8 @@ export type MedicalRecordPatient = {
   conductedTests: string;
   diagnosis: string;
   recommendations: string;
-  //   medicalRecordPatientCreatedAt: string;
-  //   medicalRecordPatientUpdatedAt: string;
+  medicalRecordPatientCreatedAt: Date;
+  medicalRecordPatientUpdatedAt: Date;
 };
 
 export type MedicalRecordPatientCreationAttributes = {
@@ -27,6 +27,7 @@ export type MedicalRecordPatientUpdateAttributes = {
   conductedTests: string;
   diagnosis: string;
   recommendations: string;
+  medicalRecordPatientUpdatedAt: Date;
 };
 
 export const medicalRecordPatientTable = clinicSchema.table(

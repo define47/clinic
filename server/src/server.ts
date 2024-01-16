@@ -3,6 +3,7 @@ import Fastify, { FastifyReply, FastifyRequest } from "fastify";
 import fastifyRedis from "@fastify/redis";
 import cluster from "node:cluster";
 import cookie, { FastifyCookieOptions } from "@fastify/cookie";
+import fastifyCors from "@fastify/cors";
 
 import {
   getAdminRoleIdEnv,
@@ -15,12 +16,6 @@ import {
 import { drizzleInstance, migrateToDb } from "./utils/drizzle.js";
 import { BaseRepository } from "./repositories/base.repository.js";
 import { User, userTable } from "./models/user.model.js";
-import { roleTable } from "./models/role.model.js";
-import { specialityTable } from "./models/speciality.model.js";
-import { userRoleMappingTable } from "./models/userRoleMapping.model.js";
-import { doctorSpecialityMappingTable } from "./models/doctorSpecialityMapping.model.js";
-import fastifyCors from "@fastify/cors";
-import { UserRoleMappingRepository } from "./repositories/userRoleMapping.repository.js";
 import { userRoutes } from "./routes/user.routes.js";
 import { appointmentRoutes } from "./routes/appointment.routes.js";
 import { medicalRecordPatientRoutes } from "./routes/medicalRecordPatient.routes.js";
@@ -147,6 +142,7 @@ const buildServer = async () => {
   await fastifyServer;
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// * sockets
+
   const { redis } = fastifyServer;
 
   fastifyServer.io.on("connection", async (socket: any) => {

@@ -1,7 +1,7 @@
 import { boolean, primaryKey, timestamp, varchar } from "drizzle-orm/pg-core";
 import { clinicSchema } from "../utils/drizzle";
 import { userTable } from "./user.model";
-import { specialityTable } from "./speciality.model";
+import { medicalSpecialityTable } from "./medicalSpeciality.model";
 import { sql } from "drizzle-orm";
 
 export type DoctorSpecialityMapping = {
@@ -52,18 +52,26 @@ export const doctorSpecialityMappingTable = clinicSchema.table(
     doctorId: varchar("doctorId")
       .notNull()
       .references(() => userTable.userId),
-    specialityId: varchar("specialityId")
+    medicalSpecialityId: varchar("medicalSpecialityId")
       .notNull()
-      .references(() => specialityTable.specialityId),
-    isPrimarySpeciality: boolean("isPrimarySpeciality").notNull(),
-    isSecondarySpeciality: boolean("isSecondarySpeciality").notNull(),
-    isTertiarySpeciality: boolean("isTertiarySpeciality").notNull(),
-    createdAt: timestamp("createdAt").default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: timestamp("updatedAt").default(sql`CURRENT_TIMESTAMP`),
+      .references(() => medicalSpecialityTable.medicalSpecialityId),
+    isPrimaryMedicalSpeciality: boolean("isPrimaryMedicalSpeciality").notNull(),
+    isSecondaryMedicalSpeciality: boolean(
+      "isSecondaryMedicalSpeciality"
+    ).notNull(),
+    isTertiaryMedicalSpeciality: boolean(
+      "isTertiaryMedicalSpeciality"
+    ).notNull(),
+    doctorSpecialityMappingCreatedAt: timestamp(
+      "doctorSpecialityMappingCreatedAt"
+    ).default(sql`CURRENT_TIMESTAMP`),
+    doctorSpecialityMappingUpdatedAt: timestamp(
+      "doctorSpecialityMappingUpdatedAt"
+    ).default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.doctorId, table.specialityId] }),
+      pk: primaryKey({ columns: [table.doctorId, table.medicalSpecialityId] }),
     };
   }
 );

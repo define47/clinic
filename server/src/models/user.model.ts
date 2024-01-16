@@ -23,8 +23,8 @@ export type User = {
   isUserEmailActivated: boolean;
   isUserApprovedByAdmin: boolean;
   isUserBanned: boolean;
-  userCreatedAt: string;
-  userUpdatedAt: string;
+  userCreatedAt: Date;
+  userUpdatedAt: Date;
 };
 
 export type UserCreationAttributes = {
@@ -53,6 +53,7 @@ export type UserUpdateAttributes = {
   isUserEmailActivated?: boolean;
   isUserApprovedByAdmin?: boolean;
   isUserBanned?: boolean;
+  userUpdatedAt: Date;
 };
 
 export const GenderEnum = pgEnum("userGender", ["male", "female"]);

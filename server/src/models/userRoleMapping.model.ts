@@ -13,6 +13,8 @@ import { sql } from "drizzle-orm";
 export type UserRoleMapping = {
   userId: string;
   roleId: string;
+  userRoleMappingCreatedAt: Date;
+  userRoleMappingUpdatedAt: Date;
 };
 
 export type UserRoleMappingJoinUserAndRole = {
@@ -37,7 +39,11 @@ export type UserRoleMappingCreationAttributes = {
   roleId: string;
 };
 
-export type UserRoleMappingUpdateAttributes = UserRoleMappingCreationAttributes;
+export type UserRoleMappingUpdateAttributes = {
+  userId: string;
+  roleId: string;
+  userRoleMappingUpdatedAt: Date;
+};
 
 export const userRoleMappingTable = clinicSchema.table(
   "UserRoleMapping",
@@ -48,8 +54,12 @@ export const userRoleMappingTable = clinicSchema.table(
     roleId: varchar("roleId")
       .notNull()
       .references(() => roleTable.roleId),
-    createdAt: timestamp("createdAt").default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: timestamp("updatedAt").default(sql`CURRENT_TIMESTAMP`),
+    userRoleMappingCreatedAt: timestamp("userRoleMappingCreatedAt").default(
+      sql`CURRENT_TIMESTAMP`
+    ),
+    userRoleMappingUpdatedAt: timestamp("userRoleMappingUpdatedAt").default(
+      sql`CURRENT_TIMESTAMP`
+    ),
   },
   (table) => {
     return {

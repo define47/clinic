@@ -1,14 +1,14 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import {
-  Speciality,
-  SpecialityCreationAttributes,
-} from "../models/speciality.model";
+  MedicalSpeciality,
+  MedicalSpecialityCreationAttributes,
+} from "../models/medicalSpeciality.model";
 import { BaseRepository } from "./base.repository";
 import { ISpecialityRepository } from "./speciality.irepository";
 import { Table } from "drizzle-orm";
 
 export class SpecialityRepository
-  extends BaseRepository<Speciality>
+  extends BaseRepository<MedicalSpeciality>
   implements ISpecialityRepository
 {
   public constructor(
@@ -20,26 +20,26 @@ export class SpecialityRepository
 
   public async getSpecialityById(
     specialityId: string
-  ): Promise<Speciality | undefined> {
+  ): Promise<MedicalSpeciality | undefined> {
     return await this.getById(specialityId);
   }
 
   public async getSpecialityByName(
     specialityName: string
-  ): Promise<Speciality | undefined> {
+  ): Promise<MedicalSpeciality | undefined> {
     return await this.getByAttribute("specialityName", specialityName);
   }
 
   public async createSpeciality(
-    specialityCreationAttributes: SpecialityCreationAttributes
-  ): Promise<Speciality | undefined> {
+    specialityCreationAttributes: MedicalSpecialityCreationAttributes
+  ): Promise<MedicalSpeciality | undefined> {
     return await this.create(specialityCreationAttributes);
   }
 
   public async updateSpeciality(
     specialityId: string,
-    specialityUpdateAttributes: SpecialityCreationAttributes
-  ): Promise<Speciality | undefined> {
+    specialityUpdateAttributes: MedicalSpecialityCreationAttributes
+  ): Promise<MedicalSpeciality | undefined> {
     return await this.update(specialityId, specialityUpdateAttributes);
   }
 

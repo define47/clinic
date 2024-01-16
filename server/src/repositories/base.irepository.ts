@@ -17,9 +17,9 @@ import {
   RoleUpdateAttributes,
 } from "../models/role.model";
 import {
-  SpecialityCreationAttributes,
-  SpecialityUpdateAttributes,
-} from "../models/speciality.model";
+  MedicalSpecialityCreationAttributes,
+  MedicalSpecialityUpdateAttributes,
+} from "../models/medicalSpeciality.model";
 import {
   UserCreationAttributes,
   UserUpdateAttributes,
@@ -42,7 +42,7 @@ export interface IBaseRepository<T> {
     creationAttributes:
       | UserCreationAttributes
       | RoleCreationAttributes
-      | SpecialityCreationAttributes
+      | MedicalSpecialityCreationAttributes
       | AppointmentCreationAttributes
       | UserRoleMappingCreationAttributes
       | DoctorSpecialityMappingCreationAttributes
@@ -58,7 +58,7 @@ export interface IBaseRepository<T> {
     updateAttributes:
       | UserUpdateAttributes
       | RoleUpdateAttributes
-      | SpecialityUpdateAttributes
+      | MedicalSpecialityUpdateAttributes
       | AppointmentUpdateAttributes
       | UserRoleMappingUpdateAttributes
       | DoctorSpecialityMappingUpdateAttributes

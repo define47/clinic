@@ -16,10 +16,10 @@ import {
   roleTable,
 } from "../models/role.model";
 import {
-  SpecialityCreationAttributes,
-  SpecialityUpdateAttributes,
-  specialityTable,
-} from "../models/speciality.model";
+  MedicalSpecialityCreationAttributes,
+  MedicalSpecialityUpdateAttributes,
+  medicalSpecialityTable,
+} from "../models/medicalSpeciality.model";
 import {
   UserRoleMappingCreationAttributes,
   UserRoleMappingUpdateAttributes,
@@ -53,6 +53,12 @@ import {
   UserPreferencesMappingUpdateAttributes,
   userPreferencesMappingTable,
 } from "../models/userPreferencesMapping.model";
+import {
+  MedicalProcedureCreationAttributes,
+  MedicalProcedureUpdateAttributes,
+  medicalProcedureTable,
+} from "../models/medicalProcedure.model";
+import { specialityMedicalProcedureMappingTable } from "../models/specialityMedicalProcedureMapping.model";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
@@ -77,34 +83,54 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "userDateOfBirth",
         "userAddress",
         "userEncryptedPassword",
-        "isUserActivated",
+        "isUserEmailActivated",
         "isUserApprovedByAdmin",
         "isUserBanned",
         "userCreatedAt",
         "userUpdatedAt",
       ];
-    else if (table === roleTable) this._tableColumns = ["roleId", "roleName"];
-    else if (table === specialityTable)
-      this._tableColumns = ["specialityId", "specialityName"];
+    else if (table === roleTable)
+      this._tableColumns = [
+        "roleId",
+        "roleName",
+        "roleCreatedAt",
+        "roleUpdatedAt",
+      ];
+    else if (table === medicalSpecialityTable)
+      this._tableColumns = [
+        "medicalSpecialityId",
+        "medicalSpecialityName",
+        "medicalSpecialityCreatedAt",
+        "medicalSpecialityUpdatedAt",
+      ];
     else if (table === userRoleMappingTable)
-      this._tableColumns = ["userId", "roleId"];
+      this._tableColumns = [
+        "userId",
+        "roleId",
+        "userRoleMappingCreatedAt",
+        "userRoleMappingUpdatedAt",
+      ];
     else if (table === doctorSpecialityMappingTable)
       this._tableColumns = [
         "doctorId",
-        "specialityId",
-        "isPrimarySpeciality",
-        "isSecondarySpeciality",
-        "isTertiarySpeciality",
+        "medicalSpecialityId",
+        "isPrimaryMedicalSpeciality",
+        "isSecondaryMedicalSpeciality",
+        "isTertiaryMedicalSpeciality",
+        "doctorSpecialityMappingCreatedAt",
+        "doctorSpecialityMappingUpdatedAt",
       ];
     else if (table === appointmentTable)
       this._tableColumns = [
         "appointmentId",
         "appointmentDoctorId",
         "appointmentPatientId",
-        "appointmentReason",
-        "appointmentCancellationReason",
         "appointmentDateTime",
+        "appointmentReason",
         "appointmentStatus",
+        "appointmentCancellationReason",
+        "appointmentCreatedAt",
+        "appointmentUpdatedAt",
       ];
     else if (table === appointmentHistoryTable)
       this._tableColumns = [
@@ -129,11 +155,23 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "conductedTests",
         "diagnosis",
         "recommendations",
+        "medicalRecordPatientCreatedAt",
+        "medicalRecordPatientUpdatedAt",
       ];
     else if (table === languageTable)
       this._tableColumns = ["languageId", "languageName", "languageCode"];
     else if (table === userPreferencesMappingTable)
       this._tableColumns = ["userId", "languageId", "isDarkModeOn"];
+    else if (table === medicalProcedureTable)
+      this._tableColumns = [
+        "medicalProcedureId",
+        "medicalProcedureName",
+        "medicalProcedurePrice",
+        "medicalProcedureCreatedAt",
+        "medicalProcedureUpdatedAt",
+      ];
+    else if (table === specialityMedicalProcedureMappingTable)
+      this._tableColumns = ["specialityId", "medicalProcedureId"];
     else this._tableColumns = [];
 
     // type MyKeys = keyof typeof this._table.$inferSelect;
@@ -159,57 +197,80 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     keyof (
       | UserCreationAttributes
       | RoleCreationAttributes
-      | SpecialityCreationAttributes
+      | MedicalSpecialityCreationAttributes
       | UserRoleMappingCreationAttributes
       | DoctorSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
       | AppointmentHistoryCreationAttributes
       | MedicalRecordPatientCreationAttributes
       | LanguageCreationAttributes
+      | MedicalProcedureCreationAttributes
     )
   > {
     if (this._table === userTable) {
       return ["userEmail"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
-        | SpecialityCreationAttributes
+        | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
         | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
       );
     } else if (this._table === roleTable) {
       return ["roleName"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
-        | SpecialityCreationAttributes
+        | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
         | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
       );
-    } else if (this._table === specialityTable) {
+    } else if (this._table === medicalSpecialityTable) {
       return ["specialityName"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
-        | SpecialityCreationAttributes
+        | MedicalSpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
       );
     } else if (this._table === userRoleMappingTable) {
       return ["userId", "roleId"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
-        | SpecialityCreationAttributes
+        | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
         | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
       );
     } else if (this._table === doctorSpecialityMappingTable) {
       return ["doctorId", "specialityId"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
-        | SpecialityCreationAttributes
+        | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
         | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
       );
     } else if (this._table === appointmentTable) {
       return [
@@ -219,10 +280,14 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       ] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
-        | SpecialityCreationAttributes
+        | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
         | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
       );
     } else if (this._table === appointmentHistoryTable) {
       return [
@@ -232,44 +297,66 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       ] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
-        | SpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-      );
-    } else if (this._table === medicalRecordPatientTable)
-      return ["appointmentId"] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | SpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-      );
-    else if (this._table === languageTable)
-      return ["languageName"] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | SpecialityCreationAttributes
+        | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
         | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
         | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
+      );
+    } else if (this._table === medicalRecordPatientTable)
+      return ["appointmentId"] as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | MedicalSpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
+        | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
+      );
+    else if (this._table === languageTable)
+      return ["languageName"] as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | MedicalSpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
+        | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
+      );
+    else if (this._table === medicalProcedureTable)
+      return ["medicalName"] as keyof (
+        | UserCreationAttributes
+        | RoleCreationAttributes
+        | MedicalSpecialityCreationAttributes
+        | UserRoleMappingCreationAttributes
+        | DoctorSpecialityMappingCreationAttributes
+        | AppointmentCreationAttributes
+        | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
       );
     else {
       return "" as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
-        | SpecialityCreationAttributes
+        | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
         | DoctorSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
+        | MedicalRecordPatientCreationAttributes
+        | LanguageCreationAttributes
+        | MedicalProcedureCreationAttributes
       );
     }
   }
@@ -296,7 +383,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     creationAttributes:
       | UserCreationAttributes
       | RoleCreationAttributes
-      | SpecialityCreationAttributes
+      | MedicalSpecialityCreationAttributes
       | UserRoleMappingCreationAttributes
       | DoctorSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
@@ -304,6 +391,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | MedicalRecordPatientCreationAttributes
       | LanguageCreationAttributes
       | UserPreferencesMappingCreationAttributes
+      | MedicalProcedureCreationAttributes
   ): Promise<T | undefined> {
     try {
       let id;
@@ -367,13 +455,14 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     updateAttributes:
       | UserUpdateAttributes
       | RoleUpdateAttributes
-      | SpecialityUpdateAttributes
+      | MedicalSpecialityUpdateAttributes
       | AppointmentUpdateAttributes
       | UserRoleMappingUpdateAttributes
       | DoctorSpecialityMappingUpdateAttributes
       | AppointmentUpdateAttributes
       | MedicalRecordPatientUpdateAttributes
       | UserPreferencesMappingUpdateAttributes
+      | MedicalProcedureUpdateAttributes
   ): Promise<T | undefined> {
     try {
       const entityAttributes: Record<string, any> = {};

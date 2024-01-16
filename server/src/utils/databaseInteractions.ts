@@ -1,7 +1,7 @@
 import { appointmentTable } from "../models/appointment.model";
 import { doctorSpecialityMappingTable } from "../models/doctorSpecialityMapping.model";
 import { roleTable } from "../models/role.model";
-import { specialityTable } from "../models/speciality.model";
+import { medicalSpecialityTable } from "../models/medicalSpeciality.model";
 import { User, userTable } from "../models/user.model";
 import { userRoleMappingTable } from "../models/userRoleMapping.model";
 import { AppointmentRepository } from "../repositories/appointment.repository";
@@ -26,7 +26,7 @@ const userRoleMappingRepository = new UserRoleMappingRepository(
 );
 const specialityRepository = new SpecialityRepository(
   drizzleInstance,
-  specialityTable
+  medicalSpecialityTable
 );
 const doctorSpecialityMappingRepository = new DoctorSpecialityMappingRepository(
   drizzleInstance,

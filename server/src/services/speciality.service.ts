@@ -1,8 +1,8 @@
 import {
-  Speciality,
-  SpecialityCreationAttributes,
-  specialityTable,
-} from "../models/speciality.model";
+  MedicalSpeciality,
+  MedicalSpecialityCreationAttributes,
+  medicalSpecialityTable,
+} from "../models/medicalSpeciality.model";
 import { SpecialityRepository } from "../repositories/speciality.repository";
 import { drizzleInstance } from "../utils/drizzle";
 import { ISpecialityService } from "./speciality.iservice";
@@ -13,25 +13,25 @@ export class SpecialityService implements ISpecialityService {
   public constructor() {
     this._specialityRepository = new SpecialityRepository(
       drizzleInstance,
-      specialityTable
+      medicalSpecialityTable
     );
   }
 
   public async getSpecialityById(
     specialityId: string
-  ): Promise<Speciality | undefined> {
+  ): Promise<MedicalSpeciality | undefined> {
     return await this._specialityRepository.getSpecialityById(specialityId);
   }
 
   public async getSpecialityByName(
     specialityName: string
-  ): Promise<Speciality | undefined> {
+  ): Promise<MedicalSpeciality | undefined> {
     return await this._specialityRepository.getSpecialityByName(specialityName);
   }
 
   public async createSpeciality(
-    specialityCreationAttributes: SpecialityCreationAttributes
-  ): Promise<Speciality | undefined> {
+    specialityCreationAttributes: MedicalSpecialityCreationAttributes
+  ): Promise<MedicalSpeciality | undefined> {
     return await this._specialityRepository.createSpeciality(
       specialityCreationAttributes
     );
@@ -39,8 +39,8 @@ export class SpecialityService implements ISpecialityService {
 
   public async updateSpeciality(
     specialityId: string,
-    specialityUpdateAttributes: SpecialityCreationAttributes
-  ): Promise<Speciality | undefined> {
+    specialityUpdateAttributes: MedicalSpecialityCreationAttributes
+  ): Promise<MedicalSpeciality | undefined> {
     return await this._specialityRepository.updateSpeciality(
       specialityId,
       specialityUpdateAttributes

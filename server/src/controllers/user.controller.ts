@@ -55,7 +55,7 @@ export class UserController {
 
       console.log("sessionId logout", request.cookieData.value);
 
-      redis.sessionRedis.del(`sessionId:${request.cookieData.value}`);
+      await redis.sessionRedis.del(`sessionId:${request.cookieData.value}`);
       reply.clearCookie("sessionId");
 
       reply.code(200).send({ success: true, message: "logged out" });
