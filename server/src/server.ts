@@ -31,12 +31,22 @@ import {
   createRoles,
   createSpecialities,
 } from "./utils/databaseInteractions.js";
+import { LanguageService } from "./services/language.service.js";
+import { userPreferencesRoutes } from "./routes/userPreferences.routes.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
 const CONNECTION_COUNT_CHANNEL = "chat:connection-count-updated";
 // const countChannelKey = "chat-connection-count";
 export const MESSAGE_CHANNEL = "chat:message-channel";
+
+// import { SerialPort } from "serialport";
+
+// SerialPort.list().then(function (ports) {
+//   ports.forEach(function (port) {
+//     console.log("Port: ", port);
+//   });
+// });
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -82,11 +92,11 @@ const buildServer = async () => {
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   };
 
-  const socketIOOptions = {
-    // origin: "*",
-    origin: "http://192.168.2.16:3000",
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  };
+  // const socketIOOptions = {
+  //   // origin: "*",
+  //   origin: "http://192.168.2.16:3000",
+  //   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  // };
 
   await fastifyServer.register(fastifyCors, corsOptions);
   await fastifyServer.register(fastifyEnv, options);
@@ -130,6 +140,9 @@ const buildServer = async () => {
   });
   await fastifyServer.register(medicalRecordPatientRoutes, {
     prefix: "api/medicalRecordsPatients",
+  });
+  await fastifyServer.register(userPreferencesRoutes, {
+    prefix: "api/user-preferences",
   });
   await fastifyServer;
 
@@ -209,10 +222,21 @@ const buildServer = async () => {
     return { counter };
   });
 
-  await migrateToDb();
+  // await migrateToDb();
 
   // await createRoles();
   // await createSpecialities();
+
+  // const languageService = new LanguageService();
+  // await languageService.createLanguage({
+  //   languageName: "Romanian",
+  //   languageCode: "ro",
+  // });
+
+  // await languageService.createLanguage({
+  //   languageName: "English",
+  //   languageCode: "en",
+  // });
 
   return fastifyServer;
 };

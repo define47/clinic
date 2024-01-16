@@ -131,14 +131,9 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "recommendations",
       ];
     else if (table === languageTable)
-      this._tableColumns = ["languageId", "languageName"];
+      this._tableColumns = ["languageId", "languageName", "languageCode"];
     else if (table === userPreferencesMappingTable)
-      this._tableColumns = [
-        "userPreferencesMappingId",
-        "userId",
-        "languageId",
-        "isDarkModeOn",
-      ];
+      this._tableColumns = ["userId", "languageId", "isDarkModeOn"];
     else this._tableColumns = [];
 
     // type MyKeys = keyof typeof this._table.$inferSelect;

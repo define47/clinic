@@ -48,6 +48,16 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."DoctorSpecialityMapping" (
 	CONSTRAINT "DoctorSpecialityMapping_doctorId_specialityId_pk" PRIMARY KEY("doctorId","specialityId")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "iatropolis"."Language" (
+	"languageId" varchar PRIMARY KEY NOT NULL,
+	"languageName" varchar(256) NOT NULL,
+	"languageCode" varchar(256) NOT NULL,
+	"languageCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"languageUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "Language_languageName_unique" UNIQUE("languageName"),
+	CONSTRAINT "Language_languageCode_unique" UNIQUE("languageCode")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalRecordPatient" (
 	"medicalRecordPatientId" varchar PRIMARY KEY NOT NULL,
 	"appointmentId" varchar(100) NOT NULL,
@@ -85,13 +95,20 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."User" (
 	"userDateOfBirth" date NOT NULL,
 	"userAddress" varchar(256) NOT NULL,
 	"userEncryptedPassword" varchar(256) NOT NULL,
-	"isUserActivated" boolean DEFAULT false NOT NULL,
+	"isUserEmailActivated" boolean DEFAULT false NOT NULL,
 	"isUserApprovedByAdmin" boolean DEFAULT false NOT NULL,
 	"isUserBanned" boolean DEFAULT false NOT NULL,
 	"userCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	"userUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "User_userEmail_unique" UNIQUE("userEmail"),
 	CONSTRAINT "User_userPhoneNumber_unique" UNIQUE("userPhoneNumber")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "iatropolis"."UserPreferencesMapping" (
+	"userId" varchar NOT NULL,
+	"languageId" varchar NOT NULL,
+	"isDarkModeOn" varchar NOT NULL,
+	CONSTRAINT "UserPreferencesMapping_userId_pk" PRIMARY KEY("userId")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."UserRoleMapping" (
@@ -158,6 +175,18 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "iatropolis"."MedicalRecordPatient" ADD CONSTRAINT "MedicalRecordPatient_appointmentId_Appointment_appointmentId_fk" FOREIGN KEY ("appointmentId") REFERENCES "iatropolis"."Appointment"("appointmentId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "iatropolis"."UserPreferencesMapping" ADD CONSTRAINT "UserPreferencesMapping_userId_User_userId_fk" FOREIGN KEY ("userId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "iatropolis"."UserPreferencesMapping" ADD CONSTRAINT "UserPreferencesMapping_languageId_Language_languageId_fk" FOREIGN KEY ("languageId") REFERENCES "iatropolis"."Language"("languageId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

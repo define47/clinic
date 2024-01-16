@@ -23,7 +23,6 @@ export type UserPreferencesMappingUpdateAttributes = {
 export const userPreferencesMappingTable = clinicSchema.table(
   "UserPreferencesMapping",
   {
-    userPreferencesMappingId: varchar("userPreferencesMappingId").primaryKey(),
     userId: varchar("userId")
       .notNull()
       .references(() => userTable.userId),
@@ -31,5 +30,10 @@ export const userPreferencesMappingTable = clinicSchema.table(
       .notNull()
       .references(() => languageTable.languageId),
     isDarkModeOn: varchar("isDarkModeOn").notNull(),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.userId] }),
+    };
   }
 );

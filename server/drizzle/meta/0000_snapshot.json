@@ -1,5 +1,5 @@
 {
-  "id": "e2b67d62-5451-4279-9dec-f3af273c5a47",
+  "id": "f110bd08-1d65-40d0-a8a0-2ad1016c58b5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -338,6 +338,63 @@
       },
       "uniqueConstraints": {}
     },
+    "Language": {
+      "name": "Language",
+      "schema": "iatropolis",
+      "columns": {
+        "languageId": {
+          "name": "languageId",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "languageName": {
+          "name": "languageName",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "languageCode": {
+          "name": "languageCode",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "languageCreatedAt": {
+          "name": "languageCreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "languageUpdatedAt": {
+          "name": "languageUpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Language_languageName_unique": {
+          "name": "Language_languageName_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "languageName"
+          ]
+        },
+        "Language_languageCode_unique": {
+          "name": "Language_languageCode_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "languageCode"
+          ]
+        }
+      }
+    },
     "MedicalRecordPatient": {
       "name": "MedicalRecordPatient",
       "schema": "iatropolis",
@@ -558,8 +615,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "isUserActivated": {
-          "name": "isUserActivated",
+        "isUserEmailActivated": {
+          "name": "isUserEmailActivated",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,
@@ -613,6 +670,68 @@
           ]
         }
       }
+    },
+    "UserPreferencesMapping": {
+      "name": "UserPreferencesMapping",
+      "schema": "iatropolis",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "languageId": {
+          "name": "languageId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isDarkModeOn": {
+          "name": "isDarkModeOn",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UserPreferencesMapping_userId_User_userId_fk": {
+          "name": "UserPreferencesMapping_userId_User_userId_fk",
+          "tableFrom": "UserPreferencesMapping",
+          "tableTo": "User",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "UserPreferencesMapping_languageId_Language_languageId_fk": {
+          "name": "UserPreferencesMapping_languageId_Language_languageId_fk",
+          "tableFrom": "UserPreferencesMapping",
+          "tableTo": "Language",
+          "columnsFrom": [
+            "languageId"
+          ],
+          "columnsTo": [
+            "languageId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserPreferencesMapping_userId_pk": {
+          "name": "UserPreferencesMapping_userId_pk",
+          "columns": [
+            "userId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
     },
     "UserRoleMapping": {
       "name": "UserRoleMapping",

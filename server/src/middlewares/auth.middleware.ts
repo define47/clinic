@@ -3,7 +3,7 @@ import { fastifyServer } from "../server";
 
 declare module "fastify" {
   interface FastifyRequest {
-    sessionId?: any;
+    cookieData?: any;
     userData?: any;
   }
 }
@@ -40,6 +40,6 @@ export const authenticationMiddleware = (
     return reply.code(401).send({ message: "Unauthorized: Token not good" });
   }
   //   console.log(signedCookie);
-  request.sessionId = signedCookieValue;
+  request.cookieData = signedCookieValue;
   done();
 };

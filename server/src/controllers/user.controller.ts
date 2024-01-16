@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import * as argon2 from "argon2";
 import { v4 as uuidv4 } from "uuid";
+import * as clc from "cli-color";
 
 import { RoleService } from "../services/role.service";
 import { UserService } from "../services/user.service";
@@ -12,6 +13,8 @@ import { DoctorSpecialityMapping } from "../models/doctorSpecialityMapping.model
 import { UserRoleMapping } from "../models/userRoleMapping.model";
 import { getDoctorRoleIdEnv } from "../utils/dotenv";
 import { MESSAGE_CHANNEL, fastifyServer } from "../server";
+import { LanguageService } from "../services/language.service";
+import { UserPreferencesMappingService } from "../services/userPreferencesMapping.service";
 
 export class UserController {
   private readonly _userService: UserService;
@@ -19,6 +22,8 @@ export class UserController {
   private readonly _userRoleMappingService: UserRoleMappingService;
   private readonly _doctorSpecialityMappingService: DoctorSpecialityMappingService;
   private readonly _specialityService: SpecialityService;
+  private readonly _languageService: LanguageService;
+  private readonly _userPreferencesMappingService: UserPreferencesMappingService;
 
   public constructor() {
     this._userService = new UserService();
@@ -26,6 +31,8 @@ export class UserController {
     this._userRoleMappingService = new UserRoleMappingService();
     this._doctorSpecialityMappingService = new DoctorSpecialityMappingService();
     this._specialityService = new SpecialityService();
+    this._languageService = new LanguageService();
+    this._userPreferencesMappingService = new UserPreferencesMappingService();
   }
 
   private checkUserEmailValidity = async (userEmail: string) => {
@@ -46,9 +53,9 @@ export class UserController {
     try {
       const { redis } = fastifyServer;
 
-      console.log("sessionId logout", request.sessionId.value);
+      console.log("sessionId logout", request.cookieData.value);
 
-      redis.sessionRedis.del(`sessionId:${request.sessionId.value}`);
+      redis.sessionRedis.del(`sessionId:${request.cookieData.value}`);
       reply.clearCookie("sessionId");
 
       reply.code(200).send({ success: true, message: "logged out" });
@@ -63,7 +70,7 @@ export class UserController {
         request.cookies.userSession!
       );
 
-      console.log("reading", request.sessionId);
+      console.log("reading", request.cookieData);
 
       reply
         .code(200)
@@ -94,6 +101,33 @@ export class UserController {
           .send({ success: false, message: "Failed Login password" });
 
       const { redis } = fastifyServer;
+
+      const userPreferencesMapping =
+        await this._userPreferencesMappingService.getUserPreferencesMappingByUserId(
+          userToLogin?.userId!
+        );
+
+      console.log(userPreferencesMapping === undefined);
+
+      if (userPreferencesMapping === undefined) {
+        const romanianLanguage = await this._languageService.getLanguageById(
+          "197a489f-c736-5974-a13e-7c12db1729b8"
+        );
+
+        console.log(romanianLanguage);
+
+        await this._userPreferencesMappingService.createUserPreferencesMapping({
+          userId: userToLogin?.userId!,
+          languageId: romanianLanguage?.languageId!,
+          isDarkModeOn: false,
+        });
+      }
+
+      const language = await this._languageService.getLanguageById(
+        userPreferencesMapping?.languageId!
+      );
+
+      console.log(language);
 
       let userRoleNames = [];
       const userToLoginRoles =
@@ -134,8 +168,14 @@ export class UserController {
         userEmail: userToLogin?.userEmail,
         roles: userRoleNames,
         specialities: doctorSpecialityNames,
+        languageCode: language?.languageCode,
+        languageName: language?.languageName,
+        isDarkModeOn: userPreferencesMapping?.isDarkModeOn,
       };
-      console.log("created session:", `sessionId:${sessionId}`);
+
+      console.log(sessionValue);
+
+      console.log(`${clc.cyan("created session:")} get sessionId:${sessionId}`);
 
       await redis.sessionRedis.set(
         `sessionId:${sessionId}`,
@@ -159,6 +199,7 @@ export class UserController {
         success: true,
         message: "login successful",
         userRoles: userToLoginRoles,
+        userPreferencesMapping,
       });
     } catch (error) {}
   };
@@ -250,7 +291,7 @@ export class UserController {
       const { redis } = fastifyServer;
 
       const userSessionData = await redis.sessionRedis.get(
-        `sessionId:${request.sessionId.value}`
+        `sessionId:${request.cookieData.value}`
       );
 
       const putUser = await this._userService.updateUser(body.userId, {
