@@ -224,7 +224,7 @@ const buildServer = async () => {
     return { counter };
   });
 
-  // await migrateToDb();
+  await migrateToDb();
 
   // await createRoles();
   // await createSpecialities();
@@ -244,22 +244,20 @@ const buildServer = async () => {
     drizzleInstance,
     userRoleMappingTable
   );
-  // const usersByRole =
-  //   await userRoleMappingRepository.getAllUserRolesMappingsByRole(
-  //     getPatientRoleIdEnv(),
-  //     ["userForename", "userSurname"],
-  //     "patientfn1",
-  //     10,
-  //     0,
-  //     "userCreatedAt"
-  //   );
-
-  // console.log(data?.userRoleMappingJoinUserAndRole);
-
-  const medicalSpecialityRepository = new MedicalSpecialityRepository(
-    drizzleInstance,
-    medicalSpecialityTable
+  const usersByRole = await userRoleMappingRepository.getAllUsersRelatedData(
+    getDoctorRoleIdEnv(),
+    ["userForename", "userSurname"],
+    "",
+    10,
+    0,
+    "medicalSpecialityName"
   );
+  console.log(usersByRole?.usersRelatedData);
+
+  // const medicalSpecialityRepository = new MedicalSpecialityRepository(
+  //   drizzleInstance,
+  //   medicalSpecialityTable
+  // );
   // const medicalSpecialities =
   //   await medicalSpecialityRepository.getAllMedicalSpecialities("in", 5, 0);
   // console.log(medicalSpecialities?.medicalSpecialities);

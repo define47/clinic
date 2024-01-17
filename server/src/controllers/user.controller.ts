@@ -209,7 +209,7 @@ export class UserController {
     try {
       const body: any = request.body;
 
-      if (body.action === "create") {
+      if (body.action === "createUser") {
         const roleNames: string[] = body.roleNames;
 
         for (let i = 0; i < roleNames.length; i++) {

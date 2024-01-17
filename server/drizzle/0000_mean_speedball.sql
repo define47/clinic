@@ -80,8 +80,8 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalRecordPatient" (
 CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalSpeciality" (
 	"medicalSpecialityId" varchar PRIMARY KEY NOT NULL,
 	"medicalSpecialityName" varchar(50) NOT NULL,
-	"medicalSpecialityCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"medicalSpecialityUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"medicalSpecialityCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"medicalSpecialityUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT "MedicalSpeciality_medicalSpecialityName_unique" UNIQUE("medicalSpecialityName")
 );
 --> statement-breakpoint
@@ -130,8 +130,8 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."UserPreferencesMapping" (
 CREATE TABLE IF NOT EXISTS "iatropolis"."UserRoleMapping" (
 	"userId" varchar NOT NULL,
 	"roleId" varchar NOT NULL,
-	"userRoleMappingCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"userRoleMappingUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"userRoleMappingCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"userRoleMappingUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT "UserRoleMapping_userId_roleId_pk" PRIMARY KEY("userId","roleId")
 );
 --> statement-breakpoint

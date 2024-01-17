@@ -1,5 +1,5 @@
 {
-  "id": "42a76b03-d6a4-4eb9-be66-0773f80ccab8",
+  "id": "386c55f4-3446-407e-b876-c9ff21bb19e4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -529,14 +529,14 @@
           "name": "medicalSpecialityCreatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
         "medicalSpecialityUpdatedAt": {
           "name": "medicalSpecialityUpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         }
       },
@@ -864,14 +864,14 @@
           "name": "userRoleMappingCreatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
         "userRoleMappingUpdatedAt": {
           "name": "userRoleMappingUpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         }
       },

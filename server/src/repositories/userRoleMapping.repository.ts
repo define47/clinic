@@ -7,10 +7,24 @@ import {
 } from "../models/userRoleMapping.model";
 import { BaseRepository } from "./base.repository";
 import { IUserRoleMappingRepository } from "./userRoleMapping.irepository";
-import { Table, and, asc, count, eq, ilike, sql } from "drizzle-orm";
+import { Table, and, asc, count, desc, eq, ilike, sql } from "drizzle-orm";
 import { roleTable } from "../models/role.model";
 import { User, userTable } from "../models/user.model";
 import { PgColumn } from "drizzle-orm/pg-core";
+import {
+  getAdminRoleIdEnv,
+  getDoctorRoleIdEnv,
+  getPatientRoleIdEnv,
+  getReceptionistRoleIdEnv,
+} from "../utils/dotenv";
+import {
+  DoctorMedicalSpecialityMappingJoinUserAndSpeciality,
+  doctorMedicalSpecialityMappingTable,
+} from "../models/doctorMedicalSpecialityMapping.model";
+import {
+  MedicalSpeciality,
+  medicalSpecialityTable,
+} from "../models/medicalSpeciality.model";
 
 export class UserRoleMappingRepository
   extends BaseRepository<UserRoleMapping>
@@ -50,7 +64,7 @@ export class UserRoleMappingRepository
       .where(eq(userRoleMappingTable.userId, userId));
   }
 
-  public async getAllUserRolesMappingsByRole(
+  public async getAllUsersRelatedData(
     roleId: string,
     searchBy: string[],
     searchQuery: string,
@@ -59,7 +73,9 @@ export class UserRoleMappingRepository
     orderBy: string
   ): Promise<
     | {
-        userRoleMappingJoinUserAndRole: UserRoleMappingJoinUserAndRole[];
+        usersRelatedData:
+          | UserRoleMappingJoinUserAndRole[]
+          | DoctorMedicalSpecialityMappingJoinUserAndSpeciality[];
         totalCount: number;
         totalPages: number;
       }
@@ -85,6 +101,8 @@ export class UserRoleMappingRepository
         columnToSearchBy1 = userTable.userDateOfBirth;
       else if (searchBy[0] === "userAddress")
         columnToSearchBy1 = userTable.userAddress;
+      else if (searchBy[0] === "medicalSpecialityName")
+        columnToSearchBy1 = medicalSpecialityTable.medicalSpecialityName;
     } else if (searchBy.length === 2) {
       if (searchBy[0] === "userForename" && searchBy[1] === "userSurname") {
         columnToSearchBy1 = userTable.userForename;
@@ -102,52 +120,172 @@ export class UserRoleMappingRepository
       userSearchQuery: and(
         eq(userRoleMappingTable.roleId, roleId),
         searchBy.length === 1
-          ? ilike(columnToSearchBy1, `%${searchQuery}%`)
+          ? ilike(columnToSearchBy1, `${searchQuery}%`)
           : searchBy.length === 2
-          ? sql`CONCAT(${columnToSearchBy1}, ' ', ${columnToSearchBy2}) ILIKE ${`%${searchQuery}%`}`
+          ? sql`CONCAT(${columnToSearchBy1}, ' ', ${columnToSearchBy2}) ILIKE ${`${searchQuery}%`}`
           : sql`TRUE`
       ),
+      doctorSearchQuery:
+        searchBy.length === 1
+          ? ilike(columnToSearchBy1, `%${searchQuery}%`)
+          : searchBy.length === 2
+          ? sql`CONCAT(${columnToSearchBy1}, ' ', ${columnToSearchBy2}) ILIKE ${`${searchQuery}%`}`
+          : sql`TRUE`,
     };
 
-    const totalCount = await this._drizzle
-      .select({ totalCount: count() })
-      .from(this._table)
-      .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
-      .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
-      .where(condition.userSearchQuery);
+    let totalCount;
+    let data;
+    let offset = page * limit;
 
-    const offset = page * limit;
+    if (
+      roleId === getPatientRoleIdEnv() ||
+      roleId === getAdminRoleIdEnv() ||
+      roleId === getReceptionistRoleIdEnv()
+    ) {
+      totalCount = await this._drizzle
+        .select({ totalCount: count() })
+        .from(this._table)
+        .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
+        .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
+        .where(condition.userSearchQuery);
 
-    const userRoleMappingJoinUserAndRole = await this._drizzle
-      .select({
-        user: {
-          userId: userTable.userId,
-          userForename: userTable.userForename,
-          userSurname: userTable.userSurname,
-          userEmail: userTable.userEmail,
-          userPhoneNumber: userTable.userPhoneNumber,
-          userGender: userTable.userGender,
-          userDateOfBirth: userTable.userDateOfBirth,
-          userAddress: userTable.userAddress,
-        },
-        role: {
-          roleId: userRoleMappingTable.roleId,
-          roleName: roleTable.roleName,
-        },
-      })
-      .from(this._table)
-      .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
-      .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
-      .where(condition.userSearchQuery)
-      .limit(limit)
-      .offset(offset)
-      .orderBy(asc(userTable[orderBy as keyof User]));
+      data = await this._drizzle
+        .select({
+          user: {
+            userId: userTable.userId,
+            userForename: userTable.userForename,
+            userSurname: userTable.userSurname,
+            userEmail: userTable.userEmail,
+            userPhoneNumber: userTable.userPhoneNumber,
+            userGender: userTable.userGender,
+            userDateOfBirth: userTable.userDateOfBirth,
+            userAddress: userTable.userAddress,
+          },
+          role: {
+            roleId: userRoleMappingTable.roleId,
+            roleName: roleTable.roleName,
+          },
+        })
+        .from(this._table)
+        .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
+        .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
+        .where(condition.userSearchQuery)
+        .limit(limit)
+        .offset(offset)
+        .orderBy(asc(userTable[orderBy as keyof User]));
 
-    return {
-      userRoleMappingJoinUserAndRole,
-      totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
-      totalCount: totalCount[0].totalCount,
-    };
+      return {
+        usersRelatedData: data as UserRoleMappingJoinUserAndRole[],
+        totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
+        totalCount: totalCount[0].totalCount,
+      };
+    } else if (roleId === getDoctorRoleIdEnv()) {
+      data = await this._drizzle
+        .select({
+          doctor: {
+            doctorId: userTable.userId,
+            doctorForename: userTable.userForename,
+            doctorSurname: userTable.userSurname,
+            doctorEmail: userTable.userEmail,
+            doctorPhoneNumber: userTable.userPhoneNumber,
+            doctorGender: userTable.userGender,
+            doctorDateOfBirth: userTable.userDateOfBirth,
+            doctorAddress: userTable.userAddress,
+          },
+          medicalSpeciality: {
+            medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
+            medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
+            isPrimaryMedicalSpeciality:
+              doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
+            isSecondaryMedicalSpeciality:
+              doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
+            isTertiaryMedicalSpeciality:
+              doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
+          },
+        })
+        .from(doctorMedicalSpecialityMappingTable)
+        .innerJoin(
+          userTable,
+          eq(doctorMedicalSpecialityMappingTable.doctorId, userTable.userId)
+        )
+        .innerJoin(
+          medicalSpecialityTable,
+          eq(
+            doctorMedicalSpecialityMappingTable.medicalSpecialityId,
+            medicalSpecialityTable.medicalSpecialityId
+          )
+        )
+        .where(condition.doctorSearchQuery)
+        .orderBy(
+          asc(
+            orderBy === "medicalSpecialityName"
+              ? medicalSpecialityTable[orderBy as keyof MedicalSpeciality]
+              : userTable[orderBy as keyof User]
+          )
+        );
+
+      const resultArray = Array.from(
+        data
+          .reduce((doctorMap, { doctor, medicalSpeciality }) => {
+            const {
+              doctorId,
+              doctorForename,
+              doctorSurname,
+              doctorEmail,
+              doctorPhoneNumber,
+              doctorGender,
+              doctorDateOfBirth,
+              doctorAddress,
+            } = doctor;
+            const {
+              medicalSpecialityName,
+              isPrimaryMedicalSpeciality,
+              isSecondaryMedicalSpeciality,
+              isTertiaryMedicalSpeciality,
+            } = medicalSpeciality;
+
+            if (!doctorMap.has(doctorId)) {
+              doctorMap.set(doctorId, {
+                doctorId,
+                doctorForename,
+                doctorSurname,
+                doctorEmail,
+                doctorPhoneNumber,
+                doctorGender,
+                doctorDateOfBirth,
+                doctorAddress,
+                medicalSpecialities: [],
+              });
+            }
+
+            const doctorEntry = doctorMap.get(doctorId);
+
+            let designation = "";
+            if (isPrimaryMedicalSpeciality) {
+              designation = " (P)";
+            } else if (isSecondaryMedicalSpeciality) {
+              designation = " (S)";
+            } else if (isTertiaryMedicalSpeciality) {
+              designation = " (T)";
+            }
+
+            doctorEntry.medicalSpecialities.push(
+              `${medicalSpecialityName}${designation}`
+            );
+
+            return doctorMap;
+          }, new Map())
+          .values()
+      );
+
+      return {
+        usersRelatedData: resultArray as any,
+        totalCount: data.length,
+        totalPages: Math.ceil(data.length / limit) - 1,
+      };
+    }
+
+    return undefined;
   }
 
   public async createUserRoleMapping(
