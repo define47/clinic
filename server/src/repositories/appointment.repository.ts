@@ -8,8 +8,9 @@ import {
 } from "../models/appointment.model";
 import { IAppointmentRepository } from "./appointment.irepository";
 import { BaseRepository } from "./base.repository";
-import { Table, eq } from "drizzle-orm";
+import { Table, eq, ilike } from "drizzle-orm";
 import { userTable } from "../models/user.model";
+import { alias } from "drizzle-orm/pg-core";
 
 export class AppointmentRepository
   extends BaseRepository<Appointment>
@@ -23,9 +24,12 @@ export class AppointmentRepository
   }
 
   public async getAllAppointments(): Promise<
-    AppointmentJoinDoctorAndPatient | undefined
+    AppointmentJoinDoctorAndPatient[] | undefined
   > {
     try {
+      const doctor = alias(userTable, "doctor");
+      const patient = alias(userTable, "patient");
+
       const data = await this._drizzle
         .select({
           appointment: {
@@ -34,7 +38,7 @@ export class AppointmentRepository
             appointmentPatientId: appointmentTable.appointmentPatientId,
             appointmentReason: appointmentTable.appointmentReason,
             appointmentDateTime: appointmentTable.appointmentDateTime,
-            appointmentStatus: appointmentTable.appointmentDateTime,
+            appointmentStatus: appointmentTable.appointmentStatus,
             appointmentCancellationReason:
               appointmentTable.appointmentCancellationReason,
           },
@@ -51,14 +55,12 @@ export class AppointmentRepository
           },
         })
         .from(appointmentTable)
+        .innerJoin(userTable, eq(appointmentTable.appointmentDoctorId, doctor))
         .innerJoin(
           userTable,
-          eq(appointmentTable.appointmentDoctorId, userTable.userId)
+          eq(appointmentTable.appointmentPatientId, patient)
         )
-        .innerJoin(
-          userTable,
-          eq(appointmentTable.appointmentPatientId, userTable.userId)
-        );
+        .where(ilike(doctor.userEmail, ""));
 
       return data;
     } catch (error) {

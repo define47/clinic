@@ -43,6 +43,7 @@ export class MedicalRecordPatientController {
             conductedTests: body.conductedTests,
             diagnosis: body.diagnosis,
             recommendations: body.recommendations,
+            medicalRecordPatientUpdatedAt: new Date(),
           }
         );
 

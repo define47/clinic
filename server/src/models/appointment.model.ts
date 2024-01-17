@@ -31,7 +31,7 @@ export type AppointmentJoinDoctorAndPatient = {
     appointmentReason: string;
     appointmentDateTime: Date;
     appointmentStatus: string;
-    appointmentCancellationReason: string;
+    appointmentCancellationReason: string | null;
   };
   doctor: {
     doctorId: string;
@@ -94,10 +94,10 @@ export const appointmentTable = clinicSchema.table("Appointment", {
   appointmentCancellationReason: varchar("appointmentCancellationReason", {
     length: 256,
   }),
-  appointmentCreatedAt: timestamp("appointmentCreatedAt").default(
-    sql`CURRENT_TIMESTAMP`
-  ),
-  appointmentUpdatedAt: timestamp("appointmentUpdatedAt").default(
-    sql`CURRENT_TIMESTAMP`
-  ),
+  appointmentCreatedAt: timestamp("appointmentCreatedAt")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  appointmentUpdatedAt: timestamp("appointmentUpdatedAt")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
 });

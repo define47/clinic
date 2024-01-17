@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userPreferencesController = exports.medicalRecordPatientController = exports.appointmentController = exports.medicalSpecialityController = exports.userController = void 0;
+const appointment_controller_1 = require("./appointment.controller");
+const medicalRecordPatient_controller_1 = require("./medicalRecordPatient.controller");
+const medicalSpeciality_controller_1 = require("./medicalSpeciality.controller");
+const user_controller_1 = require("./user.controller");
+const userPreference_controller_1 = require("./userPreference.controller");
+exports.userController = new user_controller_1.UserController();
+exports.medicalSpecialityController = new medicalSpeciality_controller_1.MedicalSpecialityController();
+exports.appointmentController = new appointment_controller_1.AppointmentController();
+exports.medicalRecordPatientController = new medicalRecordPatient_controller_1.MedicalRecordPatientController();
+exports.userPreferencesController = new userPreference_controller_1.UserPreferencesController();
