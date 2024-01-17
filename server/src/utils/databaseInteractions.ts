@@ -1,13 +1,13 @@
 import { appointmentTable } from "../models/appointment.model";
-import { doctorSpecialityMappingTable } from "../models/doctorSpecialityMapping.model";
+import { doctorMedicalSpecialityMappingTable } from "../models/doctorMedicalSpecialityMapping.model";
 import { roleTable } from "../models/role.model";
 import { medicalSpecialityTable } from "../models/medicalSpeciality.model";
 import { User, userTable } from "../models/user.model";
 import { userRoleMappingTable } from "../models/userRoleMapping.model";
 import { AppointmentRepository } from "../repositories/appointment.repository";
-import { DoctorSpecialityMappingRepository } from "../repositories/doctorSpecialityMapping.repository";
+import { DoctorMedicalSpecialityMappingRepository } from "../repositories/doctorMedicalSpecialityMapping.repository";
 import { RoleRepository } from "../repositories/role.repository";
-import { SpecialityRepository } from "../repositories/speciality.repository";
+import { MedicalSpecialityRepository } from "../repositories/medicalSpeciality.repository";
 import { UserRepository } from "../repositories/user.repository";
 import { UserRoleMappingRepository } from "../repositories/userRoleMapping.repository";
 import {
@@ -24,14 +24,15 @@ const userRoleMappingRepository = new UserRoleMappingRepository(
   drizzleInstance,
   userRoleMappingTable
 );
-const specialityRepository = new SpecialityRepository(
+const specialityRepository = new MedicalSpecialityRepository(
   drizzleInstance,
   medicalSpecialityTable
 );
-const doctorSpecialityMappingRepository = new DoctorSpecialityMappingRepository(
-  drizzleInstance,
-  doctorSpecialityMappingTable
-);
+const doctorSpecialityMappingRepository =
+  new DoctorMedicalSpecialityMappingRepository(
+    drizzleInstance,
+    doctorMedicalSpecialityMappingTable
+  );
 const appointmentRepository = new AppointmentRepository(
   drizzleInstance,
   appointmentTable
@@ -100,14 +101,16 @@ export const createRoles = async () => {
 };
 
 export const createSpecialities = async () => {
-  await specialityRepository.createSpeciality({ specialityName: "Neurology" });
-  await specialityRepository.createSpeciality({
+  await specialityRepository.createMedicalSpeciality({
+    specialityName: "Neurology",
+  });
+  await specialityRepository.createMedicalSpeciality({
     specialityName: "Internal Medicine",
   });
-  await specialityRepository.createSpeciality({
+  await specialityRepository.createMedicalSpeciality({
     specialityName: "Anesthesiology",
   });
-  await specialityRepository.createSpeciality({
+  await specialityRepository.createMedicalSpeciality({
     specialityName: "Dermatology",
   });
 };
@@ -121,7 +124,7 @@ export const getUserRoleMappings = async () => {
 };
 
 export const getDoctorSpecialityMappings = async (doctorId: string) => {
-  return await doctorSpecialityMappingRepository.getDoctorSpecialityMappingsByDoctorId(
+  return await doctorSpecialityMappingRepository.getDoctorMedicalSpecialityMappingsByDoctorId(
     doctorId
   );
 };
@@ -133,7 +136,7 @@ export const deleteUserRolesMappingById = async (userId: string) => {
 export const deleteDoctorSpecialityMappingsByDoctorId = async (
   doctorId: string
 ) => {
-  await doctorSpecialityMappingRepository.deleteDoctorSpecialityMappingsByDoctorId(
+  await doctorSpecialityMappingRepository.deleteDoctorMedicalSpecialityMappingsByDoctorId(
     doctorId
   );
 };
@@ -142,7 +145,7 @@ export const deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId = async (
   doctorId: string,
   specialityId: string
 ) => {
-  return await doctorSpecialityMappingRepository.deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId(
+  return await doctorSpecialityMappingRepository.deleteDoctorMedicalSpecialityMappingByDoctorIdAndMedicalSpecialityId(
     doctorId,
     specialityId
   );
@@ -155,7 +158,7 @@ export const createDoctorSpecialityMapping = async (
   isSecondarySpeciality: boolean,
   isTertiarySpeciality: boolean
 ) => {
-  await doctorSpecialityMappingRepository.createDoctorSpecialityMapping({
+  await doctorSpecialityMappingRepository.createDoctorMedicalSpecialityMapping({
     doctorId,
     specialityId,
     isPrimarySpeciality,

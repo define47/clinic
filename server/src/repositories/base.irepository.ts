@@ -4,9 +4,9 @@ import {
 } from "../models/appointment.model";
 import { AppointmentHistoryCreationAttributes } from "../models/appointmentHistory.model";
 import {
-  DoctorSpecialityMappingCreationAttributes,
+  DoctorMedicalSpecialityMappingCreationAttributes,
   DoctorSpecialityMappingUpdateAttributes,
-} from "../models/doctorSpecialityMapping.model";
+} from "../models/doctorMedicalSpecialityMapping.model";
 import { LanguageCreationAttributes } from "../models/language.model";
 import {
   MedicalRecordPatientCreationAttributes,
@@ -45,7 +45,7 @@ export interface IBaseRepository<T> {
       | MedicalSpecialityCreationAttributes
       | AppointmentCreationAttributes
       | UserRoleMappingCreationAttributes
-      | DoctorSpecialityMappingCreationAttributes
+      | DoctorMedicalSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
       | AppointmentHistoryCreationAttributes
       | MedicalRecordPatientCreationAttributes

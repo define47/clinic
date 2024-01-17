@@ -7,9 +7,9 @@ import { RoleService } from "../services/role.service";
 import { UserService } from "../services/user.service";
 import { UserRoleMappingService } from "../services/userRoleMapping.service";
 import { User } from "../models/user.model";
-import { DoctorSpecialityMappingService } from "../services/doctorSpecialityMapping.service";
-import { SpecialityService } from "../services/speciality.service";
-import { DoctorSpecialityMapping } from "../models/doctorSpecialityMapping.model";
+import { DoctorMedicalSpecialityMappingService } from "../services/doctorMedicalSpecialityMapping.service";
+import { MedicalSpecialityService } from "../services/medicalSpeciality.service";
+import { DoctorMedicalSpecialityMapping } from "../models/doctorMedicalSpecialityMapping.model";
 import { UserRoleMapping } from "../models/userRoleMapping.model";
 import { getDoctorRoleIdEnv } from "../utils/dotenv";
 import { MESSAGE_CHANNEL, fastifyServer } from "../server";
@@ -20,8 +20,8 @@ export class UserController {
   private readonly _userService: UserService;
   private readonly _roleService: RoleService;
   private readonly _userRoleMappingService: UserRoleMappingService;
-  private readonly _doctorSpecialityMappingService: DoctorSpecialityMappingService;
-  private readonly _specialityService: SpecialityService;
+  private readonly _doctorSpecialityMappingService: DoctorMedicalSpecialityMappingService;
+  private readonly _medicalSpecialityService: MedicalSpecialityService;
   private readonly _languageService: LanguageService;
   private readonly _userPreferencesMappingService: UserPreferencesMappingService;
 
@@ -29,8 +29,9 @@ export class UserController {
     this._userService = new UserService();
     this._roleService = new RoleService();
     this._userRoleMappingService = new UserRoleMappingService();
-    this._doctorSpecialityMappingService = new DoctorSpecialityMappingService();
-    this._specialityService = new SpecialityService();
+    this._doctorSpecialityMappingService =
+      new DoctorMedicalSpecialityMappingService();
+    this._medicalSpecialityService = new MedicalSpecialityService();
     this._languageService = new LanguageService();
     this._userPreferencesMappingService = new UserPreferencesMappingService();
   }
@@ -145,17 +146,17 @@ export class UserController {
       let doctorSpecialityNames = [];
       if (userRoleNames[0] === "doctor" || userRoleNames[1] === "doctor") {
         const userToLoginSpecialities =
-          await this._doctorSpecialityMappingService.getDoctorSpecialityMappingsByDoctorId(
+          await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
             userToLogin?.userId!
           );
 
         for (let i = 0; i < userToLoginSpecialities!.length; i++) {
           doctorSpecialityNames.push(
             (
-              await this._specialityService.getSpecialityById(
-                userToLoginSpecialities![i].specialityId
+              await this._medicalSpecialityService.getMedicalSpecialityById(
+                userToLoginSpecialities![i].medicalSpecialityId
               )
-            )?.specialityName
+            )?.medicalSpecialityName
           );
         }
       }
@@ -254,17 +255,17 @@ export class UserController {
           const specialityNames = body.specialityNames;
           for (let j = 0; j < specialityNames.length; j++) {
             const currentSpeciality =
-              await this._specialityService.getSpecialityByName(
+              await this._medicalSpecialityService.getMedicalSpecialityByName(
                 specialityNames[j]
               );
 
-            await this._doctorSpecialityMappingService.createDoctorSpecialityMapping(
+            await this._doctorSpecialityMappingService.createMedicalDoctorSpecialityMapping(
               {
                 doctorId: postUser.userId,
-                specialityId: currentSpeciality?.specialityId!,
-                isPrimarySpeciality: j === 0,
-                isSecondarySpeciality: j === 1,
-                isTertiarySpeciality: j === 2,
+                medicalSpecialityId: currentSpeciality?.medicalSpecialityId!,
+                isPrimaryMedicalSpeciality: j === 0,
+                isSecondaryMedicalSpeciality: j === 1,
+                isTertiaryMedicalSpeciality: j === 2,
               }
             );
           }
@@ -302,30 +303,31 @@ export class UserController {
         userDateOfBirth: body.userDateOfBirth,
         userAddress: body.userAddress,
         userGender: body.userGender,
+        userUpdatedAt: new Date(),
       });
 
       if (body.specialityNames) {
         const specialityNames = body.specialityNames;
         const currentDoctorSpecialities =
-          await this._doctorSpecialityMappingService.getDoctorSpecialityMappingsByDoctorId(
+          await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
             putUser?.userId!
           );
         console.log(putUser);
 
         for (let i = 0; i < specialityNames.length; i++) {
           const currentSpecialityToUpdateTo =
-            await this._specialityService.getSpecialityByName(
+            await this._medicalSpecialityService.getMedicalSpecialityByName(
               specialityNames[i]
             );
           if (
             currentDoctorSpecialities &&
-            currentDoctorSpecialities[i].specialityId !==
-              currentSpecialityToUpdateTo?.specialityId
+            currentDoctorSpecialities[i].medicalSpecialityId !==
+              currentSpecialityToUpdateTo?.medicalSpecialityId
           ) {
-            await this._doctorSpecialityMappingService.updateDoctorSpecialityMapping(
+            await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
               putUser?.userId!,
-              currentDoctorSpecialities[i]?.specialityId!,
-              currentSpecialityToUpdateTo?.specialityId!,
+              currentDoctorSpecialities[i]?.medicalSpecialityId!,
+              currentSpecialityToUpdateTo?.medicalSpecialityId!,
               i === 0,
               i === 1,
               i === 2
@@ -356,7 +358,7 @@ export class UserController {
 
       for (let i = 0; i < userRoleMappings.length; i++) {
         if (userRoleMappings[i].roleId === getDoctorRoleIdEnv()) {
-          await this._doctorSpecialityMappingService.deleteDoctorSpecialityMappingsByDoctorId(
+          await this._doctorSpecialityMappingService.deleteDoctorMedicalSpecialityMappingsByDoctorId(
             user?.userId!
           );
           break;

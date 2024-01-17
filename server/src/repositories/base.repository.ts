@@ -26,10 +26,10 @@ import {
   userRoleMappingTable,
 } from "../models/userRoleMapping.model";
 import {
-  DoctorSpecialityMappingCreationAttributes,
+  DoctorMedicalSpecialityMappingCreationAttributes,
   DoctorSpecialityMappingUpdateAttributes,
-  doctorSpecialityMappingTable,
-} from "../models/doctorSpecialityMapping.model";
+  doctorMedicalSpecialityMappingTable,
+} from "../models/doctorMedicalSpecialityMapping.model";
 import {
   AppointmentCreationAttributes,
   AppointmentUpdateAttributes,
@@ -58,7 +58,7 @@ import {
   MedicalProcedureUpdateAttributes,
   medicalProcedureTable,
 } from "../models/medicalProcedure.model";
-import { specialityMedicalProcedureMappingTable } from "../models/specialityMedicalProcedureMapping.model";
+import { medicalSpecialityMedicalProcedureMappingTable } from "../models/medicalSpecialityMedicalProcedureMapping.model";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
@@ -110,15 +110,15 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "userRoleMappingCreatedAt",
         "userRoleMappingUpdatedAt",
       ];
-    else if (table === doctorSpecialityMappingTable)
+    else if (table === doctorMedicalSpecialityMappingTable)
       this._tableColumns = [
         "doctorId",
         "medicalSpecialityId",
         "isPrimaryMedicalSpeciality",
         "isSecondaryMedicalSpeciality",
         "isTertiaryMedicalSpeciality",
-        "doctorSpecialityMappingCreatedAt",
-        "doctorSpecialityMappingUpdatedAt",
+        "doctorMedicalSpecialityMappingCreatedAt",
+        "doctorMedicalSpecialityMappingUpdatedAt",
       ];
     else if (table === appointmentTable)
       this._tableColumns = [
@@ -139,13 +139,13 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "appointmentHistoryDoctorId",
         "appointmentHistoryPatientId",
         "appointmentHistoryDateTime",
-        "appointmentHistoryStatus",
         "appointmentHistoryReason",
+        "appointmentHistoryStatus",
         "appointmentHistoryCancellationReason",
-        "appointmentHistoryCreatedAt",
-        "appointmentHistoryUpdatedAt",
         "appointmentHistoryCreatedBy",
         "appointmentHistoryUpdatedBy",
+        "appointmentHistoryCreatedAt",
+        "appointmentHistoryUpdatedAt",
       ];
     else if (table === medicalRecordPatientTable)
       this._tableColumns = [
@@ -170,8 +170,13 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "medicalProcedureCreatedAt",
         "medicalProcedureUpdatedAt",
       ];
-    else if (table === specialityMedicalProcedureMappingTable)
-      this._tableColumns = ["specialityId", "medicalProcedureId"];
+    else if (table === medicalSpecialityMedicalProcedureMappingTable)
+      this._tableColumns = [
+        "medicalSpecialityId",
+        "medicalProcedureId",
+        "medicalSpecialityMedicalProcedureMappingCreatedAt",
+        "medicalSpecialityMedicalProcedureMappingUpdatedAt",
+      ];
     else this._tableColumns = [];
 
     // type MyKeys = keyof typeof this._table.$inferSelect;
@@ -193,13 +198,13 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     // console.log("here", Object.keys(dummyVariable));
   }
 
-  private getAttributesForUUIDv5(): Array<
+  private getNecessaryAttributesForUUIDv5(): Array<
     keyof (
       | UserCreationAttributes
       | RoleCreationAttributes
       | MedicalSpecialityCreationAttributes
       | UserRoleMappingCreationAttributes
-      | DoctorSpecialityMappingCreationAttributes
+      | DoctorMedicalSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
       | AppointmentHistoryCreationAttributes
       | MedicalRecordPatientCreationAttributes
@@ -213,7 +218,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
@@ -226,7 +231,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
@@ -234,12 +239,12 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | MedicalProcedureCreationAttributes
       );
     } else if (this._table === medicalSpecialityTable) {
-      return ["specialityName"] as keyof (
+      return ["medicalSpecialityName"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
@@ -252,20 +257,20 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
         | LanguageCreationAttributes
         | MedicalProcedureCreationAttributes
       );
-    } else if (this._table === doctorSpecialityMappingTable) {
-      return ["doctorId", "specialityId"] as keyof (
+    } else if (this._table === doctorMedicalSpecialityMappingTable) {
+      return ["doctorId", "medicalSpecialityId"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
@@ -282,7 +287,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
@@ -299,7 +304,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
@@ -312,7 +317,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
@@ -325,7 +330,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
@@ -338,7 +343,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
@@ -351,7 +356,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes
         | UserRoleMappingCreationAttributes
-        | DoctorSpecialityMappingCreationAttributes
+        | DoctorMedicalSpecialityMappingCreationAttributes
         | AppointmentCreationAttributes
         | AppointmentHistoryCreationAttributes
         | MedicalRecordPatientCreationAttributes
@@ -385,7 +390,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | RoleCreationAttributes
       | MedicalSpecialityCreationAttributes
       | UserRoleMappingCreationAttributes
-      | DoctorSpecialityMappingCreationAttributes
+      | DoctorMedicalSpecialityMappingCreationAttributes
       | AppointmentCreationAttributes
       | AppointmentHistoryCreationAttributes
       | MedicalRecordPatientCreationAttributes
@@ -395,7 +400,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   ): Promise<T | undefined> {
     try {
       let id;
-      const UUIDv5Attributes = this.getAttributesForUUIDv5();
+      const UUIDv5Attributes = this.getNecessaryAttributesForUUIDv5();
 
       if (UUIDv5Attributes.length === 1)
         id = uuidv5(
@@ -430,7 +435,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 
       if (
         this._table === userRoleMappingTable ||
-        this._table === doctorSpecialityMappingTable
+        this._table === doctorMedicalSpecialityMappingTable
       )
         return (
           await this._drizzle

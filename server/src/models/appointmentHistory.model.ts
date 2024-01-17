@@ -63,12 +63,12 @@ export const appointmentHistoryTable = clinicSchema.table(
     })
       .notNull()
       .references(() => userTable.userId),
-    appointmentHistoryReason: varchar("appointmentHistoryReason", {
-      length: 256,
-    }).notNull(),
     appointmentHistoryDateTime: timestamp(
       "appointmentHistoryDateTime"
     ).notNull(),
+    appointmentHistoryReason: varchar("appointmentHistoryReason", {
+      length: 256,
+    }).notNull(),
     appointmentHistoryStatus: StatusEnum("appointmentHistoryStatus")
       .default("scheduled")
       .notNull(),

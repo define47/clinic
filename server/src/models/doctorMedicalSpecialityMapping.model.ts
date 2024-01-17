@@ -4,15 +4,15 @@ import { userTable } from "./user.model";
 import { medicalSpecialityTable } from "./medicalSpeciality.model";
 import { sql } from "drizzle-orm";
 
-export type DoctorSpecialityMapping = {
+export type DoctorMedicalSpecialityMapping = {
   doctorId: string;
-  specialityId: string;
-  isPrimarySpeciality: boolean;
-  isSecondarySpeciality: boolean;
-  isTertiarySpeciality: boolean;
+  medicalSpecialityId: string;
+  isPrimaryMedicalSpeciality: boolean;
+  isSecondaryMedicalSpeciality: boolean;
+  isTertiaryMedicalSpeciality: boolean;
 };
 
-export type DoctorSpecialityMappingJoinUserAndSpeciality = {
+export type DoctorMedicalSpecialityMappingJoinUserAndSpeciality = {
   doctor: {
     doctorId: string;
     doctorForename: string;
@@ -23,28 +23,28 @@ export type DoctorSpecialityMappingJoinUserAndSpeciality = {
     doctorDateOfBirth: string;
     doctorAddress: string;
   };
-  speciality: {
-    specialityId: string;
-    specialityName: string;
-    isPrimarySpeciality: boolean;
-    isSecondarySpeciality: boolean;
-    isTertiarySpeciality: boolean;
+  medicalSpeciality: {
+    medicalSpecialityId: string;
+    medicalSpecialityName: string;
+    isPrimaryMedicalSpeciality: boolean;
+    isSecondaryMedicalSpeciality: boolean;
+    isTertiaryMedicalSpeciality: boolean;
   };
 };
 
-export type DoctorSpecialityMappingCreationAttributes = {
+export type DoctorMedicalSpecialityMappingCreationAttributes = {
   doctorId: string;
-  specialityId: string;
-  isPrimarySpeciality: boolean;
-  isSecondarySpeciality: boolean;
-  isTertiarySpeciality: boolean;
+  medicalSpecialityId: string;
+  isPrimaryMedicalSpeciality: boolean;
+  isSecondaryMedicalSpeciality: boolean;
+  isTertiaryMedicalSpeciality: boolean;
 };
 
 export type DoctorSpecialityMappingUpdateAttributes =
-  DoctorSpecialityMappingCreationAttributes;
+  DoctorMedicalSpecialityMappingCreationAttributes;
 
-export const doctorSpecialityMappingTable = clinicSchema.table(
-  "DoctorSpecialityMapping",
+export const doctorMedicalSpecialityMappingTable = clinicSchema.table(
+  "DoctorMedicalSpecialityMapping",
   {
     // doctorSpecialityMappingId: varchar("doctorSpecialityMappingId", {
     //   length: 256,
@@ -62,11 +62,11 @@ export const doctorSpecialityMappingTable = clinicSchema.table(
     isTertiaryMedicalSpeciality: boolean(
       "isTertiaryMedicalSpeciality"
     ).notNull(),
-    doctorSpecialityMappingCreatedAt: timestamp(
-      "doctorSpecialityMappingCreatedAt"
+    doctorMedicalSpecialityMappingCreatedAt: timestamp(
+      "doctorMedicalSpecialityMappingCreatedAt"
     ).default(sql`CURRENT_TIMESTAMP`),
-    doctorSpecialityMappingUpdatedAt: timestamp(
-      "doctorSpecialityMappingUpdatedAt"
+    doctorMedicalSpecialityMappingUpdatedAt: timestamp(
+      "doctorMedicalSpecialityMappingUpdatedAt"
     ).default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => {

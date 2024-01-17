@@ -2,14 +2,15 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import {
   MedicalSpeciality,
   MedicalSpecialityCreationAttributes,
+  MedicalSpecialityUpdateAttributes,
 } from "../models/medicalSpeciality.model";
 import { BaseRepository } from "./base.repository";
-import { ISpecialityRepository } from "./speciality.irepository";
+import { IMedicalSpecialityRepository } from "./medicalSpeciality.irepository";
 import { Table } from "drizzle-orm";
 
-export class SpecialityRepository
+export class MedicalSpecialityRepository
   extends BaseRepository<MedicalSpeciality>
-  implements ISpecialityRepository
+  implements IMedicalSpecialityRepository
 {
   public constructor(
     drizzle: NodePgDatabase<Record<string, never>>,
@@ -18,32 +19,35 @@ export class SpecialityRepository
     super(drizzle, table);
   }
 
-  public async getSpecialityById(
+  public async getMedicalSpecialityById(
     specialityId: string
   ): Promise<MedicalSpeciality | undefined> {
     return await this.getById(specialityId);
   }
 
-  public async getSpecialityByName(
+  public async getMedicalSpecialityByName(
     specialityName: string
   ): Promise<MedicalSpeciality | undefined> {
     return await this.getByAttribute("specialityName", specialityName);
   }
 
-  public async createSpeciality(
+  public async createMedicalSpeciality(
     specialityCreationAttributes: MedicalSpecialityCreationAttributes
   ): Promise<MedicalSpeciality | undefined> {
     return await this.create(specialityCreationAttributes);
   }
 
-  public async updateSpeciality(
-    specialityId: string,
-    specialityUpdateAttributes: MedicalSpecialityCreationAttributes
+  public async updateMedicalSpeciality(
+    medicalSpecialityId: string,
+    medicalSpecialityUpdateAttributes: MedicalSpecialityUpdateAttributes
   ): Promise<MedicalSpeciality | undefined> {
-    return await this.update(specialityId, specialityUpdateAttributes);
+    return await this.update(
+      medicalSpecialityId,
+      medicalSpecialityUpdateAttributes
+    );
   }
 
-  public async deleteSpecialityById(
+  public async deleteMedicalSpecialityById(
     specialityId: string
   ): Promise<string | undefined> {
     return await this.delete(specialityId);

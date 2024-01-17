@@ -1,11 +1,11 @@
 import { AppointmentController } from "./appointment.controller";
 import { MedicalRecordPatientController } from "./medicalRecordPatient.controller";
-import { SpecialityController } from "./speciality.controller";
+import { MedicalSpecialityController } from "./medicalSpeciality.controller";
 import { UserController } from "./user.controller";
 import { UserPreferencesController } from "./userPreference.controller";
 
 export const userController = new UserController();
-export const specialityController = new SpecialityController();
+export const medicalSpecialityController = new MedicalSpecialityController();
 export const appointmentController = new AppointmentController();
 export const medicalRecordPatientController =
   new MedicalRecordPatientController();

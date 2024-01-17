@@ -3,18 +3,18 @@ import { clinicSchema } from "../utils/drizzle";
 import { sql } from "drizzle-orm";
 
 export type MedicalSpeciality = {
-  specialityId: string;
-  specialityName: string;
+  medicalSpecialityId: string;
+  medicalSpecialityName: string;
   medicalSpecialityCreatedAt: Date;
   medicalSpecialityUpdatedAt: Date;
 };
 
 export type MedicalSpecialityCreationAttributes = {
-  specialityName: string;
+  medicalSpecialityName: string;
 };
 
 export type MedicalSpecialityUpdateAttributes = {
-  specialityName: string;
+  medicalSpecialityName: string;
   medicalSpecialityUpdatedAt: Date;
 };
 
