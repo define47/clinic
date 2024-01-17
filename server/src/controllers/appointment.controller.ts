@@ -61,6 +61,7 @@ export class AppointmentController {
           appointmentStatus: body.appointmentStatus,
           appointmentDateTime: new Date(body.appointmentDateTime),
           appointmentCancellationReason: body.appointmentCancellationReason,
+          appointmentUpdatedAt: new Date(),
         }
       );
 

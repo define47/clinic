@@ -1,5 +1,5 @@
 {
-  "id": "f110bd08-1d65-40d0-a8a0-2ad1016c58b5",
+  "id": "42a76b03-d6a4-4eb9-be66-0773f80ccab8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -26,15 +26,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "appointmentReason": {
-          "name": "appointmentReason",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "appointmentDateTime": {
           "name": "appointmentDateTime",
           "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appointmentReason": {
+          "name": "appointmentReason",
+          "type": "varchar(256)",
           "primaryKey": false,
           "notNull": true
         },
@@ -51,15 +51,15 @@
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "appointmentCreatedAt": {
+          "name": "appointmentCreatedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "CURRENT_TIMESTAMP"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "appointmentUpdatedAt": {
+          "name": "appointmentUpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
@@ -126,15 +126,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "appointmentHistoryReason": {
-          "name": "appointmentHistoryReason",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "appointmentHistoryDateTime": {
           "name": "appointmentHistoryDateTime",
           "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appointmentHistoryReason": {
+          "name": "appointmentHistoryReason",
+          "type": "varchar(256)",
           "primaryKey": false,
           "notNull": true
         },
@@ -249,8 +249,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "DoctorSpecialityMapping": {
-      "name": "DoctorSpecialityMapping",
+    "DoctorMedicalSpecialityMapping": {
+      "name": "DoctorMedicalSpecialityMapping",
       "schema": "iatropolis",
       "columns": {
         "doctorId": {
@@ -259,39 +259,39 @@
           "primaryKey": false,
           "notNull": true
         },
-        "specialityId": {
-          "name": "specialityId",
+        "medicalSpecialityId": {
+          "name": "medicalSpecialityId",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
-        "isPrimarySpeciality": {
-          "name": "isPrimarySpeciality",
+        "isPrimaryMedicalSpeciality": {
+          "name": "isPrimaryMedicalSpeciality",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
-        "isSecondarySpeciality": {
-          "name": "isSecondarySpeciality",
+        "isSecondaryMedicalSpeciality": {
+          "name": "isSecondaryMedicalSpeciality",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
-        "isTertiarySpeciality": {
-          "name": "isTertiarySpeciality",
+        "isTertiaryMedicalSpeciality": {
+          "name": "isTertiaryMedicalSpeciality",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
+        "doctorMedicalSpecialityMappingCreatedAt": {
+          "name": "doctorMedicalSpecialityMappingCreatedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "CURRENT_TIMESTAMP"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "doctorMedicalSpecialityMappingUpdatedAt": {
+          "name": "doctorMedicalSpecialityMappingUpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
@@ -300,9 +300,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "DoctorSpecialityMapping_doctorId_User_userId_fk": {
-          "name": "DoctorSpecialityMapping_doctorId_User_userId_fk",
-          "tableFrom": "DoctorSpecialityMapping",
+        "DoctorMedicalSpecialityMapping_doctorId_User_userId_fk": {
+          "name": "DoctorMedicalSpecialityMapping_doctorId_User_userId_fk",
+          "tableFrom": "DoctorMedicalSpecialityMapping",
           "tableTo": "User",
           "columnsFrom": [
             "doctorId"
@@ -313,26 +313,26 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "DoctorSpecialityMapping_specialityId_Speciality_specialityId_fk": {
-          "name": "DoctorSpecialityMapping_specialityId_Speciality_specialityId_fk",
-          "tableFrom": "DoctorSpecialityMapping",
-          "tableTo": "Speciality",
+        "DoctorMedicalSpecialityMapping_medicalSpecialityId_MedicalSpeciality_medicalSpecialityId_fk": {
+          "name": "DoctorMedicalSpecialityMapping_medicalSpecialityId_MedicalSpeciality_medicalSpecialityId_fk",
+          "tableFrom": "DoctorMedicalSpecialityMapping",
+          "tableTo": "MedicalSpeciality",
           "columnsFrom": [
-            "specialityId"
+            "medicalSpecialityId"
           ],
           "columnsTo": [
-            "specialityId"
+            "medicalSpecialityId"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
-        "DoctorSpecialityMapping_doctorId_specialityId_pk": {
-          "name": "DoctorSpecialityMapping_doctorId_specialityId_pk",
+        "DoctorMedicalSpecialityMapping_doctorId_medicalSpecialityId_pk": {
+          "name": "DoctorMedicalSpecialityMapping_doctorId_medicalSpecialityId_pk",
           "columns": [
             "doctorId",
-            "specialityId"
+            "medicalSpecialityId"
           ]
         }
       },
@@ -394,6 +394,46 @@
           ]
         }
       }
+    },
+    "MedicalProcedure": {
+      "name": "MedicalProcedure",
+      "schema": "iatropolis",
+      "columns": {
+        "medicalProcedureId": {
+          "name": "medicalProcedureId",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "medicalProcedureName": {
+          "name": "medicalProcedureName",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "medicalProcedurePrice": {
+          "name": "medicalProcedurePrice",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "medicalProcedureCreatedAt": {
+          "name": "medicalProcedureCreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "medicalProcedureUpdatedAt": {
+          "name": "medicalProcedureUpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     },
     "MedicalRecordPatient": {
       "name": "MedicalRecordPatient",
@@ -469,6 +509,121 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "MedicalSpeciality": {
+      "name": "MedicalSpeciality",
+      "schema": "iatropolis",
+      "columns": {
+        "medicalSpecialityId": {
+          "name": "medicalSpecialityId",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "medicalSpecialityName": {
+          "name": "medicalSpecialityName",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "medicalSpecialityCreatedAt": {
+          "name": "medicalSpecialityCreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "medicalSpecialityUpdatedAt": {
+          "name": "medicalSpecialityUpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "MedicalSpeciality_medicalSpecialityName_unique": {
+          "name": "MedicalSpeciality_medicalSpecialityName_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "medicalSpecialityName"
+          ]
+        }
+      }
+    },
+    "MedicalSpecialityMedicalProcedureMapping": {
+      "name": "MedicalSpecialityMedicalProcedureMapping",
+      "schema": "iatropolis",
+      "columns": {
+        "medicalSpecialityId": {
+          "name": "medicalSpecialityId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "medicalProcedureId": {
+          "name": "medicalProcedureId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "medicalSpecialityMedicalProcedureMappingCreatedAt": {
+          "name": "medicalSpecialityMedicalProcedureMappingCreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "medicalSpecialityMedicalProcedureMappingUpdatedAt": {
+          "name": "medicalSpecialityMedicalProcedureMappingUpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "MedicalSpecialityMedicalProcedureMapping_medicalSpecialityId_MedicalSpeciality_medicalSpecialityId_fk": {
+          "name": "MedicalSpecialityMedicalProcedureMapping_medicalSpecialityId_MedicalSpeciality_medicalSpecialityId_fk",
+          "tableFrom": "MedicalSpecialityMedicalProcedureMapping",
+          "tableTo": "MedicalSpeciality",
+          "columnsFrom": [
+            "medicalSpecialityId"
+          ],
+          "columnsTo": [
+            "medicalSpecialityId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "MedicalSpecialityMedicalProcedureMapping_medicalProcedureId_MedicalProcedure_medicalProcedureId_fk": {
+          "name": "MedicalSpecialityMedicalProcedureMapping_medicalProcedureId_MedicalProcedure_medicalProcedureId_fk",
+          "tableFrom": "MedicalSpecialityMedicalProcedureMapping",
+          "tableTo": "MedicalProcedure",
+          "columnsFrom": [
+            "medicalProcedureId"
+          ],
+          "columnsTo": [
+            "medicalProcedureId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "MedicalSpecialityMedicalProcedureMapping_medicalSpecialityId_medicalProcedureId_pk": {
+          "name": "MedicalSpecialityMedicalProcedureMapping_medicalSpecialityId_medicalProcedureId_pk",
+          "columns": [
+            "medicalSpecialityId",
+            "medicalProcedureId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "Role": {
       "name": "Role",
       "schema": "iatropolis",
@@ -485,15 +640,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
+        "roleCreatedAt": {
+          "name": "roleCreatedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "CURRENT_TIMESTAMP"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "roleUpdatedAt": {
+          "name": "roleUpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
@@ -509,50 +664,6 @@
           "nullsNotDistinct": false,
           "columns": [
             "roleName"
-          ]
-        }
-      }
-    },
-    "Speciality": {
-      "name": "Speciality",
-      "schema": "iatropolis",
-      "columns": {
-        "specialityId": {
-          "name": "specialityId",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "specialityName": {
-          "name": "specialityName",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "Speciality_specialityName_unique": {
-          "name": "Speciality_specialityName_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "specialityName"
           ]
         }
       }
@@ -749,15 +860,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
+        "userRoleMappingCreatedAt": {
+          "name": "userRoleMappingCreatedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "CURRENT_TIMESTAMP"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "userRoleMappingUpdatedAt": {
+          "name": "userRoleMappingUpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,

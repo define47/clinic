@@ -14,12 +14,12 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Appointment" (
 	"appointmentId" varchar PRIMARY KEY NOT NULL,
 	"appointmentDoctorId" varchar(100) NOT NULL,
 	"appointmentPatientId" varchar(100) NOT NULL,
-	"appointmentReason" varchar(256) NOT NULL,
 	"appointmentDateTime" timestamp NOT NULL,
+	"appointmentReason" varchar(256) NOT NULL,
 	"appointmentStatus" "appointmentStatus" DEFAULT 'scheduled' NOT NULL,
 	"appointmentCancellationReason" varchar(256),
-	"createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
+	"appointmentCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"appointmentUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."AppointmentHistory" (
@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."AppointmentHistory" (
 	"appointmentId" varchar(100) NOT NULL,
 	"appointmentHistoryDoctorId" varchar(100) NOT NULL,
 	"appointmentHistoryPatientId" varchar(100) NOT NULL,
-	"appointmentHistoryReason" varchar(256) NOT NULL,
 	"appointmentHistoryDateTime" timestamp NOT NULL,
+	"appointmentHistoryReason" varchar(256) NOT NULL,
 	"appointmentHistoryStatus" "appointmentStatus" DEFAULT 'scheduled' NOT NULL,
 	"appointmentHistoryCancellationReason" varchar(256),
 	"appointmentHistoryCreatedBy" varchar(100),
@@ -37,15 +37,15 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."AppointmentHistory" (
 	"appointmentHistoryUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "iatropolis"."DoctorSpecialityMapping" (
+CREATE TABLE IF NOT EXISTS "iatropolis"."DoctorMedicalSpecialityMapping" (
 	"doctorId" varchar NOT NULL,
-	"specialityId" varchar NOT NULL,
-	"isPrimarySpeciality" boolean NOT NULL,
-	"isSecondarySpeciality" boolean NOT NULL,
-	"isTertiarySpeciality" boolean NOT NULL,
-	"createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT "DoctorSpecialityMapping_doctorId_specialityId_pk" PRIMARY KEY("doctorId","specialityId")
+	"medicalSpecialityId" varchar NOT NULL,
+	"isPrimaryMedicalSpeciality" boolean NOT NULL,
+	"isSecondaryMedicalSpeciality" boolean NOT NULL,
+	"isTertiaryMedicalSpeciality" boolean NOT NULL,
+	"doctorMedicalSpecialityMappingCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"doctorMedicalSpecialityMappingUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "DoctorMedicalSpecialityMapping_doctorId_medicalSpecialityId_pk" PRIMARY KEY("doctorId","medicalSpecialityId")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."Language" (
@@ -56,6 +56,14 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Language" (
 	"languageUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "Language_languageName_unique" UNIQUE("languageName"),
 	CONSTRAINT "Language_languageCode_unique" UNIQUE("languageCode")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalProcedure" (
+	"medicalProcedureId" varchar PRIMARY KEY NOT NULL,
+	"medicalProcedureName" varchar NOT NULL,
+	"medicalProcedurePrice" integer NOT NULL,
+	"medicalProcedureCreatedAt" timestamp NOT NULL,
+	"medicalProcedureUpdatedAt" timestamp NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalRecordPatient" (
@@ -69,20 +77,28 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalRecordPatient" (
 	"medicalRecordPatientUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalSpeciality" (
+	"medicalSpecialityId" varchar PRIMARY KEY NOT NULL,
+	"medicalSpecialityName" varchar(50) NOT NULL,
+	"medicalSpecialityCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"medicalSpecialityUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "MedicalSpeciality_medicalSpecialityName_unique" UNIQUE("medicalSpecialityName")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalSpecialityMedicalProcedureMapping" (
+	"medicalSpecialityId" varchar NOT NULL,
+	"medicalProcedureId" varchar NOT NULL,
+	"medicalSpecialityMedicalProcedureMappingCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"medicalSpecialityMedicalProcedureMappingUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "MedicalSpecialityMedicalProcedureMapping_medicalSpecialityId_medicalProcedureId_pk" PRIMARY KEY("medicalSpecialityId","medicalProcedureId")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."Role" (
 	"roleId" varchar PRIMARY KEY NOT NULL,
 	"roleName" varchar(50) NOT NULL,
-	"createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"roleCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"roleUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "Role_roleName_unique" UNIQUE("roleName")
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "iatropolis"."Speciality" (
-	"specialityId" varchar PRIMARY KEY NOT NULL,
-	"specialityName" varchar(50) NOT NULL,
-	"createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT "Speciality_specialityName_unique" UNIQUE("specialityName")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."User" (
@@ -114,8 +130,8 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."UserPreferencesMapping" (
 CREATE TABLE IF NOT EXISTS "iatropolis"."UserRoleMapping" (
 	"userId" varchar NOT NULL,
 	"roleId" varchar NOT NULL,
-	"createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"userRoleMappingCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+	"userRoleMappingUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "UserRoleMapping_userId_roleId_pk" PRIMARY KEY("userId","roleId")
 );
 --> statement-breakpoint
@@ -162,19 +178,31 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "iatropolis"."DoctorSpecialityMapping" ADD CONSTRAINT "DoctorSpecialityMapping_doctorId_User_userId_fk" FOREIGN KEY ("doctorId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "iatropolis"."DoctorMedicalSpecialityMapping" ADD CONSTRAINT "DoctorMedicalSpecialityMapping_doctorId_User_userId_fk" FOREIGN KEY ("doctorId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "iatropolis"."DoctorSpecialityMapping" ADD CONSTRAINT "DoctorSpecialityMapping_specialityId_Speciality_specialityId_fk" FOREIGN KEY ("specialityId") REFERENCES "iatropolis"."Speciality"("specialityId") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "iatropolis"."DoctorMedicalSpecialityMapping" ADD CONSTRAINT "DoctorMedicalSpecialityMapping_medicalSpecialityId_MedicalSpeciality_medicalSpecialityId_fk" FOREIGN KEY ("medicalSpecialityId") REFERENCES "iatropolis"."MedicalSpeciality"("medicalSpecialityId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "iatropolis"."MedicalRecordPatient" ADD CONSTRAINT "MedicalRecordPatient_appointmentId_Appointment_appointmentId_fk" FOREIGN KEY ("appointmentId") REFERENCES "iatropolis"."Appointment"("appointmentId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "iatropolis"."MedicalSpecialityMedicalProcedureMapping" ADD CONSTRAINT "MedicalSpecialityMedicalProcedureMapping_medicalSpecialityId_MedicalSpeciality_medicalSpecialityId_fk" FOREIGN KEY ("medicalSpecialityId") REFERENCES "iatropolis"."MedicalSpeciality"("medicalSpecialityId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "iatropolis"."MedicalSpecialityMedicalProcedureMapping" ADD CONSTRAINT "MedicalSpecialityMedicalProcedureMapping_medicalProcedureId_MedicalProcedure_medicalProcedureId_fk" FOREIGN KEY ("medicalProcedureId") REFERENCES "iatropolis"."MedicalProcedure"("medicalProcedureId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

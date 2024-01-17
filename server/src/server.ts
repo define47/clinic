@@ -9,6 +9,7 @@ import {
   getAdminRoleIdEnv,
   getDatabaseSchemaEnv,
   getDoctorRoleIdEnv,
+  getPatientRoleIdEnv,
   getServerIPAddressEnv,
   getServerPortEnv,
   options,
@@ -25,9 +26,14 @@ import fastifySocketIO from "fastify-socket.io";
 import {
   createRoles,
   createSpecialities,
+  createUsers,
 } from "./utils/databaseInteractions.js";
 import { LanguageService } from "./services/language.service.js";
 import { userPreferencesRoutes } from "./routes/userPreferences.routes.js";
+import { UserRoleMappingRepository } from "./repositories/userRoleMapping.repository.js";
+import { userRoleMappingTable } from "./models/userRoleMapping.model.js";
+import { MedicalSpecialityRepository } from "./repositories/medicalSpeciality.repository.js";
+import { medicalSpecialityTable } from "./models/medicalSpeciality.model.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -233,6 +239,32 @@ const buildServer = async () => {
   //   languageName: "English",
   //   languageCode: "en",
   // });
+
+  const userRoleMappingRepository = new UserRoleMappingRepository(
+    drizzleInstance,
+    userRoleMappingTable
+  );
+  // const usersByRole =
+  //   await userRoleMappingRepository.getAllUserRolesMappingsByRole(
+  //     getPatientRoleIdEnv(),
+  //     ["userForename", "userSurname"],
+  //     "patientfn1",
+  //     10,
+  //     0,
+  //     "userCreatedAt"
+  //   );
+
+  // console.log(data?.userRoleMappingJoinUserAndRole);
+
+  const medicalSpecialityRepository = new MedicalSpecialityRepository(
+    drizzleInstance,
+    medicalSpecialityTable
+  );
+  // const medicalSpecialities =
+  //   await medicalSpecialityRepository.getAllMedicalSpecialities("in", 5, 0);
+  // console.log(medicalSpecialities?.medicalSpecialities);
+
+  // await createUsers(50, "patient");
 
   return fastifyServer;
 };

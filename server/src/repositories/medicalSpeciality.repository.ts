@@ -3,10 +3,11 @@ import {
   MedicalSpeciality,
   MedicalSpecialityCreationAttributes,
   MedicalSpecialityUpdateAttributes,
+  medicalSpecialityTable,
 } from "../models/medicalSpeciality.model";
 import { BaseRepository } from "./base.repository";
 import { IMedicalSpecialityRepository } from "./medicalSpeciality.irepository";
-import { Table } from "drizzle-orm";
+import { Table, asc, count, ilike } from "drizzle-orm";
 
 export class MedicalSpecialityRepository
   extends BaseRepository<MedicalSpeciality>
@@ -20,21 +21,72 @@ export class MedicalSpecialityRepository
   }
 
   public async getMedicalSpecialityById(
-    specialityId: string
+    medicalSpecialityId: string
   ): Promise<MedicalSpeciality | undefined> {
-    return await this.getById(specialityId);
+    return await this.getById(medicalSpecialityId);
   }
 
   public async getMedicalSpecialityByName(
-    specialityName: string
+    medicalSpecialityName: string
   ): Promise<MedicalSpeciality | undefined> {
-    return await this.getByAttribute("specialityName", specialityName);
+    return await this.getByAttribute(
+      "medicalSpecialityName",
+      medicalSpecialityName
+    );
+  }
+
+  public async getAllMedicalSpecialities(
+    searchQuery: string,
+    limit: number,
+    page: number
+  ): Promise<
+    | {
+        medicalSpecialities: MedicalSpeciality[];
+        totalCount: number;
+        totalPages: number;
+      }
+    | undefined
+  > {
+    const condition = {
+      medicalSpecialitySearchQuery: ilike(
+        medicalSpecialityTable.medicalSpecialityName,
+        `${searchQuery}%`
+      ),
+    };
+
+    const totalCount = await this._drizzle
+      .select({ totalCount: count() })
+      .from(this._table)
+      .where(condition.medicalSpecialitySearchQuery);
+
+    const offset = page * limit;
+
+    const medicalSpecialities = await this._drizzle
+      .select({
+        medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
+        medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
+        medicalSpecialityCreatedAt:
+          medicalSpecialityTable.medicalSpecialityCreatedAt,
+        medicalSpecialityUpdatedAt:
+          medicalSpecialityTable.medicalSpecialityUpdatedAt,
+      })
+      .from(this._table)
+      .where(condition.medicalSpecialitySearchQuery)
+      .limit(limit)
+      .offset(offset)
+      .orderBy(asc(medicalSpecialityTable.medicalSpecialityName));
+
+    return {
+      medicalSpecialities,
+      totalCount: totalCount[0].totalCount,
+      totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
+    };
   }
 
   public async createMedicalSpeciality(
-    specialityCreationAttributes: MedicalSpecialityCreationAttributes
+    medicalSpecialityCreationAttributes: MedicalSpecialityCreationAttributes
   ): Promise<MedicalSpeciality | undefined> {
-    return await this.create(specialityCreationAttributes);
+    return await this.create(medicalSpecialityCreationAttributes);
   }
 
   public async updateMedicalSpeciality(
@@ -48,8 +100,8 @@ export class MedicalSpecialityRepository
   }
 
   public async deleteMedicalSpecialityById(
-    specialityId: string
+    medicalSpecialityId: string
   ): Promise<string | undefined> {
-    return await this.delete(specialityId);
+    return await this.delete(medicalSpecialityId);
   }
 }

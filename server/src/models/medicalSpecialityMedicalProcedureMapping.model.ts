@@ -12,7 +12,7 @@ export type medicalSpecialityMedicalProcedureMapping = {
 };
 
 export const medicalSpecialityMedicalProcedureMappingTable = clinicSchema.table(
-  "SpecialityProcedureMapping",
+  "MedicalSpecialityMedicalProcedureMapping",
   {
     medicalSpecialityId: varchar("medicalSpecialityId")
       .notNull()

@@ -23,10 +23,10 @@ export const medicalSpecialityTable = clinicSchema.table("MedicalSpeciality", {
   medicalSpecialityName: varchar("medicalSpecialityName", { length: 50 })
     .notNull()
     .unique(),
-  medicalSpecialityCreatedAt: timestamp("createdAt").default(
-    sql`CURRENT_TIMESTAMP`
-  ),
-  medicalSpecialityUpdatedAt: timestamp("updatedAt").default(
-    sql`CURRENT_TIMESTAMP`
-  ),
+  medicalSpecialityCreatedAt: timestamp("medicalSpecialityCreatedAt")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  medicalSpecialityUpdatedAt: timestamp("medicalSpecialityUpdatedAt")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
 });

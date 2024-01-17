@@ -54,12 +54,12 @@ export const userRoleMappingTable = clinicSchema.table(
     roleId: varchar("roleId")
       .notNull()
       .references(() => roleTable.roleId),
-    userRoleMappingCreatedAt: timestamp("userRoleMappingCreatedAt").default(
-      sql`CURRENT_TIMESTAMP`
-    ),
-    userRoleMappingUpdatedAt: timestamp("userRoleMappingUpdatedAt").default(
-      sql`CURRENT_TIMESTAMP`
-    ),
+    userRoleMappingCreatedAt: timestamp("userRoleMappingCreatedAt")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    userRoleMappingUpdatedAt: timestamp("userRoleMappingUpdatedAt")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
   },
   (table) => {
     return {

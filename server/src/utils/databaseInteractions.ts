@@ -102,16 +102,16 @@ export const createRoles = async () => {
 
 export const createSpecialities = async () => {
   await specialityRepository.createMedicalSpeciality({
-    specialityName: "Neurology",
+    medicalSpecialityName: "Neurology",
   });
   await specialityRepository.createMedicalSpeciality({
-    specialityName: "Internal Medicine",
+    medicalSpecialityName: "Internal Medicine",
   });
   await specialityRepository.createMedicalSpeciality({
-    specialityName: "Anesthesiology",
+    medicalSpecialityName: "Anesthesiology",
   });
   await specialityRepository.createMedicalSpeciality({
-    specialityName: "Dermatology",
+    medicalSpecialityName: "Dermatology",
   });
 };
 
@@ -153,17 +153,17 @@ export const deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId = async (
 
 export const createDoctorSpecialityMapping = async (
   doctorId: string,
-  specialityId: string,
-  isPrimarySpeciality: boolean,
-  isSecondarySpeciality: boolean,
-  isTertiarySpeciality: boolean
+  medicalSpecialityId: string,
+  isPrimaryMedicalSpeciality: boolean,
+  isSecondaryMedicalSpeciality: boolean,
+  isTertiaryMedicalSpeciality: boolean
 ) => {
   await doctorSpecialityMappingRepository.createDoctorMedicalSpecialityMapping({
     doctorId,
-    specialityId,
-    isPrimarySpeciality,
-    isSecondarySpeciality,
-    isTertiarySpeciality,
+    medicalSpecialityId,
+    isPrimaryMedicalSpeciality,
+    isSecondaryMedicalSpeciality,
+    isTertiaryMedicalSpeciality,
   });
 };
 
@@ -171,7 +171,7 @@ export const createAppointment = async (
   appointmentDoctorId: string,
   appointmentPatientId: string,
   appointmentReason: string,
-  appointmentDateTime: string,
+  appointmentDateTime: Date,
   appointmentStatus: string
 ) => {
   return await appointmentRepository.createAppointment({
