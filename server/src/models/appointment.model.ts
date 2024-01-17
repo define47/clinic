@@ -23,6 +23,29 @@ export type Appointment = {
   appointmentUpdatedAt: Date;
 };
 
+export type AppointmentJoinDoctorAndPatient = {
+  appointment: {
+    appointmentId: string;
+    appointmentDoctorId: string;
+    appointmentPatientId: string;
+    appointmentReason: string;
+    appointmentDateTime: Date;
+    appointmentStatus: string;
+    appointmentCancellationReason: string;
+  };
+  doctor: {
+    doctorId: string;
+    doctorForename: string;
+    doctorSurname: string;
+  };
+  patient: {
+    patientId: string;
+    patientForename: string;
+    patientSurname: string;
+    patientEmail: string;
+  };
+};
+
 export type AppointmentCreationAttributes = {
   appointmentDoctorId: string;
   appointmentPatientId: string;

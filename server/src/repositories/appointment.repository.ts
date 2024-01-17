@@ -2,11 +2,14 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import {
   Appointment,
   AppointmentCreationAttributes,
+  AppointmentJoinDoctorAndPatient,
   AppointmentUpdateAttributes,
+  appointmentTable,
 } from "../models/appointment.model";
 import { IAppointmentRepository } from "./appointment.irepository";
 import { BaseRepository } from "./base.repository";
-import { Table } from "drizzle-orm";
+import { Table, eq } from "drizzle-orm";
+import { userTable } from "../models/user.model";
 
 export class AppointmentRepository
   extends BaseRepository<Appointment>
@@ -17,6 +20,50 @@ export class AppointmentRepository
     table: Table<any>
   ) {
     super(drizzle, table);
+  }
+
+  public async getAllAppointments(): Promise<
+    AppointmentJoinDoctorAndPatient | undefined
+  > {
+    try {
+      const data = await this._drizzle
+        .select({
+          appointment: {
+            appointmentId: appointmentTable.appointmentId,
+            appointmentDoctorId: appointmentTable.appointmentDoctorId,
+            appointmentPatientId: appointmentTable.appointmentPatientId,
+            appointmentReason: appointmentTable.appointmentReason,
+            appointmentDateTime: appointmentTable.appointmentDateTime,
+            appointmentStatus: appointmentTable.appointmentDateTime,
+            appointmentCancellationReason:
+              appointmentTable.appointmentCancellationReason,
+          },
+          doctor: {
+            doctorId: userTable.userId,
+            doctorForename: userTable.userForename,
+            doctorSurname: userTable.userSurname,
+          },
+          patient: {
+            patientId: userTable.userId,
+            patientForename: userTable.userForename,
+            patientSurname: userTable.userSurname,
+            patientEmail: userTable.userEmail,
+          },
+        })
+        .from(appointmentTable)
+        .innerJoin(
+          userTable,
+          eq(appointmentTable.appointmentDoctorId, userTable.userId)
+        )
+        .innerJoin(
+          userTable,
+          eq(appointmentTable.appointmentPatientId, userTable.userId)
+        );
+
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   public async createAppointment(
