@@ -224,7 +224,7 @@ const buildServer = async () => {
     return { counter };
   });
 
-  await migrateToDb();
+  // await migrateToDb();
 
   // await createRoles();
   // await createSpecialities();
@@ -240,19 +240,19 @@ const buildServer = async () => {
   //   languageCode: "en",
   // });
 
-  const userRoleMappingRepository = new UserRoleMappingRepository(
-    drizzleInstance,
-    userRoleMappingTable
-  );
-  const usersByRole = await userRoleMappingRepository.getAllUsersRelatedData(
-    getDoctorRoleIdEnv(),
-    ["userForename", "userSurname"],
-    "",
-    10,
-    0,
-    "medicalSpecialityName"
-  );
-  console.log(usersByRole?.usersRelatedData);
+  // const userRoleMappingRepository = new UserRoleMappingRepository(
+  //   drizzleInstance,
+  //   userRoleMappingTable
+  // );
+  // const usersByRole = await userRoleMappingRepository.getAllUsersRelatedData(
+  //   getDoctorRoleIdEnv(),
+  //   ["userForename", "userSurname"],
+  //   "",
+  //   10,
+  //   0,
+  //   "medicalSpecialityName"
+  // );
+  // console.log(usersByRole?.usersRelatedData);
 
   // const medicalSpecialityRepository = new MedicalSpecialityRepository(
   //   drizzleInstance,
@@ -263,6 +263,9 @@ const buildServer = async () => {
   // console.log(medicalSpecialities?.medicalSpecialities);
 
   // await createUsers(50, "patient");
+
+  // createUsers(1, 10, "doctor");
+  // createUsers(1, 10, "patient");
 
   return fastifyServer;
 };

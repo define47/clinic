@@ -38,6 +38,12 @@ const appointmentRepository = new AppointmentRepository(
   appointmentTable
 );
 
+const specialities = [
+  "08721aa2-0b17-5173-8fa2-746443d2aa5f",
+  "108aa19f-40e9-561c-a88a-53ad20a6c99e",
+  "21041809-4d79-57ce-818a-712c959e936c",
+  "b6fc4cff-c43e-5db6-ad00-043dc50b8563",
+];
 export const createUser = async (
   userForename: string,
   userSurname: string,
@@ -71,11 +77,25 @@ export const createUser = async (
       roleId: getAdminRoleIdEnv(),
     });
 
-  if (isDoctor)
+  if (isDoctor) {
     await userRoleMappingRepository.createUserRoleMapping({
       userId: user.userId,
       roleId: getDoctorRoleIdEnv(),
     });
+
+    let numberOfSpecialities = Math.floor(Math.random() * 3) + 1;
+    console.log(numberOfSpecialities);
+
+    for (let i = 0; i < numberOfSpecialities; i++) {
+      createDoctorSpecialityMapping(
+        user.userId,
+        specialities[i],
+        i === 0,
+        i === 1,
+        i === 2
+      );
+    }
+  }
 
   if (isReceptionist)
     await userRoleMappingRepository.createUserRoleMapping({
@@ -183,8 +203,12 @@ export const createAppointment = async (
   });
 };
 
-export const createUsers = async (amount: number, roleName: string) => {
-  for (let i = 0; i < amount; i++) {
+export const createUsers = async (
+  start: number,
+  end: number,
+  roleName: string
+) => {
+  for (let i = start; i < end; i++) {
     createUser(
       `${roleName}fn${i}`,
       `${roleName}ln${i}`,
