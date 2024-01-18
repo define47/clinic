@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Appointment" (
 	"appointmentReason" varchar(256) NOT NULL,
 	"appointmentStatus" "appointmentStatus" DEFAULT 'scheduled' NOT NULL,
 	"appointmentCancellationReason" varchar(256),
-	"appointmentCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"appointmentUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
+	"appointmentCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"appointmentUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."AppointmentHistory" (

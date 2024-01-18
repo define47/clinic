@@ -1,5 +1,10 @@
+import * as argon2 from "argon2";
+
 import { appointmentTable } from "../models/appointment.model";
-import { doctorMedicalSpecialityMappingTable } from "../models/doctorMedicalSpecialityMapping.model";
+import {
+  DoctorMedicalSpecialityMappingJoinUserAndSpeciality,
+  doctorMedicalSpecialityMappingTable,
+} from "../models/doctorMedicalSpecialityMapping.model";
 import { roleTable } from "../models/role.model";
 import { medicalSpecialityTable } from "../models/medicalSpeciality.model";
 import { User, userTable } from "../models/user.model";
@@ -17,6 +22,11 @@ import {
   getReceptionistRoleIdEnv,
 } from "./dotenv";
 import { drizzleInstance } from "./drizzle";
+import { UserService } from "../services/user.service";
+import { UserRoleMappingService } from "../services/userRoleMapping.service";
+import { getDoctorData, getPatientsData } from "./users";
+import { DoctorMedicalSpecialityMappingService } from "../services/doctorMedicalSpecialityMapping.service";
+import { AppointmentService } from "../services/appointment.service";
 
 const userRepository = new UserRepository(drizzleInstance, userTable);
 const roleRepository = new RoleRepository(drizzleInstance, roleTable);
@@ -223,5 +233,175 @@ export const createUsers = async (
       roleName === "receptionist",
       roleName === "patient"
     );
+  }
+};
+
+const userService = new UserService();
+const userRoleMappingService = new UserRoleMappingService();
+const doctorMedicalSpecialityMappingService =
+  new DoctorMedicalSpecialityMappingService();
+const appointmentService = new AppointmentService();
+
+export const createPatients = async () => {
+  const patientsData = getPatientsData();
+  const patientRoleId = getPatientRoleIdEnv();
+
+  for (let i = 0; i < patientsData.length; i++) {
+    let currentPatientData = patientsData[i];
+    let patient = await userService.createUser({
+      userForename: currentPatientData.userForename,
+      userSurname: currentPatientData.userSurname,
+      userEmail: currentPatientData.userEmail,
+      userPhoneNumber: currentPatientData.userPhoneNumber,
+      userDateOfBirth: currentPatientData.userDateOfBirth,
+      userGender: currentPatientData.userGender,
+      userAddress: currentPatientData.userAddress,
+      userEncryptedPassword: await argon2.hash(
+        currentPatientData.userEncryptedPassword
+      ),
+    });
+
+    await userRoleMappingService.createUserRoleMapping({
+      userId: patient?.userId!,
+      roleId: patientRoleId,
+    });
+  }
+};
+
+export const createDoctors = async () => {
+  const doctorRoleId = getDoctorRoleIdEnv();
+  const doctorsData = getDoctorData();
+
+  for (let i = 0; i < doctorsData.length; i++) {
+    let currentDoctorData = doctorsData[i];
+    let doctor = await userService.createUser({
+      userForename: currentDoctorData.userForename,
+      userSurname: currentDoctorData.userSurname,
+      userEmail: currentDoctorData.userEmail,
+      userPhoneNumber: currentDoctorData.userPhoneNumber,
+      userDateOfBirth: currentDoctorData.userDateOfBirth,
+      userGender: currentDoctorData.userGender,
+      userAddress: currentDoctorData.userAddress,
+      userEncryptedPassword: await argon2.hash(
+        currentDoctorData.userEncryptedPassword
+      ),
+    });
+
+    await userRoleMappingService.createUserRoleMapping({
+      userId: doctor?.userId!,
+      roleId: doctorRoleId,
+    });
+
+    let numberOfSpecialities = Math.floor(Math.random() * 3) + 1;
+
+    for (let i = 0; i < numberOfSpecialities; i++) {
+      await doctorMedicalSpecialityMappingService.createMedicalDoctorSpecialityMapping(
+        {
+          doctorId: doctor?.userId!,
+          medicalSpecialityId: specialities[i],
+          isPrimaryMedicalSpeciality: i === 0,
+          isSecondaryMedicalSpeciality: i === 1,
+          isTertiaryMedicalSpeciality: i === 2,
+        }
+      );
+    }
+  }
+};
+
+const generateAppointmentDate = (year: string, month: string, day: string) => {
+  const times = [
+    "08:00",
+    "08:15",
+    "08:30",
+    "08:45",
+    "09:00",
+    "09:15",
+    "09:30",
+    "09:45",
+    "10:00",
+    "10:15",
+    "10:30",
+    "10:45",
+    "11:00",
+    "11:15",
+    "11:30",
+    "11:45",
+    "12:00",
+    "12:15",
+    "12:30",
+    "12:45",
+    "13:00",
+    "13:15",
+    "13:30",
+    "13:45",
+    "14:00",
+    "14:15",
+    "14:30",
+    "14:45",
+    "15:00",
+    "15:15",
+    "15:30",
+    "15:45",
+    "16:00",
+    "16:15",
+    "16:30",
+    "16:45",
+    "17:00",
+    "17:15",
+    "17:30",
+    "17:45",
+    "18:00",
+  ];
+
+  var time = times[Math.floor(Math.random() * times.length)];
+
+  return `${year}-${month}-${day}T${time}:00.000Z`;
+};
+
+export const createAppointments = async (
+  amount: number,
+  year: string,
+  month: string,
+  day: string
+) => {
+  const patientRoleId = getPatientRoleIdEnv();
+  const doctorRoleId = getDoctorRoleIdEnv();
+
+  const patients = (
+    await userRoleMappingRepository.getAllUsersRelatedData(
+      patientRoleId,
+      [],
+      "",
+      100,
+      0,
+      "userForename"
+    )
+  )?.usersRelatedData as any;
+
+  const doctors = (
+    await userRoleMappingRepository.getAllUsersRelatedData(
+      doctorRoleId,
+      [],
+      "",
+      100,
+      0,
+      "userForename"
+    )
+  )?.usersRelatedData as any;
+  // console.log(patients);
+  // console.log(doctors);
+
+  // console.log(randomPatient);
+
+  for (let i = 0; i < amount; i++) {
+    let randomDoctor = doctors![Math.floor(Math.random() * doctors!.length)];
+    let randomPatient = patients![Math.floor(Math.random() * patients!.length)];
+    await appointmentService.createAppointment({
+      appointmentDoctorId: randomDoctor.doctorId,
+      appointmentPatientId: randomPatient.user.userId,
+      appointmentDateTime: new Date(generateAppointmentDate(year, month, day)),
+      appointmentReason: `Doctor: ${randomDoctor.doctorForename} ${randomDoctor.doctorSurname} Patient: ${randomPatient.user.userForename} ${randomPatient.user.userSurname} ${i}`,
+      appointmentStatus: "scheduled",
+    });
   }
 };

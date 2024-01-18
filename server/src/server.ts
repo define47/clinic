@@ -24,6 +24,9 @@ import { authRoutes } from "./routes/auth.routes.js";
 import { authenticationMiddleware } from "./middlewares/auth.middleware.js";
 import fastifySocketIO from "fastify-socket.io";
 import {
+  createAppointments,
+  createDoctors,
+  createPatients,
   createRoles,
   createSpecialities,
   createUsers,
@@ -274,7 +277,21 @@ const buildServer = async () => {
     appointmentTable
   );
 
-  console.log(await appointmentRepository.getAllAppointments());
+  const appointments = await appointmentRepository.getAllAppointments(
+    "doctor",
+    ["userSurname"],
+    "",
+    "nextWeek",
+    // "appointmentDateTime"
+    ["asc:userForename", "desc:userSurname"],
+    1,
+    3
+  );
+  console.log(appointments);
+
+  // createDoctors();
+  // createPatients();
+  // await createAppointments(3, "2024", "01", "18");
 
   return fastifyServer;
 };

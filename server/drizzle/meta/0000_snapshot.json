@@ -1,5 +1,5 @@
 {
-  "id": "386c55f4-3446-407e-b876-c9ff21bb19e4",
+  "id": "f0f2b815-5569-4c49-9c6f-99237ca5426a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -55,14 +55,14 @@
           "name": "appointmentCreatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
         "appointmentUpdatedAt": {
           "name": "appointmentUpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         }
       },
