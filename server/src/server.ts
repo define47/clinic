@@ -34,6 +34,8 @@ import { UserRoleMappingRepository } from "./repositories/userRoleMapping.reposi
 import { userRoleMappingTable } from "./models/userRoleMapping.model.js";
 import { MedicalSpecialityRepository } from "./repositories/medicalSpeciality.repository.js";
 import { medicalSpecialityTable } from "./models/medicalSpeciality.model.js";
+import { AppointmentRepository } from "./repositories/appointment.repository.js";
+import { appointmentTable } from "./models/appointment.model.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -264,8 +266,15 @@ const buildServer = async () => {
 
   // await createUsers(50, "patient");
 
-  // createUsers(1, 10, "doctor"updated);
-  // createUsers(1, 10, "patient");
+  // createUsers(0, 10, "doctor"updated);
+  // createUsers(0, 10, "patient");
+
+  const appointmentRepository = new AppointmentRepository(
+    drizzleInstance,
+    appointmentTable
+  );
+
+  console.log(await appointmentRepository.getAllAppointments());
 
   return fastifyServer;
 };

@@ -43,24 +43,26 @@ export class AppointmentRepository
               appointmentTable.appointmentCancellationReason,
           },
           doctor: {
-            doctorId: userTable.userId,
-            doctorForename: userTable.userForename,
-            doctorSurname: userTable.userSurname,
+            doctorId: doctor.userId,
+            doctorForename: doctor.userForename,
+            doctorSurname: doctor.userSurname,
           },
           patient: {
-            patientId: userTable.userId,
-            patientForename: userTable.userForename,
-            patientSurname: userTable.userSurname,
-            patientEmail: userTable.userEmail,
+            patientId: patient.userId,
+            patientForename: patient.userForename,
+            patientSurname: patient.userSurname,
+            patientEmail: patient.userEmail,
           },
         })
         .from(appointmentTable)
-        .innerJoin(userTable, eq(appointmentTable.appointmentDoctorId, doctor))
         .innerJoin(
-          userTable,
-          eq(appointmentTable.appointmentPatientId, patient)
+          doctor,
+          eq(appointmentTable.appointmentDoctorId, doctor.userId)
         )
-        .where(ilike(doctor.userEmail, ""));
+        .innerJoin(
+          patient,
+          eq(appointmentTable.appointmentPatientId, patient.userId)
+        );
 
       return data;
     } catch (error) {
