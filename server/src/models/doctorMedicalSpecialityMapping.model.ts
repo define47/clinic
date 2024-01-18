@@ -12,24 +12,36 @@ export type DoctorMedicalSpecialityMapping = {
   isTertiaryMedicalSpeciality: boolean;
 };
 
+// export type DoctorMedicalSpecialityMappingJoinUserAndSpeciality = {
+//   doctor: {
+//     doctorId: string;
+//     doctorForename: string;
+//     doctorSurname: string;
+//     doctorEmail: string;
+//     doctorPhoneNumber: string;
+//     doctorGender: string;
+//     doctorDateOfBirth: string;
+//     doctorAddress: string;
+//   };
+//   medicalSpeciality: {
+//     medicalSpecialityId: string;
+//     medicalSpecialityName: string;
+//     isPrimaryMedicalSpeciality: boolean;
+//     isSecondaryMedicalSpeciality: boolean;
+//     isTertiaryMedicalSpeciality: boolean;
+//   };
+// };
+
 export type DoctorMedicalSpecialityMappingJoinUserAndSpeciality = {
-  doctor: {
-    doctorId: string;
-    doctorForename: string;
-    doctorSurname: string;
-    doctorEmail: string;
-    doctorPhoneNumber: string;
-    doctorGender: string;
-    doctorDateOfBirth: string;
-    doctorAddress: string;
-  };
-  medicalSpeciality: {
-    medicalSpecialityId: string;
-    medicalSpecialityName: string;
-    isPrimaryMedicalSpeciality: boolean;
-    isSecondaryMedicalSpeciality: boolean;
-    isTertiaryMedicalSpeciality: boolean;
-  };
+  doctorId: string;
+  doctorForename: string;
+  doctorSurname: string;
+  doctorEmail: string;
+  doctorPhoneNumber: string;
+  doctorGender: string;
+  doctorDateOfBirth: string;
+  doctorAddress: string;
+  medicalSpecialities: string[];
 };
 
 export type DoctorMedicalSpecialityMappingCreationAttributes = {

@@ -13,6 +13,7 @@ import {
   Table,
   and,
   asc,
+  count,
   desc,
   eq,
   gte,
@@ -55,7 +56,14 @@ export class AppointmentRepository
     page: number,
     doctorId?: string,
     patientId?: string
-  ): Promise<AppointmentJoinDoctorAndPatient[] | undefined> {
+  ): Promise<
+    | {
+        appointmentsRelatedData: AppointmentJoinDoctorAndPatient[];
+        totalCount: number;
+        totalPages: number;
+      }
+    | undefined
+  > {
     try {
       let filterBasedOnTable;
       const doctor = alias(userTable, "doctor");
@@ -265,6 +273,19 @@ export class AppointmentRepository
 
       let offset = page * limit;
 
+      const totalCount = await this._drizzle
+        .select({ totalCount: count() })
+        .from(appointmentTable)
+        .innerJoin(
+          doctor,
+          eq(appointmentTable.appointmentDoctorId, doctor.userId)
+        )
+        .innerJoin(
+          patient,
+          eq(appointmentTable.appointmentPatientId, patient.userId)
+        )
+        .where(appointmentSearchQuery.condition);
+
       const data = await this._drizzle
         .select({
           appointment: {
@@ -305,7 +326,11 @@ export class AppointmentRepository
 
       // .where(ilike(patient.userForename, `${searchQuery}%`));
 
-      return data;
+      return {
+        appointmentsRelatedData: data,
+        totalCount: totalCount[0].totalCount,
+        totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
+      };
     } catch (error) {
       console.log(error);
     }

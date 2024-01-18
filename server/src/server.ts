@@ -272,22 +272,38 @@ const buildServer = async () => {
   // createUsers(0, 10, "doctor"updated);
   // createUsers(0, 10, "patient");
 
-  const appointmentRepository = new AppointmentRepository(
+  // const appointmentRepository = new AppointmentRepository(
+  //   drizzleInstance,
+  //   appointmentTable
+  // );
+
+  // const appointments = await appointmentRepository.getAllAppointments(
+  //   "doctor",
+  //   ["userForename", "userSurname"],
+  //   "",
+  //   "nextWeek",
+  //   // "appointmentDateTime"
+  //   ["asc:userForename", "desc:userSurname"],
+  //   3,
+  //   0
+  // );
+  // console.log(appointments);
+
+  const userRoleMappingRepository = new UserRoleMappingRepository(
     drizzleInstance,
-    appointmentTable
+    userRoleMappingTable
   );
 
-  const appointments = await appointmentRepository.getAllAppointments(
-    "doctor",
-    ["userSurname"],
+  const usersData = await userRoleMappingRepository.getAllUsersRelatedData(
+    getPatientRoleIdEnv(),
+    ["userForename"],
     "",
-    "nextWeek",
-    // "appointmentDateTime"
-    ["asc:userForename", "desc:userSurname"],
-    1,
-    3
+    100,
+    0,
+    "asc:userForename"
   );
-  console.log(appointments);
+
+  console.log(usersData?.usersRelatedData);
 
   // createDoctors();
   // createPatients();

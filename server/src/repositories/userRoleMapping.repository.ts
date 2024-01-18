@@ -7,7 +7,7 @@ import {
 } from "../models/userRoleMapping.model";
 import { BaseRepository } from "./base.repository";
 import { IUserRoleMappingRepository } from "./userRoleMapping.irepository";
-import { Table, and, asc, count, desc, eq, ilike, sql } from "drizzle-orm";
+import { SQL, Table, and, asc, count, desc, eq, ilike, sql } from "drizzle-orm";
 import { roleTable } from "../models/role.model";
 import { User, userTable } from "../models/user.model";
 import { PgColumn } from "drizzle-orm/pg-core";
@@ -116,6 +116,31 @@ export class UserRoleMappingRepository
       }
     }
 
+    const columnToOrderByData = orderBy.split(":");
+    let columnToOrderBy;
+
+    if (
+      columnToOrderByData[0] === "asc" &&
+      columnToOrderByData[1] !== "medicalSpecialityName"
+    ) {
+      columnToOrderBy = asc(userTable[columnToOrderByData[1] as keyof User]);
+    } else if (
+      columnToOrderByData[0] === "desc" &&
+      columnToOrderByData[1] !== "medicalSpecialityName"
+    ) {
+      columnToOrderBy = desc(userTable[columnToOrderByData[1] as keyof User]);
+    } else if (
+      columnToOrderByData[0] === "asc" &&
+      columnToOrderByData[1] === "medicalSpecialityName"
+    ) {
+      columnToOrderBy = asc(medicalSpecialityTable.medicalSpecialityName);
+    } else if (
+      columnToOrderByData[0] === "desc" &&
+      columnToOrderByData[1] === "medicalSpecialityName"
+    ) {
+      columnToOrderBy = desc(medicalSpecialityTable.medicalSpecialityName);
+    }
+
     const condition = {
       userSearchQuery: and(
         eq(userRoleMappingTable.roleId, roleId),
@@ -172,7 +197,7 @@ export class UserRoleMappingRepository
         .where(condition.userSearchQuery)
         .limit(limit)
         .offset(offset)
-        .orderBy(asc(userTable[orderBy as keyof User]));
+        .orderBy(columnToOrderBy!);
 
       return {
         usersRelatedData: data as UserRoleMappingJoinUserAndRole[],
@@ -180,6 +205,24 @@ export class UserRoleMappingRepository
         totalCount: totalCount[0].totalCount,
       };
     } else if (roleId === getDoctorRoleIdEnv()) {
+      totalCount = await this._drizzle
+        .select({
+          totalCount: count(),
+        })
+        .from(doctorMedicalSpecialityMappingTable)
+        .innerJoin(
+          userTable,
+          eq(doctorMedicalSpecialityMappingTable.doctorId, userTable.userId)
+        )
+        .innerJoin(
+          medicalSpecialityTable,
+          eq(
+            doctorMedicalSpecialityMappingTable.medicalSpecialityId,
+            medicalSpecialityTable.medicalSpecialityId
+          )
+        )
+        .where(condition.doctorSearchQuery);
+
       data = await this._drizzle
         .select({
           doctor: {
@@ -216,13 +259,14 @@ export class UserRoleMappingRepository
           )
         )
         .where(condition.doctorSearchQuery)
-        .orderBy(
-          asc(
-            orderBy === "medicalSpecialityName"
-              ? medicalSpecialityTable[orderBy as keyof MedicalSpeciality]
-              : userTable[orderBy as keyof User]
-          )
-        );
+        // .orderBy(
+        //   asc(
+        //     orderBy === "medicalSpecialityName"
+        //       ? medicalSpecialityTable[orderBy as keyof MedicalSpeciality]
+        //       : userTable[orderBy as keyof User]
+        //   )
+        // );
+        .orderBy(columnToOrderBy!);
 
       const resultArray = Array.from(
         data
@@ -279,9 +323,10 @@ export class UserRoleMappingRepository
       );
 
       return {
-        usersRelatedData: resultArray as any,
-        totalCount: data.length,
-        totalPages: Math.ceil(data.length / limit) - 1,
+        usersRelatedData:
+          resultArray as DoctorMedicalSpecialityMappingJoinUserAndSpeciality[],
+        totalCount: totalCount![0].totalCount,
+        totalPages: Math.ceil(totalCount![0].totalCount / limit) - 1,
       };
     }
 
