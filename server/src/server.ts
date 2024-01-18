@@ -264,7 +264,7 @@ const buildServer = async () => {
 
   // await createUsers(50, "patient");
 
-  // createUsers(1, 10, "doctor");
+  // createUsers(1, 10, "doctor"updated);
   // createUsers(1, 10, "patient");
 
   return fastifyServer;
