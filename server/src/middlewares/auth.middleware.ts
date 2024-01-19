@@ -4,6 +4,11 @@ import { fastifyServer } from "../server";
 declare module "fastify" {
   interface FastifyRequest {
     cookieData?: any;
+    // {
+    //   valid: boolean;
+    //   renew: boolean;
+    //   value: string;
+    // };
     userData?: any;
   }
 }
@@ -16,6 +21,7 @@ export const authenticationMiddleware = (
   //   console.log(request);
 
   const signedCookie = request.cookies?.sessionId;
+  // console.log(signedCookie);
 
   if (
     !signedCookie &&
@@ -29,7 +35,7 @@ export const authenticationMiddleware = (
     ? request.unsignCookie(signedCookie)
     : null;
 
-  //   console.log("sessionId:", signedCookieValue);
+  // console.log("sessionId:", signedCookieValue);
 
   if (
     !signedCookieValue?.valid &&
@@ -39,7 +45,7 @@ export const authenticationMiddleware = (
   ) {
     return reply.code(401).send({ message: "Unauthorized: Token not good" });
   }
-  //   console.log(signedCookie);
+  console.log(signedCookie);
   request.cookieData = signedCookieValue;
   done();
 };

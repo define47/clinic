@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import io, { Socket } from "socket.io-client";
-import Stars from "./components/design/ParticlesBackground";
+import { Login } from "./pages/common/Login";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -65,8 +66,12 @@ import Stars from "./components/design/ParticlesBackground";
 //   );
 // };
 
-const App: React.FC = () => {
-  return <Stars></Stars>;
+const App: FC = () => {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+    </Routes>
+  );
 };
 
 export default App;

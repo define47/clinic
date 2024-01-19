@@ -67,22 +67,31 @@ export class UserController {
 
   public verifyUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const signedCookieValue = request.unsignCookie(
-        request.cookies.userSession!
+      // console.log("helloooo", request.cookieData);
+
+      // const signedCookieValue = request.unsignCookie(
+      //   request.cookieData!
+      // );
+
+      // console.log("reading", signedCookieValue);
+
+      const { redis } = fastifyServer;
+
+      const payload = await redis.sessionRedis.get(
+        `sessionId:${request.cookieData.value}`
       );
 
-      console.log("reading", request.cookieData);
-
-      reply
-        .code(200)
-        .send(`Signed Cookie Value:  ${JSON.stringify(signedCookieValue)}`);
-    } catch (error) {}
+      // `Signed Cookie Value:  ${JSON.stringify(data)}`
+      reply.code(200).send({ payload });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   public loginUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body: any = request.body;
-      // console.log(body);
+      console.log(body);
 
       const userToLogin = await this._userService.getUserByEmail(
         body.userEmail

@@ -97,8 +97,9 @@ fastifyServer.post("/broadcast-message", async (request, reply) => {
 
 const buildServer = async () => {
   const corsOptions = {
-    origin: "*",
-    // origin: "http://192.168.2.16:3000",
+    // origin: "*",
+    origin: "http://192.168.2.16:3000",
+    credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   };
 
@@ -109,7 +110,9 @@ const buildServer = async () => {
   // };
 
   await fastifyServer.register(fastifyCors, corsOptions);
+
   await fastifyServer.register(fastifyEnv, options);
+
   await fastifyServer
     .register(fastifyRedis, {
       host: "127.0.0.1",
@@ -132,10 +135,12 @@ const buildServer = async () => {
       family: 4,
       namespace: "subscriber",
     });
+
   await fastifyServer.register(cookie, {
     secret: "my-secret", // for cookies signature
     parseOptions: {}, // options for parsing cookies
   } as FastifyCookieOptions);
+
   await fastifyServer.register(fastifySocketIO, {
     cors: {
       origin: "http://192.168.2.16:3000",
@@ -143,17 +148,23 @@ const buildServer = async () => {
     },
   });
   fastifyServer.addHook("onRequest", authenticationMiddleware);
+
   await fastifyServer.register(authRoutes, { prefix: "api/auth" });
+
   await fastifyServer.register(userRoutes, { prefix: "api/users" });
+
   await fastifyServer.register(appointmentRoutes, {
     prefix: "api/appointments",
   });
+
   await fastifyServer.register(medicalRecordPatientRoutes, {
     prefix: "api/medicalRecordsPatients",
   });
+
   await fastifyServer.register(userPreferencesRoutes, {
     prefix: "api/user-preferences",
   });
+
   await fastifyServer;
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// * sockets
@@ -338,28 +349,28 @@ async function main() {
   }
 }
 
-// main();
+main();
 
-const numClusterWorkers = 4;
-if (cluster.isPrimary) {
-  console.log(`Primary ${process.pid} is running`);
-  for (let i = 0; i < numClusterWorkers; i++) {
-    cluster.fork();
-  }
+// const numClusterWorkers = 4;
+// if (cluster.isPrimary) {
+//   console.log(`Primary ${process.pid} is running`);
+//   for (let i = 0; i < numClusterWorkers; i++) {
+//     cluster.fork();
+//   }
 
-  cluster.on("exit", (worker, code, signal) =>
-    console.log(`worker ${worker.process.pid} died`)
-  );
+//   cluster.on("exit", (worker, code, signal) =>
+//     console.log(`worker ${worker.process.pid} died`)
+//   );
 
-  cluster.on("online", (worker) => {
-    console.log(
-      `Yay, the worker ${worker.process.pid} responded after it was forked`
-    );
-  });
-} else {
-  try {
-    main();
-  } catch (error) {
-    console.log(error);
-  }
-}
+//   cluster.on("online", (worker) => {
+//     console.log(
+//       `Yay, the worker ${worker.process.pid} responded after it was forked`
+//     );
+//   });
+// } else {
+//   try {
+//     main();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
