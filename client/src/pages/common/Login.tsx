@@ -2,8 +2,10 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import ParticlesBackground from "../../components/design/ParticlesBackground";
 import { UserToLogin } from "../../types";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const Login: FC = () => {
+  const navigate = useNavigate();
   const [userToLogin, setUserToLogin] = useState<UserToLogin>({
     userEmail: "",
     userPassword: "",
@@ -17,7 +19,12 @@ export const Login: FC = () => {
         { withCredentials: true }
       );
 
-      console.log(JSON.parse(response.data.payload));
+      console.log("here", response.data.payload);
+
+      if (response.data.success) {
+        const payload = JSON.parse(response.data.payload);
+        if (payload.roleNames[0] === "admin") navigate("/admins/dashboard");
+      }
     }
 
     verifyUser();

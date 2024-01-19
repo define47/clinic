@@ -81,8 +81,11 @@ export class UserController {
         `sessionId:${request.cookieData.value}`
       );
 
+      if (payload) reply.code(200).send({ success: true, payload });
+      reply.code(200).send({ success: false, payload });
+      // console.log(payload);
+
       // `Signed Cookie Value:  ${JSON.stringify(data)}`
-      reply.code(200).send({ payload });
     } catch (error) {
       console.log(error);
     }

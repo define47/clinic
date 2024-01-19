@@ -29,7 +29,7 @@ export const authenticationMiddleware = (
     request.url !== "/blocking" &&
     request.url !== "/non-blocking"
   )
-    return reply.code(401).send({ message: "No cookie" });
+    return reply.code(200).send({ success: false, message: "No cookie" });
 
   const signedCookieValue = signedCookie
     ? request.unsignCookie(signedCookie)
@@ -43,7 +43,9 @@ export const authenticationMiddleware = (
     request.url !== "/blocking" &&
     request.url !== "/non-blocking"
   ) {
-    return reply.code(401).send({ message: "Unauthorized: Token not good" });
+    return reply
+      .code(200)
+      .send({ success: false, message: "Unauthorized: Token not good" });
   }
   console.log(signedCookie);
   request.cookieData = signedCookieValue;

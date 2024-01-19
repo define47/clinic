@@ -1,7 +1,17 @@
-import React, { FC, useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { FC, useContext, useEffect, useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import io, { Socket } from "socket.io-client";
 import { Login } from "./pages/common/Login";
+import axios from "axios";
+import { AuthenticatedUserDataContext } from "./contexts/UserCtx";
+import { Layout } from "./pages/common/Layout";
+import { AdminDashboard } from "./pages/admin/AdminDashboard";
+import { Appointments } from "./pages/admin/Appointments";
+import { Patients } from "./pages/admin/Patients";
+import { Doctors } from "./pages/admin/Doctors";
+import { Receptionists } from "./pages/admin/Receptionists";
+import { Specialities } from "./pages/admin/Specialities";
+import { Nurses } from "./pages/admin/Nurses";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -67,10 +77,61 @@ import { Login } from "./pages/common/Login";
 // };
 
 const App: FC = () => {
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
+
+  useEffect(() => {
+    async function verifyUser() {
+      const response = await axios.post(
+        "http://192.168.2.16:40587/api/auth/read-signed-cookie",
+        {},
+        { withCredentials: true }
+      );
+
+      console.log(response.data);
+
+      if (response.data.success) {
+        authenticatedUserDataSetState(JSON.parse(response.data.payload));
+      }
+    }
+
+    verifyUser();
+  }, []);
+
+  useEffect(() => {
+    console.log("state", authenticatedUserDataState);
+  }, [authenticatedUserDataState]);
+
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-    </Routes>
+    <div>
+      {JSON.stringify(authenticatedUserDataState)}
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        {authenticatedUserDataState.roleNames[0] === "admin" && (
+          <>
+            <Route path="/" element={<Navigate to="/admins/dashboard" />} />
+            <Route
+              path="/admin"
+              element={<Navigate to="/admins/dashboard" />}
+            />
+            <Route
+              path="/dashboard"
+              element={<Navigate to="/admins/dashboard" />}
+            />
+            <Route path="/" element={<Layout />}>
+              <Route path="/admins/dashboard" element={<AdminDashboard />} />
+              <Route path="/admins/appointments" element={<Appointments />} />
+              <Route path="/admins/patients" element={<Patients />} />
+              <Route path="/admins/doctors" element={<Doctors />} />
+              <Route path="/admins/specialities" element={<Specialities />} />
+              <Route path="/admins/nurses" element={<Nurses />} />
+              <Route path="/admins/receptionists" element={<Receptionists />} />
+            </Route>
+          </>
+        )}
+      </Routes>
+    </div>
   );
 };
 
