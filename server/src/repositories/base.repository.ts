@@ -90,30 +90,12 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "isUserEmailActivated",
         "isUserApprovedByAdmin",
         "isUserBanned",
-        "userCreatedAt",
-        "userUpdatedAt",
       ];
-    else if (table === roleTable)
-      this._tableColumns = [
-        "roleId",
-        "roleName",
-        "roleCreatedAt",
-        "roleUpdatedAt",
-      ];
+    else if (table === roleTable) this._tableColumns = ["roleId", "roleName"];
     else if (table === medicalSpecialityTable)
-      this._tableColumns = [
-        "medicalSpecialityId",
-        "medicalSpecialityName",
-        "medicalSpecialityCreatedAt",
-        "medicalSpecialityUpdatedAt",
-      ];
+      this._tableColumns = ["medicalSpecialityId", "medicalSpecialityName"];
     else if (table === userRoleMappingTable)
-      this._tableColumns = [
-        "userId",
-        "roleId",
-        "userRoleMappingCreatedAt",
-        "userRoleMappingUpdatedAt",
-      ];
+      this._tableColumns = ["userId", "roleId"];
     else if (table === doctorMedicalSpecialityMappingTable)
       this._tableColumns = [
         "doctorId",
@@ -121,8 +103,6 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "isPrimaryMedicalSpeciality",
         "isSecondaryMedicalSpeciality",
         "isTertiaryMedicalSpeciality",
-        "doctorMedicalSpecialityMappingCreatedAt",
-        "doctorMedicalSpecialityMappingUpdatedAt",
       ];
     else if (table === appointmentTable)
       this._tableColumns = [
@@ -133,8 +113,6 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "appointmentReason",
         "appointmentStatus",
         "appointmentCancellationReason",
-        "appointmentCreatedAt",
-        "appointmentUpdatedAt",
       ];
     else if (table === appointmentHistoryTable)
       this._tableColumns = [
@@ -159,8 +137,6 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "conductedTests",
         "diagnosis",
         "recommendations",
-        "medicalRecordPatientCreatedAt",
-        "medicalRecordPatientUpdatedAt",
       ];
     else if (table === languageTable)
       this._tableColumns = ["languageId", "languageName", "languageCode"];
@@ -171,16 +147,9 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "medicalProcedureId",
         "medicalProcedureName",
         "medicalProcedurePrice",
-        "medicalProcedureCreatedAt",
-        "medicalProcedureUpdatedAt",
       ];
     else if (table === medicalSpecialityMedicalProcedureMappingTable)
-      this._tableColumns = [
-        "medicalSpecialityId",
-        "medicalProcedureId",
-        "medicalSpecialityMedicalProcedureMappingCreatedAt",
-        "medicalSpecialityMedicalProcedureMappingUpdatedAt",
-      ];
+      this._tableColumns = ["medicalSpecialityId", "medicalProcedureId"];
     else this._tableColumns = [];
 
     // type MyKeys = keyof typeof this._table.$inferSelect;

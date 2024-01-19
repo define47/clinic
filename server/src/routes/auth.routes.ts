@@ -9,7 +9,7 @@ export async function authRoutes(fastifyServer: FastifyInstance) {
     }
   );
 
-  fastifyServer.get(
+  fastifyServer.post(
     "/read-signed-cookie",
     async (request: FastifyRequest, reply: FastifyReply) => {
       await userController.verifyUser(request, reply);

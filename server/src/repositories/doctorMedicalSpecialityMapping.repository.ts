@@ -85,8 +85,9 @@ export class DoctorMedicalSpecialityMappingRepository
 
   public async deleteDoctorMedicalSpecialityMappingsByDoctorId(
     doctorId: string
-  ): Promise<void> {
-    console.log(await this.delete(doctorId));
+  ): Promise<string | undefined> {
+    return await this.delete(doctorId);
+    // console.log(await this.delete(doctorId));
 
     // await this.delete(doctorId)
   }
