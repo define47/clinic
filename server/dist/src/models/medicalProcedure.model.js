@@ -7,6 +7,4 @@ exports.medicalProcedureTable = drizzle_1.clinicSchema.table("MedicalProcedure",
     medicalProcedureId: (0, pg_core_1.varchar)("medicalProcedureId").primaryKey(),
     medicalProcedureName: (0, pg_core_1.varchar)("medicalProcedureName").notNull(),
     medicalProcedurePrice: (0, pg_core_1.integer)("medicalProcedurePrice").notNull(),
-    medicalProcedureCreatedAt: (0, pg_core_1.timestamp)("medicalProcedureCreatedAt").notNull(),
-    medicalProcedureUpdatedAt: (0, pg_core_1.timestamp)("medicalProcedureUpdatedAt").notNull(),
 });

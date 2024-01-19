@@ -39,6 +39,10 @@ import { MedicalSpecialityRepository } from "./repositories/medicalSpeciality.re
 import { medicalSpecialityTable } from "./models/medicalSpeciality.model.js";
 import { AppointmentRepository } from "./repositories/appointment.repository.js";
 import { appointmentTable } from "./models/appointment.model.js";
+import { UserService } from "./services/user.service.js";
+import { describe, it } from "node:test";
+import assert from "node:assert";
+import { testUser } from "./__tests__/userTest.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -289,21 +293,23 @@ const buildServer = async () => {
   // );
   // console.log(appointments);
 
-  const userRoleMappingRepository = new UserRoleMappingRepository(
-    drizzleInstance,
-    userRoleMappingTable
-  );
+  // const userRoleMappingRepository = new UserRoleMappingRepository(
+  //   drizzleInstance,
+  //   userRoleMappingTable
+  // );
 
-  const usersData = await userRoleMappingRepository.getAllUsersRelatedData(
-    getPatientRoleIdEnv(),
-    ["userForename"],
-    "",
-    100,
-    0,
-    "asc:userForename"
-  );
+  // const usersData = await userRoleMappingRepository.getAllUsersRelatedData(
+  //   getPatientRoleIdEnv(),
+  //   ["userForename"],
+  //   "",
+  //   100,
+  //   0,
+  //   "asc:userForename"
+  // );
 
-  console.log(usersData?.usersRelatedData);
+  // console.log(usersData?.usersRelatedData);
+
+  await testUser();
 
   // createDoctors();
   // createPatients();

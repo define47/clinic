@@ -32,6 +32,10 @@ import {
   UserRoleMappingCreationAttributes,
   UserRoleMappingUpdateAttributes,
 } from "../models/userRoleMapping.model";
+import {
+  MedicalSpecialityMedicalProcedureMappingCreationAttributes,
+  MedicalSpecialityMedicalProcedureMappingUpdateAttributes,
+} from "../models/medicalSpecialityMedicalProcedureMapping.model";
 
 export interface IBaseRepository<T> {
   getById(id: string): Promise<T | undefined>;
@@ -51,6 +55,7 @@ export interface IBaseRepository<T> {
       | MedicalRecordPatientCreationAttributes
       | LanguageCreationAttributes
       | UserPreferencesMappingCreationAttributes
+      | MedicalSpecialityMedicalProcedureMappingCreationAttributes
   ): Promise<T | undefined>;
 
   update(
@@ -65,6 +70,7 @@ export interface IBaseRepository<T> {
       | AppointmentUpdateAttributes
       | MedicalRecordPatientUpdateAttributes
       | UserPreferencesMappingUpdateAttributes
+      | MedicalSpecialityMedicalProcedureMappingUpdateAttributes
   ): Promise<T | undefined>;
 
   delete(id: string): Promise<string | undefined>;

@@ -41,8 +41,6 @@ class MedicalSpecialityRepository extends base_repository_1.BaseRepository {
                 .select({
                 medicalSpecialityId: medicalSpeciality_model_1.medicalSpecialityTable.medicalSpecialityId,
                 medicalSpecialityName: medicalSpeciality_model_1.medicalSpecialityTable.medicalSpecialityName,
-                medicalSpecialityCreatedAt: medicalSpeciality_model_1.medicalSpecialityTable.medicalSpecialityCreatedAt,
-                medicalSpecialityUpdatedAt: medicalSpeciality_model_1.medicalSpecialityTable.medicalSpecialityUpdatedAt,
             })
                 .from(this._table)
                 .where(condition.medicalSpecialitySearchQuery)

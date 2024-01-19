@@ -309,7 +309,6 @@ export class UserController {
         userDateOfBirth: body.userDateOfBirth,
         userAddress: body.userAddress,
         userGender: body.userGender,
-        userUpdatedAt: new Date(),
       });
 
       if (body.specialityNames) {

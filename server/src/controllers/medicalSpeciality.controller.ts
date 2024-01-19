@@ -36,7 +36,6 @@ export class MedicalSpecialityController {
           body.specialityId,
           {
             medicalSpecialityName: body.medicalSpecialityName,
-            medicalSpecialityUpdatedAt: new Date(),
           }
         );
 

@@ -30,8 +30,7 @@ const auth_routes_js_1 = require("./routes/auth.routes.js");
 const auth_middleware_js_1 = require("./middlewares/auth.middleware.js");
 const fastify_socket_io_1 = __importDefault(require("fastify-socket.io"));
 const userPreferences_routes_js_1 = require("./routes/userPreferences.routes.js");
-const userRoleMapping_repository_js_1 = require("./repositories/userRoleMapping.repository.js");
-const userRoleMapping_model_js_1 = require("./models/userRoleMapping.model.js");
+const userTest_js_1 = require("./__tests__/userTest.js");
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
 const CONNECTION_COUNT_CHANNEL = "chat:connection-count-updated";
@@ -161,7 +160,7 @@ const buildServer = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log(`Request handled by worker #${workerID}`);
         return { counter };
     }));
-    yield (0, drizzle_js_1.migrateToDb)();
+    // await migrateToDb();
     // await createRoles();
     // await createSpecialities();
     // const languageService = new LanguageService();
@@ -173,9 +172,19 @@ const buildServer = () => __awaiter(void 0, void 0, void 0, function* () {
     //   languageName: "English",
     //   languageCode: "en",
     // });
-    const userRoleMappingRepository = new userRoleMapping_repository_js_1.UserRoleMappingRepository(drizzle_js_1.drizzleInstance, userRoleMapping_model_js_1.userRoleMappingTable);
-    const usersByRole = yield userRoleMappingRepository.getAllUsersRelatedData((0, dotenv_js_1.getDoctorRoleIdEnv)(), ["userForename", "userSurname"], "", 10, 0, "medicalSpecialityName");
-    console.log(usersByRole === null || usersByRole === void 0 ? void 0 : usersByRole.usersRelatedData);
+    // const userRoleMappingRepository = new UserRoleMappingRepository(
+    //   drizzleInstance,
+    //   userRoleMappingTable
+    // );
+    // const usersByRole = await userRoleMappingRepository.getAllUsersRelatedData(
+    //   getDoctorRoleIdEnv(),
+    //   ["userForename", "userSurname"],
+    //   "",
+    //   10,
+    //   0,
+    //   "medicalSpecialityName"
+    // );
+    // console.log(usersByRole?.usersRelatedData);
     // const medicalSpecialityRepository = new MedicalSpecialityRepository(
     //   drizzleInstance,
     //   medicalSpecialityTable
@@ -184,6 +193,40 @@ const buildServer = () => __awaiter(void 0, void 0, void 0, function* () {
     //   await medicalSpecialityRepository.getAllMedicalSpecialities("in", 5, 0);
     // console.log(medicalSpecialities?.medicalSpecialities);
     // await createUsers(50, "patient");
+    // createUsers(0, 10, "doctor"updated);
+    // createUsers(0, 10, "patient");
+    // const appointmentRepository = new AppointmentRepository(
+    //   drizzleInstance,
+    //   appointmentTable
+    // );
+    // const appointments = await appointmentRepository.getAllAppointments(
+    //   "doctor",
+    //   ["userForename", "userSurname"],
+    //   "",
+    //   "nextWeek",
+    //   // "appointmentDateTime"
+    //   ["asc:userForename", "desc:userSurname"],
+    //   3,
+    //   0
+    // );
+    // console.log(appointments);
+    // const userRoleMappingRepository = new UserRoleMappingRepository(
+    //   drizzleInstance,
+    //   userRoleMappingTable
+    // );
+    // const usersData = await userRoleMappingRepository.getAllUsersRelatedData(
+    //   getPatientRoleIdEnv(),
+    //   ["userForename"],
+    //   "",
+    //   100,
+    //   0,
+    //   "asc:userForename"
+    // );
+    // console.log(usersData?.usersRelatedData);
+    yield (0, userTest_js_1.testUser)();
+    // createDoctors();
+    // createPatients();
+    // await createAppointments(3, "2024", "01", "18");
     return exports.fastifyServer;
 });
 function main() {

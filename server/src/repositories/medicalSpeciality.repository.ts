@@ -65,10 +65,6 @@ export class MedicalSpecialityRepository
       .select({
         medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
         medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
-        medicalSpecialityCreatedAt:
-          medicalSpecialityTable.medicalSpecialityCreatedAt,
-        medicalSpecialityUpdatedAt:
-          medicalSpecialityTable.medicalSpecialityUpdatedAt,
       })
       .from(this._table)
       .where(condition.medicalSpecialitySearchQuery)

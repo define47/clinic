@@ -4,11 +4,18 @@ import { medicalSpecialityTable } from "./medicalSpeciality.model";
 import { medicalProcedureTable } from "./medicalProcedure.model";
 import { sql } from "drizzle-orm";
 
-export type medicalSpecialityMedicalProcedureMapping = {
+export type MedicalSpecialityMedicalProcedureMapping = {
   medicalSpecialityId: string;
   medicalProcedureId: string;
-  medicalSpecialityMedicalProcedureMappingCreatedAt: Date;
-  medicalSpecialityMedicalProcedureMappingUpdatedAt: Date;
+};
+
+export type MedicalSpecialityMedicalProcedureMappingCreationAttributes = {
+  medicalSpecialityId: string;
+  medicalProcedureId: string;
+};
+
+export type MedicalSpecialityMedicalProcedureMappingUpdateAttributes = {
+  medicalProcedureId: string;
 };
 
 export const medicalSpecialityMedicalProcedureMappingTable = clinicSchema.table(
@@ -20,12 +27,6 @@ export const medicalSpecialityMedicalProcedureMappingTable = clinicSchema.table(
     medicalProcedureId: varchar("medicalProcedureId")
       .notNull()
       .references(() => medicalProcedureTable.medicalProcedureId),
-    medicalSpecialityMedicalProcedureMappingCreatedAt: timestamp(
-      "medicalSpecialityMedicalProcedureMappingCreatedAt"
-    ).default(sql`CURRENT_TIMESTAMP`),
-    medicalSpecialityMedicalProcedureMappingUpdatedAt: timestamp(
-      "medicalSpecialityMedicalProcedureMappingUpdatedAt"
-    ).default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => {
     return {

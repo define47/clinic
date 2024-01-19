@@ -45,8 +45,8 @@ class UserRoleMappingRepository extends base_repository_1.BaseRepository {
         return __awaiter(this, void 0, void 0, function* () {
             let columnToSearchBy1;
             let columnToSearchBy2;
-            columnToSearchBy1 = user_model_1.userTable.userCreatedAt;
-            columnToSearchBy2 = user_model_1.userTable.userCreatedAt;
+            columnToSearchBy1 = user_model_1.userTable.userForename;
+            columnToSearchBy2 = user_model_1.userTable.userForename;
             if (searchBy.length === 1) {
                 if (searchBy[0] === "userForename")
                     columnToSearchBy1 = user_model_1.userTable.userForename;
@@ -75,6 +75,24 @@ class UserRoleMappingRepository extends base_repository_1.BaseRepository {
                     columnToSearchBy1 = user_model_1.userTable.userSurname;
                     columnToSearchBy2 = user_model_1.userTable.userForename;
                 }
+            }
+            const columnToOrderByData = orderBy.split(":");
+            let columnToOrderBy;
+            if (columnToOrderByData[0] === "asc" &&
+                columnToOrderByData[1] !== "medicalSpecialityName") {
+                columnToOrderBy = (0, drizzle_orm_1.asc)(user_model_1.userTable[columnToOrderByData[1]]);
+            }
+            else if (columnToOrderByData[0] === "desc" &&
+                columnToOrderByData[1] !== "medicalSpecialityName") {
+                columnToOrderBy = (0, drizzle_orm_1.desc)(user_model_1.userTable[columnToOrderByData[1]]);
+            }
+            else if (columnToOrderByData[0] === "asc" &&
+                columnToOrderByData[1] === "medicalSpecialityName") {
+                columnToOrderBy = (0, drizzle_orm_1.asc)(medicalSpeciality_model_1.medicalSpecialityTable.medicalSpecialityName);
+            }
+            else if (columnToOrderByData[0] === "desc" &&
+                columnToOrderByData[1] === "medicalSpecialityName") {
+                columnToOrderBy = (0, drizzle_orm_1.desc)(medicalSpeciality_model_1.medicalSpecialityTable.medicalSpecialityName);
             }
             const condition = {
                 userSearchQuery: (0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(userRoleMapping_model_1.userRoleMappingTable.roleId, roleId), searchBy.length === 1
@@ -123,7 +141,7 @@ class UserRoleMappingRepository extends base_repository_1.BaseRepository {
                     .where(condition.userSearchQuery)
                     .limit(limit)
                     .offset(offset)
-                    .orderBy((0, drizzle_orm_1.asc)(user_model_1.userTable[orderBy]));
+                    .orderBy(columnToOrderBy);
                 return {
                     usersRelatedData: data,
                     totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
@@ -131,6 +149,14 @@ class UserRoleMappingRepository extends base_repository_1.BaseRepository {
                 };
             }
             else if (roleId === (0, dotenv_1.getDoctorRoleIdEnv)()) {
+                totalCount = yield this._drizzle
+                    .select({
+                    totalCount: (0, drizzle_orm_1.count)(),
+                })
+                    .from(doctorMedicalSpecialityMapping_model_1.doctorMedicalSpecialityMappingTable)
+                    .innerJoin(user_model_1.userTable, (0, drizzle_orm_1.eq)(doctorMedicalSpecialityMapping_model_1.doctorMedicalSpecialityMappingTable.doctorId, user_model_1.userTable.userId))
+                    .innerJoin(medicalSpeciality_model_1.medicalSpecialityTable, (0, drizzle_orm_1.eq)(doctorMedicalSpecialityMapping_model_1.doctorMedicalSpecialityMappingTable.medicalSpecialityId, medicalSpeciality_model_1.medicalSpecialityTable.medicalSpecialityId))
+                    .where(condition.doctorSearchQuery);
                 data = yield this._drizzle
                     .select({
                     doctor: {
@@ -155,9 +181,14 @@ class UserRoleMappingRepository extends base_repository_1.BaseRepository {
                     .innerJoin(user_model_1.userTable, (0, drizzle_orm_1.eq)(doctorMedicalSpecialityMapping_model_1.doctorMedicalSpecialityMappingTable.doctorId, user_model_1.userTable.userId))
                     .innerJoin(medicalSpeciality_model_1.medicalSpecialityTable, (0, drizzle_orm_1.eq)(doctorMedicalSpecialityMapping_model_1.doctorMedicalSpecialityMappingTable.medicalSpecialityId, medicalSpeciality_model_1.medicalSpecialityTable.medicalSpecialityId))
                     .where(condition.doctorSearchQuery)
-                    .orderBy((0, drizzle_orm_1.asc)(orderBy === "medicalSpecialityName"
-                    ? medicalSpeciality_model_1.medicalSpecialityTable[orderBy]
-                    : user_model_1.userTable[orderBy]));
+                    // .orderBy(
+                    //   asc(
+                    //     orderBy === "medicalSpecialityName"
+                    //       ? medicalSpecialityTable[orderBy as keyof MedicalSpeciality]
+                    //       : userTable[orderBy as keyof User]
+                    //   )
+                    // );
+                    .orderBy(columnToOrderBy);
                 const resultArray = Array.from(data
                     .reduce((doctorMap, { doctor, medicalSpeciality }) => {
                     const { doctorId, doctorForename, doctorSurname, doctorEmail, doctorPhoneNumber, doctorGender, doctorDateOfBirth, doctorAddress, } = doctor;
@@ -192,8 +223,8 @@ class UserRoleMappingRepository extends base_repository_1.BaseRepository {
                     .values());
                 return {
                     usersRelatedData: resultArray,
-                    totalCount: data.length,
-                    totalPages: Math.ceil(data.length / limit) - 1,
+                    totalCount: totalCount[0].totalCount,
+                    totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
                 };
             }
             return undefined;
@@ -216,8 +247,6 @@ class UserRoleMappingRepository extends base_repository_1.BaseRepository {
                 .returning({
                 userId: userRoleMapping_model_1.userRoleMappingTable.userId,
                 roleId: userRoleMapping_model_1.userRoleMappingTable.roleId,
-                userRoleMappingCreatedAt: userRoleMapping_model_1.userRoleMappingTable.userRoleMappingCreatedAt,
-                userRoleMappingUpdatedAt: userRoleMapping_model_1.userRoleMappingTable.userRoleMappingUpdatedAt,
             }))[0];
         });
     }
@@ -229,8 +258,6 @@ class UserRoleMappingRepository extends base_repository_1.BaseRepository {
                 .returning({
                 userId: userRoleMapping_model_1.userRoleMappingTable.userId,
                 roleId: userRoleMapping_model_1.userRoleMappingTable.roleId,
-                userRoleMappingCreatedAt: userRoleMapping_model_1.userRoleMappingTable.userRoleMappingCreatedAt,
-                userRoleMappingUpdatedAt: userRoleMapping_model_1.userRoleMappingTable.userRoleMappingUpdatedAt,
             }))[0];
         });
     }

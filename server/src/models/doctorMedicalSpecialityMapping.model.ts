@@ -74,12 +74,6 @@ export const doctorMedicalSpecialityMappingTable = clinicSchema.table(
     isTertiaryMedicalSpeciality: boolean(
       "isTertiaryMedicalSpeciality"
     ).notNull(),
-    doctorMedicalSpecialityMappingCreatedAt: timestamp(
-      "doctorMedicalSpecialityMappingCreatedAt"
-    ).default(sql`CURRENT_TIMESTAMP`),
-    doctorMedicalSpecialityMappingUpdatedAt: timestamp(
-      "doctorMedicalSpecialityMappingUpdatedAt"
-    ).default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => {
     return {

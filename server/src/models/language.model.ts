@@ -17,10 +17,4 @@ export const languageTable = clinicSchema.table("Language", {
   languageId: varchar("languageId").primaryKey(),
   languageName: varchar("languageName", { length: 256 }).notNull().unique(),
   languageCode: varchar("languageCode", { length: 256 }).notNull().unique(),
-  languageCreatedAt: timestamp("languageCreatedAt").default(
-    sql`CURRENT_TIMESTAMP`
-  ),
-  languageUpdatedAt: timestamp("languageUpdatedAt").default(
-    sql`CURRENT_TIMESTAMP`
-  ),
 });

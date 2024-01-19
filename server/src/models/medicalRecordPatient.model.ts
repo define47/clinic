@@ -10,8 +10,6 @@ export type MedicalRecordPatient = {
   conductedTests: string;
   diagnosis: string;
   recommendations: string;
-  medicalRecordPatientCreatedAt: Date;
-  medicalRecordPatientUpdatedAt: Date;
 };
 
 export type MedicalRecordPatientCreationAttributes = {
@@ -27,7 +25,6 @@ export type MedicalRecordPatientUpdateAttributes = {
   conductedTests: string;
   diagnosis: string;
   recommendations: string;
-  medicalRecordPatientUpdatedAt: Date;
 };
 
 export const medicalRecordPatientTable = clinicSchema.table(
@@ -41,11 +38,5 @@ export const medicalRecordPatientTable = clinicSchema.table(
     conductedTests: varchar("conductedTests", { length: 256 }).notNull(),
     diagnosis: varchar("diagnosis", { length: 256 }).notNull(),
     recommendations: varchar("recommendations", { length: 256 }).notNull(),
-    medicalRecordPatientCreatedAt: timestamp(
-      "medicalRecordPatientCreatedAt"
-    ).default(sql`CURRENT_TIMESTAMP`),
-    medicalRecordPatientUpdatedAt: timestamp(
-      "medicalRecordPatientUpdatedAt"
-    ).default(sql`CURRENT_TIMESTAMP`),
   }
 );

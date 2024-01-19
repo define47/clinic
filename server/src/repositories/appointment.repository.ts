@@ -177,9 +177,9 @@ export class AppointmentRepository
       let columnToSearchBy2: PgColumn<any>;
       let columnToOrderBy1: PgColumn<any>;
       let sortDirectionColumnToOrderBy1;
-      columnToSearchBy1 = userTable.userCreatedAt;
-      columnToSearchBy2 = userTable.userCreatedAt;
-      columnToOrderBy1 = userTable.userCreatedAt;
+      columnToSearchBy1 = userTable.userForename;
+      columnToSearchBy2 = userTable.userForename;
+      columnToOrderBy1 = userTable.userForename;
 
       if (searchBy.length === 1 && table === "doctor") {
         if (searchBy[0] === "userForename")

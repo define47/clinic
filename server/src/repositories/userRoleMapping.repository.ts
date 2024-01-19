@@ -83,8 +83,8 @@ export class UserRoleMappingRepository
   > {
     let columnToSearchBy1: PgColumn<any>;
     let columnToSearchBy2: PgColumn<any>;
-    columnToSearchBy1 = userTable.userCreatedAt;
-    columnToSearchBy2 = userTable.userCreatedAt;
+    columnToSearchBy1 = userTable.userForename;
+    columnToSearchBy2 = userTable.userForename;
 
     if (searchBy.length === 1) {
       if (searchBy[0] === "userForename")
@@ -360,10 +360,6 @@ export class UserRoleMappingRepository
         .returning({
           userId: userRoleMappingTable.userId,
           roleId: userRoleMappingTable.roleId,
-          userRoleMappingCreatedAt:
-            userRoleMappingTable.userRoleMappingCreatedAt,
-          userRoleMappingUpdatedAt:
-            userRoleMappingTable.userRoleMappingUpdatedAt,
         })
     )[0];
   }
@@ -384,10 +380,6 @@ export class UserRoleMappingRepository
         .returning({
           userId: userRoleMappingTable.userId,
           roleId: userRoleMappingTable.roleId,
-          userRoleMappingCreatedAt:
-            userRoleMappingTable.userRoleMappingCreatedAt,
-          userRoleMappingUpdatedAt:
-            userRoleMappingTable.userRoleMappingUpdatedAt,
         })
     )[0];
   }

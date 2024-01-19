@@ -279,17 +279,22 @@ class BaseRepository {
         });
     }
     delete(id) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if (this._table === appointmentHistory_model_1.appointmentHistoryTable ||
                     this._table === medicalRecordPatient_model_1.medicalRecordPatientTable)
-                    yield this._drizzle
+                    return (yield this._drizzle
                         .delete(this._table)
-                        .where((0, drizzle_orm_1.eq)(this._table[this._tableColumns[1]], id));
-                yield this._drizzle
+                        .where((0, drizzle_orm_1.eq)(this._table[this._tableColumns[1]], id))
+                        .returning({ id: this._table[this._tableColumns[1]] }))[0].id;
+                return (_a = (yield this._drizzle
                     .delete(this._table)
-                    .where((0, drizzle_orm_1.eq)(this._table[this._tableColumns[0]], id));
-                return id;
+                    .where((0, drizzle_orm_1.eq)(this._table[this._tableColumns[0]], id))
+                    .returning({ id: this._table[this._tableColumns[0]] }))[0]) === null || _a === void 0 ? void 0 : _a.id;
+                // if (idt) return idt;
+                // return undefined;
+                // return id;
             }
             catch (error) {
                 console.log(error);

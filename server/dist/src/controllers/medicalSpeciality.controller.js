@@ -28,7 +28,6 @@ class MedicalSpecialityController {
                 const body = request.body;
                 let medicalSpecialityToUpdate = yield this._medicalSpecialityService.updateMedicalSpeciality(body.specialityId, {
                     medicalSpecialityName: body.medicalSpecialityName,
-                    medicalSpecialityUpdatedAt: new Date(),
                 });
                 return reply.code(200).send({ success: true, message: "" });
             }

@@ -58,7 +58,11 @@ import {
   MedicalProcedureUpdateAttributes,
   medicalProcedureTable,
 } from "../models/medicalProcedure.model";
-import { medicalSpecialityMedicalProcedureMappingTable } from "../models/medicalSpecialityMedicalProcedureMapping.model";
+import {
+  MedicalSpecialityMedicalProcedureMappingCreationAttributes,
+  MedicalSpecialityMedicalProcedureMappingUpdateAttributes,
+  medicalSpecialityMedicalProcedureMappingTable,
+} from "../models/medicalSpecialityMedicalProcedureMapping.model";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
@@ -397,6 +401,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | LanguageCreationAttributes
       | UserPreferencesMappingCreationAttributes
       | MedicalProcedureCreationAttributes
+      | MedicalSpecialityMedicalProcedureMappingCreationAttributes
   ): Promise<T | undefined> {
     try {
       let id;
@@ -468,6 +473,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | MedicalRecordPatientUpdateAttributes
       | UserPreferencesMappingUpdateAttributes
       | MedicalProcedureUpdateAttributes
+      | MedicalSpecialityMedicalProcedureMappingUpdateAttributes
   ): Promise<T | undefined> {
     try {
       const entityAttributes: Record<string, any> = {};
@@ -516,14 +522,23 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         this._table === appointmentHistoryTable ||
         this._table === medicalRecordPatientTable
       )
+        return (
+          await this._drizzle
+            .delete(this._table)
+            .where(eq(this._table[this._tableColumns[1]], id))
+            .returning({ id: this._table[this._tableColumns[1]] })
+        )[0].id;
+      return (
         await this._drizzle
           .delete(this._table)
-          .where(eq(this._table[this._tableColumns[1]], id));
-      await this._drizzle
-        .delete(this._table)
-        .where(eq(this._table[this._tableColumns[0]], id));
+          .where(eq(this._table[this._tableColumns[0]], id))
+          .returning({ id: this._table[this._tableColumns[0]] })
+      )[0]?.id;
 
-      return id;
+      // if (idt) return idt;
+      // return undefined;
+
+      // return id;
     } catch (error) {
       console.log(error);
     }

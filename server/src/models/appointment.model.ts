@@ -19,8 +19,6 @@ export type Appointment = {
   appointmentDateTime: Date;
   appointmentStatus: string;
   appointmentCancellationReason: string;
-  appointmentCreatedAt: Date;
-  appointmentUpdatedAt: Date;
 };
 
 export type AppointmentJoinDoctorAndPatient = {
@@ -61,7 +59,6 @@ export type AppointmentUpdateAttributes = {
   appointmentDateTime: Date;
   appointmentStatus: string;
   appointmentCancellationReason: string;
-  appointmentUpdatedAt: Date;
 };
 
 export const StatusEnum = pgEnum("appointmentStatus", [
@@ -94,10 +91,4 @@ export const appointmentTable = clinicSchema.table("Appointment", {
   appointmentCancellationReason: varchar("appointmentCancellationReason", {
     length: 256,
   }),
-  appointmentCreatedAt: timestamp("appointmentCreatedAt")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  appointmentUpdatedAt: timestamp("appointmentUpdatedAt")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
 });

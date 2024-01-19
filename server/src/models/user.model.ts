@@ -23,8 +23,6 @@ export type User = {
   isUserEmailActivated: boolean;
   isUserApprovedByAdmin: boolean;
   isUserBanned: boolean;
-  userCreatedAt: Date;
-  userUpdatedAt: Date;
 };
 
 export type UserCreationAttributes = {
@@ -53,7 +51,6 @@ export type UserUpdateAttributes = {
   isUserEmailActivated?: boolean;
   isUserApprovedByAdmin?: boolean;
   isUserBanned?: boolean;
-  userUpdatedAt: Date;
 };
 
 export const GenderEnum = pgEnum("userGender", ["male", "female"]);
@@ -79,6 +76,4 @@ export const userTable = clinicSchema.table("User", {
     .default(false)
     .notNull(),
   isUserBanned: boolean("isUserBanned").default(false).notNull(),
-  userCreatedAt: timestamp("userCreatedAt").default(sql`CURRENT_TIMESTAMP`),
-  userUpdatedAt: timestamp("userUpdatedAt").default(sql`CURRENT_TIMESTAMP`),
 });

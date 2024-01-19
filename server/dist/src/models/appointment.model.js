@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.appointmentTable = exports.StatusEnum = void 0;
 const pg_core_1 = require("drizzle-orm/pg-core");
 const drizzle_1 = require("../utils/drizzle");
-const drizzle_orm_1 = require("drizzle-orm");
 const user_model_1 = require("./user.model");
 exports.StatusEnum = (0, pg_core_1.pgEnum)("appointmentStatus", [
     // pending approval => scheduled => confirmed by patient => completed (if patient makes appointment from their account)
@@ -34,10 +33,4 @@ exports.appointmentTable = drizzle_1.clinicSchema.table("Appointment", {
     appointmentCancellationReason: (0, pg_core_1.varchar)("appointmentCancellationReason", {
         length: 256,
     }),
-    appointmentCreatedAt: (0, pg_core_1.timestamp)("appointmentCreatedAt")
-        .default((0, drizzle_orm_1.sql) `CURRENT_TIMESTAMP`)
-        .notNull(),
-    appointmentUpdatedAt: (0, pg_core_1.timestamp)("appointmentUpdatedAt")
-        .default((0, drizzle_orm_1.sql) `CURRENT_TIMESTAMP`)
-        .notNull(),
 });
