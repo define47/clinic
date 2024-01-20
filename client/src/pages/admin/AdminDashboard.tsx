@@ -1,5 +1,10 @@
 import { FC } from "react";
+import { Overlay } from "../../components/overlays/Overlay";
 
 export const AdminDashboard: FC = () => {
-  return <div>admin dashboard</div>;
+  return (
+    <div className="">
+      admin dashboard <Overlay />
+    </div>
+  );
 };

@@ -105,7 +105,7 @@ const App: FC = () => {
 
   return (
     <div>
-      {JSON.stringify(authenticatedUserDataState)}
+      {/* {JSON.stringify(authenticatedUserDataState)} */}
       <Routes>
         <Route path="/login" element={<Login />} />
         {authenticatedUserDataState.roleNames[0] === "admin" && (
