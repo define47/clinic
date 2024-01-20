@@ -1,5 +1,24 @@
 import { ReactNode } from "react";
 
+export type User = {
+  userId: string;
+  userForename: string;
+  userSurname: string;
+  userEmail: string;
+  userPhoneNumber: string;
+  userGender: string;
+  userDateOfBirth: string;
+  userAddress: string;
+  userEncryptedPassword?: string;
+  isUserEmailActivated: boolean;
+  isUserApprovedByAdmin: boolean;
+  isUserBanned: boolean;
+  roleId: string;
+  roleName: string;
+};
+
+export type TableRow = User;
+
 export type UserToLogin = {
   userEmail: string;
   userPassword: string;
