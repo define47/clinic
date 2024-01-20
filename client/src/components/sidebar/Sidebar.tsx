@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { ChevronFirst, ChevronLast } from "lucide-react";
 import { SidebarItem } from "./SidebarItem";
 import { SidebarProps } from "../../types";
@@ -19,6 +19,8 @@ import {
   RiUserHeartLine,
 } from "react-icons/ri";
 import { FaRegUser, FaUser } from "react-icons/fa";
+import { TbSettings, TbSettingsFilled } from "react-icons/tb";
+import { IoHelpCircle, IoHelpCircleOutline } from "react-icons/io5";
 
 export const Sidebar: FC<SidebarProps> = ({
   isSidebarExpanded,
@@ -32,10 +34,8 @@ export const Sidebar: FC<SidebarProps> = ({
   const specialitiesPathname = "/admins/specialities";
   const nursesPathname = "/admins/nurses";
   const receptionistsPathname = "/admins/receptionists";
-
-  useEffect(() => {
-    console.log(pathname);
-  }, [pathname]);
+  const settingsPathname = "/admins/settings";
+  const adminGuidePathname = "/admins/guide";
 
   return (
     <aside
@@ -50,7 +50,7 @@ export const Sidebar: FC<SidebarProps> = ({
       }}
     >
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
-        <div className="p-4 pb-2 flex justify-between items-center border-b">
+        <div className=" h-14 flex justify-between items-center border-b">
           {/* <img
             src="https://img.logoipsum.com/243.svg"
             className={`overflow-hidden transition-all ${
@@ -161,6 +161,33 @@ export const Sidebar: FC<SidebarProps> = ({
             }
             title="Receptionists"
             active={pathname === receptionistsPathname}
+            isSidebarExpanded={isSidebarExpanded}
+          />
+          <li className="border-b"></li>
+          <SidebarItem
+            to={settingsPathname}
+            icon={
+              pathname === settingsPathname ? (
+                <TbSettingsFilled />
+              ) : (
+                <TbSettings />
+              )
+            }
+            title="Settings"
+            active={pathname === settingsPathname}
+            isSidebarExpanded={isSidebarExpanded}
+          />
+          <SidebarItem
+            to={adminGuidePathname}
+            icon={
+              pathname === adminGuidePathname ? (
+                <IoHelpCircle />
+              ) : (
+                <IoHelpCircleOutline />
+              )
+            }
+            title="Guide"
+            active={pathname === adminGuidePathname}
             isSidebarExpanded={isSidebarExpanded}
           />
         </ul>

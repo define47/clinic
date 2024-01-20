@@ -16,20 +16,16 @@ export type UserRoleMapping = {
 };
 
 export type UserRoleMappingJoinUserAndRole = {
-  user: {
-    userId: string;
-    userForename: string;
-    userSurname: string;
-    userEmail: string;
-    userPhoneNumber: string;
-    userGender: string;
-    userDateOfBirth: string;
-    userAddress: string;
-  };
-  role: {
-    roleId: string;
-    roleName: string;
-  };
+  userId: string;
+  userForename: string;
+  userSurname: string;
+  userEmail: string;
+  userPhoneNumber: string;
+  userGender: string;
+  userDateOfBirth: string;
+  userAddress: string;
+  roleId: string;
+  roleName: string;
 };
 
 export type UserRoleMappingCreationAttributes = {

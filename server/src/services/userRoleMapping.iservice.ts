@@ -1,6 +1,8 @@
+import { DoctorMedicalSpecialityMappingJoinUserAndSpeciality } from "../models/doctorMedicalSpecialityMapping.model";
 import {
   UserRoleMapping,
   UserRoleMappingCreationAttributes,
+  UserRoleMappingJoinUserAndRole,
 } from "../models/userRoleMapping.model";
 
 export interface IUserRoleMappingService {
@@ -12,6 +14,24 @@ export interface IUserRoleMappingService {
   getUserRoleMappingsByUserId(
     userId: string
   ): Promise<UserRoleMapping[] | undefined>;
+
+  getAllUsersRelatedData(
+    roleId: string,
+    searchBy: string[],
+    searchQuery: string,
+    limit: number,
+    page: number,
+    orderBy: string
+  ): Promise<
+    | {
+        usersRelatedData:
+          | UserRoleMappingJoinUserAndRole[]
+          | DoctorMedicalSpecialityMappingJoinUserAndSpeciality[];
+        totalCount: number;
+        totalPages: number;
+      }
+    | undefined
+  >;
 
   createUserRoleMapping(
     userRoleMappingCreationAttributes: UserRoleMappingCreationAttributes

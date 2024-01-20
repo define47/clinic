@@ -22,3 +22,8 @@ export type TopBarProps = {
   isSidebarExtended: boolean;
   setIsSidebarExtended: (isSidebarExtended: boolean) => void;
 };
+
+export type GeneralTableProps = {
+  URL: string;
+  roleId: string;
+};

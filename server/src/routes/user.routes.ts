@@ -2,6 +2,13 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { userController } from "../controllers";
 
 export async function userRoutes(fastifyServer: FastifyInstance) {
+  fastifyServer.get(
+    "/",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      await userController.retrieveAllUsersRelatedData(request, reply);
+    }
+  );
+
   fastifyServer.post(
     "/",
     async (request: FastifyRequest, reply: FastifyReply) => {

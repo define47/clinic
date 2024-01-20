@@ -1,6 +1,8 @@
+import { DoctorMedicalSpecialityMappingJoinUserAndSpeciality } from "../models/doctorMedicalSpecialityMapping.model";
 import {
   UserRoleMapping,
   UserRoleMappingCreationAttributes,
+  UserRoleMappingJoinUserAndRole,
   userRoleMappingTable,
 } from "../models/userRoleMapping.model";
 import { UserRoleMappingRepository } from "../repositories/userRoleMapping.repository";
@@ -32,6 +34,33 @@ export class UserRoleMappingService implements IUserRoleMappingService {
   ): Promise<UserRoleMapping[] | undefined> {
     return await this._userRoleMappingRepository.getUserRoleMappingsByUserId(
       userId
+    );
+  }
+
+  public async getAllUsersRelatedData(
+    roleId: string,
+    searchBy: string[],
+    searchQuery: string,
+    limit: number,
+    page: number,
+    orderBy: string
+  ): Promise<
+    | {
+        usersRelatedData:
+          | UserRoleMappingJoinUserAndRole[]
+          | DoctorMedicalSpecialityMappingJoinUserAndSpeciality[];
+        totalCount: number;
+        totalPages: number;
+      }
+    | undefined
+  > {
+    return await this._userRoleMappingRepository.getAllUsersRelatedData(
+      roleId,
+      searchBy,
+      searchQuery,
+      limit,
+      page,
+      orderBy
     );
   }
 

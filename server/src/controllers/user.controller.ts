@@ -50,6 +50,39 @@ export class UserController {
     return false;
   };
 
+  public retrieveAllUsersRelatedData = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const query: any = request.query;
+
+      console.log(
+        query.roleId,
+        query.searchBy.split(","),
+        query.searchQuery,
+        query.limit,
+        query.page,
+        query.orderBy
+      );
+
+      const payload = await this._userRoleMappingService.getAllUsersRelatedData(
+        query.roleId,
+        query.searchBy.split(","),
+        query.searchQuery,
+        query.limit,
+        query.page,
+        query.orderBy
+      );
+
+      console.log(payload);
+
+      reply.code(200).send({ success: true, payload });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   public logoutUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { redis } = fastifyServer;

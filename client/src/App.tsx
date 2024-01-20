@@ -12,6 +12,8 @@ import { Doctors } from "./pages/admin/Doctors";
 import { Receptionists } from "./pages/admin/Receptionists";
 import { Specialities } from "./pages/admin/Specialities";
 import { Nurses } from "./pages/admin/Nurses";
+import { Settings } from "./pages/admin/Settings";
+import { AdminGuide } from "./pages/admin/AdminGuide";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -99,9 +101,9 @@ const App: FC = () => {
     verifyUser();
   }, []);
 
-  useEffect(() => {
-    console.log("state", authenticatedUserDataState);
-  }, [authenticatedUserDataState]);
+  // useEffect(() => {
+  //   console.log("state", authenticatedUserDataState);
+  // }, [authenticatedUserDataState]);
 
   return (
     <div>
@@ -127,6 +129,8 @@ const App: FC = () => {
               <Route path="/admins/specialities" element={<Specialities />} />
               <Route path="/admins/nurses" element={<Nurses />} />
               <Route path="/admins/receptionists" element={<Receptionists />} />
+              <Route path="/admins/settings" element={<Settings />} />
+              <Route path="/admins/guide" element={<AdminGuide />} />
             </Route>
           </>
         )}

@@ -176,20 +176,16 @@ export class UserRoleMappingRepository
 
       data = await this._drizzle
         .select({
-          user: {
-            userId: userTable.userId,
-            userForename: userTable.userForename,
-            userSurname: userTable.userSurname,
-            userEmail: userTable.userEmail,
-            userPhoneNumber: userTable.userPhoneNumber,
-            userGender: userTable.userGender,
-            userDateOfBirth: userTable.userDateOfBirth,
-            userAddress: userTable.userAddress,
-          },
-          role: {
-            roleId: userRoleMappingTable.roleId,
-            roleName: roleTable.roleName,
-          },
+          userId: userTable.userId,
+          userForename: userTable.userForename,
+          userSurname: userTable.userSurname,
+          userEmail: userTable.userEmail,
+          userPhoneNumber: userTable.userPhoneNumber,
+          userGender: userTable.userGender,
+          userDateOfBirth: userTable.userDateOfBirth,
+          userAddress: userTable.userAddress,
+          roleId: userRoleMappingTable.roleId,
+          roleName: roleTable.roleName,
         })
         .from(this._table)
         .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))

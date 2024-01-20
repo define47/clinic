@@ -43,6 +43,7 @@ import { UserService } from "./services/user.service.js";
 import { describe, it } from "node:test";
 import assert from "node:assert";
 import { testUser } from "./__tests__/userTest.js";
+import { UserRoleMappingService } from "./services/userRoleMapping.service.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -282,7 +283,7 @@ const buildServer = async () => {
   //   await medicalSpecialityRepository.getAllMedicalSpecialities("in", 5, 0);
   // console.log(medicalSpecialities?.medicalSpecialities);
 
-  // await createUsers(50, "patient");
+  // await createUsers(0, 250, "patient");
 
   // createUsers(0, 10, "doctor"updated);
   // createUsers(0, 10, "patient");
@@ -304,16 +305,13 @@ const buildServer = async () => {
   // );
   // console.log(appointments);
 
-  // const userRoleMappingRepository = new UserRoleMappingRepository(
-  //   drizzleInstance,
-  //   userRoleMappingTable
-  // );
+  // const userRoleMappingService = new UserRoleMappingService();
 
-  // const usersData = await userRoleMappingRepository.getAllUsersRelatedData(
+  // const usersData = await userRoleMappingService.getAllUsersRelatedData(
   //   getPatientRoleIdEnv(),
   //   ["userForename"],
   //   "",
-  //   100,
+  //   5,
   //   0,
   //   "asc:userForename"
   // );
