@@ -1,6 +1,22 @@
 import { FC, useState } from "react";
 
-export const InputDesign: FC = () => {
+type InputDesignProps = {
+  textColorUnfocused?: string;
+  textColorFocused?: string;
+  borderColorUnfocused?: string;
+  borderColorFocused?: string;
+  labelUnfocused?: string;
+  labelFocused?: string;
+};
+
+export const InputDesign: FC<InputDesignProps> = ({
+  textColorUnfocused,
+  textColorFocused,
+  borderColorUnfocused,
+  borderColorFocused,
+  labelUnfocused,
+  labelFocused,
+}) => {
   const [focused, setFocused] = useState(false);
   const [hasText, setHasText] = useState(false);
 
@@ -15,7 +31,7 @@ export const InputDesign: FC = () => {
     }
   };
 
-  const handleInputChange = (event: any) => {
+  const handleInputChange = (event: { target: { value: string } }) => {
     setHasText(event.target.value.trim() !== "");
   };
 
@@ -26,10 +42,18 @@ export const InputDesign: FC = () => {
         <label htmlFor="">username</label>
       </div> */}
 
-      <div className="relative mt-20">
+      <div className="relative">
         <input
           type="text"
-          className={`w-80 h-10 text-base text-black p-2 bg-transparent border border-black outline-none rounded-md focus:border-gray-300 transition-all duration-200 ${
+          className={`w-80 h-10 text-base ${
+            textColorUnfocused ? textColorUnfocused : "text-black"
+          }  ${
+            textColorFocused ? textColorFocused : "text-black"
+          }  p-2 bg-transparent border ${
+            borderColorUnfocused ? borderColorUnfocused : "border-black"
+          } ${
+            borderColorFocused ? borderColorFocused : "focus:border-gray-300"
+          }  outline-none rounded-md  transition-all duration-200 ${
             focused || hasText ? "border-gray-300" : ""
           }`}
           onFocus={handleFocus}
@@ -40,8 +64,10 @@ export const InputDesign: FC = () => {
         <label
           htmlFor=""
           className={`absolute left-2 transform ${
-            focused || hasText ? "-translate-y-2 text-xs" : "translate-y-2"
-          } text-black px-1 pointer-events-none bg-white transition-all duration-200`}
+            focused || hasText ? `-translate-y-2 text-xs` : `translate-y-2`
+          } ${labelUnfocused ? labelUnfocused : "text-black"} ${
+            focused ? `!${labelFocused}` : "text-black"
+          }  px-1 pointer-events-none bg-gray-50 transition-all duration-200`}
         >
           Username
         </label>
