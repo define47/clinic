@@ -13,8 +13,8 @@ export type User = {
   isUserEmailActivated: boolean;
   isUserApprovedByAdmin: boolean;
   isUserBanned: boolean;
-  roleId: string;
-  roleName: string;
+  userRoleId: string;
+  userRoleName: string;
 };
 
 export type TableRow = User;

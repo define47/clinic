@@ -24,8 +24,8 @@ export type UserRoleMappingJoinUserAndRole = {
   userGender: string;
   userDateOfBirth: string;
   userAddress: string;
-  roleId: string;
-  roleName: string;
+  userRoleId: string;
+  userRoleName: string;
 };
 
 export type UserRoleMappingCreationAttributes = {

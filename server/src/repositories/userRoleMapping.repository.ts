@@ -184,8 +184,8 @@ export class UserRoleMappingRepository
           userGender: userTable.userGender,
           userDateOfBirth: userTable.userDateOfBirth,
           userAddress: userTable.userAddress,
-          roleId: userRoleMappingTable.roleId,
-          roleName: roleTable.roleName,
+          userRoleId: userRoleMappingTable.roleId,
+          userRoleName: roleTable.roleName,
         })
         .from(this._table)
         .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))

@@ -42,10 +42,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({ URL, roleId }) => {
 
   return (
     <div>
-      <table>
-        <thead>
-          {tableRows.length > 0 &&
-            (isUserRow(tableRows[0]) ? (
+      {tableRows.length > 0 && (
+        <table>
+          <thead>
+            {isUserRow(tableRows[0]) ? (
               <tr>
                 <td>userId</td>
                 <td>userForename</td>
@@ -55,14 +55,32 @@ export const GeneralTable: FC<GeneralTableProps> = ({ URL, roleId }) => {
                 <td>userGender</td>
                 <td>userDateOfBirth</td>
                 <td>userAddress</td>
-                <td>roleName</td>
+                <td>userRoleName</td>
               </tr>
             ) : (
               ""
-            ))}
-        </thead>
-        <tbody></tbody>
-      </table>
+            )}
+          </thead>
+          <tbody>
+            {tableRows.map(
+              (tableRow: TableRow) =>
+                isUserRow(tableRows[0]) && (
+                  <tr>
+                    <td>{tableRow.userId}</td>
+                    <td>{tableRow.userForename}</td>
+                    <td>{tableRow.userSurname}</td>
+                    <td>{tableRow.userEmail}</td>
+                    <td>{tableRow.userPhoneNumber}</td>
+                    <td>{tableRow.userGender}</td>
+                    <td>{tableRow.userDateOfBirth}</td>
+                    <td>{tableRow.userAddress}</td>
+                    <td>{tableRow.userRoleName}</td>
+                  </tr>
+                )
+            )}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
