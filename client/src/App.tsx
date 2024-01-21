@@ -3,17 +3,19 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import io, { Socket } from "socket.io-client";
 import { Login } from "./pages/common/Login";
 import axios from "axios";
-import { AuthenticatedUserDataContext } from "./contexts/UserCtx";
+import { AuthenticatedUserDataContext } from "./contexts/UserContext";
 import { Layout } from "./pages/common/Layout";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { Appointments } from "./pages/admin/Appointments";
 import { Patients } from "./pages/admin/Patients";
 import { Doctors } from "./pages/admin/Doctors";
 import { Receptionists } from "./pages/admin/Receptionists";
-import { Specialities } from "./pages/admin/Specialities";
+import { MedicalSpecialities } from "./pages/admin/MedicalSpecialities";
 import { Nurses } from "./pages/admin/Nurses";
 import { Settings } from "./pages/admin/Settings";
 import { AdminGuide } from "./pages/admin/AdminGuide";
+import { ThemeContext } from "./contexts/ThemeContext";
+import { MedicalProcedures } from "./pages/admin/MedicalProcedures";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -83,6 +85,8 @@ const App: FC = () => {
   const { authenticatedUserDataState, authenticatedUserDataSetState } =
     authContext!;
 
+  // const { themeValue, setThemeValue } = useContext(ThemeContext);
+
   useEffect(() => {
     async function verifyUser() {
       const response = await axios.post(
@@ -100,6 +104,10 @@ const App: FC = () => {
 
     verifyUser();
   }, []);
+
+  // useEffect(() => {
+  //   setThemeValue("light");
+  // }, []);
 
   // useEffect(() => {
   //   console.log("state", authenticatedUserDataState);
@@ -126,7 +134,14 @@ const App: FC = () => {
               <Route path="/admins/appointments" element={<Appointments />} />
               <Route path="/admins/patients" element={<Patients />} />
               <Route path="/admins/doctors" element={<Doctors />} />
-              <Route path="/admins/specialities" element={<Specialities />} />
+              <Route
+                path="/admins/medical-specialities"
+                element={<MedicalSpecialities />}
+              />
+              <Route
+                path="/admins/medical-procedures"
+                element={<MedicalProcedures />}
+              />
               <Route path="/admins/nurses" element={<Nurses />} />
               <Route path="/admins/receptionists" element={<Receptionists />} />
               <Route path="/admins/settings" element={<Settings />} />

@@ -1,7 +1,9 @@
-import { FC, useState } from "react";
+import { ChangeEventHandler, FC, useState } from "react";
 
-type InputDesignProps = {
+type StyledInputProps = {
   label: string;
+  name: string;
+  onChangeStyledInput: ChangeEventHandler<HTMLInputElement>;
   textColorUnfocused?: string;
   textColorFocused?: string;
   borderColorUnfocused?: string;
@@ -10,8 +12,10 @@ type InputDesignProps = {
   labelFocused?: string;
 };
 
-export const InputDesign: FC<InputDesignProps> = ({
+export const StyledInput: FC<StyledInputProps> = ({
   label,
+  name,
+  onChangeStyledInput,
   textColorUnfocused,
   textColorFocused,
   borderColorUnfocused,
@@ -60,7 +64,11 @@ export const InputDesign: FC<InputDesignProps> = ({
           }`}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          onChange={handleInputChange}
+          name={name}
+          onChange={(event) => {
+            handleInputChange(event);
+            onChangeStyledInput(event);
+          }}
           required
         />
         <label

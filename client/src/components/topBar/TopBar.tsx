@@ -1,6 +1,8 @@
 import { FC, useContext, useEffect } from "react";
 import { TopBarProps } from "../../types";
-import { AuthenticatedUserDataContext } from "../../contexts/UserCtx";
+import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
+import { ThemeSwitcher } from "../ThemeSwitcher";
+import { useLocation } from "react-router-dom";
 
 export const TopBar: FC<TopBarProps> = ({
   isSidebarExtended,
@@ -8,26 +10,28 @@ export const TopBar: FC<TopBarProps> = ({
 }) => {
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState } = authContext!;
-
+  const { pathname } = useLocation();
   // useEffect(() => {
   //   console.log("topbar", authenticatedUserDataState);
   // }, [authenticatedUserDataState]);
 
   return (
     <div
-      className={`h-14 fixed transition-all ${
-        isSidebarExtended
-          ? "w-[calc(100%-256px)] right-0"
-          : "w-[calc(100%-80px)] right-0"
-      } bg-white border-b px-2`}
+      // fixed z-20
+      className={`h-14 w-full flex items-center justify-between transition-all !bg-red-200 dark:bg-darkMode-topBarColor border-b px-2`}
     >
-      <div className="fixed flex-flex-col right-3 text-sm">
-        <div>
-          {authenticatedUserDataState.userForename}&nbsp;
-          {authenticatedUserDataState.userSurname}
-        </div>
-        <div className="flex items-center justify-center">
-          {authenticatedUserDataState.roleNames[0]}
+      <div className="w-full">{pathname}</div>
+      <div className="w-full flex justify-center">b</div>
+      <div className="w-full flex items-center justify-end text-sm">
+        <ThemeSwitcher />
+        <div className="w-52 flex flex-col bg-gray-100">
+          <div className="flex">
+            <span>{authenticatedUserDataState.userForename}</span>&nbsp;
+            <span>{authenticatedUserDataState.userSurname}</span>
+          </div>
+          <div className="flex justify-center">
+            {authenticatedUserDataState.roleNames[0]}
+          </div>
         </div>
       </div>
     </div>

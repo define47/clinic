@@ -21,6 +21,7 @@ import {
 import { FaRegUser, FaUser } from "react-icons/fa";
 import { TbSettings, TbSettingsFilled } from "react-icons/tb";
 import { IoHelpCircle, IoHelpCircleOutline } from "react-icons/io5";
+import { BiInjection, BiSolidInjection } from "react-icons/bi";
 
 export const Sidebar: FC<SidebarProps> = ({
   isSidebarExpanded,
@@ -31,7 +32,8 @@ export const Sidebar: FC<SidebarProps> = ({
   const adminDashboardPathname = "/admins/dashboard";
   const patientsPathname = "/admins/patients";
   const doctorsPathname = "/admins/doctors";
-  const specialitiesPathname = "/admins/specialities";
+  const medicalSpecialitiesPathname = "/admins/medical-specialities";
+  const medicalProceduresPathname = "/admins/medical-procedures";
   const nursesPathname = "/admins/nurses";
   const receptionistsPathname = "/admins/receptionists";
   const settingsPathname = "/admins/settings";
@@ -39,6 +41,7 @@ export const Sidebar: FC<SidebarProps> = ({
 
   return (
     <aside
+      // fixed top-0 left-0 z-20
       className={`h-full overflow-hidden transition-all ${
         isSidebarExpanded ? "w-64" : "w-20"
       }`}
@@ -49,8 +52,8 @@ export const Sidebar: FC<SidebarProps> = ({
         setIsSidebarExpanded(false);
       }}
     >
-      <nav className="h-full flex flex-col bg-white border-r shadow-sm">
-        <div className=" h-14 flex justify-between items-center border-b">
+      <nav className="h-full flex flex-col bg-lightMode-sidebarColor dark:bg-darkMode-sidebarColor border-r shadow-sm">
+        <div className="h-14 flex justify-between items-center border-b">
           {/* <img
             src="https://img.logoipsum.com/243.svg"
             className={`overflow-hidden transition-all ${
@@ -59,8 +62,8 @@ export const Sidebar: FC<SidebarProps> = ({
             alt=""
           /> */}
           <span
-            className={`overflow-hidden transition-all  ${
-              isSidebarExpanded ? "w-32" : "w-32 text-xs"
+            className={`overflow-hidden transition-all flex items-center justify-center  ${
+              isSidebarExpanded ? "w-full text-2xl" : "w-full text-sm"
             }`}
           >
             Iatropolis
@@ -69,14 +72,14 @@ export const Sidebar: FC<SidebarProps> = ({
           {/* fixed ${
               isSidebarExpanded ? "left-60 top-16" : "left-[70px] top-7"
             }  */}
-          <button
+          {/* <button
             onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
             className={`${
               !isSidebarExpanded && "flex w-full items-center justify-center"
             } rounded-lg bg-gray-50 hover:bg-gray-100`}
           >
             {isSidebarExpanded ? <ChevronFirst /> : <ChevronLast />}
-          </button>
+          </button> */}
         </div>
 
         <ul className="flex-1 px-3">
@@ -133,16 +136,29 @@ export const Sidebar: FC<SidebarProps> = ({
             isSidebarExpanded={isSidebarExpanded}
           />
           <SidebarItem
-            to={specialitiesPathname}
+            to={medicalSpecialitiesPathname}
             icon={
-              pathname === specialitiesPathname ? (
+              pathname === medicalSpecialitiesPathname ? (
                 <RiShieldCrossFill />
               ) : (
                 <RiShieldCrossLine />
               )
             }
-            title="Specialities"
-            active={pathname === specialitiesPathname}
+            title="Medical Specialities"
+            active={pathname === medicalSpecialitiesPathname}
+            isSidebarExpanded={isSidebarExpanded}
+          />
+          <SidebarItem
+            to={medicalProceduresPathname}
+            icon={
+              pathname === medicalProceduresPathname ? (
+                <BiSolidInjection />
+              ) : (
+                <BiInjection />
+              )
+            }
+            title="Medical Procedures"
+            active={pathname === medicalProceduresPathname}
             isSidebarExpanded={isSidebarExpanded}
           />
           <SidebarItem

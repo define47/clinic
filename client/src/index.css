@@ -2,6 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+}
+
+.ripple-button {
+  position: relative;
+  overflow: hidden;
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  background-color: #3498db;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+
+.ripple-button:hover {
+  background-color: #2980b9; /* Your hover color here */
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(0);
+  animation: ripple-animation 0.5s linear;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(5);
+    opacity: 0;
+  }
+}
+
 /* .input-group {
   position: relative;
   margin: 20px 0;

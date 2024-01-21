@@ -1,6 +1,6 @@
 import { FC, useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { AuthenticatedUserDataContext } from "../../contexts/UserCtx";
+import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { Sidebar } from "../../components/sidebar/Sidebar";
 import { TopBar } from "../../components/topBar/TopBar";
 
@@ -17,31 +17,26 @@ export const Layout: FC = () => {
       authenticatedUserDataState.roleNames[0] === "admin"
     )
       content = (
-        <div>
-          <div className="w-full">
-            <TopBar
-              isSidebarExtended={isSidebarExpanded}
-              setIsSidebarExtended={setIsSidebarExpanded}
-            />
-          </div>
-
-          <div className="fixed top-0 h-screen z-50">
+        <div className="select-none w-screen h-screen flex">
+          <div className="fixed z-10 h-full">
             <Sidebar
               isSidebarExpanded={isSidebarExpanded}
               setIsSidebarExpanded={setIsSidebarExpanded}
             />
           </div>
 
-          {/* ${
-              isSidebarExpanded
-                ? "w-[calc(100%-256px)] left-64"
-                : "w-[calc(100%-80px)] left-20"
-            } */}
-
-          <div
-            className={`fixed h-[calc(100%-56px)] w-[calc(100%-80px)] left-20 top-14 flex justify-center transition-all bg-gray-50`}
-          >
-            <Outlet />
+          <div className="w-full flex flex-col h-full flex-wrap">
+            <div className="fixed w-full">
+              <TopBar
+                isSidebarExtended={isSidebarExpanded}
+                setIsSidebarExtended={setIsSidebarExpanded}
+              />
+            </div>
+            <div
+              className={`fixed md:static h-[calc(100%-56px)] w-[calc(100%-80px) left-20 top-14 flex justify-center transition-all bg-red-300 dark:bg-darkMode-backgroundColor`}
+            >
+              <Outlet />
+            </div>
           </div>
         </div>
       );

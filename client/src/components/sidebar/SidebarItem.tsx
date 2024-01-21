@@ -14,8 +14,8 @@ export const SidebarItem: FC<SidebarItemProps> = ({
       <li
         className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors ${
           active
-            ? "bg-gradient-to-tr from-pink-200 to-pink-100 text-pink-800"
-            : "hover:bg-pink-50 text-gray-600"
+            ? "bg-gradient-to-tr from-lightMode-sidebarItemGradientFrom to-lightMode-sidebarItemGradientTo text-lightMode-sidebarItemColor"
+            : "hover:bg-lightMode-sidebarItemColorHover text-lightMode-sidebarItemTextColor"
         }`}
       >
         <div
@@ -25,14 +25,14 @@ export const SidebarItem: FC<SidebarItemProps> = ({
         </div>
         <span
           className={`w-52 ml-3 overflow-hidden transition-all ${
-            isSidebarExpanded ? "w-32" : "w-0"
+            isSidebarExpanded ? "w-full" : "hidden"
           }`}
         >
           {title}
         </span>
         {active && (
           <div
-            className={`absolute right-4 w-2 h-2 rounded bg-pink-400 ${
+            className={`absolute right-4 w-2 h-2 rounded bg-lightMode-sidebarBubbleColor ${
               isSidebarExpanded ? "" : "top-2"
             }`}
           />
