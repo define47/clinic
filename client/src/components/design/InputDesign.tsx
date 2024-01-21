@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 
 type InputDesignProps = {
+  label: string;
   textColorUnfocused?: string;
   textColorFocused?: string;
   borderColorUnfocused?: string;
@@ -10,6 +11,7 @@ type InputDesignProps = {
 };
 
 export const InputDesign: FC<InputDesignProps> = ({
+  label,
   textColorUnfocused,
   textColorFocused,
   borderColorUnfocused,
@@ -69,7 +71,7 @@ export const InputDesign: FC<InputDesignProps> = ({
             focused ? `!${labelFocused}` : "text-black"
           }  px-1 pointer-events-none bg-gray-50 transition-all duration-200`}
         >
-          Username
+          {label}
         </label>
       </div>
     </div>

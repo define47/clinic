@@ -1,8 +1,13 @@
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { GeneralTableProps, TableRow, User } from "../../types";
+import { CreateUserOverlay } from "../overlays/userOverlays/CreateUserOverlay";
 
-export const GeneralTable: FC<GeneralTableProps> = ({ URL, roleId }) => {
+export const GeneralTable: FC<GeneralTableProps> = ({
+  URL,
+  roleId,
+  roleName,
+}) => {
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
 
   function isUserRow(tableRow: TableRow): tableRow is User {
@@ -81,6 +86,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({ URL, roleId }) => {
           </tbody>
         </table>
       )}
+
+      <div>
+        <CreateUserOverlay roleName={roleName} />
+      </div>
     </div>
   );
 };

@@ -45,4 +45,9 @@ export type TopBarProps = {
 export type GeneralTableProps = {
   URL: string;
   roleId: string;
+  roleName: string;
+};
+
+export type CreateUserOverlayPros = {
+  roleName: string;
 };

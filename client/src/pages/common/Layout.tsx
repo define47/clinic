@@ -7,7 +7,7 @@ import { TopBar } from "../../components/topBar/TopBar";
 export const Layout: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState } = authContext!;
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState<boolean>(true);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState<boolean>(false);
 
   function determineUserLayout() {
     let content = <div></div>;

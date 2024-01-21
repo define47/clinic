@@ -8,7 +8,11 @@ export const Patients: FC = () => {
   return (
     <div>
       Patients
-      <GeneralTable URL={usersPath} roleId={patientRoleId} />
+      <GeneralTable
+        URL={usersPath}
+        roleId={patientRoleId}
+        roleName={"patient"}
+      />
     </div>
   );
 };
