@@ -63,7 +63,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
         Create {roleName}
       </button>
       <div
-        className={`fixed inset-0 flex justify-center items-center transition-colors  ${
+        className={`fixed inset-0 flex justify-center items-center transition-colors z-50  ${
           isCreateUserOverlayVisible ? "visible bg-black/20" : "invisible"
         }`}
         onClick={(event) => handleOverlayBackdropClick(event)}

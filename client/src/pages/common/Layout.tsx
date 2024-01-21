@@ -26,7 +26,7 @@ export const Layout: FC = () => {
           </div>
 
           <div className="w-full flex flex-col h-full flex-wrap">
-            <div className="fixed w-full">
+            <div className="w-full">
               <TopBar
                 isSidebarExtended={isSidebarExpanded}
                 setIsSidebarExtended={setIsSidebarExpanded}
