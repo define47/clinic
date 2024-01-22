@@ -18,7 +18,9 @@ export const TopBar: FC<TopBarProps> = ({
   return (
     <div
       // fixed z-20
-      className={`h-14 w-full flex items-center justify-between transition-all !bg-red-200 dark:bg-darkMode-topBarColor border-b px-2`}
+      className={`h-14 flex items-center justify-between  transition-all
+      
+       !bg-red-200 dark:bg-darkMode-topBarColor border-b px-2`}
     >
       <div className="w-full">{pathname}</div>
       <div className="w-full flex justify-center">b</div>

@@ -1,12 +1,18 @@
-import { FC } from "react";
-import { Overlay } from "../../components/overlays/Overlay";
+import { FC, useState } from "react";
+
 import { StyledInput } from "../../components/design/StyledInput";
 import { StyledRippleButton } from "../../components/design/StyledRippleButton";
+import Modal from "../../components/overlays/Modal";
+import ModalOverlay from "../../components/overlays/ModalOverlay";
 
 export const AdminDashboard: FC = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleModal = () => {
+    setModalOpen(!modalOpen);
+  };
   return (
     <div className="">
-      admin dashboard <Overlay />
+      {/* admin dashboard <Overlay /> */}
       <div className="space-y-10">
         {/* <StyledInput
           label="label1"
@@ -31,6 +37,11 @@ export const AdminDashboard: FC = () => {
           label="label"
           type="create"
         />
+        <button onClick={handleModal}>Open Modal</button>
+
+        {/* {modalOpen && <Modal closeModal={() => setModalOpen(false)} />} */}
+
+        {modalOpen && <ModalOverlay closeModal={() => setModalOpen(false)} />}
       </div>
     </div>
   );
