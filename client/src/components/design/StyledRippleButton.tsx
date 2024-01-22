@@ -42,21 +42,21 @@ export const StyledRippleButton: FC<StyledRippleButton> = ({
   return (
     <button
       ref={buttonRef}
-      className={`relative overflow-hidden ${
+      className={`relative flex items-center justify-center w-40 overflow-hidden ${
         type === "create"
-          ? "bg-blue-400 dark:bg-blue-800"
+          ? "bg-blue-500 dark:bg-blue-800"
           : type === "delete"
-          ? "bg-red-400"
+          ? "bg-red-500 dark:bg-red-800"
           : type === "yes"
-          ? "bg-green-400"
+          ? "bg-green-500 dark:bg-green-800"
           : ""
       } w-36 h-10 rounded-full text-white ${
         type === "create"
-          ? "hover:bg-blue-700"
+          ? "hover:bg-blue-600"
           : type === "delete"
-          ? "hover:bg-red-700"
+          ? "hover:bg-red-600"
           : type === "yes"
-          ? "hover:bg-green-700"
+          ? "hover:bg-green-600"
           : ""
       } ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"}`}
       onClick={handleClick}

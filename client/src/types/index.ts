@@ -51,3 +51,13 @@ export type GeneralTableProps = {
 export type CreateUserOverlayPros = {
   roleName: string;
 };
+
+export type UpdateUserOverlayPros = {
+  user: User;
+  roleName: string;
+};
+
+export type DeleteUserOverlayPros = {
+  user: User;
+  roleName: string;
+};

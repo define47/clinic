@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, useState } from "react";
+import { ChangeEventHandler, FC, useEffect, useState } from "react";
 
 type StyledInputProps = {
   label: string;
@@ -10,6 +10,8 @@ type StyledInputProps = {
   borderColorFocused?: string;
   labelUnfocused?: string;
   labelFocused?: string;
+  labelBackgroundColor?: string;
+  inputValue?: string;
 };
 
 export const StyledInput: FC<StyledInputProps> = ({
@@ -22,9 +24,12 @@ export const StyledInput: FC<StyledInputProps> = ({
   borderColorFocused,
   labelUnfocused,
   labelFocused,
+  labelBackgroundColor,
+  inputValue,
 }) => {
   const [focused, setFocused] = useState(false);
   const [hasText, setHasText] = useState(false);
+  const [defaultValueTest, setDefaultValueTest] = useState<string>(inputValue!);
 
   const handleFocus = () => {
     setFocused(true);
@@ -32,15 +37,23 @@ export const StyledInput: FC<StyledInputProps> = ({
 
   const handleBlur = () => {
     setFocused(false);
-    if (!hasText) {
-      setFocused(false);
-    }
   };
 
   const handleInputChange = (event: { target: { value: string } }) => {
     setHasText(event.target.value.trim() !== "");
   };
 
+  useEffect(() => {
+    if (inputValue) {
+      setDefaultValueTest(inputValue);
+    } else {
+      setHasText(false);
+    }
+  }, [inputValue]);
+
+  useEffect(() => {
+    console.log("defaultValueTest", defaultValueTest);
+  }, [defaultValueTest, inputValue]);
   return (
     <div>
       {/* <div className="input-group">
@@ -60,7 +73,7 @@ export const StyledInput: FC<StyledInputProps> = ({
           } ${
             borderColorFocused ? borderColorFocused : "focus:border-gray-300"
           }  outline-none rounded-md  transition-all duration-200 ${
-            focused || hasText ? "border-gray-300" : ""
+            focused || hasText || defaultValueTest ? "border-gray-300" : ""
           }`}
           onFocus={handleFocus}
           onBlur={handleBlur}
@@ -69,17 +82,22 @@ export const StyledInput: FC<StyledInputProps> = ({
             handleInputChange(event);
             onChangeStyledInput(event);
           }}
+          value={defaultValueTest}
           required
         />
         <label
           htmlFor=""
           className={`absolute left-2 transform ${
-            focused || hasText ? `-translate-y-2 text-xs` : `translate-y-2`
+            focused || hasText || defaultValueTest
+              ? `-translate-y-2 text-xs`
+              : `translate-y-2`
           } ${labelUnfocused ? labelUnfocused : "text-black"} ${
             focused ? `!${labelFocused}` : "text-black"
-          }  px-1 pointer-events-none bg-gray-50 transition-all duration-200`}
+          }  px-1 pointer-events-none ${
+            labelBackgroundColor ? labelBackgroundColor : "bg-gray-50"
+          } transition-all duration-200`}
         >
-          {label}
+          {label} {defaultValueTest}
         </label>
       </div>
     </div>

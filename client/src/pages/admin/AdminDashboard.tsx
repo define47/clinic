@@ -1,7 +1,11 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { StyledRippleButton } from "../../components/design/StyledRippleButton";
+import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
 
 export const AdminDashboard: FC = () => {
+  const socketContext = useContext(SocketNotificationDataContext);
+  const { socketNotificationDataState, socketNotificationDataSetState } =
+    socketContext!;
   return (
     <div className="">
       {/* admin dashboard <Overlay /> */}
@@ -29,6 +33,7 @@ export const AdminDashboard: FC = () => {
           label="label"
           type="create"
         />
+        here notification {JSON.stringify(socketNotificationDataState)}
       </div>
     </div>
   );

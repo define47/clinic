@@ -1,13 +1,84 @@
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { Sidebar } from "../../components/sidebar/Sidebar";
 import { TopBar } from "../../components/topBar/TopBar";
+import { Socket, io } from "socket.io-client";
+import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
+
+// const App: React.FC = () => {
+
+//   return (
+//     <div>
+//       connected? {isSocketConnected.toString()} here: {welcome}
+//     </div>
+//   );
+// };
 
 export const Layout: FC = () => {
+  function useSocket() {
+    const [socket, setSocket] = useState<Socket | null>(null);
+
+    useEffect(() => {
+      const socketIo = io("http://192.168.2.16:40587", {
+        reconnection: false,
+        upgrade: true,
+        transports: ["websocket", "polling"],
+        query: { query: "this is supposed to be query" },
+        auth: { userId: "userId auth" },
+      });
+
+      setSocket(socketIo);
+
+      return function () {
+        socketIo.disconnect();
+      };
+    }, []);
+    return socket;
+  }
+
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState } = authContext!;
   const [isSidebarExpanded, setIsSidebarExpanded] = useState<boolean>(false);
+  const [isSocketConnected, setIsSocketConnected] = useState<boolean>(false);
+  const [welcome, setWelcome] = useState<string>("");
+  const socket = useSocket();
+
+  const socketContext = useContext(SocketNotificationDataContext);
+  const { socketNotificationDataState, socketNotificationDataSetState } =
+    socketContext!;
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("connect", () => {
+        setIsSocketConnected(true);
+      });
+
+      socket.on("disconnect", () => {
+        setIsSocketConnected(false);
+      });
+
+      socket.on("welcome", (welcome) => {
+        console.log(`Received welcome message: ${welcome}`);
+        socketNotificationDataSetState(welcome);
+        setWelcome(welcome);
+      });
+
+      socket.on("message", (message) => {
+        console.log(`Received welcome message: ${message}`);
+        socketNotificationDataSetState(message);
+        setWelcome(message);
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off("connect");
+        socket.off("disconnect");
+        socket.off("welcome");
+      }
+    };
+  }, [socket]);
 
   function determineUserLayout() {
     let content = <div></div>;
@@ -35,8 +106,9 @@ export const Layout: FC = () => {
             <div
               // md:static
               // left-20 top-14
-              className={`lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-screen lg:w-[calc(100%-80px)] flex justify-center transition-all bg-red-300 dark:bg-darkMode-backgroundColor`}
+              className={`lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-screen lg:w-[calc(100%-80px)] flex justify-center transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
             >
+              {/* connected? {isSocketConnected.toString()} here: {welcome} */}
               <Outlet />
             </div>
           </div>

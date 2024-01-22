@@ -1,5 +1,5 @@
 {
-  "id": "f0f2b815-5569-4c49-9c6f-99237ca5426a",
+  "id": "8a57d690-9286-4be5-b8f1-a1223b4c23ad",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -50,20 +50,6 @@
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": false
-        },
-        "appointmentCreatedAt": {
-          "name": "appointmentCreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "appointmentUpdatedAt": {
-          "name": "appointmentUpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {},
@@ -282,20 +268,6 @@
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
-        },
-        "doctorMedicalSpecialityMappingCreatedAt": {
-          "name": "doctorMedicalSpecialityMappingCreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "doctorMedicalSpecialityMappingUpdatedAt": {
-          "name": "doctorMedicalSpecialityMappingUpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {},
@@ -359,20 +331,6 @@
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": true
-        },
-        "languageCreatedAt": {
-          "name": "languageCreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "languageUpdatedAt": {
-          "name": "languageUpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {},
@@ -414,18 +372,6 @@
         "medicalProcedurePrice": {
           "name": "medicalProcedurePrice",
           "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "medicalProcedureCreatedAt": {
-          "name": "medicalProcedureCreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "medicalProcedureUpdatedAt": {
-          "name": "medicalProcedureUpdatedAt",
-          "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         }
@@ -474,20 +420,6 @@
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": true
-        },
-        "medicalRecordPatientCreatedAt": {
-          "name": "medicalRecordPatientCreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "medicalRecordPatientUpdatedAt": {
-          "name": "medicalRecordPatientUpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {},
@@ -524,20 +456,6 @@
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
-        },
-        "medicalSpecialityCreatedAt": {
-          "name": "medicalSpecialityCreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "medicalSpecialityUpdatedAt": {
-          "name": "medicalSpecialityUpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {},
@@ -568,20 +486,6 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
-        },
-        "medicalSpecialityMedicalProcedureMappingCreatedAt": {
-          "name": "medicalSpecialityMedicalProcedureMappingCreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "medicalSpecialityMedicalProcedureMappingUpdatedAt": {
-          "name": "medicalSpecialityMedicalProcedureMappingUpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {},
@@ -639,20 +543,6 @@
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
-        },
-        "roleCreatedAt": {
-          "name": "roleCreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "roleUpdatedAt": {
-          "name": "roleUpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {},
@@ -746,20 +636,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
-        },
-        "userCreatedAt": {
-          "name": "userCreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "userUpdatedAt": {
-          "name": "userUpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {},
@@ -859,20 +735,6 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
-        },
-        "userRoleMappingCreatedAt": {
-          "name": "userRoleMappingCreatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "userRoleMappingUpdatedAt": {
-          "name": "userRoleMappingUpdatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {},

@@ -75,7 +75,7 @@ export class UserController {
         query.orderBy
       );
 
-      console.log(payload);
+      // console.log(payload);
 
       reply.code(200).send({ success: true, payload });
     } catch (error) {
@@ -253,82 +253,78 @@ export class UserController {
     try {
       const body: any = request.body;
 
-      if (body.action === "createUser") {
-        const roleNames: string[] = body.roleNames;
+      console.log(body);
 
-        for (let i = 0; i < roleNames.length; i++) {
-          const role = await this._roleService.getRoleByName(roleNames[i]);
-          if (!role)
-            return reply.code(200).send({
-              success: false,
-              message: `role ${roleNames[i]} not found`,
-            });
-        }
+      const roleNames: string[] = body.roleNames;
 
-        const isUserEmailValid = await this.checkUserEmailValidity(
-          body.userEmail
-        );
+      for (let i = 0; i < roleNames.length; i++) {
+        const role = await this._roleService.getRoleByName(roleNames[i]);
+        if (!role)
+          return reply.code(200).send({
+            success: false,
+            message: `role ${roleNames[i]} not found`,
+          });
+      }
 
-        const isUserPhoneNumberValid = await this.checkUserPhoneNumberValidity(
-          body.userPhoneNumber
-        );
+      const isUserEmailValid = await this.checkUserEmailValidity(
+        body.userEmail
+      );
 
-        if (!isUserEmailValid) reply.code(200).send({ success: false });
-        if (!isUserPhoneNumberValid) reply.code(200).send({ success: false });
+      const isUserPhoneNumberValid = await this.checkUserPhoneNumberValidity(
+        body.userPhoneNumber
+      );
 
-        let postUser = await this._userService.createUser({
-          userForename: body.userForename,
-          userSurname: body.userSurname,
-          userEmail: body.userEmail,
-          userPhoneNumber: body.userPhoneNumber,
-          userDateOfBirth: body.userDateOfBirth,
-          userAddress: body.userAddress,
-          userGender: body.userGender,
-          userEncryptedPassword: await argon2.hash(body.userEncryptedPassword),
+      if (!isUserEmailValid) reply.code(200).send({ success: false });
+      if (!isUserPhoneNumberValid) reply.code(200).send({ success: false });
+
+      let postUser = await this._userService.createUser({
+        userForename: body.userForename,
+        userSurname: body.userSurname,
+        userEmail: body.userEmail,
+        userPhoneNumber: body.userPhoneNumber,
+        userDateOfBirth: body.userDateOfBirth,
+        userAddress: body.userAddress,
+        userGender: body.userGender,
+        userEncryptedPassword: await argon2.hash(body.userEncryptedPassword),
+      });
+
+      postUser = postUser as User;
+
+      for (let i = 0; i < roleNames.length; i++) {
+        const role = await this._roleService.getRoleByName(roleNames[i]);
+        await this._userRoleMappingService.createUserRoleMapping({
+          userId: postUser.userId,
+          roleId: role?.roleId!,
         });
 
-        postUser = postUser as User;
-
-        for (let i = 0; i < roleNames.length; i++) {
-          const role = await this._roleService.getRoleByName(roleNames[i]);
-          await this._userRoleMappingService.createUserRoleMapping({
-            userId: postUser.userId,
-            roleId: role?.roleId!,
-          });
-
-          if (role?.roleName === "doctor") {
-            const specialityNames = body.specialityNames;
-            for (let j = 0; j < specialityNames.length; j++) {
-              const currentSpeciality =
-                await this._medicalSpecialityService.getMedicalSpecialityByName(
-                  specialityNames[j]
-                );
-
-              await this._doctorSpecialityMappingService.createMedicalDoctorSpecialityMapping(
-                {
-                  doctorId: postUser.userId,
-                  medicalSpecialityId: currentSpeciality?.medicalSpecialityId!,
-                  isPrimaryMedicalSpeciality: j === 0,
-                  isSecondaryMedicalSpeciality: j === 1,
-                  isTertiaryMedicalSpeciality: j === 2,
-                }
+        if (role?.roleName === "doctor") {
+          const specialityNames = body.specialityNames;
+          for (let j = 0; j < specialityNames.length; j++) {
+            const currentSpeciality =
+              await this._medicalSpecialityService.getMedicalSpecialityByName(
+                specialityNames[j]
               );
-            }
+
+            await this._doctorSpecialityMappingService.createMedicalDoctorSpecialityMapping(
+              {
+                doctorId: postUser.userId,
+                medicalSpecialityId: currentSpeciality?.medicalSpecialityId!,
+                isPrimaryMedicalSpeciality: j === 0,
+                isSecondaryMedicalSpeciality: j === 1,
+                isTertiaryMedicalSpeciality: j === 2,
+              }
+            );
           }
         }
-
-        const { redis } = fastifyServer;
-
-        await redis.publisher.publish(
-          MESSAGE_CHANNEL,
-          JSON.stringify(postUser)
-        );
-
-        return reply
-          .code(200)
-          .send({ success: postUser !== undefined, message: "" });
-      } else if (body.action === "getUsers") {
       }
+
+      const { redis } = fastifyServer;
+
+      await redis.publisher.publish(MESSAGE_CHANNEL, JSON.stringify(postUser));
+
+      return reply
+        .code(200)
+        .send({ success: postUser !== undefined, message: "" });
     } catch (error) {
       console.log(error);
       return reply.code(400).send({ error: (error as Error).message });

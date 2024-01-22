@@ -5,13 +5,16 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { AuthenticatedUserDataContextProvider } from "./contexts/UserContext.tsx";
 import { ThemeContextProvider } from "./contexts/ThemeContext.tsx";
+import { SocketNotificationDataContextProvider } from "./contexts/SocketNotificationContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <AuthenticatedUserDataContextProvider>
-    <ThemeContextProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeContextProvider>
+    <SocketNotificationDataContextProvider>
+      <ThemeContextProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeContextProvider>
+    </SocketNotificationDataContextProvider>
   </AuthenticatedUserDataContextProvider>
 );

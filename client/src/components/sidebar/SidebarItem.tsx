@@ -14,7 +14,7 @@ export const SidebarItem: FC<SidebarItemProps> = ({
       <li
         className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors ${
           active
-            ? "bg-gradient-to-tr from-lightMode-sidebarItemGradientFrom to-lightMode-sidebarItemGradientTo text-lightMode-sidebarItemColor"
+            ? "bg-gradient-to-tr from-lightMode-sidebarItemGradientFrom to-lightMode-sidebarItemGradientTo text-lightMode-sidebarItemIconColor"
             : "hover:bg-lightMode-sidebarItemColorHover text-lightMode-sidebarItemTextColor"
         }`}
       >

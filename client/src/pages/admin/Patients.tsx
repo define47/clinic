@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { GeneralTable } from "../../components/table/GeneralTable";
-import { patientRoleId, usersPath } from "../../utils/dotenv";
+import { patientRoleId, patientRoleName, usersPath } from "../../utils/dotenv";
 
 export const Patients: FC = () => {
   console.log(patientRoleId);
@@ -11,7 +11,7 @@ export const Patients: FC = () => {
       <GeneralTable
         URL={usersPath}
         roleId={patientRoleId}
-        roleName={"patient"}
+        roleName={patientRoleName}
       />
     </div>
   );

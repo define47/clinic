@@ -17,9 +17,7 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Appointment" (
 	"appointmentDateTime" timestamp NOT NULL,
 	"appointmentReason" varchar(256) NOT NULL,
 	"appointmentStatus" "appointmentStatus" DEFAULT 'scheduled' NOT NULL,
-	"appointmentCancellationReason" varchar(256),
-	"appointmentCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"appointmentUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
+	"appointmentCancellationReason" varchar(256)
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."AppointmentHistory" (
@@ -43,8 +41,6 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."DoctorMedicalSpecialityMapping" (
 	"isPrimaryMedicalSpeciality" boolean NOT NULL,
 	"isSecondaryMedicalSpeciality" boolean NOT NULL,
 	"isTertiaryMedicalSpeciality" boolean NOT NULL,
-	"doctorMedicalSpecialityMappingCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"doctorMedicalSpecialityMappingUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "DoctorMedicalSpecialityMapping_doctorId_medicalSpecialityId_pk" PRIMARY KEY("doctorId","medicalSpecialityId")
 );
 --> statement-breakpoint
@@ -52,8 +48,6 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Language" (
 	"languageId" varchar PRIMARY KEY NOT NULL,
 	"languageName" varchar(256) NOT NULL,
 	"languageCode" varchar(256) NOT NULL,
-	"languageCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"languageUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "Language_languageName_unique" UNIQUE("languageName"),
 	CONSTRAINT "Language_languageCode_unique" UNIQUE("languageCode")
 );
@@ -61,9 +55,7 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Language" (
 CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalProcedure" (
 	"medicalProcedureId" varchar PRIMARY KEY NOT NULL,
 	"medicalProcedureName" varchar NOT NULL,
-	"medicalProcedurePrice" integer NOT NULL,
-	"medicalProcedureCreatedAt" timestamp NOT NULL,
-	"medicalProcedureUpdatedAt" timestamp NOT NULL
+	"medicalProcedurePrice" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalRecordPatient" (
@@ -72,32 +64,24 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalRecordPatient" (
 	"symptoms" varchar(256) NOT NULL,
 	"conductedTests" varchar(256) NOT NULL,
 	"diagnosis" varchar(256) NOT NULL,
-	"recommendations" varchar(256) NOT NULL,
-	"medicalRecordPatientCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"medicalRecordPatientUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
+	"recommendations" varchar(256) NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalSpeciality" (
 	"medicalSpecialityId" varchar PRIMARY KEY NOT NULL,
 	"medicalSpecialityName" varchar(50) NOT NULL,
-	"medicalSpecialityCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"medicalSpecialityUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT "MedicalSpeciality_medicalSpecialityName_unique" UNIQUE("medicalSpecialityName")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalSpecialityMedicalProcedureMapping" (
 	"medicalSpecialityId" varchar NOT NULL,
 	"medicalProcedureId" varchar NOT NULL,
-	"medicalSpecialityMedicalProcedureMappingCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"medicalSpecialityMedicalProcedureMappingUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "MedicalSpecialityMedicalProcedureMapping_medicalSpecialityId_medicalProcedureId_pk" PRIMARY KEY("medicalSpecialityId","medicalProcedureId")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."Role" (
 	"roleId" varchar PRIMARY KEY NOT NULL,
 	"roleName" varchar(50) NOT NULL,
-	"roleCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"roleUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "Role_roleName_unique" UNIQUE("roleName")
 );
 --> statement-breakpoint
@@ -114,8 +98,6 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."User" (
 	"isUserEmailActivated" boolean DEFAULT false NOT NULL,
 	"isUserApprovedByAdmin" boolean DEFAULT false NOT NULL,
 	"isUserBanned" boolean DEFAULT false NOT NULL,
-	"userCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"userUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "User_userEmail_unique" UNIQUE("userEmail"),
 	CONSTRAINT "User_userPhoneNumber_unique" UNIQUE("userPhoneNumber")
 );
@@ -130,8 +112,6 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."UserPreferencesMapping" (
 CREATE TABLE IF NOT EXISTS "iatropolis"."UserRoleMapping" (
 	"userId" varchar NOT NULL,
 	"roleId" varchar NOT NULL,
-	"userRoleMappingCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"userRoleMappingUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT "UserRoleMapping_userId_roleId_pk" PRIMARY KEY("userId","roleId")
 );
 --> statement-breakpoint

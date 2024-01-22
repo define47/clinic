@@ -5,10 +5,10 @@ export default {
     extend: {
       colors: {
         lightMode: {
-          backgroundColor: "#f9fafb",
+          layoutColor: "#f9fafb",
           itemBackgroundColor: "#f3f4f6",
           sidebarColor: "#FFFFFF",
-          sidebarItemColor: "#9d174d",
+          sidebarItemIconColor: "#9d174d",
           sidebarItemColorHover: "#fdf2f8",
           sidebarItemTextColor: "#4b5563",
           sidebarItemGradientFrom: "#fbcfe8",

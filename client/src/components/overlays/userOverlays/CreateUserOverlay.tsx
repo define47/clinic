@@ -3,6 +3,9 @@ import { CreateUserOverlayPros, User } from "../../../types";
 import { StyledInput } from "../../design/StyledInput";
 import Overlay from "../base/Overlay";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
+import { StyledRippleButton } from "../../design/StyledRippleButton";
+import axios from "axios";
+import { usersPath } from "../../../utils/dotenv";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
   const [isCreateUserOverlayVisible, setIsCreateUserOverlayVisible] =
@@ -17,8 +20,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
     userSurname: "",
     userEmail: "",
     userPhoneNumber: "",
-    userGender: "",
-    userDateOfBirth: "",
+    userGender: "male",
+    userDateOfBirth: "1765-05-23",
     userAddress: "",
     userEncryptedPassword: "",
     isUserEmailActivated: false,
@@ -66,9 +69,27 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
     console.log(userToCreate);
   }, [userToCreate]);
 
-  function onCreateUser() {
+  async function onCreateUser() {
     try {
-      ("");
+      const response = await axios.post(
+        usersPath,
+        {
+          userForename: userToCreate.userForename,
+          userSurname: userToCreate.userSurname,
+          userEmail: userToCreate.userEmail,
+          userPhoneNumber: userToCreate.userPhoneNumber,
+          userGender: userToCreate.userGender,
+          userDateOfBirth: userToCreate.userDateOfBirth,
+          userAddress: userToCreate.userAddress,
+          userEncryptedPassword: "",
+          roleNames: [roleName],
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -76,9 +97,11 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
 
   return (
     <>
-      <button onClick={() => setIsCreateUserOverlayVisible(true)}>
-        Open Modal
-      </button>
+      <StyledRippleButton
+        label="Create Patient"
+        type="create"
+        onClick={() => setIsCreateUserOverlayVisible(true)}
+      />
 
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
@@ -87,30 +110,36 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
         closeModal={() => setIsCreateUserOverlayVisible(false)}
       >
         <div
-          className={`bg-white border border-gray-500 w-2/3 h-2/3 rounded-xl shadow p-6 transition-all ${
+          className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
             isCreateUserOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
           }`}
           onClick={(e) => e.stopPropagation()}
         >
-          <span className="flex justify-center">Modal Create User</span>
+          <span className="flex justify-center mb-8">Create {roleName}</span>
           <div className="w-full flex justify-between">
             <div className="flex flex-col space-y-6">
               <StyledInput
                 label="userForename"
                 name="userForename"
                 onChangeStyledInput={handleStyledInputChange}
+                labelBackgroundColor="bg-white"
+                // defaultValue="patientFN"
               />
               <StyledInput
                 label="userSurname"
                 name="userSurname"
                 onChangeStyledInput={handleStyledInputChange}
+                labelBackgroundColor="bg-white"
+                // defaultValue="patientLN"
               />
               <StyledInput
                 label="userEmail"
                 name="userEmail"
                 onChangeStyledInput={handleStyledInputChange}
+                labelBackgroundColor="bg-white"
+                // defaultValue="patientEM"
               />
             </div>
             <div className="flex flex-col space-y-6">
@@ -118,16 +147,22 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
                 label="userPhoneNumber"
                 name="userPhoneNumber"
                 onChangeStyledInput={handleStyledInputChange}
+                labelBackgroundColor="bg-white"
+                // defaultValue="patientPH"
               />
               <StyledInput
                 label="userGender"
                 name="userGender"
                 onChangeStyledInput={handleStyledInputChange}
+                labelBackgroundColor="bg-white"
+                // defaultValue="male"
               />
               <StyledInput
                 label="userDateOfBirth"
                 name="userDateOfBirth"
                 onChangeStyledInput={handleStyledInputChange}
+                labelBackgroundColor="bg-white"
+                // defaultValue="1765-05-23"
               />
             </div>
             <div className="flex flex-col space-y-6">
@@ -135,24 +170,26 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
                 label="userAddress"
                 name="userAddress"
                 onChangeStyledInput={handleStyledInputChange}
+                labelBackgroundColor="bg-white"
+                // defaultValue="patientAddr"
               />
             </div>
           </div>
-          <button
-            className="text-black"
-            onClick={() => setIsCreateUserOverlayVisible(false)}
-          >
-            Close User Creation Modal
-          </button>
+          <div className="w-full mt-14 flex justify-between">
+            <StyledRippleButton
+              label="Continue"
+              type="create"
+              onClick={() =>
+                setIsCreateUserConfirmationDialogOverlayVisible(true)
+              }
+            />
 
-          <button
-            className="text-black"
-            onClick={() =>
-              setIsCreateUserConfirmationDialogOverlayVisible(true)
-            }
-          >
-            Open Modal Confirmation
-          </button>
+            <StyledRippleButton
+              label="Cancel"
+              type="delete"
+              onClick={() => setIsCreateUserOverlayVisible(false)}
+            />
+          </div>
 
           <ConfirmationDialogOverlay
             className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
@@ -172,14 +209,18 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
               }`}
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                className="text-black"
+              <StyledRippleButton
+                label="Create"
+                type="yes"
+                onClick={onCreateUser}
+              />
+              <StyledRippleButton
+                label="Cancel"
+                type="delete"
                 onClick={() =>
                   setIsCreateUserConfirmationDialogOverlayVisible(false)
                 }
-              >
-                Close Confirmation Modal
-              </button>
+              />
             </div>
           </ConfirmationDialogOverlay>
         </div>
