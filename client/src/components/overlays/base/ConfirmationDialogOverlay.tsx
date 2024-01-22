@@ -4,11 +4,13 @@ import { createPortal } from "react-dom";
 type OverlayProps = {
   closeConfirmationDialogModal: () => void;
   children: ReactNode;
+  className: string;
 };
 
 export const ConfirmationDialogOverlay: FC<OverlayProps> = ({
   closeConfirmationDialogModal,
   children,
+  className,
 }) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -26,10 +28,7 @@ export const ConfirmationDialogOverlay: FC<OverlayProps> = ({
   const portalRoot = document.getElementById("confirmationDialog");
 
   return createPortal(
-    <div
-      className="overlayConfirmationDialog"
-      onClick={closeConfirmationDialogModal}
-    >
+    <div className={className} onClick={closeConfirmationDialogModal}>
       {children}
     </div>,
     portalRoot!

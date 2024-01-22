@@ -1,12 +1,7 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { StyledRippleButton } from "../../components/design/StyledRippleButton";
-import ModalOverlay from "../../components/overlays/ModalOverlay";
 
 export const AdminDashboard: FC = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const handleModal = () => {
-    setModalOpen(!modalOpen);
-  };
   return (
     <div className="">
       {/* admin dashboard <Overlay /> */}
@@ -34,18 +29,6 @@ export const AdminDashboard: FC = () => {
           label="label"
           type="create"
         />
-        <button onClick={handleModal}>Open Modal</button>
-
-        {/* {modalOpen && <Modal closeModal={() => setModalOpen(false)} />} */}
-
-        {modalOpen && (
-          <ModalOverlay closeModal={() => setModalOpen(false)}>
-            <>
-              <h3>Modal2</h3>
-              <p>Modal here</p>
-            </>
-          </ModalOverlay>
-        )}
       </div>
     </div>
   );

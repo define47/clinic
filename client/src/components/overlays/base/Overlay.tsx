@@ -32,13 +32,14 @@ import { createPortal } from "react-dom";
 type OverlayProps = {
   closeModal: () => void;
   children: ReactNode;
+  className: string;
 };
 
-const Overlay: FC<OverlayProps> = ({ closeModal, children }) => {
+const Overlay: FC<OverlayProps> = ({ className, closeModal, children }) => {
   const portalRoot = document.getElementById("overlay");
 
   return createPortal(
-    <div className="overlay" onClick={closeModal}>
+    <div className={className} onClick={closeModal}>
       {children}
     </div>,
     portalRoot!

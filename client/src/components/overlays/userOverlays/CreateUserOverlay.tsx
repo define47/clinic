@@ -2,7 +2,6 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import { CreateUserOverlayPros, User } from "../../../types";
 import { StyledInput } from "../../design/StyledInput";
 import Overlay from "../base/Overlay";
-import { ConfirmationDialogModal } from "../baseConfirmationDialog/ConfirmationDialogModal";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
@@ -80,80 +79,103 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
       <button onClick={() => setIsCreateUserOverlayVisible(true)}>
         Open Modal
       </button>
-      {isCreateUserOverlayVisible && (
-        <Overlay closeModal={() => setIsCreateUserOverlayVisible(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Modal Create User</h3>
-            <div className="w-full flex justify-between">
-              <div className="flex flex-col space-y-6">
-                <StyledInput
-                  label="userForename"
-                  name="userForename"
-                  onChangeStyledInput={handleStyledInputChange}
-                />
-                <StyledInput
-                  label="userSurname"
-                  name="userSurname"
-                  onChangeStyledInput={handleStyledInputChange}
-                />
-                <StyledInput
-                  label="userEmail"
-                  name="userEmail"
-                  onChangeStyledInput={handleStyledInputChange}
-                />
-              </div>
-              <div className="flex flex-col space-y-6">
-                <StyledInput
-                  label="userPhoneNumber"
-                  name="userPhoneNumber"
-                  onChangeStyledInput={handleStyledInputChange}
-                />
-                <StyledInput
-                  label="userGender"
-                  name="userGender"
-                  onChangeStyledInput={handleStyledInputChange}
-                />
-                <StyledInput
-                  label="userDateOfBirth"
-                  name="userDateOfBirth"
-                  onChangeStyledInput={handleStyledInputChange}
-                />
-              </div>
-              <div className="flex flex-col space-y-6">
-                <StyledInput
-                  label="userAddress"
-                  name="userAddress"
-                  onChangeStyledInput={handleStyledInputChange}
-                />
-              </div>
-            </div>
-            <button
-              className="text-black"
-              onClick={() => setIsCreateUserOverlayVisible(false)}
-            >
-              Close User Creation Modal
-            </button>
 
-            <button
-              className="text-black"
-              onClick={() =>
-                setIsCreateUserConfirmationDialogOverlayVisible(true)
-              }
-            >
-              Open Modal Confirmation
-            </button>
-            {isCreateUserConfirmationDialogOverlayVisible && (
-              <ConfirmationDialogOverlay
-                closeConfirmationDialogModal={() =>
-                  setIsCreateUserConfirmationDialogOverlayVisible(false)
-                }
-              >
-                Close
-              </ConfirmationDialogOverlay>
-            )}
+      <Overlay
+        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
+          isCreateUserOverlayVisible ? "visible backdrop-blur-sm" : "invisible"
+        }`}
+        closeModal={() => setIsCreateUserOverlayVisible(false)}
+      >
+        <div
+          className={`bg-white border border-gray-500 w-2/3 h-2/3 rounded-xl shadow p-6 transition-all ${
+            isCreateUserOverlayVisible
+              ? "scale-100 opacity-100 duration-500"
+              : "scale-125 opacity-0 duration-500"
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h3>Modal Create User</h3>
+          <div className="w-full flex justify-between">
+            <div className="flex flex-col space-y-6">
+              <StyledInput
+                label="userForename"
+                name="userForename"
+                onChangeStyledInput={handleStyledInputChange}
+              />
+              <StyledInput
+                label="userSurname"
+                name="userSurname"
+                onChangeStyledInput={handleStyledInputChange}
+              />
+              <StyledInput
+                label="userEmail"
+                name="userEmail"
+                onChangeStyledInput={handleStyledInputChange}
+              />
+            </div>
+            <div className="flex flex-col space-y-6">
+              <StyledInput
+                label="userPhoneNumber"
+                name="userPhoneNumber"
+                onChangeStyledInput={handleStyledInputChange}
+              />
+              <StyledInput
+                label="userGender"
+                name="userGender"
+                onChangeStyledInput={handleStyledInputChange}
+              />
+              <StyledInput
+                label="userDateOfBirth"
+                name="userDateOfBirth"
+                onChangeStyledInput={handleStyledInputChange}
+              />
+            </div>
+            <div className="flex flex-col space-y-6">
+              <StyledInput
+                label="userAddress"
+                name="userAddress"
+                onChangeStyledInput={handleStyledInputChange}
+              />
+            </div>
           </div>
-        </Overlay>
-      )}
+          <button
+            className="text-black"
+            onClick={() => setIsCreateUserOverlayVisible(false)}
+          >
+            Close User Creation Modal
+          </button>
+
+          <button
+            className="text-black"
+            onClick={() =>
+              setIsCreateUserConfirmationDialogOverlayVisible(true)
+            }
+          >
+            Open Modal Confirmation
+          </button>
+
+          <ConfirmationDialogOverlay
+            className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
+              isCreateUserConfirmationDialogOverlayVisible
+                ? "visible backdrop-blur-sm"
+                : "invisible"
+            }`}
+            closeConfirmationDialogModal={() =>
+              setIsCreateUserConfirmationDialogOverlayVisible(false)
+            }
+          >
+            <div
+              className={`w-96 h-96 bg-white flex items-center justify-center transition-all ${
+                isCreateUserConfirmationDialogOverlayVisible
+                  ? "scale-100 opacity-100 duration-200"
+                  : "scale-125 opacity-0 duration-200"
+              }`}
+            >
+              Close
+            </div>
+          </ConfirmationDialogOverlay>
+        </div>
+      </Overlay>
     </>
   );
 };
@@ -229,11 +251,11 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
 //         onClick={(event) => handleOverlayBackdropClick(event)}
 //       >
 //         <div
-//           className={`bg-white border border-gray-500 w-2/3 h-2/3 rounded-xl shadow p-6 transition-all ${
-//             isCreateUserOverlayVisible
-//               ? "scale-100 opacity-100 duration-500"
-//               : "scale-125 opacity-0 duration-500"
-//           }`}
+// className={`bg-white border border-gray-500 w-2/3 h-2/3 rounded-xl shadow p-6 transition-all ${
+//   isCreateUserOverlayVisible
+//     ? "scale-100 opacity-100 duration-500"
+//     : "scale-125 opacity-0 duration-500"
+// }`}
 //         >
 {
   /* <div className="w-full flex justify-between">

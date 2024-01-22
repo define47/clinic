@@ -8,7 +8,6 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   roleId,
   roleName,
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
 
   function isUserRow(tableRow: TableRow): tableRow is User {
