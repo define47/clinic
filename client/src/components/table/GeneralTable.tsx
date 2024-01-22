@@ -8,6 +8,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   roleId,
   roleName,
 }) => {
+  const [modalOpen, setModalOpen] = useState(false);
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
 
   function isUserRow(tableRow: TableRow): tableRow is User {
@@ -87,6 +88,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         </table>
       )}
 
+      {/* <CreateUserOverlay roleName={roleName} /> */}
+      {/* <div>
+        <button onClick={() => setModalOpen(true)}>Open Modal</button>
+        {modalOpen && (
+          <CreateUserOverlay
+            closeModal={() => setModalOpen(false)}
+            roleName={roleName}
+          />
+        )}
+      </div> */}
       <div>
         <CreateUserOverlay roleName={roleName} />
       </div>

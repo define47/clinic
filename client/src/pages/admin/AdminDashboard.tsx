@@ -1,8 +1,5 @@
 import { FC, useState } from "react";
-
-import { StyledInput } from "../../components/design/StyledInput";
 import { StyledRippleButton } from "../../components/design/StyledRippleButton";
-import Modal from "../../components/overlays/Modal";
 import ModalOverlay from "../../components/overlays/ModalOverlay";
 
 export const AdminDashboard: FC = () => {
@@ -41,7 +38,14 @@ export const AdminDashboard: FC = () => {
 
         {/* {modalOpen && <Modal closeModal={() => setModalOpen(false)} />} */}
 
-        {modalOpen && <ModalOverlay closeModal={() => setModalOpen(false)} />}
+        {modalOpen && (
+          <ModalOverlay closeModal={() => setModalOpen(false)}>
+            <>
+              <h3>Modal2</h3>
+              <p>Modal here</p>
+            </>
+          </ModalOverlay>
+        )}
       </div>
     </div>
   );

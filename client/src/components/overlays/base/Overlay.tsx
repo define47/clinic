@@ -26,7 +26,7 @@
 //   );
 // };
 
-import React, { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 type OverlayProps = {
@@ -35,12 +35,7 @@ type OverlayProps = {
 };
 
 const Overlay: FC<OverlayProps> = ({ closeModal, children }) => {
-  const portalRoot = document.getElementById("portal");
-
-  // if (!portalRoot) {
-  //   console.error("Portal root element not found");
-  //   return null;
-  // }
+  const portalRoot = document.getElementById("overlay");
 
   return createPortal(
     <div className="overlay" onClick={closeModal}>
