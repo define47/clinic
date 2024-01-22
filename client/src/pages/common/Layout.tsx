@@ -18,7 +18,7 @@ export const Layout: FC = () => {
     )
       content = (
         <div className="select-none w-screen h-screen flex">
-          <div className="fixed z-20 h-full hidden md:block">
+          <div className="lg:fixed h-full hidden lg:block z-10">
             <Sidebar
               isSidebarExpanded={isSidebarExpanded}
               setIsSidebarExpanded={setIsSidebarExpanded}
@@ -35,7 +35,7 @@ export const Layout: FC = () => {
             <div
               // md:static
               // left-20 top-14
-              className={`fixed left-20 top-14 z-10 h-[calc(100%-56px)] w-[calc(100%-80px)] flex justify-center transition-all bg-red-300 dark:bg-darkMode-backgroundColor`}
+              className={`lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-screen lg:w-[calc(100%-80px)] flex justify-center transition-all bg-red-300 dark:bg-darkMode-backgroundColor`}
             >
               <Outlet />
             </div>

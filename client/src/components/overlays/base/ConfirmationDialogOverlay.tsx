@@ -12,25 +12,13 @@ export const ConfirmationDialogOverlay: FC<OverlayProps> = ({
   children,
   className,
 }) => {
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeConfirmationDialogModal();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-  const portalRoot = document.getElementById("confirmationDialog");
+  const confirmationDialogPortalRoot =
+    document.getElementById("confirmationDialog");
 
   return createPortal(
     <div className={className} onClick={closeConfirmationDialogModal}>
       {children}
     </div>,
-    portalRoot!
+    confirmationDialogPortalRoot!
   );
 };

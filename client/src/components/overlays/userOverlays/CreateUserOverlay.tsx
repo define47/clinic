@@ -94,7 +94,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
           }`}
           onClick={(e) => e.stopPropagation()}
         >
-          <h3>Modal Create User</h3>
+          <span className="flex justify-center">Modal Create User</span>
           <div className="w-full flex justify-between">
             <div className="flex flex-col space-y-6">
               <StyledInput
@@ -170,8 +170,16 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
                   ? "scale-100 opacity-100 duration-200"
                   : "scale-125 opacity-0 duration-200"
               }`}
+              onClick={(e) => e.stopPropagation()}
             >
-              Close
+              <button
+                className="text-black"
+                onClick={() =>
+                  setIsCreateUserConfirmationDialogOverlayVisible(false)
+                }
+              >
+                Close Confirmation Modal
+              </button>
             </div>
           </ConfirmationDialogOverlay>
         </div>
