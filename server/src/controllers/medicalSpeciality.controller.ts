@@ -53,7 +53,7 @@ export class MedicalSpecialityController {
 
       let medicalSpecialityToUpdate =
         await this._medicalSpecialityService.updateMedicalSpeciality(
-          body.specialityId,
+          body.medicalSpecialityId,
           {
             medicalSpecialityName: body.medicalSpecialityName,
           }

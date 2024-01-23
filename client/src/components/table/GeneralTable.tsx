@@ -13,10 +13,12 @@ import { DeleteUserOverlay } from "../overlays/userOverlays/DeleteUserOverlay";
 import {
   doctorRoleId,
   patientRoleId,
+  patientRoleName,
   receptionistRoleId,
 } from "../../utils/dotenv";
 import { CreateMedicalSpecialityOverlay } from "../overlays/medicalSpecialityOverlays/CreateMedicalSpecialityOverlay";
 import { DeleteMedicalSpecialityOverlay } from "../overlays/medicalSpecialityOverlays/DeleteMedicalSpecialityOverlay";
+import { UpdateMedicalSpeciality } from "../overlays/medicalSpecialityOverlays/UpdateMedicalSpeciality";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -260,6 +262,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   <td>{tableRow.medicalSpecialityId}</td>
                   <td>{tableRow.medicalSpecialityName}</td>
                   <td>
+                    <UpdateMedicalSpeciality medicalSpeciality={tableRow} />
                     <DeleteMedicalSpecialityOverlay
                       medicalSpeciality={tableRow}
                     />
@@ -283,11 +286,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         )}
       </div> */}
       <div>
-        {entity === "patient" ||
+        {(entity === patientRoleName ||
           entity === "doctor" ||
-          (entity === "receptionist" && (
-            <CreateUserOverlay roleId={roleId} roleName={entity} />
-          ))}
+          entity === "receptionist") && (
+          <CreateUserOverlay roleId={roleId} roleName={entity} />
+        )}
         {entity === "medicalSpeciality" && <CreateMedicalSpecialityOverlay />}
       </div>
       {/* here notification {JSON.stringify(socketNotificationDataState)} */}

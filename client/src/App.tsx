@@ -16,6 +16,7 @@ import { Settings } from "./pages/admin/Settings";
 import { AdminGuide } from "./pages/admin/AdminGuide";
 import { ThemeContext } from "./contexts/ThemeContext";
 import { MedicalProcedures } from "./pages/admin/MedicalProcedures";
+import { authPath, verifyUserPath } from "./utils/dotenv";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -90,7 +91,7 @@ const App: FC = () => {
   useEffect(() => {
     async function verifyUser() {
       const response = await axios.post(
-        "http://192.168.2.16:40587/api/auth/read-signed-cookie",
+        `${verifyUserPath}`,
         {},
         { withCredentials: true }
       );

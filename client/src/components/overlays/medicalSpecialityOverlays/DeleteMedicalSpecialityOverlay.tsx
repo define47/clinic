@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { DeleteMedicalSpecialityOverlayPros } from "../../../types";
 import { medicalSpecialityPath } from "../../../utils/dotenv";
 import axios from "axios";
@@ -26,6 +26,20 @@ export const DeleteMedicalSpecialityOverlay: FC<
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsDeleteMedicalSpecialityConfirmationDialogOverlayVisible(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleCloseOverlayEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleCloseOverlayEscapeKey);
+    };
+  }, [isDeleteMedicalSpecialityConfirmationDialogOverlayVisible]);
   return (
     <div>
       {isDeleteMedicalSpecialityConfirmationDialogOverlayVisible ? (

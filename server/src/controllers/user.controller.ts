@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import * as argon2 from "argon2";
 import { v4 as uuidv4 } from "uuid";
+import * as argon2 from "argon2";
 import * as clc from "cli-color";
 
 import { RoleService } from "../services/role.service";
@@ -11,7 +11,10 @@ import { DoctorMedicalSpecialityMappingService } from "../services/doctorMedical
 import { MedicalSpecialityService } from "../services/medicalSpeciality.service";
 import { DoctorMedicalSpecialityMapping } from "../models/doctorMedicalSpecialityMapping.model";
 import { UserRoleMapping } from "../models/userRoleMapping.model";
-import { getDoctorRoleIdEnv } from "../utils/dotenv";
+import {
+  getDoctorRoleIdEnv,
+  getReactClientIPAddressEnv,
+} from "../utils/dotenv";
 import { MESSAGE_CHANNEL, fastifyServer } from "../server";
 import { LanguageService } from "../services/language.service";
 import { UserPreferencesMappingService } from "../services/userPreferencesMapping.service";
@@ -230,7 +233,7 @@ export class UserController {
 
       reply.setCookie("sessionId", sessionId, {
         signed: true,
-        domain: "192.168.2.16",
+        domain: getReactClientIPAddressEnv(),
         path: "/",
         expires: new Date(Date.now() + 80_400_000),
       });
@@ -349,17 +352,20 @@ export class UserController {
           });
       }
 
-      for (let i = 0; i < specialityIds.length; i++) {
-        const speciality =
-          await this._medicalSpecialityService.getMedicalSpecialityById(
-            specialityIds[i]
-          );
-        if (!speciality)
-          return reply.code(200).send({
-            success: false,
-            message: `speciality ${roleIds[i]} not found`,
-          });
-      }
+      if (specialityIds)
+        for (let i = 0; i < specialityIds.length; i++) {
+          const speciality =
+            await this._medicalSpecialityService.getMedicalSpecialityById(
+              specialityIds[i]
+            );
+          if (!speciality)
+            return reply.code(200).send({
+              success: false,
+              message: `speciality ${roleIds[i]} not found`,
+            });
+        }
+
+      console.log("hello");
 
       const isUserEmailValid = await this.checkUserEmailValidity(
         body.userEmail

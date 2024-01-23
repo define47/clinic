@@ -73,3 +73,7 @@ export type DeleteUserOverlayPros = {
 export type DeleteMedicalSpecialityOverlayPros = {
   medicalSpeciality: MedicalSpeciality;
 };
+
+export type UpdateMedicalSpecialityOverlayProps = {
+  medicalSpeciality: MedicalSpeciality;
+};

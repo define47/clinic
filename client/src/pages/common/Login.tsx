@@ -3,6 +3,7 @@ import ParticlesBackground from "../../components/design/ParticlesBackground";
 import { UserToLogin } from "../../types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { loginUserPath, verifyUserPath } from "../../utils/dotenv";
 
 export const Login: FC = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export const Login: FC = () => {
   useEffect(() => {
     async function verifyUser() {
       const response = await axios.post(
-        "http://192.168.2.16:40587/api/auth/read-signed-cookie",
+        `${verifyUserPath}`,
         {},
         { withCredentials: true }
       );
@@ -38,7 +39,7 @@ export const Login: FC = () => {
   async function onLogin() {
     try {
       const response = await axios.post(
-        "http://192.168.2.16:40587/api/auth/login",
+        `${loginUserPath}`,
         { ...userToLogin },
         { withCredentials: true }
       );

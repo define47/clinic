@@ -101,7 +101,7 @@ fastifyServer.post("/broadcast-message", async (request, reply) => {
 const buildServer = async () => {
   const corsOptions = {
     // origin: "*",
-    origin: "http://192.168.2.16:3000",
+    origin: `http://192.168.2.14:3000`,
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   };
@@ -146,7 +146,7 @@ const buildServer = async () => {
 
   await fastifyServer.register(fastifySocketIO, {
     cors: {
-      origin: "http://192.168.2.16:3000",
+      origin: "http://192.168.2.14:3000",
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     },
   });

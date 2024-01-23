@@ -18,6 +18,7 @@ export const schema = {
     "DOCTOR_ROLE_ID",
     "RECEPTIONIST_ROLE_ID",
     "PATIENT_ROLE_ID",
+    "REACT_APP_IP_ADDRESS",
   ],
   properties: {
     SERVER_PORT: {

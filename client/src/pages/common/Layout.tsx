@@ -5,6 +5,7 @@ import { Sidebar } from "../../components/sidebar/Sidebar";
 import { TopBar } from "../../components/topBar/TopBar";
 import { Socket, io } from "socket.io-client";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
+import { serverURL } from "../../utils/dotenv";
 
 // const App: React.FC = () => {
 
@@ -20,7 +21,8 @@ export const Layout: FC = () => {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-      const socketIo = io("http://192.168.2.16:40587", {
+      // "http://192.168.2.14:40587"
+      const socketIo = io(serverURL, {
         reconnection: false,
         upgrade: true,
         transports: ["websocket", "polling"],

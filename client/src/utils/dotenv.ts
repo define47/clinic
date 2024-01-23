@@ -1,3 +1,17 @@
+export const serverURL = `${import.meta.env.VITE_SERVER_SCHEME}${
+  import.meta.env.VITE_SERVER_HOST_AND_PORT
+}`;
+
+export const authPath = `${import.meta.env.VITE_SERVER_SCHEME}${
+  import.meta.env.VITE_SERVER_HOST_AND_PORT
+}${import.meta.env.VITE_SERVER_AUTH_PATH}`;
+export const verifyUserPath = `${import.meta.env.VITE_SERVER_SCHEME}${
+  import.meta.env.VITE_SERVER_HOST_AND_PORT
+}${import.meta.env.VITE_SERVER_AUTH_PATH}/read-signed-cookie`;
+export const loginUserPath = `${import.meta.env.VITE_SERVER_SCHEME}${
+  import.meta.env.VITE_SERVER_HOST_AND_PORT
+}${import.meta.env.VITE_SERVER_AUTH_PATH}/login`;
+
 export const userPath = `${import.meta.env.VITE_SERVER_SCHEME}${
   import.meta.env.VITE_SERVER_HOST_AND_PORT
 }${import.meta.env.VITE_SERVER_USERS_PATH}`;

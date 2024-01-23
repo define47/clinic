@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { DeleteUserOverlayPros } from "../../../types";
@@ -14,6 +14,20 @@ export const DeleteUserOverlay: FC<DeleteUserOverlayPros> = ({
     isDeleteUserConfirmationDialogOverlayVisible,
     setIsDeleteUserConfirmationDialogOverlayVisible,
   ] = useState<boolean>(false);
+
+  useEffect(() => {
+    function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsDeleteUserConfirmationDialogOverlayVisible(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleCloseOverlayEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleCloseOverlayEscapeKey);
+    };
+  }, [isDeleteUserConfirmationDialogOverlayVisible]);
 
   async function onDeleteUser() {
     try {
