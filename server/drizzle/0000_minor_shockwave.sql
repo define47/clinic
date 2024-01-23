@@ -36,12 +36,12 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."AppointmentHistory" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."DoctorMedicalSpecialityMapping" (
-	"doctorId" varchar NOT NULL,
+	"userId" varchar NOT NULL,
 	"medicalSpecialityId" varchar NOT NULL,
 	"isPrimaryMedicalSpeciality" boolean NOT NULL,
 	"isSecondaryMedicalSpeciality" boolean NOT NULL,
 	"isTertiaryMedicalSpeciality" boolean NOT NULL,
-	CONSTRAINT "DoctorMedicalSpecialityMapping_doctorId_medicalSpecialityId_pk" PRIMARY KEY("doctorId","medicalSpecialityId")
+	CONSTRAINT "DoctorMedicalSpecialityMapping_userId_medicalSpecialityId_pk" PRIMARY KEY("userId","medicalSpecialityId")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."Language" (
@@ -158,7 +158,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "iatropolis"."DoctorMedicalSpecialityMapping" ADD CONSTRAINT "DoctorMedicalSpecialityMapping_doctorId_User_userId_fk" FOREIGN KEY ("doctorId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "iatropolis"."DoctorMedicalSpecialityMapping" ADD CONSTRAINT "DoctorMedicalSpecialityMapping_userId_User_userId_fk" FOREIGN KEY ("userId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

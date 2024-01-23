@@ -7,7 +7,10 @@ import { StyledRippleButton } from "../../design/StyledRippleButton";
 import axios from "axios";
 import { usersPath } from "../../../utils/dotenv";
 
-export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
+export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
+  roleId,
+  roleName,
+}) => {
   const [isCreateUserOverlayVisible, setIsCreateUserOverlayVisible] =
     useState<boolean>(false);
   const [
@@ -82,7 +85,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
           userDateOfBirth: userToCreate.userDateOfBirth,
           userAddress: userToCreate.userAddress,
           userEncryptedPassword: "",
-          roleNames: [roleName],
+          roleIds: [roleId],
         },
         {
           withCredentials: true,
@@ -98,7 +101,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
   return (
     <>
       <StyledRippleButton
-        label="Create Patient"
+        label={`Create ${roleName}`}
         type="create"
         onClick={() => setIsCreateUserOverlayVisible(true)}
       />
@@ -125,21 +128,21 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
                 name="userForename"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                // defaultValue="patientFN"
+                defaultValue="patientFN"
               />
               <StyledInput
                 label="userSurname"
                 name="userSurname"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                // defaultValue="patientLN"
+                defaultValue="patientLN"
               />
               <StyledInput
                 label="userEmail"
                 name="userEmail"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                // defaultValue="patientEM"
+                defaultValue="patientEM"
               />
             </div>
             <div className="flex flex-col space-y-6">
@@ -148,21 +151,21 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
                 name="userPhoneNumber"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                // defaultValue="patientPH"
+                defaultValue="patientPH"
               />
               <StyledInput
                 label="userGender"
                 name="userGender"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                // defaultValue="male"
+                defaultValue="male"
               />
               <StyledInput
                 label="userDateOfBirth"
                 name="userDateOfBirth"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                // defaultValue="1765-05-23"
+                defaultValue="1765-05-23"
               />
             </div>
             <div className="flex flex-col space-y-6">
@@ -171,7 +174,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({ roleName }) => {
                 name="userAddress"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                // defaultValue="patientAddr"
+                defaultValue="patientAddr"
               />
             </div>
           </div>

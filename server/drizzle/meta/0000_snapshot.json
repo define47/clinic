@@ -1,5 +1,5 @@
 {
-  "id": "8a57d690-9286-4be5-b8f1-a1223b4c23ad",
+  "id": "7fd83b95-1e65-45fc-bfc6-a1efcdb0ebcf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -239,8 +239,8 @@
       "name": "DoctorMedicalSpecialityMapping",
       "schema": "iatropolis",
       "columns": {
-        "doctorId": {
-          "name": "doctorId",
+        "userId": {
+          "name": "userId",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
@@ -272,12 +272,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "DoctorMedicalSpecialityMapping_doctorId_User_userId_fk": {
-          "name": "DoctorMedicalSpecialityMapping_doctorId_User_userId_fk",
+        "DoctorMedicalSpecialityMapping_userId_User_userId_fk": {
+          "name": "DoctorMedicalSpecialityMapping_userId_User_userId_fk",
           "tableFrom": "DoctorMedicalSpecialityMapping",
           "tableTo": "User",
           "columnsFrom": [
-            "doctorId"
+            "userId"
           ],
           "columnsTo": [
             "userId"
@@ -300,10 +300,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "DoctorMedicalSpecialityMapping_doctorId_medicalSpecialityId_pk": {
-          "name": "DoctorMedicalSpecialityMapping_doctorId_medicalSpecialityId_pk",
+        "DoctorMedicalSpecialityMapping_userId_medicalSpecialityId_pk": {
+          "name": "DoctorMedicalSpecialityMapping_userId_medicalSpecialityId_pk",
           "columns": [
-            "doctorId",
+            "userId",
             "medicalSpecialityId"
           ]
         }

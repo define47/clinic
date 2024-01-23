@@ -11,6 +11,7 @@ type StyledInputProps = {
   labelUnfocused?: string;
   labelFocused?: string;
   labelBackgroundColor?: string;
+  defaultValue?: string;
   inputValue?: string;
 };
 
@@ -25,6 +26,7 @@ export const StyledInput: FC<StyledInputProps> = ({
   labelUnfocused,
   labelFocused,
   labelBackgroundColor,
+  defaultValue,
   inputValue,
 }) => {
   const [focused, setFocused] = useState(false);
@@ -83,6 +85,7 @@ export const StyledInput: FC<StyledInputProps> = ({
             onChangeStyledInput(event);
           }}
           value={defaultValueTest}
+          defaultValue={defaultValue}
           required
         />
         <label

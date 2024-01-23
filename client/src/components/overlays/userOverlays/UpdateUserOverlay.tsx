@@ -136,7 +136,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
 
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
-          isUpdateUserOverlayVisible ? "visible" : "invisible"
+          isUpdateUserOverlayVisible ? "visible backdrop-blur-sm" : "invisible"
         }`}
         closeModal={() => setIsUpdateUserOverlayVisible(false)}
       >

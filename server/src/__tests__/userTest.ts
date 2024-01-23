@@ -316,7 +316,7 @@ export const testUser = async () => {
       const doctorPrimarySpecialityMapping =
         await doctorMedicalSpecialityMappingService.createMedicalDoctorSpecialityMapping(
           {
-            doctorId: dummyDoctorId,
+            userId: dummyDoctorId,
             medicalSpecialityId: primarySpecialityId,
             isPrimaryMedicalSpeciality: true,
             isSecondaryMedicalSpeciality: false,
@@ -325,7 +325,7 @@ export const testUser = async () => {
         );
 
       const doctorPrimarySpecialityMappingExpected = {
-        doctorId: dummyDoctorId,
+        userId: dummyDoctorId,
         medicalSpecialityId: primarySpecialityId,
         isPrimaryMedicalSpeciality: true,
         isSecondaryMedicalSpeciality: false,
@@ -344,7 +344,7 @@ export const testUser = async () => {
       const doctorSecondarySpecialityMapping =
         await doctorMedicalSpecialityMappingService.createMedicalDoctorSpecialityMapping(
           {
-            doctorId: dummyDoctorId,
+            userId: dummyDoctorId,
             medicalSpecialityId: secondarySpecialityId,
             isPrimaryMedicalSpeciality: false,
             isSecondaryMedicalSpeciality: true,
@@ -353,7 +353,7 @@ export const testUser = async () => {
         );
 
       const doctorSecondarySpecialityMappingExpected = {
-        doctorId: dummyDoctorId,
+        userId: dummyDoctorId,
         medicalSpecialityId: secondarySpecialityId,
         isPrimaryMedicalSpeciality: false,
         isSecondaryMedicalSpeciality: true,
@@ -372,7 +372,7 @@ export const testUser = async () => {
       const doctorTertiarySpecialityMapping =
         await doctorMedicalSpecialityMappingService.createMedicalDoctorSpecialityMapping(
           {
-            doctorId: dummyDoctorId,
+            userId: dummyDoctorId,
             medicalSpecialityId: tertiarySpecialityId,
             isPrimaryMedicalSpeciality: false,
             isSecondaryMedicalSpeciality: false,
@@ -381,7 +381,7 @@ export const testUser = async () => {
         );
 
       const doctorTertiarySpecialityMappingExpected = {
-        doctorId: dummyDoctorId,
+        userId: dummyDoctorId,
         medicalSpecialityId: tertiarySpecialityId,
         isPrimaryMedicalSpeciality: false,
         isSecondaryMedicalSpeciality: false,

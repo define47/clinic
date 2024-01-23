@@ -25,7 +25,7 @@ export class DoctorMedicalSpecialityMappingRepository
     return this._drizzle
       .select()
       .from(doctorMedicalSpecialityMappingTable)
-      .where(eq(doctorMedicalSpecialityMappingTable.doctorId, doctorId));
+      .where(eq(doctorMedicalSpecialityMappingTable.userId, doctorId));
   }
 
   public async createDoctorMedicalSpecialityMapping(
@@ -43,7 +43,7 @@ export class DoctorMedicalSpecialityMappingRepository
         .delete(doctorMedicalSpecialityMappingTable)
         .where(
           and(
-            eq(doctorMedicalSpecialityMappingTable.doctorId, doctorId),
+            eq(doctorMedicalSpecialityMappingTable.userId, doctorId),
             eq(
               doctorMedicalSpecialityMappingTable.medicalSpecialityId,
               medicalSpecialityId
@@ -74,7 +74,7 @@ export class DoctorMedicalSpecialityMappingRepository
       })
       .where(
         and(
-          eq(doctorMedicalSpecialityMappingTable.doctorId, doctorId),
+          eq(doctorMedicalSpecialityMappingTable.userId, doctorId),
           eq(
             doctorMedicalSpecialityMappingTable.medicalSpecialityId,
             currentMedicalSpecialityId

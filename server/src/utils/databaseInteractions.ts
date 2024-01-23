@@ -182,14 +182,14 @@ export const deleteDoctorSpecialityMappingByDoctorIdAndSpecialityId = async (
 };
 
 export const createDoctorSpecialityMapping = async (
-  doctorId: string,
+  userId: string,
   medicalSpecialityId: string,
   isPrimaryMedicalSpeciality: boolean,
   isSecondaryMedicalSpeciality: boolean,
   isTertiaryMedicalSpeciality: boolean
 ) => {
   await doctorSpecialityMappingRepository.createDoctorMedicalSpecialityMapping({
-    doctorId,
+    userId,
     medicalSpecialityId,
     isPrimaryMedicalSpeciality,
     isSecondaryMedicalSpeciality,
@@ -297,7 +297,7 @@ export const createDoctors = async () => {
     for (let i = 0; i < numberOfSpecialities; i++) {
       await doctorMedicalSpecialityMappingService.createMedicalDoctorSpecialityMapping(
         {
-          doctorId: doctor?.userId!,
+          userId: doctor?.userId!,
           medicalSpecialityId: specialities[i],
           isPrimaryMedicalSpeciality: i === 0,
           isSecondaryMedicalSpeciality: i === 1,

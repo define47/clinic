@@ -250,13 +250,11 @@ const buildServer = async () => {
 
   // await createRoles();
   // await createSpecialities();
-
   // const languageService = new LanguageService();
   // await languageService.createLanguage({
   //   languageName: "Romanian",
   //   languageCode: "ro",
   // });
-
   // await languageService.createLanguage({
   //   languageName: "English",
   //   languageCode: "en",
@@ -286,7 +284,7 @@ const buildServer = async () => {
 
   // await createUsers(0, 250, "patient");
 
-  // createUsers(0, 10, "doctor"updated);
+  // createUsers(0, 1, "doctor");
   // createUsers(0, 10, "patient");
 
   // const appointmentRepository = new AppointmentRepository(
@@ -348,28 +346,28 @@ async function main() {
   }
 }
 
-// main();
+main();
 
-const numClusterWorkers = 8;
-if (cluster.isPrimary) {
-  console.log(`Primary ${process.pid} is running`);
-  for (let i = 0; i < numClusterWorkers; i++) {
-    cluster.fork();
-  }
+// const numClusterWorkers = 8;
+// if (cluster.isPrimary) {
+//   console.log(`Primary ${process.pid} is running`);
+//   for (let i = 0; i < numClusterWorkers; i++) {
+//     cluster.fork();
+//   }
 
-  cluster.on("exit", (worker, code, signal) =>
-    console.log(`worker ${worker.process.pid} died`)
-  );
+//   cluster.on("exit", (worker, code, signal) =>
+//     console.log(`worker ${worker.process.pid} died`)
+//   );
 
-  cluster.on("online", (worker) => {
-    console.log(
-      `Yay, the worker ${worker.process.pid} responded after it was forked`
-    );
-  });
-} else {
-  try {
-    main();
-  } catch (error) {
-    console.log(error);
-  }
-}
+//   cluster.on("online", (worker) => {
+//     console.log(
+//       `Yay, the worker ${worker.process.pid} responded after it was forked`
+//     );
+//   });
+// } else {
+//   try {
+//     main();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }

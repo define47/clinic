@@ -249,20 +249,115 @@ export class UserController {
     } catch (error) {}
   };
 
+  // public postUser = async (request: FastifyRequest, reply: FastifyReply) => {
+  //   try {
+  //     const body: any = request.body;
+
+  //     console.log(body);
+
+  //     const roleNames: string[] = body.roleNames;
+
+  //     for (let i = 0; i < roleNames.length; i++) {
+  //       const role = await this._roleService.getRoleByName(roleNames[i]);
+  //       if (!role)
+  //         return reply.code(200).send({
+  //           success: false,
+  //           message: `role ${roleNames[i]} not found`,
+  //         });
+  //     }
+
+  //     const isUserEmailValid = await this.checkUserEmailValidity(
+  //       body.userEmail
+  //     );
+
+  //     const isUserPhoneNumberValid = await this.checkUserPhoneNumberValidity(
+  //       body.userPhoneNumber
+  //     );
+
+  //     if (!isUserEmailValid) reply.code(200).send({ success: false });
+  //     if (!isUserPhoneNumberValid) reply.code(200).send({ success: false });
+
+  //     let postUser = await this._userService.createUser({
+  //       userForename: body.userForename,
+  //       userSurname: body.userSurname,
+  //       userEmail: body.userEmail,
+  //       userPhoneNumber: body.userPhoneNumber,
+  //       userDateOfBirth: body.userDateOfBirth,
+  //       userAddress: body.userAddress,
+  //       userGender: body.userGender,
+  //       userEncryptedPassword: await argon2.hash(body.userEncryptedPassword),
+  //     });
+
+  //     postUser = postUser as User;
+
+  //     for (let i = 0; i < roleNames.length; i++) {
+  //       const role = await this._roleService.getRoleByName(roleNames[i]);
+  //       await this._userRoleMappingService.createUserRoleMapping({
+  //         userId: postUser.userId,
+  //         roleId: role?.roleId!,
+  //       });
+
+  //       if (role?.roleName === "doctor") {
+  //         const specialityNames = body.specialityNames;
+  //         for (let j = 0; j < specialityNames.length; j++) {
+  //           const currentSpeciality =
+  //             await this._medicalSpecialityService.getMedicalSpecialityByName(
+  //               specialityNames[j]
+  //             );
+
+  //           await this._doctorSpecialityMappingService.createMedicalDoctorSpecialityMapping(
+  //             {
+  //               userId: postUser.userId,
+  //               medicalSpecialityId: currentSpeciality?.medicalSpecialityId!,
+  //               isPrimaryMedicalSpeciality: j === 0,
+  //               isSecondaryMedicalSpeciality: j === 1,
+  //               isTertiaryMedicalSpeciality: j === 2,
+  //             }
+  //           );
+  //         }
+  //       }
+  //     }
+
+  //     const { redis } = fastifyServer;
+
+  //     await redis.publisher.publish(MESSAGE_CHANNEL, JSON.stringify(postUser));
+
+  //     return reply
+  //       .code(200)
+  //       .send({ success: postUser !== undefined, message: "" });
+  //   } catch (error) {
+  //     console.log(error);
+  //     return reply.code(400).send({ error: (error as Error).message });
+  //   }
+  // };
+
   public postUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body: any = request.body;
 
-      console.log(body);
+      console.log("bodypostuser", body);
 
-      const roleNames: string[] = body.roleNames;
+      const roleIds: string[] = body.roleIds;
+      const specialityIds = body.specialityIds;
 
-      for (let i = 0; i < roleNames.length; i++) {
-        const role = await this._roleService.getRoleByName(roleNames[i]);
+      for (let i = 0; i < roleIds.length; i++) {
+        const role = await this._roleService.getRoleById(roleIds[i]);
         if (!role)
           return reply.code(200).send({
             success: false,
-            message: `role ${roleNames[i]} not found`,
+            message: `role ${roleIds[i]} not found`,
+          });
+      }
+
+      for (let i = 0; i < specialityIds.length; i++) {
+        const speciality =
+          await this._medicalSpecialityService.getMedicalSpecialityById(
+            specialityIds[i]
+          );
+        if (!speciality)
+          return reply.code(200).send({
+            success: false,
+            message: `speciality ${roleIds[i]} not found`,
           });
       }
 
@@ -290,25 +385,23 @@ export class UserController {
 
       postUser = postUser as User;
 
-      for (let i = 0; i < roleNames.length; i++) {
-        const role = await this._roleService.getRoleByName(roleNames[i]);
+      for (let i = 0; i < roleIds.length; i++) {
         await this._userRoleMappingService.createUserRoleMapping({
           userId: postUser.userId,
-          roleId: role?.roleId!,
+          roleId: roleIds[i],
         });
 
-        if (role?.roleName === "doctor") {
-          const specialityNames = body.specialityNames;
-          for (let j = 0; j < specialityNames.length; j++) {
-            const currentSpeciality =
-              await this._medicalSpecialityService.getMedicalSpecialityByName(
-                specialityNames[j]
-              );
+        // * if doctor
+        if (roleIds[i] === "0db07f94-ca81-5fa0-9497-1967481f576a") {
+          console.log("specialityIds", specialityIds);
+
+          for (let j = 0; j < specialityIds.length; j++) {
+            console.log("specialityIds[i]", specialityIds[i]);
 
             await this._doctorSpecialityMappingService.createMedicalDoctorSpecialityMapping(
               {
-                doctorId: postUser.userId,
-                medicalSpecialityId: currentSpeciality?.medicalSpecialityId!,
+                userId: postUser.userId,
+                medicalSpecialityId: specialityIds[j],
                 isPrimaryMedicalSpeciality: j === 0,
                 isSecondaryMedicalSpeciality: j === 1,
                 isTertiaryMedicalSpeciality: j === 2,

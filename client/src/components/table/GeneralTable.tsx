@@ -15,6 +15,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   const { socketNotificationDataState, socketNotificationDataSetState } =
     socketContext!;
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
+  const [clickedTableRow, setClickedTableRow] = useState<TableRow>();
 
   function isUserRow(tableRow: TableRow): tableRow is User {
     return "userId" in tableRow;
@@ -78,6 +79,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   //   ]);
   // }, [socketNotificationDataState]);
 
+  function determineSpecialityOrder(
+    medicalSpecialities: string[],
+    target: string
+  ) {
+    for (let i = 0; i < medicalSpecialities.length; i++) {
+      if (medicalSpecialities[i].includes(target))
+        return medicalSpecialities[i];
+    }
+  }
+
   return (
     <div>
       {tableRows.length > 0 && (
@@ -94,6 +105,15 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                 <td className="px-6 py-4 font-bold">userDateOfBirth</td>
                 <td className="px-6 py-4 font-bold">userAddress</td>
                 <td className="px-6 py-4 font-bold">userRoleName</td>
+                {roleName === "doctor" && (
+                  <td className="px-6 py-4 font-bold">Primary Speciality</td>
+                )}
+                {roleName === "doctor" && (
+                  <td className="px-6 py-4 font-bold">Secondary Speciality</td>
+                )}
+                {roleName === "doctor" && (
+                  <td className="px-6 py-4 font-bold">Tertiary Speciality</td>
+                )}
                 <td className="px-6 py-4 font-bold">Actions</td>
               </tr>
             ) : (
@@ -104,7 +124,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             {tableRows.map(
               (tableRow: TableRow) =>
                 isUserRow(tableRows[0]) && (
-                  <tr className="border-b border-neutral-400 even:bg-neutral-50 odd:bg-neutral-100 transition duration-300 ease-in-out hover:bg-pink-100">
+                  <tr
+                    key={tableRow.userId}
+                    className={`border-b border-neutral-400 even:bg-neutral-50 odd:bg-neutral-100 transition duration-300 ease-in-out hover:bg-pink-100 ${
+                      clickedTableRow?.userId === tableRow.userId &&
+                      "!bg-pink-200"
+                    }`}
+                    onClick={() => setClickedTableRow(tableRow)}
+                  >
                     <td className="px-6 py-4 font-medium text-gray-700">
                       {tableRow.userId}
                     </td>
@@ -132,7 +159,31 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     <td className="px-6 py-4 font-medium">
                       {tableRow.userRoleName}
                     </td>
-                    <td>
+                    {roleName === "doctor" && (
+                      <td>
+                        {determineSpecialityOrder(
+                          tableRow.medicalSpecialities!,
+                          "P"
+                        )?.slice(0, -3)}
+                      </td>
+                    )}
+                    {roleName === "doctor" && (
+                      <td>
+                        {determineSpecialityOrder(
+                          tableRow.medicalSpecialities!,
+                          "S"
+                        )?.slice(0, -3)}
+                      </td>
+                    )}
+                    {roleName === "doctor" && (
+                      <td>
+                        {determineSpecialityOrder(
+                          tableRow.medicalSpecialities!,
+                          "T"
+                        )?.slice(0, -3)}
+                      </td>
+                    )}
+                    <td className="h-14 flex items-center justify-center w-full space-x-2">
                       <UpdateUserOverlay user={tableRow} roleName={roleName} />
                       <DeleteUserOverlay user={tableRow} roleName={roleName} />
                     </td>
@@ -153,7 +204,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         )}
       </div> */}
       <div>
-        <CreateUserOverlay roleName={roleName} />
+        <CreateUserOverlay roleId={roleId} roleName={roleName} />
       </div>
       {/* here notification {JSON.stringify(socketNotificationDataState)} */}
     </div>

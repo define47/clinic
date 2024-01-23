@@ -98,7 +98,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       this._tableColumns = ["userId", "roleId"];
     else if (table === doctorMedicalSpecialityMappingTable)
       this._tableColumns = [
-        "doctorId",
+        "userId",
         "medicalSpecialityId",
         "isPrimaryMedicalSpeciality",
         "isSecondaryMedicalSpeciality",
@@ -238,7 +238,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | MedicalProcedureCreationAttributes
       );
     } else if (this._table === doctorMedicalSpecialityMappingTable) {
-      return ["doctorId", "medicalSpecialityId"] as keyof (
+      return ["userId", "medicalSpecialityId"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes

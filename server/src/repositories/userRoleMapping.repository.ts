@@ -208,7 +208,7 @@ export class UserRoleMappingRepository
         .from(doctorMedicalSpecialityMappingTable)
         .innerJoin(
           userTable,
-          eq(doctorMedicalSpecialityMappingTable.doctorId, userTable.userId)
+          eq(doctorMedicalSpecialityMappingTable.userId, userTable.userId)
         )
         .innerJoin(
           medicalSpecialityTable,
@@ -221,15 +221,15 @@ export class UserRoleMappingRepository
 
       data = await this._drizzle
         .select({
-          doctor: {
-            doctorId: userTable.userId,
-            doctorForename: userTable.userForename,
-            doctorSurname: userTable.userSurname,
-            doctorEmail: userTable.userEmail,
-            doctorPhoneNumber: userTable.userPhoneNumber,
-            doctorGender: userTable.userGender,
-            doctorDateOfBirth: userTable.userDateOfBirth,
-            doctorAddress: userTable.userAddress,
+          user: {
+            userId: userTable.userId,
+            userForename: userTable.userForename,
+            userSurname: userTable.userSurname,
+            userEmail: userTable.userEmail,
+            userPhoneNumber: userTable.userPhoneNumber,
+            userGender: userTable.userGender,
+            userDateOfBirth: userTable.userDateOfBirth,
+            userAddress: userTable.userAddress,
           },
           medicalSpeciality: {
             medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
@@ -245,7 +245,7 @@ export class UserRoleMappingRepository
         .from(doctorMedicalSpecialityMappingTable)
         .innerJoin(
           userTable,
-          eq(doctorMedicalSpecialityMappingTable.doctorId, userTable.userId)
+          eq(doctorMedicalSpecialityMappingTable.userId, userTable.userId)
         )
         .innerJoin(
           medicalSpecialityTable,
@@ -266,17 +266,17 @@ export class UserRoleMappingRepository
 
       const resultArray = Array.from(
         data
-          .reduce((doctorMap, { doctor, medicalSpeciality }) => {
+          .reduce((doctorMap, { user, medicalSpeciality }) => {
             const {
-              doctorId,
-              doctorForename,
-              doctorSurname,
-              doctorEmail,
-              doctorPhoneNumber,
-              doctorGender,
-              doctorDateOfBirth,
-              doctorAddress,
-            } = doctor;
+              userId,
+              userForename,
+              userSurname,
+              userEmail,
+              userPhoneNumber,
+              userGender,
+              userDateOfBirth,
+              userAddress,
+            } = user;
             const {
               medicalSpecialityName,
               isPrimaryMedicalSpeciality,
@@ -284,21 +284,22 @@ export class UserRoleMappingRepository
               isTertiaryMedicalSpeciality,
             } = medicalSpeciality;
 
-            if (!doctorMap.has(doctorId)) {
-              doctorMap.set(doctorId, {
-                doctorId,
-                doctorForename,
-                doctorSurname,
-                doctorEmail,
-                doctorPhoneNumber,
-                doctorGender,
-                doctorDateOfBirth,
-                doctorAddress,
+            if (!doctorMap.has(userId)) {
+              doctorMap.set(userId, {
+                userId,
+                userForename,
+                userSurname,
+                userEmail,
+                userPhoneNumber,
+                userGender,
+                userDateOfBirth,
+                userAddress,
                 medicalSpecialities: [],
+                userRoleName: "doctor",
               });
             }
 
-            const doctorEntry = doctorMap.get(doctorId);
+            const doctorEntry = doctorMap.get(userId);
 
             let designation = "";
             if (isPrimaryMedicalSpeciality) {

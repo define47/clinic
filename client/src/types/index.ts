@@ -10,6 +10,7 @@ export type User = {
   userDateOfBirth: string;
   userAddress: string;
   userEncryptedPassword?: string;
+  medicalSpecialities?: string[];
   isUserEmailActivated: boolean;
   isUserApprovedByAdmin: boolean;
   isUserBanned: boolean;
@@ -49,6 +50,7 @@ export type GeneralTableProps = {
 };
 
 export type CreateUserOverlayPros = {
+  roleId: string;
   roleName: string;
 };
 
