@@ -24,7 +24,7 @@ export interface IUserRoleMappingService {
     orderBy: string
   ): Promise<
     | {
-        usersRelatedData:
+        tableData:
           | UserRoleMappingJoinUserAndRole[]
           | DoctorMedicalSpecialityMappingJoinUserAndSpeciality[];
         totalCount: number;

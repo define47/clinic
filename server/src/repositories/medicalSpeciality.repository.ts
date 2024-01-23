@@ -41,7 +41,7 @@ export class MedicalSpecialityRepository
     page: number
   ): Promise<
     | {
-        medicalSpecialities: MedicalSpeciality[];
+        tableData: MedicalSpeciality[];
         totalCount: number;
         totalPages: number;
       }
@@ -73,7 +73,7 @@ export class MedicalSpecialityRepository
       .orderBy(asc(medicalSpecialityTable.medicalSpecialityName));
 
     return {
-      medicalSpecialities,
+      tableData: medicalSpecialities,
       totalCount: totalCount[0].totalCount,
       totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
     };

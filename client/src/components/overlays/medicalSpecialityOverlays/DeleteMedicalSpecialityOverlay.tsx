@@ -1,53 +1,56 @@
 import { FC, useState } from "react";
-import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
-import { StyledRippleButton } from "../../design/StyledRippleButton";
-import { DeleteUserOverlayPros } from "../../../types";
-import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
+import { DeleteMedicalSpecialityOverlayPros } from "../../../types";
+import { medicalSpecialityPath } from "../../../utils/dotenv";
 import axios from "axios";
-import { userPath } from "../../../utils/dotenv";
+import { StyledRippleButton } from "../../design/StyledRippleButton";
+import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
+import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
 
-export const DeleteUserOverlay: FC<DeleteUserOverlayPros> = ({
-  user,
-  roleName,
-}) => {
+export const DeleteMedicalSpecialityOverlay: FC<
+  DeleteMedicalSpecialityOverlayPros
+> = ({ medicalSpeciality }) => {
   const [
-    isDeleteUserConfirmationDialogOverlayVisible,
-    setIsDeleteUserConfirmationDialogOverlayVisible,
+    isDeleteMedicalSpecialityConfirmationDialogOverlayVisible,
+    setIsDeleteMedicalSpecialityConfirmationDialogOverlayVisible,
   ] = useState<boolean>(false);
 
-  async function onDeleteUser() {
+  async function onDeleteMedicalSpeciality() {
     try {
-      const response = await axios.delete(userPath, {
-        data: { userId: user.userId },
+      const response = await axios.delete(medicalSpecialityPath, {
+        data: { medicalSpecialityId: medicalSpeciality.medicalSpecialityId },
         withCredentials: true,
       });
+
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
   }
   return (
     <div>
-      {isDeleteUserConfirmationDialogOverlayVisible ? (
+      {isDeleteMedicalSpecialityConfirmationDialogOverlayVisible ? (
         <IoTrashSharp className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
       ) : (
         <IoTrashOutline
-          onClick={() => setIsDeleteUserConfirmationDialogOverlayVisible(true)}
+          onClick={() =>
+            setIsDeleteMedicalSpecialityConfirmationDialogOverlayVisible(true)
+          }
           className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
         />
       )}
       <ConfirmationDialogOverlay
         className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
-          isDeleteUserConfirmationDialogOverlayVisible
+          isDeleteMedicalSpecialityConfirmationDialogOverlayVisible
             ? "visible backdrop-blur-sm"
             : "invisible"
         }`}
         closeConfirmationDialogModal={() =>
-          setIsDeleteUserConfirmationDialogOverlayVisible(false)
+          setIsDeleteMedicalSpecialityConfirmationDialogOverlayVisible(false)
         }
       >
         <div
           className={`w-1/3 h-1/4 bg-white flex transition-all rounded-xl ${
-            isDeleteUserConfirmationDialogOverlayVisible
+            isDeleteMedicalSpecialityConfirmationDialogOverlayVisible
               ? "scale-100 opacity-100 duration-200"
               : "scale-125 opacity-0 duration-200"
           }`}
@@ -55,22 +58,25 @@ export const DeleteUserOverlay: FC<DeleteUserOverlayPros> = ({
         >
           <div className="w-full flex flex-col p-4">
             <span className="w-full flex justify-center mb-8">
-              Are you sure want to delete the {roleName}?
+              Are you sure want to delete the Speciality{" "}
+              {medicalSpeciality.medicalSpecialityName}?
             </span>
             <div>
-              <div>{user.userId}</div>
+              <div>{medicalSpeciality.medicalSpecialityId}</div>
             </div>
             <div className="w-full flex justify-between">
               <StyledRippleButton
                 label="Yes"
                 type="yes"
-                onClick={onDeleteUser}
+                onClick={onDeleteMedicalSpeciality}
               />
               <StyledRippleButton
                 label="No"
                 type="delete"
                 onClick={() =>
-                  setIsDeleteUserConfirmationDialogOverlayVisible(false)
+                  setIsDeleteMedicalSpecialityConfirmationDialogOverlayVisible(
+                    false
+                  )
                 }
               />
             </div>

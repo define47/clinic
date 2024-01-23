@@ -15,6 +15,19 @@ export interface IMedicalSpecialityRepository
     medicalSpecialityName: string
   ): Promise<MedicalSpeciality | undefined>;
 
+  getAllMedicalSpecialities(
+    searchQuery: string,
+    limit: number,
+    page: number
+  ): Promise<
+    | {
+        tableData: MedicalSpeciality[];
+        totalCount: number;
+        totalPages: number;
+      }
+    | undefined
+  >;
+
   createMedicalSpeciality(
     medicalSpecialityCreationAttributes: MedicalSpecialityCreationAttributes
   ): Promise<MedicalSpeciality | undefined>;

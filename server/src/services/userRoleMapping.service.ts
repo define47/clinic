@@ -46,7 +46,7 @@ export class UserRoleMappingService implements IUserRoleMappingService {
     orderBy: string
   ): Promise<
     | {
-        usersRelatedData:
+        tableData:
           | UserRoleMappingJoinUserAndRole[]
           | DoctorMedicalSpecialityMappingJoinUserAndSpeciality[];
         totalCount: number;

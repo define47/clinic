@@ -44,6 +44,8 @@ import { describe, it } from "node:test";
 import assert from "node:assert";
 import { testUser } from "./__tests__/userTest.js";
 import { UserRoleMappingService } from "./services/userRoleMapping.service.js";
+import { medicalSpecialityRoutes } from "./routes/medicalSpeciality.routes.js";
+import { MedicalSpecialityService } from "./services/medicalSpeciality.service.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -154,6 +156,10 @@ const buildServer = async () => {
   await fastifyServer.register(authRoutes, { prefix: "api/auth" });
 
   await fastifyServer.register(userRoutes, { prefix: "api/users" });
+
+  await fastifyServer.register(medicalSpecialityRoutes, {
+    prefix: "api/medical-specialities",
+  });
 
   await fastifyServer.register(appointmentRoutes, {
     prefix: "api/appointments",
@@ -274,13 +280,10 @@ const buildServer = async () => {
   // );
   // console.log(usersByRole?.usersRelatedData);
 
-  // const medicalSpecialityRepository = new MedicalSpecialityRepository(
-  //   drizzleInstance,
-  //   medicalSpecialityTable
-  // );
-  // const medicalSpecialities =
-  //   await medicalSpecialityRepository.getAllMedicalSpecialities("in", 5, 0);
-  // console.log(medicalSpecialities?.medicalSpecialities);
+  const medicalSpecialityService = new MedicalSpecialityService();
+  const medicalSpecialities =
+    await medicalSpecialityService.getAllMedicalSpecialities("", 5, 0);
+  console.log(medicalSpecialities);
 
   // await createUsers(0, 250, "patient");
 

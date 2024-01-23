@@ -8,6 +8,26 @@ export class MedicalSpecialityController {
     this._medicalSpecialityService = new MedicalSpecialityService();
   }
 
+  public getAllMedicalSpecialities = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const query: any = request.query;
+
+      const payload =
+        await this._medicalSpecialityService.getAllMedicalSpecialities(
+          query.searchQuery,
+          query.limit,
+          query.page
+        );
+
+      reply.code(200).send({ success: true, payload });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   public postMedicalSpeciality = async (
     request: FastifyRequest,
     reply: FastifyReply
@@ -17,7 +37,7 @@ export class MedicalSpecialityController {
 
       let medicalSpecialityToCreate =
         await this._medicalSpecialityService.createMedicalSpeciality({
-          medicalSpecialityName: body.specialityName,
+          medicalSpecialityName: body.medicalSpecialityName,
         });
 
       return reply.code(200).send({ success: true, message: "" });
@@ -52,7 +72,7 @@ export class MedicalSpecialityController {
 
       let medicalSpecialityToDelete =
         await this._medicalSpecialityService.deleteMedicalSpecialityById(
-          body.specialityId
+          body.medicalSpecialityId
         );
 
       return reply.code(200).send({ success: true, message: "" });

@@ -73,7 +73,7 @@ export class UserRoleMappingRepository
     orderBy: string
   ): Promise<
     | {
-        usersRelatedData:
+        tableData:
           | UserRoleMappingJoinUserAndRole[]
           | DoctorMedicalSpecialityMappingJoinUserAndSpeciality[];
         totalCount: number;
@@ -196,7 +196,7 @@ export class UserRoleMappingRepository
         .orderBy(columnToOrderBy!);
 
       return {
-        usersRelatedData: data as UserRoleMappingJoinUserAndRole[],
+        tableData: data as UserRoleMappingJoinUserAndRole[],
         totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
         totalCount: totalCount[0].totalCount,
       };
@@ -320,7 +320,7 @@ export class UserRoleMappingRepository
       );
 
       return {
-        usersRelatedData:
+        tableData:
           resultArray as DoctorMedicalSpecialityMappingJoinUserAndSpeciality[],
         totalCount: totalCount![0].totalCount,
         totalPages: Math.ceil(totalCount![0].totalCount / limit) - 1,

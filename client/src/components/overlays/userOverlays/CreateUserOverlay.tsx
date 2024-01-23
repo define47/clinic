@@ -5,7 +5,7 @@ import Overlay from "../base/Overlay";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import axios from "axios";
-import { usersPath } from "../../../utils/dotenv";
+import { userPath } from "../../../utils/dotenv";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -75,7 +75,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   async function onCreateUser() {
     try {
       const response = await axios.post(
-        usersPath,
+        userPath,
         {
           userForename: userToCreate.userForename,
           userSurname: userToCreate.userSurname,

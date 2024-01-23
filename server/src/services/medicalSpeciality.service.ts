@@ -34,6 +34,21 @@ export class MedicalSpecialityService implements IMedicalSpecialityService {
     );
   }
 
+  public async getAllMedicalSpecialities(
+    searchQuery: string,
+    limit: number,
+    page: number
+  ): Promise<
+    | { tableData: MedicalSpeciality[]; totalCount: number; totalPages: number }
+    | undefined
+  > {
+    return await this._medicalSpecialityRepository.getAllMedicalSpecialities(
+      searchQuery,
+      limit,
+      page
+    );
+  }
+
   public async createMedicalSpeciality(
     medicalSpecialityCreationAttributes: MedicalSpecialityCreationAttributes
   ): Promise<MedicalSpeciality | undefined> {

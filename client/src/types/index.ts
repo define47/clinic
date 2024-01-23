@@ -18,7 +18,12 @@ export type User = {
   userRoleName: string;
 };
 
-export type TableRow = User;
+export type MedicalSpeciality = {
+  medicalSpecialityId?: string;
+  medicalSpecialityName: string;
+};
+
+export type TableRow = User | MedicalSpeciality;
 
 export type UserToLogin = {
   userEmail: string;
@@ -45,8 +50,9 @@ export type TopBarProps = {
 
 export type GeneralTableProps = {
   URL: string;
-  roleId: string;
-  roleName: string;
+  // roleId?: string;
+  // roleName?: string;
+  entity: string;
 };
 
 export type CreateUserOverlayPros = {
@@ -62,4 +68,8 @@ export type UpdateUserOverlayPros = {
 export type DeleteUserOverlayPros = {
   user: User;
   roleName: string;
+};
+
+export type DeleteMedicalSpecialityOverlayPros = {
+  medicalSpeciality: MedicalSpeciality;
 };

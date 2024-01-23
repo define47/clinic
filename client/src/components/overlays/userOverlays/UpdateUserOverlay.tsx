@@ -5,7 +5,7 @@ import Overlay from "../base/Overlay";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import axios from "axios";
-import { usersPath } from "../../../utils/dotenv";
+import { userPath } from "../../../utils/dotenv";
 import { PiPencil, PiPencilLineFill } from "react-icons/pi";
 
 export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
@@ -84,7 +84,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   async function onUpdateUser() {
     try {
       const response = await axios.put(
-        usersPath,
+        userPath,
         {
           userId: user.userId,
           userForename: userToUpdate.userForename,

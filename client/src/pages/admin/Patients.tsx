@@ -1,18 +1,12 @@
 import { FC } from "react";
 import { GeneralTable } from "../../components/table/GeneralTable";
-import { patientRoleId, patientRoleName, usersPath } from "../../utils/dotenv";
+import { patientRoleName, userPath } from "../../utils/dotenv";
 
 export const Patients: FC = () => {
-  console.log(patientRoleId);
-
   return (
     <div>
       Patients
-      <GeneralTable
-        URL={usersPath}
-        roleId={patientRoleId}
-        roleName={patientRoleName}
-      />
+      <GeneralTable URL={userPath} entity={patientRoleName} />
     </div>
   );
 };
