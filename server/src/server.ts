@@ -42,10 +42,14 @@ import { appointmentTable } from "./models/appointment.model.js";
 import { UserService } from "./services/user.service.js";
 import { describe, it } from "node:test";
 import assert from "node:assert";
-import { testUser } from "./__tests__/userTest.js";
 import { UserRoleMappingService } from "./services/userRoleMapping.service.js";
 import { medicalSpecialityRoutes } from "./routes/medicalSpeciality.routes.js";
 import { MedicalSpecialityService } from "./services/medicalSpeciality.service.js";
+import {
+  testDoctorSpecialityMapping,
+  testUserRoleMapping,
+  testUsers,
+} from "./utils/models.test.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -283,10 +287,10 @@ const buildServer = async () => {
   // );
   // console.log(usersByRole?.usersRelatedData);
 
-  const medicalSpecialityService = new MedicalSpecialityService();
-  const medicalSpecialities =
-    await medicalSpecialityService.getAllMedicalSpecialities("", 5, 0);
-  console.log(medicalSpecialities);
+  // const medicalSpecialityService = new MedicalSpecialityService();
+  // const medicalSpecialities =
+  //   await medicalSpecialityService.getAllMedicalSpecialities("", 5, 0);
+  // console.log(medicalSpecialities);
 
   // await createUsers(0, 250, "patient");
 
@@ -323,7 +327,9 @@ const buildServer = async () => {
 
   // console.log(usersData?.usersRelatedData);
 
-  // await testUser();
+  // await testUsers(false);
+  // await testUserRoleMapping(false);
+  testDoctorSpecialityMapping(true);
 
   // createDoctors();
   // createPatients();
@@ -352,28 +358,28 @@ async function main() {
   }
 }
 
-// main();
+main();
 
-const numClusterWorkers = 2;
-if (cluster.isPrimary) {
-  console.log(`Primary ${process.pid} is running`);
-  for (let i = 0; i < numClusterWorkers; i++) {
-    cluster.fork();
-  }
+// const numClusterWorkers = 2;
+// if (cluster.isPrimary) {
+//   console.log(`Primary ${process.pid} is running`);
+//   for (let i = 0; i < numClusterWorkers; i++) {
+//     cluster.fork();
+//   }
 
-  cluster.on("exit", (worker, code, signal) =>
-    console.log(`worker ${worker.process.pid} died`)
-  );
+//   cluster.on("exit", (worker, code, signal) =>
+//     console.log(`worker ${worker.process.pid} died`)
+//   );
 
-  cluster.on("online", (worker) => {
-    console.log(
-      `Yay, the worker ${worker.process.pid} responded after it was forked`
-    );
-  });
-} else {
-  try {
-    main();
-  } catch (error) {
-    console.log(error);
-  }
-}
+//   cluster.on("online", (worker) => {
+//     console.log(
+//       `Yay, the worker ${worker.process.pid} responded after it was forked`
+//     );
+//   });
+// } else {
+//   try {
+//     main();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }

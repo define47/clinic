@@ -3,7 +3,7 @@ import {
   DoctorMedicalSpecialityMappingCreationAttributes,
 } from "../models/doctorMedicalSpecialityMapping.model";
 
-export interface IDoctorSpecialityMappingService {
+export interface IDoctorMedicalSpecialityMappingService {
   getDoctorMedicalSpecialityMappingsByDoctorId(
     doctorId: string
   ): Promise<DoctorMedicalSpecialityMapping[] | undefined>;
@@ -24,7 +24,7 @@ export interface IDoctorSpecialityMappingService {
   deleteDoctorMedicalSpecialityMappingByDoctorIdAndSpecialityId(
     doctorId: string,
     medicalSpecialityId: string
-  ): Promise<string>;
+  ): Promise<DoctorMedicalSpecialityMapping | undefined>;
 
   deleteDoctorMedicalSpecialityMappingsByDoctorId(
     doctorId: string

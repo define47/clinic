@@ -4,9 +4,10 @@ import { patientRoleName, userPath } from "../../utils/dotenv";
 
 export const Patients: FC = () => {
   return (
-    <div>
-      Patients
-      <GeneralTable URL={userPath} entity={patientRoleName} />
+    <div className="w-full">
+      <div className="w-full p-4">
+        <GeneralTable URL={userPath} entity={patientRoleName} />
+      </div>
     </div>
   );
 };

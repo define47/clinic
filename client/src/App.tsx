@@ -1,5 +1,11 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import io, { Socket } from "socket.io-client";
 import { Login } from "./pages/common/Login";
 import axios from "axios";
@@ -88,6 +94,9 @@ const App: FC = () => {
 
   // const { themeValue, setThemeValue } = useContext(ThemeContext);
 
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   useEffect(() => {
     async function verifyUser() {
       const response = await axios.post(
@@ -100,11 +109,13 @@ const App: FC = () => {
 
       if (response.data.success) {
         authenticatedUserDataSetState(JSON.parse(response.data.payload));
+      } else {
+        navigate("/login");
       }
     }
 
     verifyUser();
-  }, []);
+  }, [pathname]);
 
   // useEffect(() => {
   //   setThemeValue("light");
@@ -147,6 +158,7 @@ const App: FC = () => {
               <Route path="/admins/receptionists" element={<Receptionists />} />
               <Route path="/admins/settings" element={<Settings />} />
               <Route path="/admins/guide" element={<AdminGuide />} />
+              <Route path="*" element={<p>Path not resolved</p>} />
             </Route>
           </>
         )}

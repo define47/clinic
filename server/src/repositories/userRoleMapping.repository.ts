@@ -7,7 +7,18 @@ import {
 } from "../models/userRoleMapping.model";
 import { BaseRepository } from "./base.repository";
 import { IUserRoleMappingRepository } from "./userRoleMapping.irepository";
-import { SQL, Table, and, asc, count, desc, eq, ilike, sql } from "drizzle-orm";
+import {
+  SQL,
+  Table,
+  and,
+  asc,
+  count,
+  countDistinct,
+  desc,
+  eq,
+  ilike,
+  sql,
+} from "drizzle-orm";
 import { roleTable } from "../models/role.model";
 import { User, userTable } from "../models/user.model";
 import { PgColumn } from "drizzle-orm/pg-core";
@@ -203,7 +214,7 @@ export class UserRoleMappingRepository
     } else if (roleId === getDoctorRoleIdEnv()) {
       totalCount = await this._drizzle
         .select({
-          totalCount: count(),
+          totalCount: countDistinct(doctorMedicalSpecialityMappingTable.userId),
         })
         .from(doctorMedicalSpecialityMappingTable)
         .innerJoin(

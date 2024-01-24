@@ -4,8 +4,13 @@ import { GeneralTable } from "../../components/table/GeneralTable";
 
 export const MedicalSpecialities: FC = () => {
   return (
-    <div>
-      <GeneralTable URL={medicalSpecialityPath} entity={"medicalSpeciality"} />
+    <div className="w-full">
+      <div className="w-full p-4">
+        <GeneralTable
+          URL={medicalSpecialityPath}
+          entity={"medicalSpeciality"}
+        />
+      </div>
     </div>
   );
 };

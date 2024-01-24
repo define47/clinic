@@ -5,6 +5,7 @@ export default {
     extend: {
       width: {
         "1/9": "11.111111",
+        "1/10": "10",
       },
       colors: {
         lightMode: {

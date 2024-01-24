@@ -23,8 +23,9 @@ export const Login: FC = () => {
       console.log("here", response.data.payload);
 
       if (response.data.success) {
-        const payload = JSON.parse(response.data.payload);
-        if (payload.roleNames[0] === "admin") navigate("/admins/dashboard");
+        // const payload = JSON.parse(response.data.payload);
+        // if (payload.roleNames[0] === "admin") navigate("/admins/dashboard");
+        navigate("/");
       }
     }
 
@@ -45,6 +46,9 @@ export const Login: FC = () => {
       );
 
       console.log(response.data);
+
+      if (response.data.success) navigate("/");
+      navigate(0);
 
       return response;
     } catch (error) {

@@ -5,7 +5,7 @@ import {
 } from "../models/doctorMedicalSpecialityMapping.model";
 import { DoctorMedicalSpecialityMappingRepository } from "../repositories/doctorMedicalSpecialityMapping.repository";
 import { drizzleInstance } from "../utils/drizzle";
-import { IDoctorSpecialityMappingService as IDoctorMedicalSpecialityMappingService } from "./doctorMedicalSpecialityMapping.iservice";
+import { IDoctorMedicalSpecialityMappingService } from "./doctorMedicalSpecialityMapping.iservice";
 
 export class DoctorMedicalSpecialityMappingService
   implements IDoctorMedicalSpecialityMappingService
@@ -57,7 +57,7 @@ export class DoctorMedicalSpecialityMappingService
   public async deleteDoctorMedicalSpecialityMappingByDoctorIdAndSpecialityId(
     doctorId: string,
     medicalSpecialityId: string
-  ): Promise<string> {
+  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
     return await this._doctorMedicalSpecialityMappingRepository.deleteDoctorMedicalSpecialityMappingByDoctorIdAndMedicalSpecialityId(
       doctorId,
       medicalSpecialityId

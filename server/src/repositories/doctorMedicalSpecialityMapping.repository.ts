@@ -37,7 +37,7 @@ export class DoctorMedicalSpecialityMappingRepository
   public async deleteDoctorMedicalSpecialityMappingByDoctorIdAndMedicalSpecialityId(
     doctorId: string,
     medicalSpecialityId: string
-  ): Promise<string> {
+  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
     return (
       await this._drizzle
         .delete(doctorMedicalSpecialityMappingTable)
@@ -51,9 +51,17 @@ export class DoctorMedicalSpecialityMappingRepository
           )
         )
         .returning({
-          specialityId: doctorMedicalSpecialityMappingTable.medicalSpecialityId,
+          userId: doctorMedicalSpecialityMappingTable.userId,
+          medicalSpecialityId:
+            doctorMedicalSpecialityMappingTable.medicalSpecialityId,
+          isPrimaryMedicalSpeciality:
+            doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
+          isSecondaryMedicalSpeciality:
+            doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
+          isTertiaryMedicalSpeciality:
+            doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
         })
-    )[0]?.specialityId;
+    )[0];
   }
 
   public async updateMedicalDoctorSpecialityMapping(

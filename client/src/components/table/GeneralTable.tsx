@@ -19,6 +19,7 @@ import {
 import { CreateMedicalSpecialityOverlay } from "../overlays/medicalSpecialityOverlays/CreateMedicalSpecialityOverlay";
 import { DeleteMedicalSpecialityOverlay } from "../overlays/medicalSpecialityOverlays/DeleteMedicalSpecialityOverlay";
 import { UpdateMedicalSpeciality } from "../overlays/medicalSpecialityOverlays/UpdateMedicalSpeciality";
+import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -30,7 +31,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   const { socketNotificationDataState, socketNotificationDataSetState } =
     socketContext!;
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
+  const [tableTotalCount, setTableTotalCount] = useState<number>(0);
+  const [tableTotalPages, setTableTotalPages] = useState<number>(0);
+  const [tableLimit, setTableLimit] = useState<number>(10);
   const [clickedTableRow, setClickedTableRow] = useState<TableRow>();
+  const [orderBy, setOrderBy] = useState<string>("asc:userForename");
   const [roleId, setRoleId] = useState<string>("");
 
   useEffect(() => {
@@ -65,14 +70,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           roleId,
           searchBy: "userForename",
           searchQuery: "",
-          limit: 5,
+          limit: tableLimit,
           page: 0,
-          orderBy: "asc:userForename",
+          orderBy,
         };
       else if (entity === "medicalSpeciality")
         queryParams = {
           searchQuery: "",
-          limit: 5,
+          limit: tableLimit,
           page: 0,
         };
 
@@ -94,7 +99,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
       });
 
       console.log("table data ", response.data);
-      if (response.data.success) setTableRows(response.data.payload.tableData);
+      if (response.data.success) {
+        setTableRows(response.data.payload.tableData);
+        setTableTotalCount(response.data.payload.totalCount);
+        setTableTotalPages(response.data.payload.totalPages);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -102,7 +111,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
   useEffect(() => {
     fetchTableData();
-  }, [entity, roleId]);
+  }, [entity, roleId, orderBy]);
 
   useEffect(() => {
     console.log(tableRows);
@@ -211,135 +220,184 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   }
 
   return (
-    <div>
-      {tableRows.length > 0 && (
-        <table className="text-center text-xs font-light">
-          <thead className="border-b bg-neutral-200 font-medium">
-            {isUserRow(tableRows[0]) ? (
-              <tr>
-                <td className="px-6 py-4 font-bold w-1/9">userId</td>
-                <td className="px-6 py-4 font-bold w-1/9">userForename</td>
-                <td className="px-6 py-4 font-bold w-1/9">userSurname</td>
-                <td className="px-6 py-4 font-bold w-1/9">userEmail</td>
-                <td className="px-6 py-4 font-bold w-1/9">userPhoneNumber</td>
-                <td className="px-6 py-4 font-bold w-1/9">userGender</td>
-                <td className="px-6 py-4 font-bold w-1/9">userDateOfBirth</td>
-                <td className="px-6 py-4 font-bold w-1/9">userAddress</td>
-                <td className="px-6 py-4 font-bold w-1/9">userRoleName</td>
-                {entity === "doctor" && (
-                  <td className="px-6 py-4 font-bold">Primary Speciality</td>
-                )}
-                {entity === "doctor" && (
-                  <td className="px-6 py-4 font-bold">Secondary Speciality</td>
-                )}
-                {entity === "doctor" && (
-                  <td className="px-6 py-4 font-bold">Tertiary Speciality</td>
-                )}
-                <td className="px-6 py-4 font-bold">Actions</td>
-              </tr>
-            ) : isMedicalSpecialityRow(tableRows[0]) ? (
-              <tr>
-                <td className="px-6 py-4 font-bold">Medical Speciality Id</td>
-                <td className="px-6 py-4 font-bold">Medical Speciality Name</td>
-                <td className="px-6 py-4 font-bold">Actions</td>
-              </tr>
-            ) : (
-              ""
-            )}
-          </thead>
-          <tbody>
-            {tableRows.map((tableRow: TableRow) =>
-              isUserRow(tableRow) ? (
-                <tr
-                  key={tableRow.userId}
-                  className={`border-b border-neutral-400 even:bg-neutral-50 odd:bg-neutral-100 transition duration-300 ease-in-out hover:bg-pink-100 ${
-                    (clickedTableRow as User)?.userId === tableRow.userId &&
-                    "!bg-pink-200"
-                  }`}
-                  onClick={() => setClickedTableRow(tableRow)}
-                >
-                  <td className="px-6 py-4 font-medium text-gray-700">
-                    {tableRow.userId}
+    <div className="w-full hidden lg:block border p-4 rounded-xl">
+      <div className="w-full border rounded-xl overflow-hidden">
+        {tableRows.length > 0 && (
+          <table className="w-full text-center text-xs font-light border rounded-xl">
+            <thead className="w-full border-b bg-white font-medium">
+              {isUserRow(tableRows[0]) ? (
+                <tr>
+                  <td className="px-6 py-4 font-bold">
+                    <div className="flex items-center justify-center">
+                      userId
+                    </div>
                   </td>
-                  <td className="px-6 py-4 font-medium">
-                    {tableRow.userForename}
+                  <td className="px-6 py-4 font-bold">
+                    <div className="flex items-center justify-center">
+                      userForename &nbsp;
+                      {orderBy !== "asc:userForename" && (
+                        <RiArrowUpSFill
+                          onClick={() => setOrderBy("asc:userForename")}
+                        />
+                      )}
+                      {orderBy === "asc:userForename" && (
+                        <RiArrowDownSFill
+                          onClick={() => setOrderBy("desc:userForename")}
+                        />
+                      )}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 font-medium">
-                    {tableRow.userSurname}
+                  <td className="px-6 py-4 font-bold">
+                    <div className="flex items-center justify-center">
+                      userSurname &nbsp;
+                      {orderBy !== "asc:userSurname" && (
+                        <RiArrowUpSFill
+                          onClick={() => setOrderBy("asc:userSurname")}
+                        />
+                      )}
+                      {orderBy === "asc:userSurname" && (
+                        <RiArrowDownSFill
+                          onClick={() => setOrderBy("desc:userSurname")}
+                        />
+                      )}
+                      {/* {orderBy === "asc:userSurname" ? (
+                        
+                      ) : orderBy === "desc:userForename" ? (
+                        <RiArrowDownSFill
+                          onClick={() => setOrderBy("asc:userSurname")}
+                        />
+                      ) : (
+                        ""
+                      )} */}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 font-medium">
-                    {tableRow.userEmail}
-                  </td>
-                  <td className="px-6 py-4 font-medium">
-                    {tableRow.userPhoneNumber}
-                  </td>
-                  <td className="px-6 py-4 font-medium">
-                    {tableRow.userGender}
-                  </td>
-                  <td className="px-6 py-4 font-medium">
-                    {tableRow.userDateOfBirth}
-                  </td>
-                  <td className="px-6 py-4 font-medium">
-                    {tableRow.userAddress}
-                  </td>
-                  <td className="px-6 py-4 font-medium">
-                    {tableRow.userRoleName}
-                  </td>
+                  <td className="px-6 py-4 font-bold">userEmail</td>
+                  <td className="px-6 py-4 font-bold">userPhoneNumber</td>
+                  <td className="px-6 py-4 font-bold">userGender</td>
+                  <td className="px-6 py-4 font-bold">userDateOfBirth</td>
+                  <td className="px-6 py-4 font-bold">userAddress</td>
+                  <td className="px-6 py-4 font-bold">userRoleName</td>
                   {entity === "doctor" && (
-                    <td>
-                      {determineSpecialityOrder(
-                        tableRow.medicalSpecialities!,
-                        "P"
-                      )?.slice(0, -3)}
+                    <td className="px-6 py-4 font-bold">Primary Speciality</td>
+                  )}
+                  {entity === "doctor" && (
+                    <td className="px-6 py-4 font-bold">
+                      Secondary Speciality
                     </td>
                   )}
                   {entity === "doctor" && (
-                    <td>
-                      {determineSpecialityOrder(
-                        tableRow.medicalSpecialities!,
-                        "S"
-                      )?.slice(0, -3)}
-                    </td>
+                    <td className="px-6 py-4 font-bold">Tertiary Speciality</td>
                   )}
-                  {entity === "doctor" && (
-                    <td>
-                      {determineSpecialityOrder(
-                        tableRow.medicalSpecialities!,
-                        "T"
-                      )?.slice(0, -3)}
-                    </td>
-                  )}
-                  <td className="h-14 flex items-center justify-center w-full space-x-2">
-                    <UpdateUserOverlay user={tableRow} roleName={entity} />
-                    <DeleteUserOverlay user={tableRow} roleName={entity} />
-                  </td>
+                  <td className="px-6 py-4 font-bold">Actions</td>
                 </tr>
-              ) : isMedicalSpecialityRow(tableRow) ? (
-                <tr
-                  key={tableRow.medicalSpecialityId}
-                  className={`border-b border-neutral-400 even:bg-neutral-50 odd:bg-neutral-100 transition duration-300 ease-in-out hover:bg-pink-100 ${
-                    (clickedTableRow as MedicalSpeciality)
-                      ?.medicalSpecialityId === tableRow.medicalSpecialityId &&
-                    "!bg-pink-200"
-                  }`}
-                  onClick={() => setClickedTableRow(tableRow)}
-                >
-                  <td>{tableRow.medicalSpecialityId}</td>
-                  <td>{tableRow.medicalSpecialityName}</td>
-                  <td>
-                    <UpdateMedicalSpeciality medicalSpeciality={tableRow} />
-                    <DeleteMedicalSpecialityOverlay
-                      medicalSpeciality={tableRow}
-                    />
+              ) : isMedicalSpecialityRow(tableRows[0]) ? (
+                <tr>
+                  <td className="px-6 py-4 font-bold w-1/3">
+                    Medical Speciality Id
                   </td>
+                  <td className="px-6 py-4 font-bold w-1/3">
+                    Medical Speciality Name
+                  </td>
+                  <td className="px-6 py-4 font-bold w-1/3">Actions</td>
                 </tr>
               ) : (
                 ""
-              )
-            )}
-          </tbody>
-        </table>
-      )}
+              )}
+            </thead>
+            <tbody>
+              {tableRows.map((tableRow: TableRow) =>
+                isUserRow(tableRow) ? (
+                  <tr
+                    key={tableRow.userId}
+                    className={`border-b border-neutral-400 odd:bg-neutral-100 even:bg-white transition duration-300 ease-in-out hover:bg-pink-100 ${
+                      (clickedTableRow as User)?.userId === tableRow.userId &&
+                      "!bg-pink-200"
+                    }`}
+                    onClick={() => setClickedTableRow(tableRow)}
+                  >
+                    <td className="px-6 py-4 font-medium text-gray-700">
+                      {tableRow.userId}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.userForename}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.userSurname}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.userEmail}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.userPhoneNumber}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.userGender}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.userDateOfBirth}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.userAddress}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.userRoleName}
+                    </td>
+                    {entity === "doctor" && (
+                      <td className="px-6 py-4 font-medium">
+                        {determineSpecialityOrder(
+                          tableRow.medicalSpecialities!,
+                          "P"
+                        )?.slice(0, -3)}
+                      </td>
+                    )}
+                    {entity === "doctor" && (
+                      <td className="px-6 py-4 font-medium">
+                        {determineSpecialityOrder(
+                          tableRow.medicalSpecialities!,
+                          "S"
+                        )?.slice(0, -3)}
+                      </td>
+                    )}
+                    {entity === "doctor" && (
+                      <td className="px-6 py-4 font-medium">
+                        {determineSpecialityOrder(
+                          tableRow.medicalSpecialities!,
+                          "T"
+                        )?.slice(0, -3)}
+                      </td>
+                    )}
+                    <td className="h-14 flex items-center justify-center space-x-2">
+                      <UpdateUserOverlay user={tableRow} roleName={entity} />
+                      <DeleteUserOverlay user={tableRow} roleName={entity} />
+                    </td>
+                  </tr>
+                ) : isMedicalSpecialityRow(tableRow) ? (
+                  <tr
+                    key={tableRow.medicalSpecialityId}
+                    className={`border-b border-neutral-400 odd:bg-neutral-100 even:bg-white transition duration-300 ease-in-out hover:bg-pink-100 ${
+                      (clickedTableRow as MedicalSpeciality)
+                        ?.medicalSpecialityId ===
+                        tableRow.medicalSpecialityId && "!bg-pink-200"
+                    }`}
+                    onClick={() => setClickedTableRow(tableRow)}
+                  >
+                    <td className="">{tableRow.medicalSpecialityId}</td>
+                    <td className="">{tableRow.medicalSpecialityName}</td>
+                    <td className="h-14 flex items-center justify-center space-x-2">
+                      <UpdateMedicalSpeciality medicalSpeciality={tableRow} />
+                      <DeleteMedicalSpecialityOverlay
+                        medicalSpeciality={tableRow}
+                      />
+                    </td>
+                  </tr>
+                ) : (
+                  ""
+                )
+              )}
+            </tbody>
+          </table>
+        )}
+      </div>
       {/* <CreateUserOverlay roleName={roleName} /> */}
       {/* <div>
         <button onClick={() => setModalOpen(true)}>Open Modal</button>
@@ -350,6 +408,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           />
         )}
       </div> */}
+      <div className="w-full flex flex-col justify-center items-center">
+        <span>total count: {tableTotalCount}</span>
+        <span>total pages: {tableTotalPages}</span>
+      </div>
       <div>
         {(entity === patientRoleName ||
           entity === "doctor" ||

@@ -18,11 +18,11 @@ export const TopBar: FC<TopBarProps> = ({
   return (
     <div
       // fixed z-20
-      className={`h-14 fixed flex items-center justify-between  transition-all 
+      className={`h-14 fixed flex items-center justify-between  w-full transition-all 
        ${
          isSidebarExtended
-           ? "w-[calc(100%-256px)] left-64"
-           : "w-[calc(100%-40px)] left-20"
+           ? "lg:w-[calc(100%-256px)] lg:left-64"
+           : "lg:w-[calc(100%-40px)] lg:left-20"
        } 
        !bg-red-200 dark:bg-darkMode-topBarColor border-b px-2`}
     >

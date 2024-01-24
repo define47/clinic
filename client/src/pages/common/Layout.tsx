@@ -1,11 +1,12 @@
 import { FC, useContext, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { Sidebar } from "../../components/sidebar/Sidebar";
 import { TopBar } from "../../components/topBar/TopBar";
 import { Socket, io } from "socket.io-client";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
-import { serverURL } from "../../utils/dotenv";
+import { serverURL, verifyUserPath } from "../../utils/dotenv";
+import axios from "axios";
 
 // const App: React.FC = () => {
 
@@ -38,6 +39,34 @@ export const Layout: FC = () => {
     }, []);
     return socket;
   }
+
+  // const navigate = useNavigate();
+  // const { pathname } = useLocation();
+
+  // useEffect(() => {
+  //   async function verifyUser() {
+  //     try {
+  //       const response = await axios.post(
+  //         `${verifyUserPath}`,
+  //         {},
+  //         { withCredentials: true }
+  //       );
+
+  //       console.log("here", response.data.payload);
+
+  //       if (response.data.success) {
+  //         // const payload = JSON.parse(response.data.payload);
+  //         // if (payload.roleNames[0] === "admin") navigate("/admins/dashboard");
+  //       } else {
+  //         navigate("/login");
+  //       }
+  //     } catch (error) {
+  //       navigate("/login");
+  //     }
+  //   }
+
+  //   verifyUser();
+  // }, [pathname]);
 
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState } = authContext!;
