@@ -41,17 +41,21 @@ export class MedicalSpecialityController {
           medicalSpecialityName: body.medicalSpecialityName,
         });
 
-      console.log(medicalSpecialityToCreate);
       const { redis } = fastifyServer;
 
-      let obj = { data: { medicalSpecialityToCreate } };
+      if (medicalSpecialityToCreate)
+        await redis.publisher.publish(
+          MESSAGE_CHANNEL,
+          JSON.stringify({
+            action: "createMedicalSpeciality",
+            data: medicalSpecialityToCreate,
+          })
+        );
 
-      await redis.publisher.publish(
-        MESSAGE_CHANNEL,
-        JSON.stringify(medicalSpecialityToCreate)
-      );
-
-      return reply.code(200).send({ success: true, message: "" });
+      return reply.code(200).send({
+        success: medicalSpecialityToCreate !== undefined,
+        message: "",
+      });
     } catch (error) {
       console.log(error);
     }
@@ -71,6 +75,16 @@ export class MedicalSpecialityController {
             medicalSpecialityName: body.medicalSpecialityName,
           }
         );
+
+      const { redis } = fastifyServer;
+
+      await redis.publisher.publish(
+        MESSAGE_CHANNEL,
+        JSON.stringify({
+          action: "updateMedicalSpeciality",
+          data: medicalSpecialityToUpdate,
+        })
+      );
 
       return reply.code(200).send({ success: true, message: "" });
     } catch (error) {}
@@ -92,7 +106,10 @@ export class MedicalSpecialityController {
 
       await redis.publisher.publish(
         MESSAGE_CHANNEL,
-        JSON.stringify(medicalSpecialityToDelete)
+        JSON.stringify({
+          action: "deleteMedicalSpeciality",
+          data: medicalSpecialityToDelete,
+        })
       );
 
       return reply.code(200).send({ success: true, message: "" });

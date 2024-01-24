@@ -110,11 +110,59 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
   useEffect(() => {
     if (socketNotificationDataState) {
-      const json = JSON.parse(socketNotificationDataState);
+      const receivedSocketData = JSON.parse(socketNotificationDataState);
+      const action = receivedSocketData.action;
+      let data = receivedSocketData.data;
+
+      if (action === "createMedicalSpeciality") {
+        data = data as MedicalSpeciality;
+        setTableRows((prevMedicalSpecialities: TableRow[]) => [
+          {
+            medicalSpecialityId: data.medicalSpecialityId,
+            medicalSpecialityName: data.medicalSpecialityName,
+          } as MedicalSpeciality,
+          ...prevMedicalSpecialities,
+        ]);
+      } else if (action === "deleteMedicalSpeciality") {
+        setTableRows((prevMedicalSpecialities: TableRow[]) =>
+          prevMedicalSpecialities.filter((medicalSpeciality: TableRow) => {
+            if ("medicalSpecialityId" in medicalSpeciality) {
+              return medicalSpeciality.medicalSpecialityId !== data;
+            }
+            return true;
+          })
+        );
+      } else if (action === "updateMedicalSpeciality") {
+        data = data as MedicalSpeciality;
+        setTableRows((prevMedicalSpecialities: TableRow[]) => {
+          const updatedEvents = prevMedicalSpecialities.map(
+            (event: TableRow) => {
+              if (
+                isMedicalSpecialityRow(event) &&
+                event.medicalSpecialityId === data.medicalSpecialityId
+              ) {
+                return {
+                  ...event,
+                  medicalSpecialityId: data.medicalSpecialityId,
+                  medicalSpecialityName: data.medicalSpecialityName,
+                };
+              } else {
+                return event;
+              }
+            }
+          );
+          return updatedEvents;
+        });
+      }
+
       console.log(
         "🚀 ~ useEffect ~ socketNotificationDataState:",
-        json?.medicalSpecialityName
+        receivedSocketData
       );
+
+      console.log("🚀 ~ useEffect ~ action:", action);
+
+      console.log("receivedSocketData", data);
     }
 
     // if (
@@ -169,15 +217,15 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           <thead className="border-b bg-neutral-200 font-medium">
             {isUserRow(tableRows[0]) ? (
               <tr>
-                <td className="px-6 py-4 font-bold">userId</td>
-                <td className="px-6 py-4 font-bold">userForename</td>
-                <td className="px-6 py-4 font-bold">userSurname</td>
-                <td className="px-6 py-4 font-bold">userEmail</td>
-                <td className="px-6 py-4 font-bold">userPhoneNumber</td>
-                <td className="px-6 py-4 font-bold">userGender</td>
-                <td className="px-6 py-4 font-bold">userDateOfBirth</td>
-                <td className="px-6 py-4 font-bold">userAddress</td>
-                <td className="px-6 py-4 font-bold">userRoleName</td>
+                <td className="px-6 py-4 font-bold w-1/9">userId</td>
+                <td className="px-6 py-4 font-bold w-1/9">userForename</td>
+                <td className="px-6 py-4 font-bold w-1/9">userSurname</td>
+                <td className="px-6 py-4 font-bold w-1/9">userEmail</td>
+                <td className="px-6 py-4 font-bold w-1/9">userPhoneNumber</td>
+                <td className="px-6 py-4 font-bold w-1/9">userGender</td>
+                <td className="px-6 py-4 font-bold w-1/9">userDateOfBirth</td>
+                <td className="px-6 py-4 font-bold w-1/9">userAddress</td>
+                <td className="px-6 py-4 font-bold w-1/9">userRoleName</td>
                 {entity === "doctor" && (
                   <td className="px-6 py-4 font-bold">Primary Speciality</td>
                 )}

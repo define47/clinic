@@ -3,6 +3,9 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      width: {
+        "1/9": "11.111111",
+      },
       colors: {
         lightMode: {
           layoutColor: "#f9fafb",

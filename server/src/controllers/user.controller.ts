@@ -240,7 +240,7 @@ export class UserController {
 
       await redis.publisher.publish(
         MESSAGE_CHANNEL,
-        `a user (${body.userEmail}) has logged in`
+        JSON.stringify({ message: `a user (${body.userEmail}) has logged in` })
       );
 
       reply.code(200).send({
