@@ -108,32 +108,49 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     console.log(tableRows);
   }, [tableRows]);
 
-  // useEffect(() => {
-  //   console.log(
-  //     "🚀 ~ useEffect ~ socketNotificationDataState:",
-  //     socketNotificationDataState
-  //   );
+  useEffect(() => {
+    if (socketNotificationDataState) {
+      const json = JSON.parse(socketNotificationDataState);
+      console.log(
+        "🚀 ~ useEffect ~ socketNotificationDataState:",
+        json?.medicalSpecialityName
+      );
+    }
 
-  //   setTableRows((prevUsers: TableRow[]) => [
-  //     {
-  //       userId: "userIdTest",
-  //       userForename: "",
-  //       userSurname: "",
-  //       userEmail: "",
-  //       userPhoneNumber: "",
-  //       userGender: "",
-  //       userDateOfBirth: "",
-  //       userAddress: "",
-  //       userEncryptedPassword: "",
-  //       isUserEmailActivated: false,
-  //       isUserApprovedByAdmin: false,
-  //       isUserBanned: false,
-  //       userRoleId: "",
-  //       userRoleName: "",
-  //     } as User,
-  //     ...prevUsers,
-  //   ]);
-  // }, [socketNotificationDataState]);
+    // if (
+    //   socketNotificationDataState &&
+    //   socketNotificationDataState !== undefined
+    // ) {
+    //   console.log("Received Data:", socketNotificationDataState);
+    //   let receivedData = socketNotificationDataState;
+    //   console.log(
+    //     "🚀 ~ useEffect ~ receivedData:",
+    //     JSON.parse(
+    //       (receivedData as unknown as MedicalSpeciality).medicalSpecialityName
+    //     )
+    //   );
+    // }
+
+    // setTableRows((prevUsers: TableRow[]) => [
+    //   {
+    //     userId: "userIdTest",
+    //     userForename: "",
+    //     userSurname: "",
+    //     userEmail: "",
+    //     userPhoneNumber: "",
+    //     userGender: "",
+    //     userDateOfBirth: "",
+    //     userAddress: "",
+    //     userEncryptedPassword: "",
+    //     isUserEmailActivated: false,
+    //     isUserApprovedByAdmin: false,
+    //     isUserBanned: false,
+    //     userRoleId: "",
+    //     userRoleName: "",
+    //   } as User,
+    //   ...prevUsers,
+    // ]);
+  }, [socketNotificationDataState]);
 
   function determineSpecialityOrder(
     medicalSpecialities: string[],

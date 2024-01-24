@@ -194,7 +194,10 @@ const buildServer = async () => {
     //   String(connectedClients)
     // );
 
-    socket.emit("welcome", "A warm welcome from the server!");
+    socket.emit(
+      "welcome",
+      JSON.stringify({ message: "A warm welcome from the server!" })
+    );
 
     redis.subscriber.subscribe(MESSAGE_CHANNEL, (err) => {
       if (err) {

@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { MedicalSpecialityService } from "../services/medicalSpeciality.service";
+import { MESSAGE_CHANNEL, fastifyServer } from "../server";
 
 export class MedicalSpecialityController {
   private readonly _medicalSpecialityService: MedicalSpecialityService;
@@ -40,8 +41,20 @@ export class MedicalSpecialityController {
           medicalSpecialityName: body.medicalSpecialityName,
         });
 
+      console.log(medicalSpecialityToCreate);
+      const { redis } = fastifyServer;
+
+      let obj = { data: { medicalSpecialityToCreate } };
+
+      await redis.publisher.publish(
+        MESSAGE_CHANNEL,
+        JSON.stringify(medicalSpecialityToCreate)
+      );
+
       return reply.code(200).send({ success: true, message: "" });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   public putMedicalSpeciality = async (
@@ -74,6 +87,13 @@ export class MedicalSpecialityController {
         await this._medicalSpecialityService.deleteMedicalSpecialityById(
           body.medicalSpecialityId
         );
+
+      const { redis } = fastifyServer;
+
+      await redis.publisher.publish(
+        MESSAGE_CHANNEL,
+        JSON.stringify(medicalSpecialityToDelete)
+      );
 
       return reply.code(200).send({ success: true, message: "" });
     } catch (error) {}
