@@ -137,7 +137,7 @@ export const Layout: FC = () => {
             <div
               // md:static
               // left-20 top-14
-              className={`lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-screen lg:w-[calc(100%-80px)] flex justify-center transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
+              className={`lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-screen overflow-y-auto lg:w-[calc(100%-80px)] flex justify-center transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
             >
               {/* connected? {isSocketConnected.toString()} here: {welcome} */}
               <Outlet />

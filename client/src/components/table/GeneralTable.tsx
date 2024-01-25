@@ -52,6 +52,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
       setRoleId(patientRoleId);
     } else if (entity === "doctor") setRoleId(doctorRoleId);
     else if (entity === "receptionist") setRoleId(receptionistRoleId);
+
     // else if (entity === "nurse")
     // setRoleId(nurse)
   }, [entity]);
@@ -85,7 +86,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         };
       else if (entity === "medicalSpeciality")
         queryParams = {
-          searchQuery: "",
+          searchQuery,
           limit: tableLimit,
           page: 0,
         };
@@ -257,6 +258,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             />
           )}
         </div>
+      )}
+      {entity === "medicalSpeciality" && (
+        <StyledInput
+          label={`${entity} search`}
+          name="medicalSpecialitySearch"
+          onChangeStyledInput={(event) => setSearchQuery(event.target.value)}
+          icon={<IoIosSearch />}
+        />
       )}
       <div className="w-full border rounded-xl overflow-hidden">
         {tableRows.length > 0 && (

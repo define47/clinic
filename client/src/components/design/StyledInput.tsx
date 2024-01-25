@@ -23,7 +23,7 @@ type StyledInputProps = {
   defaultValue?: string;
   inputValue?: string;
   icon?: ReactNode;
-  isPicker: boolean;
+  isPicker?: boolean;
   isPickerVisible?: boolean;
 };
 

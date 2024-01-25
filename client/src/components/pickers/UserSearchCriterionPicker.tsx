@@ -4,7 +4,8 @@ import {
   UserSearchCriterionPickerProps,
 } from "../../types";
 import { StyledInput } from "../design/StyledInput";
-import { RiFilterLine } from "react-icons/ri";
+import { RiArrowDownSLine, RiArrowUpSLine, RiFilterLine } from "react-icons/ri";
+import { TiTick } from "react-icons/ti";
 
 export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   entity,
@@ -138,12 +139,44 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
               !isUserSearchCriterionPickerVisible
             );
           }}
-          icon={<RiFilterLine />}
+          icon={
+            // <div>
+            //   {isUserSearchCriterionPickerVisible ? (
+            //     <RiArrowDownSLine
+            //       onClick={(event) => {
+            //         event.stopPropagation();
+            //         setIsUserSearchCriterionPickerVisible(false);
+            //       }}
+            //     />
+            //   ) : (
+            //     <RiArrowUpSLine
+            //       onClick={(event) => {
+            //         event.stopPropagation();
+            //         setIsUserSearchCriterionPickerVisible(true);
+            //       }}
+            //     />
+            //   )}
+            // </div>
+            <div
+              className={`transition-transform transform ${
+                !isUserSearchCriterionPickerVisible ? "rotate-0" : "rotate-180"
+              }`}
+            >
+              <RiArrowUpSLine
+                onClick={() => {
+                  setIsUserSearchCriterionPickerVisible(
+                    !isUserSearchCriterionPickerVisible
+                  );
+                }}
+              />
+            </div>
+          }
+          // <RiFilterLine />
           isPicker={true}
           isPickerVisible={isUserSearchCriterionPickerVisible}
         />
         <ul
-          className={`absolute w-full bg-white overflow-y-auto ${
+          className={`absolute w-full bg-white overflow-y-auto h-40 ${
             isUserSearchCriterionPickerVisible
               ? "opacity-100 duration-500 border border-gray-300 rounded-lg"
               : "opacity-0 duration-500 pointer-events-none"
@@ -159,8 +192,14 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
                       handleUserSearchCriteriaClick(userSearchCriteria)
                     }
                   >
-                    <span>-</span>
-                    <span>{userSearchCriteria.userSearchCriteriaName}</span>
+                    <div className="w-full flex justify-between items-center">
+                      <div>
+                        <span>-</span>
+                        <span>{userSearchCriteria.userSearchCriteriaName}</span>
+                      </div>
+                      {selectedUserSearchCriteriaName ===
+                        userSearchCriteria.userSearchCriteriaName && <TiTick />}
+                    </div>
                   </li>
                 )
               )
@@ -173,10 +212,18 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
                       handleUserSearchCriteriaClick(filteredUserSearchCriteria)
                     }
                   >
-                    <span>-</span>
-                    <span>
-                      {filteredUserSearchCriteria.userSearchCriteriaName}
-                    </span>
+                    <div className="w-full flex justify-between items-center">
+                      <div>
+                        <span>-</span>
+                        <span>
+                          {filteredUserSearchCriteria.userSearchCriteriaName}
+                        </span>
+                      </div>
+                      {selectedUserSearchCriteriaName ===
+                        filteredUserSearchCriteria.userSearchCriteriaName && (
+                        <TiTick />
+                      )}
+                    </div>
                   </li>
                 )
               )}

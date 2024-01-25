@@ -3,6 +3,7 @@ import { StyledRippleButton } from "../../components/design/StyledRippleButton";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
 import TreeTable from "../../components/TreeTable";
 import { UserSearchCriterionPicker } from "../../components/pickers/UserSearchCriterionPicker";
+import { MedicalSpecialityPicker } from "../../components/pickers/MedicalSpecialityPicker";
 
 export const AdminDashboard: FC = () => {
   const socketContext = useContext(SocketNotificationDataContext);
@@ -55,6 +56,7 @@ export const AdminDashboard: FC = () => {
         />
         here notification {JSON.stringify(socketNotificationDataState)}
         {/* <UserSearchCriterionPicker /> */}
+        <MedicalSpecialityPicker />
       </div>
     </div>
   );
