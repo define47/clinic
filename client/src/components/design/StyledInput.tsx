@@ -1,9 +1,18 @@
-import { ChangeEventHandler, FC, useEffect, useState } from "react";
+import {
+  ChangeEventHandler,
+  FC,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 type StyledInputProps = {
   label: string;
   name: string;
   onChangeStyledInput: ChangeEventHandler<HTMLInputElement>;
+  // MouseEventHandler<HTMLInputElement>
+  onClickInput?: () => void;
   textColorUnfocused?: string;
   textColorFocused?: string;
   borderColorUnfocused?: string;
@@ -13,12 +22,16 @@ type StyledInputProps = {
   labelBackgroundColor?: string;
   defaultValue?: string;
   inputValue?: string;
+  icon?: ReactNode;
+  isPicker: boolean;
+  isPickerVisible?: boolean;
 };
 
 export const StyledInput: FC<StyledInputProps> = ({
   label,
   name,
   onChangeStyledInput,
+  onClickInput,
   textColorUnfocused,
   textColorFocused,
   borderColorUnfocused,
@@ -28,11 +41,15 @@ export const StyledInput: FC<StyledInputProps> = ({
   labelBackgroundColor,
   defaultValue,
   inputValue,
+  icon,
+  isPicker,
+  isPickerVisible,
 }) => {
+  const styledInputRef = useRef<HTMLInputElement | null>(null);
   const [focused, setFocused] = useState(false);
   const [hasText, setHasText] = useState(false);
-  const [defaultValueTest, setDefaultValueTest] = useState<string>(inputValue!);
-
+  const [isStyledInputFocused, setIsStyledInputFocused] =
+    useState<boolean>(false);
   const handleFocus = () => {
     setFocused(true);
   };
@@ -46,27 +63,47 @@ export const StyledInput: FC<StyledInputProps> = ({
   };
 
   useEffect(() => {
-    if (inputValue) {
-      setDefaultValueTest(inputValue);
-    } else {
-      setHasText(false);
-    }
-  }, [inputValue]);
+    const handleDocumentClick = (event: MouseEvent) => {
+      // console.log(styledInputRef.current === document.activeElement);
+      setIsStyledInputFocused(
+        styledInputRef.current === document.activeElement
+      );
+    };
 
-  useEffect(() => {
-    console.log("defaultValueTest", defaultValueTest);
-  }, [defaultValueTest, inputValue]);
+    document.addEventListener("click", handleDocumentClick);
+
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, [styledInputRef]);
+
+  // useEffect(() => {
+  //   if (inputValue) {
+  //     setDefaultValueTest(inputValue);
+  //   } else {
+  //     setHasText(false);
+  //   }
+  // }, [inputValue]);
+
+  // useEffect(() => {
+  //   console.log("defaultValueTest", defaultValueTest);
+  // }, [defaultValueTest, inputValue]);
+
+  // useEffect(() => {
+  //   console.log(ref?.current);
+  // }, [ref]);
   return (
-    <div>
+    <div className="">
       {/* <div className="input-group">
         <input type="text" required />
         <label htmlFor="">username</label>
       </div> */}
 
-      <div className="relative">
+      <div className="relative cursor-pointer">
         <input
+          ref={styledInputRef}
           type="text"
-          className={`w-80 h-10 text-base ${
+          className={`w-64 h-10 text-base cursor-pointer ${
             textColorUnfocused ? textColorUnfocused : "text-black"
           }  ${
             textColorFocused ? textColorFocused : "text-black"
@@ -75,7 +112,7 @@ export const StyledInput: FC<StyledInputProps> = ({
           } ${
             borderColorFocused ? borderColorFocused : "focus:border-gray-300"
           }  outline-none rounded-md  transition-all duration-200 ${
-            focused || hasText || defaultValueTest ? "border-gray-300" : ""
+            focused || hasText || inputValue ? "border-gray-300" : ""
           }`}
           onFocus={handleFocus}
           onBlur={handleBlur}
@@ -84,14 +121,17 @@ export const StyledInput: FC<StyledInputProps> = ({
             handleInputChange(event);
             onChangeStyledInput(event);
           }}
-          value={defaultValueTest}
+          value={inputValue}
           defaultValue={defaultValue}
+          onClick={onClickInput}
+          autoComplete="off"
           required
         />
+
         <label
           htmlFor=""
           className={`absolute left-2 transform ${
-            focused || hasText || defaultValueTest
+            focused || hasText || inputValue
               ? `-translate-y-2 text-xs`
               : `translate-y-2`
           } ${labelUnfocused ? labelUnfocused : "text-black"} ${
@@ -100,8 +140,28 @@ export const StyledInput: FC<StyledInputProps> = ({
             labelBackgroundColor ? labelBackgroundColor : "bg-gray-50"
           } transition-all duration-200`}
         >
-          {label} {defaultValueTest}
+          {label}
         </label>
+        <span
+          className="absolute right-2 top-2.5 text-xl"
+          onClick={() => {
+            if (isPicker) {
+              if (isPickerVisible) {
+                styledInputRef.current?.blur();
+                if (typeof onClickInput === "function") onClickInput();
+              } else {
+                styledInputRef.current?.focus();
+                if (typeof onClickInput === "function") onClickInput();
+              }
+            } else {
+              if (isStyledInputFocused) {
+                styledInputRef.current?.blur();
+              } else styledInputRef.current?.focus();
+            }
+          }}
+        >
+          {icon}
+        </span>
       </div>
     </div>
   );

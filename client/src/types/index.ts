@@ -77,3 +77,20 @@ export type DeleteMedicalSpecialityOverlayPros = {
 export type UpdateMedicalSpecialityOverlayProps = {
   medicalSpeciality: MedicalSpeciality;
 };
+
+export type UserSearchCriteria = {
+  userSearchCriteriaName: string;
+  userSearchCriteriaValue: string;
+};
+
+export type UserSearchCriterionPickerProps = {
+  entity: string;
+  selectedUserSearchCriteriaName: string;
+  setSelectedUserSearchCriteriaName: (
+    selectedUserSearchCriteriaName: string
+  ) => void;
+  selectedUserSearchCriteriaValue: string;
+  setSelectedUserSearchCriteriaValue: (
+    selectedUserSearchCriteriaValue: string
+  ) => void;
+};

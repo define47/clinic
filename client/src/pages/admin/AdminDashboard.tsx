@@ -2,6 +2,7 @@ import { FC, useContext } from "react";
 import { StyledRippleButton } from "../../components/design/StyledRippleButton";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
 import TreeTable from "../../components/TreeTable";
+import { UserSearchCriterionPicker } from "../../components/pickers/UserSearchCriterionPicker";
 
 export const AdminDashboard: FC = () => {
   const socketContext = useContext(SocketNotificationDataContext);
@@ -53,6 +54,7 @@ export const AdminDashboard: FC = () => {
           type="create"
         />
         here notification {JSON.stringify(socketNotificationDataState)}
+        {/* <UserSearchCriterionPicker /> */}
       </div>
     </div>
   );

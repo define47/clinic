@@ -116,9 +116,9 @@ const buildServer = async () => {
   //   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   // };
 
-  await fastifyServer.register(fastifyCors, corsOptions);
-
   await fastifyServer.register(fastifyEnv, options);
+
+  await fastifyServer.register(fastifyCors, corsOptions);
 
   await fastifyServer
     .register(fastifyRedis, {

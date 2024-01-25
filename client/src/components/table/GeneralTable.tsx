@@ -20,6 +20,9 @@ import { CreateMedicalSpecialityOverlay } from "../overlays/medicalSpecialityOve
 import { DeleteMedicalSpecialityOverlay } from "../overlays/medicalSpecialityOverlays/DeleteMedicalSpecialityOverlay";
 import { UpdateMedicalSpeciality } from "../overlays/medicalSpecialityOverlays/UpdateMedicalSpeciality";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
+import { UserSearchCriterionPicker } from "../pickers/UserSearchCriterionPicker";
+import { StyledInput } from "../design/StyledInput";
+import { IoIosSearch } from "react-icons/io";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -37,6 +40,12 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   const [clickedTableRow, setClickedTableRow] = useState<TableRow>();
   const [orderBy, setOrderBy] = useState<string>("asc:userForename");
   const [roleId, setRoleId] = useState<string>("");
+
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedUserSearchCriteriaName, setSelectedUserSearchCriteriaName] =
+    useState<string>("");
+  const [selectedUserSearchCriteriaValue, setSelectedUserSearchCriteriaValue] =
+    useState<string>("");
 
   useEffect(() => {
     if (entity === "patient") {
@@ -68,8 +77,8 @@ export const GeneralTable: FC<GeneralTableProps> = ({
       )
         queryParams = {
           roleId,
-          searchBy: "userForename",
-          searchQuery: "",
+          searchBy: selectedUserSearchCriteriaValue,
+          searchQuery,
           limit: tableLimit,
           page: 0,
           orderBy,
@@ -111,7 +120,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
   useEffect(() => {
     fetchTableData();
-  }, [entity, roleId, orderBy]);
+  }, [entity, roleId, orderBy, searchQuery, selectedUserSearchCriteriaValue]);
 
   useEffect(() => {
     console.log(tableRows);
@@ -221,6 +230,34 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
   return (
     <div className="w-full hidden lg:block border p-4 rounded-xl">
+      {(entity === "doctor" ||
+        entity === "patient" ||
+        entity === "receptionist" ||
+        entity === "nurse") && (
+        <div className="flex space-x-3">
+          <UserSearchCriterionPicker
+            entity={entity}
+            selectedUserSearchCriteriaName={selectedUserSearchCriteriaName}
+            setSelectedUserSearchCriteriaName={
+              setSelectedUserSearchCriteriaName
+            }
+            selectedUserSearchCriteriaValue={selectedUserSearchCriteriaValue}
+            setSelectedUserSearchCriteriaValue={
+              setSelectedUserSearchCriteriaValue
+            }
+          />
+          {selectedUserSearchCriteriaValue !== "" && (
+            <StyledInput
+              label={`${entity} search`}
+              name="name"
+              onChangeStyledInput={(event) =>
+                setSearchQuery(event.target.value)
+              }
+              icon={<IoIosSearch />}
+            />
+          )}
+        </div>
+      )}
       <div className="w-full border rounded-xl overflow-hidden">
         {tableRows.length > 0 && (
           <table className="w-full text-center text-xs font-light border rounded-xl">
@@ -234,14 +271,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   </td>
                   <td className="px-6 py-4 font-bold">
                     <div className="flex items-center justify-center">
-                      userForename &nbsp;
+                      userForename
                       {orderBy !== "asc:userForename" && (
                         <RiArrowUpSFill
+                          className="text-sm cursor-pointer"
                           onClick={() => setOrderBy("asc:userForename")}
                         />
                       )}
                       {orderBy === "asc:userForename" && (
                         <RiArrowDownSFill
+                          className="text-sm cursor-pointer"
                           onClick={() => setOrderBy("desc:userForename")}
                         />
                       )}
@@ -249,14 +288,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   </td>
                   <td className="px-6 py-4 font-bold">
                     <div className="flex items-center justify-center">
-                      userSurname &nbsp;
+                      userSurname
                       {orderBy !== "asc:userSurname" && (
                         <RiArrowUpSFill
+                          className="text-sm cursor-pointer"
                           onClick={() => setOrderBy("asc:userSurname")}
                         />
                       )}
                       {orderBy === "asc:userSurname" && (
                         <RiArrowDownSFill
+                          className="text-sm cursor-pointer"
                           onClick={() => setOrderBy("desc:userSurname")}
                         />
                       )}
