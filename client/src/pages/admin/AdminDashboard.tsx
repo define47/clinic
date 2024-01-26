@@ -56,7 +56,6 @@ export const AdminDashboard: FC = () => {
         />
         here notification {JSON.stringify(socketNotificationDataState)}
         {/* <UserSearchCriterionPicker /> */}
-        <MedicalSpecialityPicker />
       </div>
     </div>
   );

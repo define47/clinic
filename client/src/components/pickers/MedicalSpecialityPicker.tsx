@@ -1,19 +1,28 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { MedicalSpeciality } from "../../types";
+import { MedicalSpeciality, MedicalSpecialityPickerProps } from "../../types";
 import axios from "axios";
 import { medicalSpecialityPath } from "../../utils/dotenv";
 import { StyledInput } from "../design/StyledInput";
 import { RiArrowUpSLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
 
-export const MedicalSpecialityPicker: FC = () => {
+export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
+  label,
+  selectedMedicalSpecialityId,
+  setSelectedMedicalSpecialityId,
+  selectedMedicalSpecialityName,
+  setSelectedMedicalSpecialityName,
+  selectedPrimaryMedicalSpecialityId,
+  selectedSecondaryMedicalSpecialityId,
+  selectedTertiaryMedicalSpecialityId,
+}) => {
   const [medicalSpecialities, setMedicalSpecialities] = useState<
     MedicalSpeciality[]
   >([]);
-  const [selectedMedicalSpecialityId, setSelectedMedicalSpecialityId] =
-    useState<string>("");
-  const [selectedMedicalSpecialityName, setSelectedMedicalSpecialityName] =
-    useState<string>("");
+  // const [selectedMedicalSpecialityId, setSelectedMedicalSpecialityId] =
+  //   useState<string>("");
+  // const [selectedMedicalSpecialityName, setSelectedMedicalSpecialityName] =
+  //   useState<string>("");
   const [
     isMedicalSpecialityPickerVisible,
     setIsMedicalSpecialityPickerVisible,
@@ -77,6 +86,26 @@ export const MedicalSpecialityPicker: FC = () => {
     };
   }, []);
 
+  // const handleOutsideClick = (event: MouseEvent) => {
+  //   if (
+  //     medicalSpecialityPickerRef.current &&
+  //     !medicalSpecialityPickerRef.current.contains(event.target as Node)
+  //   ) {
+  //     setIsMedicalSpecialityPickerVisible(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     handleOutsideClick(event);
+  //   };
+
+  //   document.addEventListener("click", handleClickOutside);
+
+  //   return () => {
+  //     document.removeEventListener("click", handleClickOutside);
+  //   };
+  // }, []);
   function handleMedicalSpecialityClick(medicalSpeciality: MedicalSpeciality) {
     // setUserSearchCriteriaTerm(userSearchCriteria.userSearchCriteriaName);
     setSelectedMedicalSpecialityName(medicalSpeciality.medicalSpecialityName);
@@ -157,9 +186,20 @@ export const MedicalSpecialityPicker: FC = () => {
 
   return (
     <div className="flex">
-      <div className="relative z-50" ref={medicalSpecialityPickerRef}>
+      <div
+        className={`relative ${
+          label.includes("primary")
+            ? "z-50"
+            : label.includes("secondary")
+            ? "z-40"
+            : label.includes("tertiary")
+            ? "z-30"
+            : ""
+        }`}
+        ref={medicalSpecialityPickerRef}
+      >
         <StyledInput
-          label={`Medical Speciality`}
+          label={label}
           inputValue={selectedMedicalSpecialityName}
           name="medicalSpeciality"
           onChangeStyledInput={(event) => {
@@ -172,23 +212,6 @@ export const MedicalSpecialityPicker: FC = () => {
             );
           }}
           icon={
-            // <div>
-            //   {isUserSearchCriterionPickerVisible ? (
-            //     <RiArrowDownSLine
-            //       onClick={(event) => {
-            //         event.stopPropagation();
-            //         setIsUserSearchCriterionPickerVisible(false);
-            //       }}
-            //     />
-            //   ) : (
-            //     <RiArrowUpSLine
-            //       onClick={(event) => {
-            //         event.stopPropagation();
-            //         setIsUserSearchCriterionPickerVisible(true);
-            //       }}
-            //     />
-            //   )}
-            // </div>
             <div
               className={`transition-transform transform ${
                 !isMedicalSpecialityPickerVisible ? "rotate-0" : "rotate-180"
@@ -206,6 +229,7 @@ export const MedicalSpecialityPicker: FC = () => {
           // <RiFilterLine />
           isPicker={true}
           isPickerVisible={isMedicalSpecialityPickerVisible}
+          labelBackgroundColor="bg-white"
         />
         <ul
           className={`absolute w-full bg-white overflow-y-auto h-40 ${
@@ -216,53 +240,63 @@ export const MedicalSpecialityPicker: FC = () => {
         >
           {selectedMedicalSpecialityName === ""
             ? medicalSpecialities.map(
-                (medicalSpeciality: MedicalSpeciality) => (
-                  <li
-                    className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
-                    key={medicalSpeciality.medicalSpecialityId}
-                    onClick={() =>
-                      handleMedicalSpecialityClick(medicalSpeciality)
-                    }
-                  >
-                    <div className="w-full flex justify-between items-center">
-                      <div>
-                        <span>-&nbsp;</span>
-                        <span>{medicalSpeciality.medicalSpecialityName}</span>
+                (medicalSpeciality: MedicalSpeciality) =>
+                  selectedPrimaryMedicalSpecialityId !==
+                    medicalSpeciality.medicalSpecialityId &&
+                  selectedSecondaryMedicalSpecialityId !==
+                    medicalSpeciality.medicalSpecialityId &&
+                  selectedTertiaryMedicalSpecialityId !==
+                    medicalSpeciality.medicalSpecialityId && (
+                    <li
+                      className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
+                      key={medicalSpeciality.medicalSpecialityId}
+                      onClick={() =>
+                        handleMedicalSpecialityClick(medicalSpeciality)
+                      }
+                    >
+                      <div className="w-full flex justify-between items-center">
+                        <div>
+                          <span>-&nbsp;</span>
+                          <span>{medicalSpeciality.medicalSpecialityName}</span>
+                        </div>
+                        {selectedMedicalSpecialityName.toLowerCase() ===
+                          medicalSpeciality.medicalSpecialityName.toLowerCase() && (
+                          <TiTick />
+                        )}
                       </div>
-                      {selectedMedicalSpecialityName.toLowerCase() ===
-                        medicalSpeciality.medicalSpecialityName.toLowerCase() && (
-                        <TiTick />
-                      )}
-                    </div>
-                  </li>
-                )
+                    </li>
+                  )
               )
             : filteredMedicalSpecialities.map(
-                (filteredMedicalSpeciality: MedicalSpeciality) => (
-                  <li
-                    className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
-                    key={filteredMedicalSpeciality.medicalSpecialityId}
-                    onClick={() =>
-                      handleMedicalSpecialityClick(filteredMedicalSpeciality)
-                    }
-                  >
-                    <div className="w-full flex justify-between items-center">
-                      <div>
-                        <span>-&nbsp;</span>
-                        <span>
-                          {filteredMedicalSpeciality.medicalSpecialityName}
-                        </span>
+                (filteredMedicalSpeciality: MedicalSpeciality) =>
+                  selectedPrimaryMedicalSpecialityId !==
+                    filteredMedicalSpeciality.medicalSpecialityId &&
+                  selectedSecondaryMedicalSpecialityId !==
+                    filteredMedicalSpeciality.medicalSpecialityId && (
+                    <li
+                      className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
+                      key={filteredMedicalSpeciality.medicalSpecialityId}
+                      onClick={() =>
+                        handleMedicalSpecialityClick(filteredMedicalSpeciality)
+                      }
+                    >
+                      <div className="w-full flex justify-between items-center">
+                        <div>
+                          <span>-&nbsp;</span>
+                          <span>
+                            {filteredMedicalSpeciality.medicalSpecialityName}
+                          </span>
+                        </div>
+                        {selectedMedicalSpecialityName.toLowerCase() ===
+                          filteredMedicalSpeciality.medicalSpecialityName.toLocaleLowerCase() && (
+                          <TiTick />
+                        )}
+                        {/* {selectedMedicalSpecialityName}-
+                        {filteredMedicalSpeciality.medicalSpecialityName} */}
+                        {/* {selectedMedicalSpecialityId} */}
                       </div>
-                      {selectedMedicalSpecialityName.toLowerCase() ===
-                        filteredMedicalSpeciality.medicalSpecialityName.toLocaleLowerCase() && (
-                        <TiTick />
-                      )}
-                      {/* {selectedMedicalSpecialityName}-
-                      {filteredMedicalSpeciality.medicalSpecialityName} */}
-                      {/* {selectedMedicalSpecialityId} */}
-                    </div>
-                  </li>
-                )
+                    </li>
+                  )
               )}
         </ul>
       </div>

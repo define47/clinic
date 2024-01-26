@@ -94,3 +94,16 @@ export type UserSearchCriterionPickerProps = {
     selectedUserSearchCriteriaValue: string
   ) => void;
 };
+
+export type MedicalSpecialityPickerProps = {
+  label: string;
+  selectedMedicalSpecialityName: string;
+  setSelectedMedicalSpecialityName: (
+    selectedMedicalSpecialityName: string
+  ) => void;
+  selectedMedicalSpecialityId: string;
+  setSelectedMedicalSpecialityId: (selectedMedicalSpecialityId: string) => void;
+  selectedPrimaryMedicalSpecialityId?: string;
+  selectedSecondaryMedicalSpecialityId?: string;
+  selectedTertiaryMedicalSpecialityId?: string;
+};

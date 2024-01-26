@@ -103,7 +103,7 @@ export const StyledInput: FC<StyledInputProps> = ({
         <input
           ref={styledInputRef}
           type="text"
-          className={`w-64 h-10 text-base cursor-pointer ${
+          className={`w-72 h-10 text-base cursor-pointer ${
             textColorUnfocused ? textColorUnfocused : "text-black"
           }  ${
             textColorFocused ? textColorFocused : "text-black"

@@ -26,11 +26,11 @@
 //   );
 // };
 
-import { FC, ReactNode } from "react";
+import { FC, MouseEvent, ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 type OverlayProps = {
-  closeModal: () => void;
+  closeModal: (e: MouseEvent<HTMLDivElement>) => void;
   children: ReactNode;
   className: string;
 };

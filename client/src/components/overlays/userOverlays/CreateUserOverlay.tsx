@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
 import { CreateUserOverlayPros, User } from "../../../types";
 import { StyledInput } from "../../design/StyledInput";
 import Overlay from "../base/Overlay";
@@ -6,6 +6,7 @@ import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import axios from "axios";
 import { userPath } from "../../../utils/dotenv";
+import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -33,6 +34,33 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
     userRoleId: "",
     userRoleName: "",
   });
+
+  const [
+    selectedPrimaryMedicalSpecialityId,
+    setSelectedPrimaryMedicalSpecialityId,
+  ] = useState<string>("");
+  const [
+    selectedPrimaryMedicalSpecialityName,
+    setSelectedPrimaryMedicalSpecialityName,
+  ] = useState<string>("");
+
+  const [
+    selectedSecondaryMedicalSpecialityId,
+    setSelectedSecondaryMedicalSpecialityId,
+  ] = useState<string>("");
+  const [
+    selectedSecondaryMedicalSpecialityName,
+    setSelectedSecondaryMedicalSpecialityName,
+  ] = useState<string>("");
+
+  const [
+    selectedTertiaryMedicalSpecialityId,
+    setSelectedTertiaryMedicalSpecialityId,
+  ] = useState<string>("");
+  const [
+    selectedTertiaryMedicalSpecialityName,
+    setSelectedTertiaryMedicalSpecialityName,
+  ] = useState<string>("");
 
   useEffect(() => {
     function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
@@ -86,6 +114,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
           userAddress: userToCreate.userAddress,
           userEncryptedPassword: "",
           roleIds: [roleId],
+          ...(roleName === "doctor" && {
+            specialityIds: [
+              selectedPrimaryMedicalSpecialityId,
+              selectedSecondaryMedicalSpecialityId,
+              selectedTertiaryMedicalSpecialityId,
+            ],
+          }),
         },
         {
           withCredentials: true,
@@ -97,6 +132,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
       console.log(error);
     }
   }
+
+  const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
+    // Close the overlay if the click is outside the content
+    if (e.target === e.currentTarget) {
+      setIsCreateUserOverlayVisible(false);
+    }
+  };
 
   return (
     <>
@@ -110,7 +152,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
           isCreateUserOverlayVisible ? "visible backdrop-blur-sm" : "invisible"
         }`}
-        closeModal={() => setIsCreateUserOverlayVisible(false)}
+        // closeModal={() => setIsCreateUserOverlayVisible(false)}
+        closeModal={handleOverlayClick}
       >
         <div
           className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
@@ -118,7 +161,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
           }`}
-          onClick={(e) => e.stopPropagation()}
+          // onClick={(e) => e.stopPropagation()}
         >
           <span className="flex justify-center mb-8">Create {roleName}</span>
           <div className="w-full flex justify-between">
@@ -128,21 +171,21 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 name="userForename"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                defaultValue="patientFN"
+                defaultValue={`${roleName}FN`}
               />
               <StyledInput
                 label="userSurname"
                 name="userSurname"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                defaultValue="patientLN"
+                defaultValue={`${roleName}LN`}
               />
               <StyledInput
                 label="userEmail"
                 name="userEmail"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                defaultValue="patientEM"
+                defaultValue={`${roleName}EM`}
               />
             </div>
             <div className="flex flex-col space-y-6">
@@ -151,7 +194,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 name="userPhoneNumber"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                defaultValue="patientPH"
+                defaultValue={`${roleName}PH`}
               />
               <StyledInput
                 label="userGender"
@@ -174,8 +217,87 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 name="userAddress"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                defaultValue="patientAddr"
+                defaultValue={`${roleName}Addr`}
               />
+
+              {roleName === "doctor" && (
+                <>
+                  <MedicalSpecialityPicker
+                    label="primary"
+                    selectedMedicalSpecialityId={
+                      selectedPrimaryMedicalSpecialityId
+                    }
+                    setSelectedMedicalSpecialityId={
+                      setSelectedPrimaryMedicalSpecialityId
+                    }
+                    selectedMedicalSpecialityName={
+                      selectedPrimaryMedicalSpecialityName
+                    }
+                    setSelectedMedicalSpecialityName={
+                      setSelectedPrimaryMedicalSpecialityName
+                    }
+                    selectedPrimaryMedicalSpecialityId={
+                      selectedPrimaryMedicalSpecialityId
+                    }
+                    selectedSecondaryMedicalSpecialityId={
+                      selectedSecondaryMedicalSpecialityId
+                    }
+                    selectedTertiaryMedicalSpecialityId={
+                      selectedTertiaryMedicalSpecialityId
+                    }
+                  />
+
+                  <MedicalSpecialityPicker
+                    label="secondary"
+                    selectedMedicalSpecialityId={
+                      selectedSecondaryMedicalSpecialityId
+                    }
+                    setSelectedMedicalSpecialityId={
+                      setSelectedSecondaryMedicalSpecialityId
+                    }
+                    selectedMedicalSpecialityName={
+                      selectedSecondaryMedicalSpecialityName
+                    }
+                    setSelectedMedicalSpecialityName={
+                      setSelectedSecondaryMedicalSpecialityName
+                    }
+                    selectedPrimaryMedicalSpecialityId={
+                      selectedPrimaryMedicalSpecialityId
+                    }
+                    selectedSecondaryMedicalSpecialityId={
+                      selectedSecondaryMedicalSpecialityId
+                    }
+                    selectedTertiaryMedicalSpecialityId={
+                      selectedTertiaryMedicalSpecialityId
+                    }
+                  />
+
+                  <MedicalSpecialityPicker
+                    label="tertiary"
+                    selectedMedicalSpecialityId={
+                      selectedTertiaryMedicalSpecialityId
+                    }
+                    setSelectedMedicalSpecialityId={
+                      setSelectedTertiaryMedicalSpecialityId
+                    }
+                    selectedMedicalSpecialityName={
+                      selectedTertiaryMedicalSpecialityName
+                    }
+                    setSelectedMedicalSpecialityName={
+                      setSelectedTertiaryMedicalSpecialityName
+                    }
+                    selectedPrimaryMedicalSpecialityId={
+                      selectedPrimaryMedicalSpecialityId
+                    }
+                    selectedSecondaryMedicalSpecialityId={
+                      selectedSecondaryMedicalSpecialityId
+                    }
+                    selectedTertiaryMedicalSpecialityId={
+                      selectedTertiaryMedicalSpecialityId
+                    }
+                  />
+                </>
+              )}
             </div>
           </div>
           <div className="w-full mt-14 flex justify-between">

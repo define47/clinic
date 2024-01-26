@@ -12,9 +12,11 @@ import { UpdateUserOverlay } from "../overlays/userOverlays/UpdateUserOverlay";
 import { DeleteUserOverlay } from "../overlays/userOverlays/DeleteUserOverlay";
 import {
   doctorRoleId,
+  doctorRoleName,
   patientRoleId,
   patientRoleName,
   receptionistRoleId,
+  receptionistRoleName,
 } from "../../utils/dotenv";
 import { CreateMedicalSpecialityOverlay } from "../overlays/medicalSpecialityOverlays/CreateMedicalSpecialityOverlay";
 import { DeleteMedicalSpecialityOverlay } from "../overlays/medicalSpecialityOverlays/DeleteMedicalSpecialityOverlay";
@@ -464,8 +466,8 @@ export const GeneralTable: FC<GeneralTableProps> = ({
       </div>
       <div>
         {(entity === patientRoleName ||
-          entity === "doctor" ||
-          entity === "receptionist") && (
+          entity === doctorRoleName ||
+          entity === receptionistRoleName) && (
           <CreateUserOverlay roleId={roleId} roleName={entity} />
         )}
         {entity === "medicalSpeciality" && <CreateMedicalSpecialityOverlay />}

@@ -450,35 +450,54 @@ export class UserController {
         userGender: body.userGender,
       });
 
-      if (body.specialityNames) {
-        const specialityNames = body.specialityNames;
+      if (body.specialityIds) {
+        const specialityIds = body.specialityIds;
         const currentDoctorSpecialities =
           await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
             putUser?.userId!
           );
-        console.log(putUser);
-
-        for (let i = 0; i < specialityNames.length; i++) {
-          const currentSpecialityToUpdateTo =
-            await this._medicalSpecialityService.getMedicalSpecialityByName(
-              specialityNames[i]
-            );
-          if (
-            currentDoctorSpecialities &&
-            currentDoctorSpecialities[i].medicalSpecialityId !==
-              currentSpecialityToUpdateTo?.medicalSpecialityId
-          ) {
+        if (currentDoctorSpecialities)
+          for (let i = 0; i < specialityIds.length; i++) {
             await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
               putUser?.userId!,
-              currentDoctorSpecialities[i]?.medicalSpecialityId!,
-              currentSpecialityToUpdateTo?.medicalSpecialityId!,
+              currentDoctorSpecialities[i].medicalSpecialityId,
+              specialityIds[i],
               i === 0,
               i === 1,
               i === 2
             );
           }
-        }
       }
+
+      // if (body.specialityNames) {
+      //   const specialityNames = body.specialityNames;
+      // const currentDoctorSpecialities =
+      //   await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
+      //     putUser?.userId!
+      //   );
+      //   console.log(putUser);
+
+      //   for (let i = 0; i < specialityNames.length; i++) {
+      //     const currentSpecialityToUpdateTo =
+      //       await this._medicalSpecialityService.getMedicalSpecialityByName(
+      //         specialityNames[i]
+      //       );
+      //     if (
+      //       currentDoctorSpecialities &&
+      //       currentDoctorSpecialities[i].medicalSpecialityId !==
+      //         currentSpecialityToUpdateTo?.medicalSpecialityId
+      //     ) {
+      //       await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
+      //         putUser?.userId!,
+      //         currentDoctorSpecialities[i]?.medicalSpecialityId!,
+      //         currentSpecialityToUpdateTo?.medicalSpecialityId!,
+      // i === 0,
+      // i === 1,
+      // i === 2
+      //       );
+      //     }
+      //   }
+      // }
 
       return reply
         .code(200)
