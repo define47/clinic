@@ -7,7 +7,7 @@ import { RiArrowUpSLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
 
 export const MedicalSpecialityPicker: FC = () => {
-  const [medicalSpecialties, setMedicalSpecialities] = useState<
+  const [medicalSpecialities, setMedicalSpecialities] = useState<
     MedicalSpeciality[]
   >([]);
   const [selectedMedicalSpecialityId, setSelectedMedicalSpecialityId] =
@@ -42,7 +42,7 @@ export const MedicalSpecialityPicker: FC = () => {
     getMedicalSpecialities();
   }, []);
 
-  const filteredMedicalSpecialities = medicalSpecialties.filter(
+  const filteredMedicalSpecialities = medicalSpecialities.filter(
     (filteredMedicalSpeciality: MedicalSpeciality) =>
       filteredMedicalSpeciality.medicalSpecialityName
         .toLowerCase()
@@ -85,12 +85,75 @@ export const MedicalSpecialityPicker: FC = () => {
   }
 
   useEffect(() => {
+    for (let i = 0; i < medicalSpecialities.length; i++) {
+      if (
+        selectedMedicalSpecialityName.toLowerCase() !==
+        medicalSpecialities[i].medicalSpecialityName.toLowerCase()
+      ) {
+        setSelectedMedicalSpecialityId("");
+      } else if (
+        selectedMedicalSpecialityName.toLowerCase() ===
+        medicalSpecialities[i].medicalSpecialityName.toLowerCase()
+      ) {
+        setSelectedMedicalSpecialityId(
+          medicalSpecialities[i].medicalSpecialityId!
+        );
+        break;
+      }
+    }
+  }, [selectedMedicalSpecialityName]);
+
+  useEffect(() => {
+    setSelectedMedicalSpecialityId("");
+
+    const foundSpeciality = medicalSpecialities.find(
+      (medicalSpeciality) =>
+        medicalSpeciality.medicalSpecialityName.toLowerCase() ===
+        selectedMedicalSpecialityName.toLowerCase()
+    );
+
+    if (foundSpeciality) {
+      setSelectedMedicalSpecialityId(foundSpeciality.medicalSpecialityId!);
+    }
+  }, [selectedMedicalSpecialityName, medicalSpecialities]);
+
+  useEffect(() => {
     console.log(
       "medical speciality picker",
       selectedMedicalSpecialityName,
       selectedMedicalSpecialityId
     );
   }, [selectedMedicalSpecialityName, selectedMedicalSpecialityId]);
+
+  // useEffect(() => {
+  //   setSelectedMedicalSpecialityName("anesthesiology");
+  // }, []);
+
+  // useEffect(() => {
+  //   for (let i = 0; i < medicalSpecialties.length; i++) {
+  //     if (
+  //       selectedMedicalSpecialityName.toLowerCase() ===
+  //       medicalSpecialties[i].medicalSpecialityName.toLowerCase()
+  //     ) {
+  //       setSelectedMedicalSpecialityId(
+  //         medicalSpecialties[i].medicalSpecialityId!
+  //       );
+  //       break;
+  //     }
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    const foundSpeciality = medicalSpecialities.find(
+      (medicalSpeciality) =>
+        medicalSpeciality.medicalSpecialityName.toLowerCase() ===
+        selectedMedicalSpecialityName.toLowerCase()
+    );
+
+    if (foundSpeciality) {
+      setSelectedMedicalSpecialityId(foundSpeciality.medicalSpecialityId!);
+    }
+  }, []);
 
   return (
     <div className="flex">
@@ -152,24 +215,28 @@ export const MedicalSpecialityPicker: FC = () => {
           }`}
         >
           {selectedMedicalSpecialityName === ""
-            ? medicalSpecialties.map((medicalSpeciality: MedicalSpeciality) => (
-                <li
-                  className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
-                  key={medicalSpeciality.medicalSpecialityId}
-                  onClick={() =>
-                    handleMedicalSpecialityClick(medicalSpeciality)
-                  }
-                >
-                  <div className="w-full flex justify-between items-center">
-                    <div>
-                      <span>-&nbsp;</span>
-                      <span>{medicalSpeciality.medicalSpecialityName}</span>
+            ? medicalSpecialities.map(
+                (medicalSpeciality: MedicalSpeciality) => (
+                  <li
+                    className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
+                    key={medicalSpeciality.medicalSpecialityId}
+                    onClick={() =>
+                      handleMedicalSpecialityClick(medicalSpeciality)
+                    }
+                  >
+                    <div className="w-full flex justify-between items-center">
+                      <div>
+                        <span>-&nbsp;</span>
+                        <span>{medicalSpeciality.medicalSpecialityName}</span>
+                      </div>
+                      {selectedMedicalSpecialityName.toLowerCase() ===
+                        medicalSpeciality.medicalSpecialityName.toLowerCase() && (
+                        <TiTick />
+                      )}
                     </div>
-                    {selectedMedicalSpecialityName ===
-                      medicalSpeciality.medicalSpecialityName && <TiTick />}
-                  </div>
-                </li>
-              ))
+                  </li>
+                )
+              )
             : filteredMedicalSpecialities.map(
                 (filteredMedicalSpeciality: MedicalSpeciality) => (
                   <li
@@ -186,10 +253,13 @@ export const MedicalSpecialityPicker: FC = () => {
                           {filteredMedicalSpeciality.medicalSpecialityName}
                         </span>
                       </div>
-                      {selectedMedicalSpecialityName ===
-                        filteredMedicalSpeciality.medicalSpecialityName && (
+                      {selectedMedicalSpecialityName.toLowerCase() ===
+                        filteredMedicalSpeciality.medicalSpecialityName.toLocaleLowerCase() && (
                         <TiTick />
                       )}
+                      {/* {selectedMedicalSpecialityName}-
+                      {filteredMedicalSpeciality.medicalSpecialityName} */}
+                      {/* {selectedMedicalSpecialityId} */}
                     </div>
                   </li>
                 )
