@@ -8,7 +8,10 @@ import {
 import { roleTable } from "../models/role.model";
 import { medicalSpecialityTable } from "../models/medicalSpeciality.model";
 import { User, userTable } from "../models/user.model";
-import { userRoleMappingTable } from "../models/userRoleMapping.model";
+import {
+  UserRoleMappingJoinUserAndRole,
+  userRoleMappingTable,
+} from "../models/userRoleMapping.model";
 import { AppointmentRepository } from "../repositories/appointment.repository";
 import { DoctorMedicalSpecialityMappingRepository } from "../repositories/doctorMedicalSpecialityMapping.repository";
 import { RoleRepository } from "../repositories/role.repository";
@@ -27,6 +30,9 @@ import { UserRoleMappingService } from "../services/userRoleMapping.service";
 import { getDoctorData, getPatientsData } from "./users";
 import { DoctorMedicalSpecialityMappingService } from "../services/doctorMedicalSpecialityMapping.service";
 import { AppointmentService } from "../services/appointment.service";
+import { MedicalSpecialityMedicalProcedureMappingRepository } from "../repositories/medicalSpecialityMedicalProcedureMapping.repository";
+import { medicalSpecialityMedicalProcedureMappingTable } from "../models/medicalSpecialityMedicalProcedureMapping.model";
+import { MedicalProcedureService } from "../services/medicalProcedure.service";
 
 const userRepository = new UserRepository(drizzleInstance, userTable);
 const roleRepository = new RoleRepository(drizzleInstance, roleTable);
@@ -367,27 +373,42 @@ export const createAppointments = async (
   const patientRoleId = getPatientRoleIdEnv();
   const doctorRoleId = getDoctorRoleIdEnv();
 
+  const userRoleMappingService = new UserRoleMappingService();
+
   const patients = (
-    await userRoleMappingRepository.getAllUsersRelatedData(
+    (await userRoleMappingService.getAllUsersRelatedData(
       patientRoleId,
-      [],
+      [""],
       "",
       100,
       0,
-      "userForename"
-    )
-  )?.usersRelatedData as any;
+      "asc:userForename"
+    )) as {
+      tableData: UserRoleMappingJoinUserAndRole[];
+
+      totalCount: number;
+      totalPages: number;
+    }
+  ).tableData;
+  console.log(patients[0].userId);
 
   const doctors = (
-    await userRoleMappingRepository.getAllUsersRelatedData(
+    (await userRoleMappingService.getAllUsersRelatedData(
       doctorRoleId,
-      [],
+      [""],
       "",
       100,
       0,
-      "userForename"
-    )
-  )?.usersRelatedData as any;
+      "asc:userForename"
+    )) as {
+      tableData: UserRoleMappingJoinUserAndRole[];
+
+      totalCount: number;
+      totalPages: number;
+    }
+  ).tableData;
+  console.log(doctors[0].userId);
+
   // console.log(patients);
   // console.log(doctors);
 
@@ -397,11 +418,114 @@ export const createAppointments = async (
     let randomDoctor = doctors![Math.floor(Math.random() * doctors!.length)];
     let randomPatient = patients![Math.floor(Math.random() * patients!.length)];
     await appointmentService.createAppointment({
-      appointmentDoctorId: randomDoctor.doctorId,
-      appointmentPatientId: randomPatient.user.userId,
+      appointmentDoctorId: randomDoctor.userId,
+      appointmentPatientId: randomPatient.userId,
       appointmentDateTime: new Date(generateAppointmentDate(year, month, day)),
-      appointmentReason: `Doctor: ${randomDoctor.doctorForename} ${randomDoctor.doctorSurname} Patient: ${randomPatient.user.userForename} ${randomPatient.user.userSurname} ${i}`,
+      appointmentReason: `Doctor: ${randomDoctor.userForename} ${randomDoctor.userSurname} Patient: ${randomPatient.userForename} ${randomPatient.userSurname} ${i}`,
       appointmentStatus: "scheduled",
     });
   }
 };
+
+export async function createProcedures() {
+  const medicalProcedureService = new MedicalProcedureService();
+  const neurologyProcedure1 =
+    await medicalProcedureService.createMedicalProcedure({
+      medicalProcedureName: "NeurologyProcedure1",
+      medicalProcedurePrice: 100,
+    });
+  const neurologyProcedure2 =
+    await medicalProcedureService.createMedicalProcedure({
+      medicalProcedureName: "NeurologyProcedure2",
+      medicalProcedurePrice: 150,
+    });
+  const neurologyProcedure3 =
+    await medicalProcedureService.createMedicalProcedure({
+      medicalProcedureName: "NeurologyProcedure3",
+      medicalProcedurePrice: 200,
+    });
+
+  const dermatologyProcedure1 =
+    await medicalProcedureService.createMedicalProcedure({
+      medicalProcedureName: "DermatologyProcedure1",
+      medicalProcedurePrice: 250,
+    });
+  const dermatologyProcedure2 =
+    await medicalProcedureService.createMedicalProcedure({
+      medicalProcedureName: "DermatologyProcedure2",
+      medicalProcedurePrice: 350,
+    });
+  const dermatologyProcedure3 =
+    await medicalProcedureService.createMedicalProcedure({
+      medicalProcedureName: "DermatologyProcedure3",
+      medicalProcedurePrice: 450,
+    });
+  const dermatologyProcedure4 =
+    await medicalProcedureService.createMedicalProcedure({
+      medicalProcedureName: "DermatologyProcedure4",
+      medicalProcedurePrice: 550,
+    });
+
+  const anesthesiologyProcedure1 =
+    await medicalProcedureService.createMedicalProcedure({
+      medicalProcedureName: "AnesthesiologyProcedure4",
+      medicalProcedurePrice: 1050,
+    });
+
+  const medicalSpecialityMedicalProcedureMappingRepository =
+    new MedicalSpecialityMedicalProcedureMappingRepository(
+      drizzleInstance,
+      medicalSpecialityMedicalProcedureMappingTable
+    );
+
+  await medicalSpecialityMedicalProcedureMappingRepository.createMedicalSpecialityMedicalProcedureMapping(
+    {
+      medicalSpecialityId: "108aa19f-40e9-561c-a88a-53ad20a6c99e",
+      medicalProcedureId: "c609532e-9c0c-5183-a6d9-b18796ecbbcb",
+    }
+  );
+  await medicalSpecialityMedicalProcedureMappingRepository.createMedicalSpecialityMedicalProcedureMapping(
+    {
+      medicalSpecialityId: "108aa19f-40e9-561c-a88a-53ad20a6c99e",
+      medicalProcedureId: "aa5e9a9e-8a2c-53e2-917b-e9d83fa98314",
+    }
+  );
+  await medicalSpecialityMedicalProcedureMappingRepository.createMedicalSpecialityMedicalProcedureMapping(
+    {
+      medicalSpecialityId: "108aa19f-40e9-561c-a88a-53ad20a6c99e",
+      medicalProcedureId: "e2470316-424e-5081-99d5-4fbcb92b2c4e",
+    }
+  );
+
+  await medicalSpecialityMedicalProcedureMappingRepository.createMedicalSpecialityMedicalProcedureMapping(
+    {
+      medicalSpecialityId: "21041809-4d79-57ce-818a-712c959e936c",
+      medicalProcedureId: dermatologyProcedure1?.medicalProcedureId!,
+    }
+  );
+  await medicalSpecialityMedicalProcedureMappingRepository.createMedicalSpecialityMedicalProcedureMapping(
+    {
+      medicalSpecialityId: "21041809-4d79-57ce-818a-712c959e936c",
+      medicalProcedureId: dermatologyProcedure2?.medicalProcedureId!,
+    }
+  );
+  await medicalSpecialityMedicalProcedureMappingRepository.createMedicalSpecialityMedicalProcedureMapping(
+    {
+      medicalSpecialityId: "21041809-4d79-57ce-818a-712c959e936c",
+      medicalProcedureId: dermatologyProcedure3?.medicalProcedureId!,
+    }
+  );
+  await medicalSpecialityMedicalProcedureMappingRepository.createMedicalSpecialityMedicalProcedureMapping(
+    {
+      medicalSpecialityId: "21041809-4d79-57ce-818a-712c959e936c",
+      medicalProcedureId: dermatologyProcedure4?.medicalProcedureId!,
+    }
+  );
+
+  await medicalSpecialityMedicalProcedureMappingRepository.createMedicalSpecialityMedicalProcedureMapping(
+    {
+      medicalSpecialityId: "b6fc4cff-c43e-5db6-ad00-043dc50b8563",
+      medicalProcedureId: anesthesiologyProcedure1?.medicalProcedureId!,
+    }
+  );
+}

@@ -3,10 +3,13 @@ import {
   MedicalSpecialityMedicalProcedureMapping,
   MedicalSpecialityMedicalProcedureMappingCreationAttributes,
   MedicalSpecialityMedicalProcedureMappingUpdateAttributes,
+  medicalSpecialityMedicalProcedureMappingTable,
 } from "../models/medicalSpecialityMedicalProcedureMapping.model";
 import { BaseRepository } from "./base.repository";
 import { IMedicalSpecialityMedicalProcedureMappingRepository } from "./medicalSpecialityMedicalProcedureMapping.irepository";
-import { Table } from "drizzle-orm";
+import { Table, eq } from "drizzle-orm";
+import { medicalSpecialityTable } from "../models/medicalSpeciality.model";
+import { medicalProcedureTable } from "../models/medicalProcedure.model";
 
 export class MedicalSpecialityMedicalProcedureMappingRepository
   extends BaseRepository<MedicalSpecialityMedicalProcedureMapping>
@@ -23,6 +26,33 @@ export class MedicalSpecialityMedicalProcedureMappingRepository
     medicalSpecialityId: string
   ): Promise<MedicalSpecialityMedicalProcedureMapping[] | undefined> {
     throw new Error("Method not implemented.");
+  }
+
+  public async getAllMedicalSpecialitiesAndProcedures() {
+    const data = await this._drizzle
+      .select({
+        medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
+        medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
+        procedureId: medicalProcedureTable.medicalProcedureId,
+        procedureName: medicalProcedureTable.medicalProcedureName,
+      })
+      .from(this._table)
+      .innerJoin(
+        medicalSpecialityTable,
+        eq(
+          medicalSpecialityMedicalProcedureMappingTable.medicalSpecialityId,
+          medicalSpecialityTable.medicalSpecialityId
+        )
+      )
+      .innerJoin(
+        medicalProcedureTable,
+        eq(
+          medicalSpecialityMedicalProcedureMappingTable.medicalProcedureId,
+          medicalProcedureTable.medicalProcedureId
+        )
+      );
+
+    return data;
   }
 
   public async getMedicalSpecialityMedicalProcedureMappingBySpecialityIdAndProcedureId(

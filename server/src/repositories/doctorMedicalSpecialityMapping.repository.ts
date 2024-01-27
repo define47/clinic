@@ -28,12 +28,6 @@ export class DoctorMedicalSpecialityMappingRepository
       .where(eq(doctorMedicalSpecialityMappingTable.userId, doctorId));
   }
 
-  public async getAllMedicalSpecialitiesAndProcedures() {
-    const data = await this._drizzle.select().from(this._table);
-
-    return data;
-  }
-
   public async createDoctorMedicalSpecialityMapping(
     doctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingCreationAttributes
   ): Promise<DoctorMedicalSpecialityMapping | undefined> {

@@ -27,6 +27,7 @@ import {
   createAppointments,
   createDoctors,
   createPatients,
+  createProcedures,
   createRoles,
   createSpecialities,
   createUsers,
@@ -50,6 +51,11 @@ import {
   testUserRoleMapping,
   testUsers,
 } from "./utils/models.test.js";
+import { doctorMedicalSpecialityMappingTable } from "./models/doctorMedicalSpecialityMapping.model.js";
+import { DoctorMedicalSpecialityMappingRepository } from "./repositories/doctorMedicalSpecialityMapping.repository.js";
+import { MedicalSpecialityMedicalProcedureMappingRepository } from "./repositories/medicalSpecialityMedicalProcedureMapping.repository.js";
+import { medicalSpecialityMedicalProcedureMappingTable } from "./models/medicalSpecialityMedicalProcedureMapping.model.js";
+import { MedicalProcedureService } from "./services/medicalProcedure.service.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -333,7 +339,18 @@ const buildServer = async () => {
 
   // createDoctors();
   // createPatients();
-  // await createAppointments(3, "2024", "01", "18");
+  // await createAppointments(5, "2024", "01", "18");
+  // createProcedures();
+
+  // const medicalSpecialityMedicalProcedureMappingRepository =
+  //   new MedicalSpecialityMedicalProcedureMappingRepository(
+  //     drizzleInstance,
+  //     medicalSpecialityMedicalProcedureMappingTable
+  //   );
+
+  // console.log(
+  //   await medicalSpecialityMedicalProcedureMappingRepository.getAllMedicalSpecialitiesAndProcedures()
+  // );
 
   return fastifyServer;
 };

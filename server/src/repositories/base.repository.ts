@@ -311,7 +311,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | MedicalProcedureCreationAttributes
       );
     else if (this._table === medicalProcedureTable)
-      return ["medicalName"] as keyof (
+      return ["medicalProcedureName"] as keyof (
         | UserCreationAttributes
         | RoleCreationAttributes
         | MedicalSpecialityCreationAttributes

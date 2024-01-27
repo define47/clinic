@@ -29,13 +29,15 @@ export class MedicalProcedureService implements IMedicalProcedureService {
   public async getMedicalProcedureByName(
     medicalProcedureName: string
   ): Promise<MedicalProcedure | undefined> {
-    return await this.getMedicalProcedureByName(medicalProcedureName);
+    return await this._medicalProcedureRepository.getMedicalProcedureByName(
+      medicalProcedureName
+    );
   }
 
   public async createMedicalProcedure(
     medicalProcedureCreationAttributes: MedicalProcedureCreationAttributes
   ): Promise<MedicalProcedure | undefined> {
-    return await this.createMedicalProcedure(
+    return await this._medicalProcedureRepository.createMedicalProcedure(
       medicalProcedureCreationAttributes
     );
   }

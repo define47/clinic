@@ -5,6 +5,7 @@ import { SocketNotificationDataContext } from "../../contexts/SocketNotification
 import { UserSearchCriterionPicker } from "../../components/pickers/UserSearchCriterionPicker";
 import { MedicalSpecialityPicker } from "../../components/pickers/MedicalSpecialityPicker";
 import { TreeTable } from "../../components/TreeTable";
+import { DateTimePicker } from "../../components/pickers/DateTimePicker";
 
 export const AdminDashboard: FC = () => {
   const socketContext = useContext(SocketNotificationDataContext);
@@ -58,6 +59,7 @@ export const AdminDashboard: FC = () => {
         />
         here notification {JSON.stringify(socketNotificationDataState)}
         {/* <UserSearchCriterionPicker /> */}
+        <DateTimePicker />
       </div>
     </div>
   );
