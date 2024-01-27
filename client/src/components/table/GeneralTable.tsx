@@ -237,7 +237,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         entity === "patient" ||
         entity === "receptionist" ||
         entity === "nurse") && (
-        <div className="flex space-x-3">
+        <div className="flex space-x-3 mb-3">
           <UserSearchCriterionPicker
             entity={entity}
             selectedUserSearchCriteriaName={selectedUserSearchCriteriaName}
@@ -262,12 +262,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         </div>
       )}
       {entity === "medicalSpeciality" && (
-        <StyledInput
-          label={`${entity} search`}
-          name="medicalSpecialitySearch"
-          onChangeStyledInput={(event) => setSearchQuery(event.target.value)}
-          icon={<IoIosSearch />}
-        />
+        <div className="mb-3">
+          <StyledInput
+            label={`${entity} search`}
+            name="medicalSpecialitySearch"
+            onChangeStyledInput={(event) => setSearchQuery(event.target.value)}
+            icon={<IoIosSearch />}
+          />
+        </div>
       )}
       <div className="w-full border rounded-xl overflow-hidden">
         {tableRows.length > 0 && (

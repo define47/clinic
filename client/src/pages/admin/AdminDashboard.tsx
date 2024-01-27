@@ -1,9 +1,10 @@
 import { FC, useContext } from "react";
 import { StyledRippleButton } from "../../components/design/StyledRippleButton";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
-import TreeTable from "../../components/TreeTable";
+
 import { UserSearchCriterionPicker } from "../../components/pickers/UserSearchCriterionPicker";
 import { MedicalSpecialityPicker } from "../../components/pickers/MedicalSpecialityPicker";
+import { TreeTable } from "../../components/TreeTable";
 
 export const AdminDashboard: FC = () => {
   const socketContext = useContext(SocketNotificationDataContext);
@@ -26,6 +27,7 @@ export const AdminDashboard: FC = () => {
       children: [{ name: "Node 2.1" }, { name: "Node 2.2" }],
     },
   ];
+
   return (
     <div className="">
       {/* admin dashboard <Overlay /> */}
@@ -48,7 +50,7 @@ export const AdminDashboard: FC = () => {
           labelUnfocused="text-green-500"
           labelFocused="text-green-500"
         /> */}
-        <TreeTable data={treeData} />
+        <TreeTable />
         <StyledRippleButton
           onClick={() => console.log("Button Clicked")}
           label="label"

@@ -329,7 +329,7 @@ const buildServer = async () => {
 
   // await testUsers(false);
   // await testUserRoleMapping(false);
-  testDoctorSpecialityMapping(true);
+  // testDoctorSpecialityMapping(true);
 
   // createDoctors();
   // createPatients();
@@ -360,7 +360,7 @@ async function main() {
 
 main();
 
-// const numClusterWorkers = 2;
+// const numClusterWorkers = 8;
 // if (cluster.isPrimary) {
 //   console.log(`Primary ${process.pid} is running`);
 //   for (let i = 0; i < numClusterWorkers; i++) {
