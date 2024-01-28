@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { StyledInput } from "../design/StyledInput";
 import { FcCalendar } from "react-icons/fc";
 import {
@@ -30,10 +30,27 @@ export const DateTimePicker: FC = () => {
   const [emptyCellsAfter, setEmptyCellsAfter] = useState<number[]>([]);
   const [sundays, setSundays] = useState<number[]>([]);
 
+  const dateTimePickerRef = useRef<HTMLDivElement | null>(null);
   const years = Array.from(
     { length: 200 },
     (_, i) => new Date().getFullYear() - 123 + i
   );
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        dateTimePickerRef.current &&
+        !dateTimePickerRef.current.contains(event.target as Node)
+      ) {
+        setIsDateTimePickerShown(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
 
   const weekDays = [
     "Monday",
@@ -290,7 +307,7 @@ export const DateTimePicker: FC = () => {
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dateTimePickerRef}>
       <div className="w-72">
         <StyledInput
           label="datetimepicker"
@@ -443,9 +460,10 @@ export const DateTimePicker: FC = () => {
               {monthData.months.map((month: string, monthIndex: number) => (
                 <span
                   className="flex items-center justify-center hover:bg-pink-300 hover:rounded-full cursor-pointer"
-                  onClick={() => {
+                  onClick={(event) => {
                     setSelectedMonth(monthIndex);
                     setAreMonthsShown(false);
+                    event.stopPropagation();
                   }}
                 >
                   {month}
@@ -467,9 +485,10 @@ export const DateTimePicker: FC = () => {
               {years.map((year: number) => (
                 <span
                   className="flex items-center justify-center hover:bg-pink-300 hover:rounded-full cursor-pointer"
-                  onClick={() => {
+                  onClick={(event) => {
                     setSelectedYear(year);
                     setAreYearsShown(false);
+                    event.stopPropagation();
                   }}
                 >
                   {year}
