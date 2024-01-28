@@ -7,6 +7,7 @@ import { StyledRippleButton } from "../../design/StyledRippleButton";
 import axios from "axios";
 import { userPath } from "../../../utils/dotenv";
 import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
+import { DateTimePicker } from "../../pickers/DateTimePicker";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -210,6 +211,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 labelBackgroundColor="bg-white"
                 defaultValue="1765-05-23"
               />
+              <DateTimePicker />
             </div>
             <div className="flex flex-col space-y-6">
               <StyledInput

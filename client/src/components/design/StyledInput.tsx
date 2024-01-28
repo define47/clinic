@@ -25,6 +25,7 @@ type StyledInputProps = {
   icon?: ReactNode;
   isPicker?: boolean;
   isPickerVisible?: boolean;
+  disabled?: boolean;
 };
 
 export const StyledInput: FC<StyledInputProps> = ({
@@ -44,6 +45,7 @@ export const StyledInput: FC<StyledInputProps> = ({
   icon,
   isPicker,
   isPickerVisible,
+  disabled,
 }) => {
   const styledInputRef = useRef<HTMLInputElement | null>(null);
   const [focused, setFocused] = useState(false);
@@ -126,6 +128,7 @@ export const StyledInput: FC<StyledInputProps> = ({
           onClick={onClickInput}
           autoComplete="off"
           required
+          disabled={disabled}
         />
 
         <label
