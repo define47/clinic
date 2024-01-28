@@ -3,6 +3,9 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        roboto: ["Roboto", "sans-serif"],
+      },
       width: {
         "1/9": "11.111111",
         "1/10": "10",

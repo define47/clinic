@@ -232,7 +232,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   }
 
   return (
-    <div className="w-full hidden lg:block border p-4 rounded-xl">
+    <div className="w-full hidden lg:block border p-4 rounded-xl font-roboto">
       {(entity === "doctor" ||
         entity === "patient" ||
         entity === "receptionist" ||

@@ -60,15 +60,6 @@ export class UserController {
     try {
       const query: any = request.query;
 
-      console.log(
-        query.roleId,
-        query.searchBy.split(","),
-        query.searchQuery,
-        query.limit,
-        query.page,
-        query.orderBy
-      );
-
       const payload = await this._userRoleMappingService.getAllUsersRelatedData(
         query.roleId,
         query.searchBy.split(","),
@@ -77,8 +68,6 @@ export class UserController {
         query.page,
         query.orderBy
       );
-
-      // console.log(payload);
 
       reply.code(200).send({ success: true, payload });
     } catch (error) {
@@ -130,7 +119,6 @@ export class UserController {
   public loginUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body: any = request.body;
-      console.log(body);
 
       const userToLogin = await this._userService.getUserByEmail(
         body.userEmail
@@ -155,8 +143,6 @@ export class UserController {
         await this._userPreferencesMappingService.getUserPreferencesMappingByUserId(
           userToLogin?.userId!
         );
-
-      console.log(userPreferencesMapping === undefined);
 
       if (userPreferencesMapping === undefined) {
         const romanianLanguage = await this._languageService.getLanguageById(

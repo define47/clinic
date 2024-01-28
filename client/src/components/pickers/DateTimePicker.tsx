@@ -276,9 +276,12 @@ export const DateTimePicker: FC = () => {
   useEffect(() => {
     // setSelectedEntity(`${selectedDay}-${selectedMonth + 1}-${selectedYear}`);
     setSelectedEntity(
-      `${selectedYear}-${
+      // `${selectedYear}-${
+      //   selectedMonth + 1 <= 9 ? "0" + (selectedMonth + 1) : selectedMonth + 1
+      // }-${selectedDay <= 9 ? "0" + selectedDay : selectedDay}`
+      `${selectedDay <= 9 ? "0" + selectedDay : selectedDay}-${
         selectedMonth + 1 <= 9 ? "0" + (selectedMonth + 1) : selectedMonth + 1
-      }-${selectedDay <= 9 ? "0" + selectedDay : selectedDay}`
+      }-${selectedYear}`
     );
   }, [selectedYear, selectedMonth, selectedDay]);
 
@@ -294,6 +297,9 @@ export const DateTimePicker: FC = () => {
           inputValue={selectedEntity}
           name="name"
           onChangeStyledInput={() => {}}
+          // onClickInput={() => {
+          //   setIsDateTimePickerShown(true);
+          // }}
           disabled={true}
           icon={
             <RiCalendarLine
@@ -301,6 +307,9 @@ export const DateTimePicker: FC = () => {
                 setIsDateTimePickerShown(!isDateTimePickerShown);
                 setAreMonthsShown(false);
                 setAreYearsShown(false);
+                setSelectedYear(currentDate.getUTCFullYear());
+                setSelectedMonth(currentDate.getUTCMonth());
+                setSelectedDay(currentDate.getDate());
               }}
             />
           }
@@ -359,7 +368,7 @@ export const DateTimePicker: FC = () => {
         {/* {!areMonthsShown && ( */}
 
         <div
-          className={`transition-opacity w-72 grid grid-cols-7 gap-1 text-xs items-center justify-center p-1 ${
+          className={`transition-opacity ease-linear w-72 grid grid-cols-7 gap-1 text-xs items-center justify-center p-1 ${
             !areMonthsShown && !areYearsShown
               ? "h-full opacity-100 duration-700"
               : "h-0 opacity-0 duration-700 pointer-events-none"
@@ -423,7 +432,7 @@ export const DateTimePicker: FC = () => {
         {/* )} */}
         {/* {areMonthsShown && ( */}
         <div
-          className={`transition-opacity ${
+          className={`transition-opacity ease-linear ${
             areMonthsShown
               ? "h-full opacity-100 duration-700"
               : "h-0 opacity-0 duration-700 pointer-events-none"
@@ -447,7 +456,7 @@ export const DateTimePicker: FC = () => {
         </div>
 
         <div
-          className={`transition-opacity ${
+          className={`transition-opacity ease-linear ${
             areYearsShown
               ? "h-full opacity-100 duration-700 overflow-y-auto overflow-x-hidden"
               : "h-0 opacity-0 duration-700 pointer-events-none"

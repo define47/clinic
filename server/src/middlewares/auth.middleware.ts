@@ -47,7 +47,7 @@ export const authenticationMiddleware = (
       .code(200)
       .send({ success: false, message: "Unauthorized: Token not good" });
   }
-  console.log(signedCookie);
+  // console.log(signedCookie);
   request.cookieData = signedCookieValue;
   done();
 };
