@@ -59,7 +59,19 @@ export const AdminDashboard: FC = () => {
         />
         here notification {JSON.stringify(socketNotificationDataState)}
         {/* <UserSearchCriterionPicker /> */}
-        <DateTimePicker />
+        <div className="flex">
+          <DateTimePicker
+            isDateOnly={true}
+            label="default DATE picker"
+            defaultDate="1234-08-23"
+          />
+          <DateTimePicker
+            isDateOnly={false}
+            label="default DATE TIME picker"
+            defaultDate="2025-03-05"
+            defaultTime="10:00"
+          />
+        </div>
       </div>
     </div>
   );

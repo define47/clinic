@@ -16,7 +16,19 @@ const getEndOfMonth = (year: number, month: number) => {
   return new Date(Date.UTC(year, month + 1, 0));
 };
 
-export const DateTimePicker: FC = () => {
+type DateTimePickerProps = {
+  isDateOnly: boolean;
+  label: string;
+  defaultDate?: string;
+  defaultTime?: string;
+};
+
+export const DateTimePicker: FC<DateTimePickerProps> = ({
+  isDateOnly,
+  label,
+  defaultDate,
+  defaultTime,
+}) => {
   const currentDate = new Date("2024-05-20");
   const [selectedEntity, setSelectedEntity] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<number>(0);
@@ -32,7 +44,7 @@ export const DateTimePicker: FC = () => {
   const [sundays, setSundays] = useState<number[]>([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
-  const [isDateOnly, setIsDateOnly] = useState<boolean>(false);
+  // const [isDateOnly, setIsDateOnly] = useState<boolean>(false);
   const [areTimeSlotsShown, setAreTimeSlotsShown] = useState<boolean>(false);
 
   const dateTimePickerRef = useRef<HTMLDivElement | null>(null);
@@ -45,14 +57,31 @@ export const DateTimePicker: FC = () => {
     console.log(currentDate.getUTCFullYear(), currentDate.getUTCMonth());
 
     if (isDateOnly) {
-      setSelectedYear(currentDate.getUTCFullYear());
-      setSelectedMonth(currentDate.getUTCMonth());
-      setSelectedDay(currentDate.getDate());
+      if (defaultDate) {
+        const data = defaultDate.split("-");
+        console.log("parsed", parseInt(data[1]));
+
+        setSelectedYear(parseInt(data[0]));
+        setSelectedMonth(parseInt(data[1]));
+        setSelectedDay(parseInt(data[2]));
+      } else {
+        setSelectedYear(currentDate.getUTCFullYear());
+        setSelectedMonth(currentDate.getUTCMonth());
+        setSelectedDay(currentDate.getDate());
+      }
     } else {
-      setSelectedYear(currentDate.getUTCFullYear());
-      setSelectedMonth(currentDate.getUTCMonth());
-      setSelectedDay(currentDate.getDate());
-      setSelectedTimeSlot("08:00");
+      if (defaultTime && defaultDate) {
+        const data = defaultDate.split("-");
+        setSelectedYear(parseInt(data[0]));
+        setSelectedMonth(parseInt(data[1]));
+        setSelectedDay(parseInt(data[2]));
+        setSelectedTimeSlot(defaultTime);
+      } else {
+        setSelectedYear(currentDate.getUTCFullYear());
+        setSelectedMonth(currentDate.getUTCMonth());
+        setSelectedDay(currentDate.getDate());
+        setSelectedTimeSlot("08:00");
+      }
     }
   }, []);
 
@@ -63,6 +92,27 @@ export const DateTimePicker: FC = () => {
         !dateTimePickerRef.current.contains(event.target as Node)
       ) {
         setIsDateTimePickerShown(false);
+        setAreMonthsShown(false);
+        setAreYearsShown(false);
+        setAreTimeSlotsShown(false);
+
+        // if (isDateOnly) {
+        //   if (defaultDate) {
+        //     const data = defaultDate.split("-");
+        //     setSelectedYear(parseInt(data[0]));
+        //     setSelectedMonth(parseInt(data[1]));
+        //     setSelectedDay(parseInt(data[2]));
+        //   } else {
+        //     setSelectedYear(currentDate.getUTCFullYear());
+        //     setSelectedMonth(currentDate.getUTCMonth());
+        //     setSelectedDay(currentDate.getDate());
+        //   }
+        // } else {
+        //   setSelectedYear(currentDate.getUTCFullYear());
+        //   setSelectedMonth(currentDate.getUTCMonth());
+        //   setSelectedDay(currentDate.getDate());
+        //   setSelectedTimeSlot("08:00");
+        // }
       }
     };
 
@@ -369,7 +419,7 @@ export const DateTimePicker: FC = () => {
     <div className="relative" ref={dateTimePickerRef}>
       <div className="w-72">
         <StyledInput
-          label="datetimepicker"
+          label={label}
           inputValue={
             isDateOnly
               ? `${selectedEntity.split("-").reverse().join("-")}`
@@ -395,9 +445,19 @@ export const DateTimePicker: FC = () => {
                 setAreMonthsShown(false);
                 setAreYearsShown(false);
                 setAreTimeSlotsShown(false);
-                setSelectedYear(currentDate.getUTCFullYear());
-                setSelectedMonth(currentDate.getUTCMonth());
-                setSelectedDay(currentDate.getDate());
+                // if (isDateOnly) {
+                //   if (defaultDate) {
+                //     const data = defaultDate.split("-");
+                //     setSelectedYear(parseInt(data[0]));
+                //     setSelectedMonth(parseInt(data[1]));
+                //     setSelectedDay(parseInt(data[2]));
+                //   } else {
+                //     setSelectedYear(currentDate.getUTCFullYear());
+                //     setSelectedMonth(currentDate.getUTCMonth());
+                //     setSelectedDay(currentDate.getDate());
+                //   }
+                // } else {
+                // }
               }}
             />
           }
@@ -412,7 +472,8 @@ export const DateTimePicker: FC = () => {
         }`}
       >
         <div className="flex items-center justify-center text-sm pt-2 pb-1 border-b">
-          {(currentDate.getUTCMonth() < selectedMonth ||
+          {(isDateOnly ||
+            currentDate.getUTCMonth() < selectedMonth ||
             currentDate.getUTCFullYear() < selectedYear) && (
             <span
               className={`flex items-center ${
@@ -479,29 +540,31 @@ export const DateTimePicker: FC = () => {
             />
           </span>
 
-          <span className="absolute right-2">
-            {areTimeSlotsShown ? (
-              <AiFillClockCircle
-                className="text-xl text-pink-300 cursor-pointer transform hover:scale-125"
-                onClick={(event) => {
-                  setAreTimeSlotsShown(false);
-                  setAreMonthsShown(false);
-                  setAreYearsShown(false);
-                  event.stopPropagation();
-                }}
-              />
-            ) : (
-              <AiOutlineClockCircle
-                className="text-xl cursor-pointer transform hover:text-pink-300 hover:scale-125"
-                onClick={(event) => {
-                  setAreTimeSlotsShown(true);
-                  setAreMonthsShown(false);
-                  setAreYearsShown(false);
-                  event.stopPropagation();
-                }}
-              />
-            )}
-          </span>
+          {!isDateOnly && (
+            <span className="absolute right-2">
+              {areTimeSlotsShown ? (
+                <AiFillClockCircle
+                  className="text-xl text-pink-300 cursor-pointer transform hover:scale-125"
+                  onClick={(event) => {
+                    setAreTimeSlotsShown(false);
+                    setAreMonthsShown(false);
+                    setAreYearsShown(false);
+                    event.stopPropagation();
+                  }}
+                />
+              ) : (
+                <AiOutlineClockCircle
+                  className="text-xl cursor-pointer transform hover:text-pink-300 hover:scale-125"
+                  onClick={(event) => {
+                    setAreTimeSlotsShown(true);
+                    setAreMonthsShown(false);
+                    setAreYearsShown(false);
+                    event.stopPropagation();
+                  }}
+                />
+              )}
+            </span>
+          )}
           {/* <span>{selectedTimeSlot}</span> */}
         </div>
         <div
@@ -554,12 +617,16 @@ export const DateTimePicker: FC = () => {
                       : "hover:bg-pink-300 hover:rounded-full cursor-pointer"
                   } `}
                   onClick={() => {
-                    if (
-                      !isDateOnly &&
-                      day >= currentDate.getDate() &&
-                      currentDate.getUTCMonth() === selectedMonth
-                    )
-                      setSelectedDay(day);
+                    // if (
+                    //   !isDateOnly &&
+                    //   day >= currentDate.getDate() &&
+                    //   currentDate.getUTCMonth() === selectedMonth &&
+                    //   currentDate.getUTCFullYear() === selectedYear
+                    // )
+                    //   setSelectedDay(day);
+
+                    // if (isDateOnly)
+                    setSelectedDay(day);
                   }}
                 >
                   {day}
