@@ -16,7 +16,7 @@ const getEndOfMonth = (year: number, month: number) => {
 };
 
 export const DateTimePicker: FC = () => {
-  const currentDate = new Date();
+  const currentDate = new Date("2024-05-20");
   const [selectedEntity, setSelectedEntity] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<number>(0);
   const [selectedMonth, setSelectedMonth] = useState<number>(0);
@@ -29,12 +29,22 @@ export const DateTimePicker: FC = () => {
   const [calendar, setCalendar] = useState<number[]>([]);
   const [emptyCellsAfter, setEmptyCellsAfter] = useState<number[]>([]);
   const [sundays, setSundays] = useState<number[]>([]);
+  const [timeSlots, setTimeSlots] = useState<string[]>([]);
+  const [isDateOnly, setIsDateOnly] = useState<boolean>(false);
 
   const dateTimePickerRef = useRef<HTMLDivElement | null>(null);
   const years = Array.from(
     { length: 200 },
     (_, i) => new Date().getFullYear() - 123 + i
   );
+
+  useEffect(() => {
+    console.log(currentDate.getUTCFullYear(), currentDate.getUTCMonth());
+
+    setSelectedYear(currentDate.getUTCFullYear());
+    setSelectedMonth(currentDate.getUTCMonth());
+    setSelectedDay(currentDate.getDate());
+  }, []);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -94,14 +104,6 @@ export const DateTimePicker: FC = () => {
   };
 
   const weekDaysAbbreviations = ["M", "T", "W", "T", "F", "S", "S"];
-
-  useEffect(() => {
-    console.log(currentDate.getUTCFullYear(), currentDate.getUTCMonth());
-
-    setSelectedYear(currentDate.getUTCFullYear());
-    setSelectedMonth(currentDate.getUTCMonth());
-    setSelectedDay(currentDate.getDate());
-  }, []);
 
   function computeEmptyCellsBefore() {
     const firstDayOfCurrentMonth = getStartOfMonth(selectedYear, selectedMonth);
@@ -178,6 +180,29 @@ export const DateTimePicker: FC = () => {
 
     // console.log(sundays, saturdays);
     return sundays;
+  }
+
+  function generateTimeSlots() {
+    const timeSlots = [];
+    let hour = 8; // Starting hour
+    let minute = 0; // Starting minute
+
+    while (hour <= 17) {
+      timeSlots.push(
+        `${hour.toString().padStart(2, "0")}:${minute
+          .toString()
+          .padStart(2, "0")}`
+      );
+
+      // Increment by 15 minutes
+      minute += 15;
+      if (minute === 60) {
+        minute = 0;
+        hour += 1;
+      }
+    }
+
+    return timeSlots;
   }
 
   //   function computeSundays() {
@@ -291,6 +316,10 @@ export const DateTimePicker: FC = () => {
   }, [selectedYear, selectedMonth]);
 
   useEffect(() => {
+    if (!isDateOnly) setTimeSlots(generateTimeSlots());
+  }, [isDateOnly]);
+
+  useEffect(() => {
     // setSelectedEntity(`${selectedDay}-${selectedMonth + 1}-${selectedYear}`);
     setSelectedEntity(
       // `${selectedYear}-${
@@ -334,173 +363,215 @@ export const DateTimePicker: FC = () => {
       </div>
       {/* {isDateTimePickerShown && ( */}
       <div
-        className={`h-52 flex flex-col absolute top-10 bg-white w-72 rounded-xl ${
+        className={`h-52 flex absolute top-10 bg-white w-72 rounded-xl ${
           isDateTimePickerShown
             ? "opacity-100 duration-700 shadow-2xl shadow-black/40"
             : "opacity-0 duration-700 pointer-events-none"
         }`}
       >
-        <div className="flex items-center justify-center text-sm pt-2 pb-1 border-b">
-          <RiArrowLeftSLine
-            className="w-5"
-            onClick={() => {
-              if (selectedMonth > 0) setSelectedMonth(selectedMonth - 1);
-              else {
-                setSelectedMonth(11);
-                setSelectedYear(selectedYear - 1);
-              }
-            }}
-          />
-          <div className="w-24 flex items-center justify-center">
-            <span
-              onClick={() => {
-                setAreMonthsShown(!areMonthsShown);
-                setAreYearsShown(false);
-              }}
-            >
-              {monthData.months[selectedMonth]}
-            </span>
-            &nbsp;
-            <span
-              onClick={() => {
-                setAreYearsShown(!areYearsShown);
-                setAreMonthsShown(false);
-              }}
-            >
-              {selectedYear}
-            </span>
-          </div>
-
-          <RiArrowRightSLine
-            className="w-5"
-            onClick={() => {
-              if (selectedMonth < 11) setSelectedMonth(selectedMonth + 1);
-              else {
-                setSelectedMonth(0);
-                setSelectedYear(selectedYear + 1);
-              }
-            }}
-          />
-        </div>
-        {/* {!areMonthsShown && ( */}
-
-        <div
-          className={`transition-opacity ease-linear w-72 grid grid-cols-7 gap-1 text-xs items-center justify-center p-1 ${
-            !areMonthsShown && !areYearsShown
-              ? "h-full opacity-100 duration-700"
-              : "h-0 opacity-0 duration-700 pointer-events-none"
-          }`}
-        >
-          {!areMonthsShown && !areYearsShown && (
-            <>
-              {weekDaysAbbreviations.map(
-                (
-                  weekDayAbbreviation: string,
-                  weekDayAbbreviationIndex: number
-                ) => (
-                  <span
-                    key={weekDayAbbreviationIndex}
-                    className={`h-5 w-5 flex items-center justify-center text-gray-300 ${
-                      weekDayAbbreviationIndex === 6 && "text-red-600"
-                    }`}
-                  >
-                    {weekDayAbbreviation}
-                  </span>
-                )
+        <div className="flex">
+          <div className="flex-col">
+            <div className="flex items-center justify-center text-sm pt-2 pb-1 border-b">
+              {currentDate.getUTCMonth() < selectedMonth && (
+                <span
+                  className={`flex items-center ${
+                    !areMonthsShown && !areYearsShown
+                      ? "h-full opacity-100 duration-700"
+                      : "h-0 opacity-0 duration-700 pointer-events-none"
+                  }`}
+                >
+                  <RiArrowLeftSLine
+                    className="w-5"
+                    onClick={(event) => {
+                      if (selectedMonth > 0)
+                        setSelectedMonth(selectedMonth - 1);
+                      else {
+                        setSelectedMonth(11);
+                        setSelectedYear(selectedYear - 1);
+                      }
+                      event.stopPropagation();
+                    }}
+                  />
+                </span>
               )}
-              {emptyCellsBefore.map((day: number, dayIndex: number) => (
-                <span
-                  key={dayIndex}
-                  className="h-5 w-5 flex items-center justify-center text-gray-300 cursor-not-allowed"
-                >
-                  {day}
-                </span>
-              ))}
-              {calendar.map((day: number, dayIndex: number) => (
-                <span
-                  key={dayIndex}
-                  className={`h-5 w-5 flex items-center justify-center ${
-                    sundays.includes(day) && "text-red-600"
-                  } ${
-                    currentDate.getUTCFullYear() === selectedYear &&
-                    currentDate.getUTCMonth() === selectedMonth &&
-                    currentDate.getDate() === day &&
-                    "underline !text-pink-500"
-                  } ${
-                    selectedDay === day && "bg-pink-300 rounded-full"
-                  } hover:bg-pink-300 hover:rounded-full cursor-pointer`}
-                  onClick={() => setSelectedDay(day)}
-                >
-                  {day}
-                </span>
-              ))}
-              {emptyCellsAfter.map((day: number, dayIndex: number) => (
-                <span
-                  key={dayIndex}
-                  className="h-5 w-5 flex items-center justify-center text-gray-300 cursor-not-allowed"
-                >
-                  {day}
-                </span>
-              ))}
-            </>
-          )}
-        </div>
 
-        {/* )} */}
-        {/* {areMonthsShown && ( */}
-        <div
-          className={`transition-opacity ease-linear ${
-            areMonthsShown
-              ? "h-full opacity-100 duration-700"
-              : "h-0 opacity-0 duration-700 pointer-events-none"
-          }`}
-        >
-          {areMonthsShown && (
-            <div className="w-72 h-full grid grid-cols-4 text-xs">
-              {monthData.months.map((month: string, monthIndex: number) => (
+              <div className="w-24 flex items-center justify-center">
                 <span
-                  className="flex items-center justify-center hover:bg-pink-300 hover:rounded-full cursor-pointer"
-                  onClick={(event) => {
-                    setSelectedMonth(monthIndex);
-                    setAreMonthsShown(false);
-                    event.stopPropagation();
-                  }}
-                >
-                  {month}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div
-          className={`transition-opacity ease-linear ${
-            areYearsShown
-              ? "h-full opacity-100 duration-700 overflow-y-auto overflow-x-hidden"
-              : "h-0 opacity-0 duration-700 pointer-events-none"
-          }`}
-        >
-          {areYearsShown && (
-            <div className="w-72 h-full grid grid-cols-3 text-xs">
-              {years.map((year: number) => (
-                <span
-                  className="flex items-center justify-center hover:bg-pink-300 hover:rounded-full cursor-pointer"
-                  onClick={(event) => {
-                    setSelectedYear(year);
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setAreMonthsShown(!areMonthsShown);
                     setAreYearsShown(false);
-                    event.stopPropagation();
                   }}
                 >
-                  {year}
+                  {monthData.months[selectedMonth]}
                 </span>
+                &nbsp;
+                <span
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setAreYearsShown(!areYearsShown);
+                    setAreMonthsShown(false);
+                  }}
+                >
+                  {selectedYear}
+                </span>
+              </div>
+
+              <span
+                className={`flex items-center ${
+                  !areMonthsShown && !areYearsShown
+                    ? "h-full opacity-100 duration-700"
+                    : "h-0 opacity-0 duration-700 pointer-events-none"
+                }`}
+              >
+                <RiArrowRightSLine
+                  className="w-5"
+                  onClick={(event) => {
+                    if (selectedMonth < 11) setSelectedMonth(selectedMonth + 1);
+                    else {
+                      setSelectedMonth(0);
+                      setSelectedYear(selectedYear + 1);
+                    }
+                    event.stopPropagation();
+                  }}
+                />
+              </span>
+            </div>
+            <div
+              className={`transition-opacity ease-linear w-72 grid grid-cols-7 gap-1 text-xs items-center justify-center p-1 ${
+                !areMonthsShown && !areYearsShown
+                  ? "h-full opacity-100 duration-700"
+                  : "h-0 opacity-0 duration-700 pointer-events-none"
+              }`}
+            >
+              {!areMonthsShown && !areYearsShown && (
+                <>
+                  {weekDaysAbbreviations.map(
+                    (
+                      weekDayAbbreviation: string,
+                      weekDayAbbreviationIndex: number
+                    ) => (
+                      <span
+                        key={weekDayAbbreviationIndex}
+                        className={`h-5 w-5 flex items-center justify-center text-gray-300 ${
+                          weekDayAbbreviationIndex === 6 && "text-red-600"
+                        }`}
+                      >
+                        {weekDayAbbreviation}
+                      </span>
+                    )
+                  )}
+                  {emptyCellsBefore.map((day: number, dayIndex: number) => (
+                    <span
+                      key={dayIndex}
+                      className="h-5 w-5 flex items-center justify-center text-gray-300 cursor-not-allowed"
+                    >
+                      {day}
+                    </span>
+                  ))}
+                  {calendar.map((day: number, dayIndex: number) => (
+                    <span
+                      key={dayIndex}
+                      className={`h-5 w-5 flex items-center justify-center ${
+                        sundays.includes(day) && "text-red-600"
+                      } ${
+                        currentDate.getUTCFullYear() === selectedYear &&
+                        currentDate.getUTCMonth() === selectedMonth &&
+                        currentDate.getDate() === day &&
+                        "underline !text-pink-500"
+                      } ${selectedDay === day && "bg-pink-300 rounded-full"} ${
+                        !isDateOnly &&
+                        day < currentDate.getDate() &&
+                        currentDate.getUTCMonth() === selectedMonth
+                          ? "!text-gray-300 cursor-not-allowed"
+                          : "hover:bg-pink-300 hover:rounded-full cursor-pointer"
+                      } `}
+                      onClick={() => {
+                        if (
+                          !isDateOnly &&
+                          day >= currentDate.getDate() &&
+                          currentDate.getUTCMonth() === selectedMonth
+                        )
+                          setSelectedDay(day);
+                      }}
+                    >
+                      {day}
+                    </span>
+                  ))}
+                  {emptyCellsAfter.map((day: number, dayIndex: number) => (
+                    <span
+                      key={dayIndex}
+                      className="h-5 w-5 flex items-center justify-center text-gray-300 cursor-not-allowed"
+                    >
+                      {day}
+                    </span>
+                  ))}
+                </>
+              )}
+            </div>
+            <div
+              className={`transition-opacity ease-linear ${
+                areMonthsShown
+                  ? "h-full opacity-100 duration-700"
+                  : "h-0 opacity-0 duration-700 pointer-events-none"
+              }`}
+            >
+              {areMonthsShown && (
+                <div className="w-72 h-full grid grid-cols-4 text-xs">
+                  {monthData.months.map((month: string, monthIndex: number) => (
+                    <span
+                      className={`flex items-center justify-center hover:bg-pink-300 hover:rounded-full cursor-pointer ${
+                        !isDateOnly &&
+                        monthIndex < currentDate.getUTCMonth() &&
+                        "text-gray-300 pointer-events-none"
+                      }`}
+                      onClick={(event) => {
+                        setSelectedMonth(monthIndex);
+                        setAreMonthsShown(false);
+                        event.stopPropagation();
+                      }}
+                    >
+                      {month}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div
+              className={`transition-opacity ease-linear ${
+                areYearsShown
+                  ? "h-full opacity-100 duration-700 overflow-y-auto overflow-x-hidden"
+                  : "h-0 opacity-0 duration-700 pointer-events-none"
+              }`}
+            >
+              {areYearsShown && (
+                <div className="w-72 h-full grid grid-cols-3 text-xs">
+                  {years.map((year: number) => (
+                    <span
+                      className="flex items-center justify-center hover:bg-pink-300 hover:rounded-full cursor-pointer"
+                      onClick={(event) => {
+                        setSelectedYear(year);
+                        setAreYearsShown(false);
+                        event.stopPropagation();
+                      }}
+                    >
+                      {year}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          {!isDateOnly && (
+            <div className="w-72 bg-white  h-full grid grid-cols-3 text-xs overflow-y-auto p-2 rounded-xl">
+              {timeSlots.map((timeSlot: string) => (
+                <span>{timeSlot}</span>
               ))}
             </div>
           )}
         </div>
-        {/* )} */}
       </div>
-
-      {/* )} */}
     </div>
   );
 };
