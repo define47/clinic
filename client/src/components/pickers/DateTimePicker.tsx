@@ -6,6 +6,7 @@ import {
   RiArrowRightSLine,
   RiCalendarLine,
 } from "react-icons/ri";
+import { AiFillClockCircle, AiOutlineClockCircle } from "react-icons/ai";
 
 const getStartOfMonth = (year: number, month: number) => {
   return new Date(Date.UTC(year, month, 1));
@@ -32,6 +33,7 @@ export const DateTimePicker: FC = () => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
   const [isDateOnly, setIsDateOnly] = useState<boolean>(false);
+  const [areTimeSlotsShown, setAreTimeSlotsShown] = useState<boolean>(false);
 
   const dateTimePickerRef = useRef<HTMLDivElement | null>(null);
   const years = Array.from(
@@ -375,7 +377,10 @@ export const DateTimePicker: FC = () => {
                   .split("T")[0]
                   .split("-")
                   .reverse()
-                  .join("-")} ${selectedEntity.split("T")[1].substring(0, 5)}`
+                  .join("-")} ${
+                  selectedEntity.split("T")[1] &&
+                  selectedEntity.split("T")[1].substring(0, 5)
+                }`
           }
           name="name"
           onChangeStyledInput={() => {}}
@@ -389,6 +394,7 @@ export const DateTimePicker: FC = () => {
                 setIsDateTimePickerShown(!isDateTimePickerShown);
                 setAreMonthsShown(false);
                 setAreYearsShown(false);
+                setAreTimeSlotsShown(false);
                 setSelectedYear(currentDate.getUTCFullYear());
                 setSelectedMonth(currentDate.getUTCMonth());
                 setSelectedDay(currentDate.getDate());
@@ -399,14 +405,15 @@ export const DateTimePicker: FC = () => {
       </div>
       {/* {isDateTimePickerShown && ( */}
       <div
-        className={`h-52 flex flex-col absolute top-10 bg-white rounded-tl-xl rounded-bl-xl w-72 ${
+        className={`h-52 flex flex-col absolute top-10 bg-white rounded-xl w-72 ${
           isDateTimePickerShown
             ? "opacity-100 duration-700 shadow-2xl shadow-black/40"
             : "opacity-0 duration-700 pointer-events-none"
         }`}
       >
         <div className="flex items-center justify-center text-sm pt-2 pb-1 border-b">
-          {currentDate.getUTCMonth() < selectedMonth && (
+          {(currentDate.getUTCMonth() < selectedMonth ||
+            currentDate.getUTCFullYear() < selectedYear) && (
             <span
               className={`flex items-center ${
                 !areMonthsShown && !areYearsShown
@@ -434,6 +441,7 @@ export const DateTimePicker: FC = () => {
               onClick={() => {
                 setAreMonthsShown(!areMonthsShown);
                 setAreYearsShown(false);
+                setAreTimeSlotsShown(false);
               }}
             >
               {monthData.months[selectedMonth]}
@@ -444,6 +452,7 @@ export const DateTimePicker: FC = () => {
               onClick={() => {
                 setAreYearsShown(!areYearsShown);
                 setAreMonthsShown(false);
+                setAreTimeSlotsShown(false);
               }}
             >
               {selectedYear}
@@ -469,15 +478,40 @@ export const DateTimePicker: FC = () => {
               }}
             />
           </span>
+
+          <span className="absolute right-2">
+            {areTimeSlotsShown ? (
+              <AiFillClockCircle
+                className="text-xl text-pink-300 cursor-pointer transform hover:scale-125"
+                onClick={(event) => {
+                  setAreTimeSlotsShown(false);
+                  setAreMonthsShown(false);
+                  setAreYearsShown(false);
+                  event.stopPropagation();
+                }}
+              />
+            ) : (
+              <AiOutlineClockCircle
+                className="text-xl cursor-pointer transform hover:text-pink-300 hover:scale-125"
+                onClick={(event) => {
+                  setAreTimeSlotsShown(true);
+                  setAreMonthsShown(false);
+                  setAreYearsShown(false);
+                  event.stopPropagation();
+                }}
+              />
+            )}
+          </span>
+          {/* <span>{selectedTimeSlot}</span> */}
         </div>
         <div
           className={`transition-opacity ease-linear w-72 grid grid-cols-7 gap-1 text-xs items-center justify-center p-1 ${
-            !areMonthsShown && !areYearsShown
+            !areMonthsShown && !areYearsShown && !areTimeSlotsShown
               ? "h-full opacity-100 duration-700"
               : "h-0 opacity-0 duration-700 pointer-events-none"
           }`}
         >
-          {!areMonthsShown && !areYearsShown && (
+          {!areMonthsShown && !areYearsShown && !areTimeSlotsShown && (
             <>
               {weekDaysAbbreviations.map(
                 (
@@ -553,6 +587,7 @@ export const DateTimePicker: FC = () => {
             <div className="w-72 h-full grid grid-cols-4 text-xs">
               {monthData.months.map((month: string, monthIndex: number) => (
                 <span
+                  key={monthIndex}
                   className={`flex items-center justify-center hover:bg-pink-300 hover:rounded-full cursor-pointer ${
                     !isDateOnly &&
                     monthIndex < currentDate.getUTCMonth() &&
@@ -570,7 +605,6 @@ export const DateTimePicker: FC = () => {
             </div>
           )}
         </div>
-
         <div
           className={`transition-opacity ease-linear ${
             areYearsShown
@@ -582,6 +616,7 @@ export const DateTimePicker: FC = () => {
             <div className="w-72 h-full grid grid-cols-3 text-xs">
               {years.map((year: number) => (
                 <span
+                  key={year}
                   className="flex items-center justify-center hover:bg-pink-300 hover:rounded-full cursor-pointer"
                   onClick={(event) => {
                     setSelectedYear(year);
@@ -595,18 +630,28 @@ export const DateTimePicker: FC = () => {
             </div>
           )}
         </div>
-        {!isDateOnly && (
-          <div className="absolute top-0 left-72 bg-white w-72 h-full grid grid-cols-3 gap-2 text-xs overflow-y-auto p-2 no-scrollbar rounded-tr-xl rounded-br-xl">
-            {timeSlots.map((timeSlot: string) => (
-              <span
-                className={`flex items-center justify-center border hover:border-pink-400 p-2 cursor-pointer`}
-                onClick={() => setSelectedTimeSlot(timeSlot)}
-              >
-                {timeSlot}
-              </span>
-            ))}
-          </div>
-        )}
+        {/* // absolute top-0 left-72 */}
+        <div
+          className={`transition-opacity ease-linear no-scrollbar ${
+            areTimeSlotsShown
+              ? "h-full opacity-100 duration-700 overflow-y-auto overflow-x-hidden"
+              : "h-0 opacity-0 duration-700 pointer-events-none"
+          }`}
+        >
+          {areTimeSlotsShown && (
+            <div className="w-72 h-full grid grid-cols-3 gap-1 p-1 text-xs">
+              {timeSlots.map((timeSlot: string) => (
+                <span
+                  key={timeSlot}
+                  className={`flex items-center justify-center border hover:border-pink-400 p-2 cursor-pointer`}
+                  onClick={() => setSelectedTimeSlot(timeSlot)}
+                >
+                  {timeSlot}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
