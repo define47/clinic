@@ -303,22 +303,22 @@ const buildServer = async () => {
   // createUsers(0, 1, "doctor");
   // createUsers(0, 10, "patient");
 
-  // const appointmentRepository = new AppointmentRepository(
-  //   drizzleInstance,
-  //   appointmentTable
-  // );
+  const appointmentRepository = new AppointmentRepository(
+    drizzleInstance,
+    appointmentTable
+  );
 
-  // const appointments = await appointmentRepository.getAllAppointments(
-  //   "doctor",
-  //   ["userForename", "userSurname"],
-  //   "",
-  //   "nextWeek",
-  //   // "appointmentDateTime"
-  //   ["asc:userForename", "desc:userSurname"],
-  //   3,
-  //   0
-  // );
-  // console.log(appointments);
+  const appointments = await appointmentRepository.getAllAppointments(
+    "doctor",
+    ["userForename", "userSurname"],
+    "",
+    "month",
+    // "appointmentDateTime"
+    ["asc:userForename", "desc:userSurname"],
+    3,
+    0
+  );
+  console.log(appointments?.tableData);
 
   // const userRoleMappingService = new UserRoleMappingService();
 

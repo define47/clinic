@@ -35,6 +35,16 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
     userRoleId: "",
     userRoleName: "",
   });
+  const [userDateOfBirth, setUserDateOfBirth] = useState<string>("");
+
+  const [defaultDate, setDefaultDate] = useState<string>("");
+  // useEffect(() => {
+  //   if (isCreateUserOverlayVisible) setDefaultDate("1945-01-01");
+  // }, [isCreateUserOverlayVisible]);
+
+  useEffect(() => {
+    console.log("defaultDate", defaultDate);
+  }, [defaultDate]);
 
   const [
     selectedPrimaryMedicalSpecialityId,
@@ -98,8 +108,33 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   }
 
   useEffect(() => {
-    console.log(userToCreate);
-  }, [userToCreate]);
+    console.log("userToCreate", {
+      userForename: userToCreate.userForename,
+      userSurname: userToCreate.userSurname,
+      userEmail: userToCreate.userEmail,
+      userPhoneNumber: userToCreate.userPhoneNumber,
+      userGender: userToCreate.userGender,
+      userDateOfBirth,
+      userAddress: userToCreate.userAddress,
+      userEncryptedPassword: "",
+      roleIds: [roleId],
+      ...(roleName === "doctor" && {
+        specialityIds: [
+          selectedPrimaryMedicalSpecialityId,
+          selectedSecondaryMedicalSpecialityId,
+          selectedTertiaryMedicalSpecialityId,
+        ],
+      }),
+    });
+  }, [
+    userToCreate,
+    selectedPrimaryMedicalSpecialityId,
+    selectedSecondaryMedicalSpecialityId,
+    selectedTertiaryMedicalSpecialityId,
+    userDateOfBirth,
+    roleId,
+    roleName,
+  ]);
 
   async function onCreateUser() {
     try {
@@ -111,7 +146,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
           userEmail: userToCreate.userEmail,
           userPhoneNumber: userToCreate.userPhoneNumber,
           userGender: userToCreate.userGender,
-          userDateOfBirth: userToCreate.userDateOfBirth,
+          // userDateOfBirth: userToCreate.userDateOfBirth,
+          userDateOfBirth,
           userAddress: userToCreate.userAddress,
           userEncryptedPassword: "",
           roleIds: [roleId],
@@ -204,14 +240,21 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 labelBackgroundColor="bg-white"
                 defaultValue="male"
               />
-              <StyledInput
+              {/* <StyledInput
                 label="userDateOfBirth"
                 name="userDateOfBirth"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
                 defaultValue="1765-05-23"
+              /> */}
+              <DateTimePicker
+                isDateOnly={true}
+                label={"Date of Birth"}
+                selectedEntity={userDateOfBirth}
+                setSelectedEntity={setUserDateOfBirth}
+                defaultDate={defaultDate}
+                isOverlayVisible={isCreateUserOverlayVisible}
               />
-              <DateTimePicker />
             </div>
             <div className="flex flex-col space-y-6">
               <StyledInput

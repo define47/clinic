@@ -1,6 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { StyledInput } from "../design/StyledInput";
-import { FcCalendar } from "react-icons/fc";
 import {
   RiArrowLeftSLine,
   RiArrowRightSLine,
@@ -21,6 +20,9 @@ type DateTimePickerProps = {
   label: string;
   defaultDate?: string;
   defaultTime?: string;
+  selectedEntity: string;
+  setSelectedEntity: (selectedEntity: string) => void;
+  isOverlayVisible?: boolean;
 };
 
 export const DateTimePicker: FC<DateTimePickerProps> = ({
@@ -28,9 +30,12 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   label,
   defaultDate,
   defaultTime,
+  selectedEntity,
+  setSelectedEntity,
+  isOverlayVisible,
 }) => {
   const currentDate = new Date("2024-05-20");
-  const [selectedEntity, setSelectedEntity] = useState<string>("");
+  // const [selectedEntity, setSelectedEntity] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<number>(0);
   const [selectedMonth, setSelectedMonth] = useState<number>(0);
   const [selectedDay, setSelectedDay] = useState<number>(0);
@@ -54,13 +59,9 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   );
 
   useEffect(() => {
-    console.log(currentDate.getUTCFullYear(), currentDate.getUTCMonth());
-
     if (isDateOnly) {
       if (defaultDate) {
         const data = defaultDate.split("-");
-        console.log("parsed", parseInt(data[1]));
-
         setSelectedYear(parseInt(data[0]));
         setSelectedMonth(parseInt(data[1]));
         setSelectedDay(parseInt(data[2]));
@@ -83,7 +84,12 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
         setSelectedTimeSlot("08:00");
       }
     }
-  }, []);
+
+    // const data = defaultDate!.split("-");
+    // setSelectedYear(parseInt(data[0]));
+    // setSelectedMonth(parseInt(data[1]));
+    // setSelectedDay(parseInt(data[2]));
+  }, [isDateOnly, defaultDate, defaultTime, isOverlayVisible]);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -227,8 +233,6 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
     ) {
       const date = new Date(selectedYear, selectedMonth, i);
 
-      console.log(date.getDay());
-
       //   if (date.getDay() == 6) {
       //     saturdays.push(date);
       //   } else if (date.getDay() == 0) {
@@ -369,10 +373,10 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
     setCalendar(computeCalendar());
     setEmptyCellsAfter(computeEmptyCellsAfter());
     setSundays(computeSundays());
-    console.log(computeEmptyCellsBefore());
-    console.log(computeCalendar());
-    console.log(computeEmptyCellsAfter());
-    console.log(computeSundays());
+    // console.log(computeEmptyCellsBefore());
+    // console.log(computeCalendar());
+    // console.log(computeEmptyCellsAfter());
+    // console.log(computeSundays());
   }, [selectedYear, selectedMonth]);
 
   useEffect(() => {
@@ -410,10 +414,10 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
     );
   }, [selectedYear, selectedMonth, selectedDay, selectedTimeSlot, isDateOnly]);
 
-  useEffect(() => {
-    // const saturdays = [];
-    console.log(selectedEntity);
-  }, [selectedEntity]);
+  // useEffect(() => {
+  //   // const saturdays = [];
+  //   console.log(selectedEntity);
+  // }, [selectedEntity]);
 
   return (
     <div className="relative" ref={dateTimePickerRef}>
@@ -710,7 +714,9 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
               {timeSlots.map((timeSlot: string) => (
                 <span
                   key={timeSlot}
-                  className={`flex items-center justify-center border hover:border-pink-400 p-2 cursor-pointer`}
+                  className={`flex items-center justify-center border hover:border-pink-400 hover:scale-105 p-2 cursor-pointer ${
+                    selectedTimeSlot === timeSlot && "border-pink-400"
+                  }`}
                   onClick={() => setSelectedTimeSlot(timeSlot)}
                 >
                   {timeSlot}

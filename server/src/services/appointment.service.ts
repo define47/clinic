@@ -3,6 +3,7 @@ import {
   Appointment,
   appointmentTable,
   AppointmentUpdateAttributes,
+  AppointmentJoinDoctorAndPatient,
 } from "../models/appointment.model";
 import { AppointmentRepository } from "../repositories/appointment.repository";
 import { drizzleInstance } from "../utils/drizzle";
@@ -15,6 +16,37 @@ export class AppointmentService implements IAppointmentService {
     this._appointmentRepository = new AppointmentRepository(
       drizzleInstance,
       appointmentTable
+    );
+  }
+
+  public async getAllAppointments(
+    table: string,
+    searchBy: string[],
+    searchQuery: string,
+    scheduleFilter: string,
+    orderBy: string[],
+    limit: number,
+    page: number,
+    doctorId?: string,
+    patientId?: string
+  ): Promise<
+    | {
+        tableData: AppointmentJoinDoctorAndPatient[];
+        totalCount: number;
+        totalPages: number;
+      }
+    | undefined
+  > {
+    return await this._appointmentRepository.getAllAppointments(
+      table,
+      searchBy,
+      searchQuery,
+      scheduleFilter,
+      orderBy,
+      limit,
+      page,
+      doctorId,
+      patientId
     );
   }
 

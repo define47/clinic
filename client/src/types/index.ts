@@ -23,7 +23,30 @@ export type MedicalSpeciality = {
   medicalSpecialityName: string;
 };
 
-export type TableRow = User | MedicalSpeciality;
+export type Appointment = {
+  appointment: {
+    appointmentId: string;
+    appointmentDoctorId: string;
+    appointmentPatientId: string;
+    appointmentReason: string;
+    appointmentDateTime: string;
+    appointmentStatus: string;
+    appointmentCancellationReason: string | null;
+  };
+  doctor: {
+    doctorId: string;
+    doctorForename: string;
+    doctorSurname: string;
+  };
+  patient: {
+    patientId: string;
+    patientForename: string;
+    patientSurname: string;
+    patientEmail: string;
+  };
+};
+
+export type TableRow = User | MedicalSpeciality | Appointment;
 
 export type UserToLogin = {
   userEmail: string;

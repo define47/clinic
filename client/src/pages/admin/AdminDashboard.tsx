@@ -1,4 +1,4 @@
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 import { StyledRippleButton } from "../../components/design/StyledRippleButton";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
 
@@ -6,11 +6,14 @@ import { UserSearchCriterionPicker } from "../../components/pickers/UserSearchCr
 import { MedicalSpecialityPicker } from "../../components/pickers/MedicalSpecialityPicker";
 import { TreeTable } from "../../components/TreeTable";
 import { DateTimePicker } from "../../components/pickers/DateTimePicker";
+import { UserPicker } from "../../components/pickers/UserPicker";
 
 export const AdminDashboard: FC = () => {
   const socketContext = useContext(SocketNotificationDataContext);
   const { socketNotificationDataState, socketNotificationDataSetState } =
     socketContext!;
+
+  const [selectedEntity, setSelectedEntity] = useState<string>("");
 
   const treeData = [
     {
@@ -58,20 +61,29 @@ export const AdminDashboard: FC = () => {
           type="create"
         />
         here notification {JSON.stringify(socketNotificationDataState)}
+        <DateTimePicker
+          isDateOnly={false}
+          label="DD/MM/YYYY HH:MM"
+          selectedEntity={selectedEntity}
+          setSelectedEntity={setSelectedEntity}
+        />
         {/* <UserSearchCriterionPicker /> */}
-        <div className="flex">
+        {/* <div className="flex">
+          <DateTimePicker isDateOnly={true} label="date picker" />
+          <DateTimePicker isDateOnly={false} label="date time picker" />
           <DateTimePicker
             isDateOnly={true}
-            label="default DATE picker"
+            label="DEFAULT date picker"
             defaultDate="1234-08-23"
           />
           <DateTimePicker
             isDateOnly={false}
-            label="default DATE TIME picker"
+            label="DEFAULT date time picker"
             defaultDate="2025-03-05"
             defaultTime="10:00"
           />
-        </div>
+        </div> */}
+        <UserPicker />
       </div>
     </div>
   );

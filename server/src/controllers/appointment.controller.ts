@@ -12,6 +12,33 @@ export class AppointmentController {
     this._appointmentHistoryService = new AppointmentHistoryService();
   }
 
+  public retrieveAllUsersRelatedData = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const query: any = request.query;
+
+      console.log("query app", query.searchBy);
+
+      const payload = await this._appointmentService.getAllAppointments(
+        query.table,
+        query.searchBy.split(","),
+        query.searchQuery,
+        query.scheduleFilter,
+        query.orderBy.split(","),
+        query.limit,
+        query.page,
+        query.doctorId,
+        query.patientId
+      );
+
+      reply.code(200).send({ success: true, payload });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   public postAppointment = async (
     request: FastifyRequest,
     reply: FastifyReply

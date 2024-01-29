@@ -58,7 +58,7 @@ export class AppointmentRepository
     patientId?: string
   ): Promise<
     | {
-        appointmentsRelatedData: AppointmentJoinDoctorAndPatient[];
+        tableData: AppointmentJoinDoctorAndPatient[];
         totalCount: number;
         totalPages: number;
       }
@@ -123,6 +123,7 @@ export class AppointmentRepository
 
           startDate = firstDayOfCurrentWeek;
           endDate = lastDayOfCurrentWeek;
+          break;
         case "month":
           const currentMonthStart = new Date(
             Date.UTC(
@@ -152,6 +153,7 @@ export class AppointmentRepository
 
           startDate = currentMonthStart;
           endDate = currentMonthEnd;
+          break;
         case "nextWeek":
           let startOfNextWeek = new Date(currentDate);
           let daysUntilNextMonday = 8 - currentDate.getUTCDay();
@@ -223,11 +225,8 @@ export class AppointmentRepository
       if (orderBy.length === 1 && table === "doctor") {
         const element0 = orderBy[0].split(":");
 
-        console.log(element0);
-
         if (element0[0] === "asc") {
           orderByFinal0 = asc(doctor[element0[1] as keyof User]);
-          console.log(orderByFinal0);
 
           orderByColumns.push(orderByFinal0);
         } else {
@@ -327,7 +326,7 @@ export class AppointmentRepository
       // .where(ilike(patient.userForename, `${searchQuery}%`));
 
       return {
-        appointmentsRelatedData: data,
+        tableData: data,
         totalCount: totalCount[0].totalCount,
         totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
       };

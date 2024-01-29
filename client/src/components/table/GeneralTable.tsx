@@ -1,6 +1,7 @@
 import axios from "axios";
 import { FC, useContext, useEffect, useState } from "react";
 import {
+  Appointment,
   GeneralTableProps,
   MedicalSpeciality,
   TableRow,
@@ -69,6 +70,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     return "medicalSpecialityId" in tableRow;
   }
 
+  function isAppointmentRow(tableRow: TableRow): tableRow is Appointment {
+    return "appointment" in tableRow && "appointmentId" in tableRow.appointment;
+  }
+
   async function fetchTableData() {
     try {
       let queryParams = {};
@@ -92,7 +97,18 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           limit: tableLimit,
           page: 0,
         };
-
+      else if (entity === "appointment")
+        queryParams = {
+          table: "doctor",
+          searchBy: "userForename",
+          searchQuery: "",
+          scheduleFilter: "month",
+          orderBy: "desc:userForename, asc:userSurname",
+          limit: 100,
+          page: 0,
+          doctorId: "",
+          patientId: "",
+        };
       console.log("queryParams", queryParams);
 
       const response = await axios.get(URL, {
@@ -354,6 +370,19 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   </td>
                   <td className="px-6 py-4 font-bold w-1/3">Actions</td>
                 </tr>
+              ) : isAppointmentRow(tableRows[0]) ? (
+                <tr>
+                  <td className="px-6 py-4 font-bold">appointmentId</td>
+                  <td className="px-6 py-4 font-bold">doctor</td>
+                  <td className="px-6 py-4 font-bold">patient</td>
+                  <td className="px-6 py-4 font-bold">appointmentReason</td>
+                  <td className="px-6 py-4 font-bold">appointmentDateTime</td>
+                  <td className="px-6 py-4 font-bold">appointmentStatus</td>
+                  <td className="px-6 py-4 font-bold">
+                    appointmentCancellationReason
+                  </td>
+                  <td className="px-6 py-4 font-bold">Actions</td>
+                </tr>
               ) : (
                 ""
               )}
@@ -388,7 +417,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       {tableRow.userGender}
                     </td>
                     <td className="px-6 py-4 font-medium">
-                      {tableRow.userDateOfBirth}
+                      {tableRow.userDateOfBirth.split("-").reverse().join("-")}
                     </td>
                     <td className="px-6 py-4 font-medium">
                       {tableRow.userAddress}
@@ -443,6 +472,49 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                         medicalSpeciality={tableRow}
                       />
                     </td>
+                  </tr>
+                ) : isAppointmentRow(tableRow) ? (
+                  <tr
+                    key={tableRow.appointment.appointmentId}
+                    className={`border-b border-neutral-400 odd:bg-neutral-100 even:bg-white transition duration-300 ease-in-out hover:bg-pink-100 ${
+                      (clickedTableRow as Appointment)?.appointment
+                        .appointmentId === tableRow.appointment.appointmentId &&
+                      "!bg-pink-200"
+                    }`}
+                    onClick={() => setClickedTableRow(tableRow)}
+                  >
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.appointment.appointmentId}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.doctor.doctorForename}&nbsp;
+                      {tableRow.doctor.doctorSurname}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.patient.patientForename}&nbsp;
+                      {tableRow.patient.patientSurname}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.appointment.appointmentReason}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.appointment.appointmentDateTime
+                        .split("T")[0]
+                        .split("-")
+                        .reverse()
+                        .join("-")}
+                      &nbsp;
+                      {tableRow.appointment.appointmentDateTime
+                        .split("T")[1]
+                        .substring(0, 5)}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.appointment.appointmentStatus}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.appointment.appointmentCancellationReason}
+                    </td>
+                    <td></td>
                   </tr>
                 ) : (
                   ""
