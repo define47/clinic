@@ -83,8 +83,8 @@ export const AdminDashboard: FC = () => {
             defaultTime="10:00"
           />
         </div> */}
-        <UserPicker label="doctor picker" roleName="doctor" />
-        <UserPicker label="patient picker" roleName="patient" />
+        <UserPicker label="doctor picker" roleName="doctor" z="z-50" />
+        <UserPicker label="patient picker" roleName="patient" z="z-40" />
       </div>
     </div>
   );

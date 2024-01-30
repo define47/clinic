@@ -3,9 +3,11 @@ import { StyledInput } from "../design/StyledInput";
 import {
   RiArrowLeftSLine,
   RiArrowRightSLine,
+  RiCalendarFill,
   RiCalendarLine,
 } from "react-icons/ri";
 import { AiFillClockCircle, AiOutlineClockCircle } from "react-icons/ai";
+import { IoCalendarClearSharp } from "react-icons/io5";
 
 const getStartOfMonth = (year: number, month: number) => {
   return new Date(Date.UTC(year, month, 1));
@@ -443,29 +445,64 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           // }}
           disabled={true}
           icon={
-            <RiCalendarLine
-              onClick={() => {
-                setIsDateTimePickerShown(!isDateTimePickerShown);
-                setAreMonthsShown(false);
-                setAreYearsShown(false);
-                setAreTimeSlotsShown(false);
-                // if (isDateOnly) {
-                //   if (defaultDate) {
-                //     const data = defaultDate.split("-");
-                //     setSelectedYear(parseInt(data[0]));
-                //     setSelectedMonth(parseInt(data[1]));
-                //     setSelectedDay(parseInt(data[2]));
-                //   } else {
-                //     setSelectedYear(currentDate.getUTCFullYear());
-                //     setSelectedMonth(currentDate.getUTCMonth());
-                //     setSelectedDay(currentDate.getDate());
-                //   }
-                // } else {
-                // }
-              }}
-            />
+            // <RiCalendarLine
+            //   onClick={() => {
+            //     setIsDateTimePickerShown(!isDateTimePickerShown);
+            //     setAreMonthsShown(false);
+            //     setAreYearsShown(false);
+            //     setAreTimeSlotsShown(false);
+            //   }}
+            // />
+            <div className="z-10">
+              {isDateTimePickerShown ? (
+                <RiCalendarFill
+                  className="text-pink-300 hover:text-pink-400"
+                  onClick={() => {
+                    // setIsDateTimePickerShown(false);
+                    // setAreMonthsShown(false);
+                    // setAreYearsShown(false);
+                    // setAreTimeSlotsShown(false);
+                  }}
+                />
+              ) : (
+                <RiCalendarLine
+                  className="hover:text-pink-400"
+                  onClick={() => {
+                    // setIsDateTimePickerShown(true);
+                    // setAreMonthsShown(false);
+                    // setAreYearsShown(false);
+                    // setAreTimeSlotsShown(false);
+                  }}
+                />
+              )}
+            </div>
+            // <div>
+            //   {isDateTimePickerShown ? (
+            //     <RiCalendarFill
+            //       onClick={() => {
+            //         setIsDateTimePickerShown(false);
+            //         setAreMonthsShown(false);
+            //         setAreYearsShown(false);
+            //         setAreTimeSlotsShown(false);
+            //       }}
+            //     />
+            //   ) : (
+            //     <RiCalendarLine
+            //       onClick={() => {
+            //         setIsDateTimePickerShown(true);
+            //         setAreMonthsShown(false);
+            //         setAreYearsShown(false);
+            //         setAreTimeSlotsShown(false);
+            //       }}
+            //     />
+            //   )}
+            // </div>
           }
         />
+        <span
+          className="absolute top-0 h-10 w-72 bg-transparent cursor-pointer"
+          onClick={() => setIsDateTimePickerShown(!isDateTimePickerShown)}
+        ></span>
       </div>
       {/* {isDateTimePickerShown && ( */}
       <div

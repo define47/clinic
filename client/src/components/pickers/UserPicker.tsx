@@ -4,13 +4,15 @@ import { User } from "../../types";
 import { doctorRoleId, patientRoleId, userPath } from "../../utils/dotenv";
 import { StyledInput } from "../design/StyledInput";
 import { TiTick } from "react-icons/ti";
+import { RiArrowUpSLine } from "react-icons/ri";
 
 type UserPickerProps = {
   label: string;
   roleName: string;
+  z: string;
 };
 
-export const UserPicker: FC<UserPickerProps> = ({ label, roleName }) => {
+export const UserPicker: FC<UserPickerProps> = ({ label, roleName, z }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [selectedUserName, setSelectedUserName] = useState<string>("");
@@ -34,6 +36,18 @@ export const UserPicker: FC<UserPickerProps> = ({ label, roleName }) => {
       document.removeEventListener("click", handleOutsideClick);
     };
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsUserPickerVisible(false);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isUserPickerVisible]);
 
   async function fetchTableData() {
     try {
@@ -84,12 +98,33 @@ export const UserPicker: FC<UserPickerProps> = ({ label, roleName }) => {
       const userSurnameMatch = filteredUser.userSurname
         .toLowerCase()
         .startsWith(selectedUserName);
+      // const specialityName = filteredUser
+      //   .medicalSpecialities![0]?.toLowerCase()
+      //   .startsWith(selectedUserName);
+      let specialityNameMatch = false;
+
+      if (roleName === "doctor" && filteredUser.medicalSpecialities) {
+        for (let i = 0; i < filteredUser.medicalSpecialities.length; i++) {
+          const speciality = filteredUser.medicalSpecialities[i]?.toLowerCase();
+          if (
+            speciality &&
+            speciality.startsWith(selectedUserName.toLowerCase())
+          ) {
+            specialityNameMatch = true;
+            break; // Break the loop if a match is found
+          }
+        }
+      }
 
       const fullName =
         `${filteredUser.userForename} ${filteredUser.userSurname}`.toLowerCase();
       const fullNameMatch = fullName.startsWith(selectedUserName);
-      return userForenameMatch || userSurnameMatch || fullNameMatch;
-      // const userForenameMatch = filteredUser.userForename.toLowerCase().startsWith(selectedUserName)
+      return (
+        userForenameMatch ||
+        userSurnameMatch ||
+        fullNameMatch ||
+        (roleName === "doctor" && specialityNameMatch)
+      );
     });
 
     return filteredUsers;
@@ -143,7 +178,7 @@ export const UserPicker: FC<UserPickerProps> = ({ label, roleName }) => {
 
   return (
     <div className="flex">
-      <div className="relative z-50" ref={userSearchPickerRef}>
+      <div className={`relative ${z}`} ref={userSearchPickerRef}>
         <StyledInput
           label={label}
           inputValue={selectedUserName}
@@ -155,7 +190,19 @@ export const UserPicker: FC<UserPickerProps> = ({ label, roleName }) => {
           onClickInput={() => {
             setIsUserPickerVisible(!isUserPickerVisible);
           }}
-          // <RiFilterLine />
+          icon={
+            <div
+              className={`transition-transform transform ${
+                !isUserPickerVisible ? "rotate-0" : "rotate-180"
+              }`}
+            >
+              <RiArrowUpSLine
+                onClick={() => {
+                  setIsUserPickerVisible(!isUserPickerVisible);
+                }}
+              />
+            </div>
+          }
           isPicker={true}
           isPickerVisible={isUserPickerVisible}
         />
@@ -175,10 +222,24 @@ export const UserPicker: FC<UserPickerProps> = ({ label, roleName }) => {
                 >
                   <div className="w-full flex justify-between items-center">
                     <div>
-                      <span>-</span>
+                      <span>-</span>&nbsp;
                       <span>{user.userForename}</span>&nbsp;
                       <span>{user.userSurname}</span>&nbsp;
-                      {roleName === "doctor" && user.medicalSpecialities}
+                      {roleName === "doctor" &&
+                        "(" + user.medicalSpecialities + ")"}
+                      {/* {roleName === "doctor" &&
+                        user.medicalSpecialities &&
+                        "(" +
+                          user.medicalSpecialities.map(
+                            (
+                              medicalSpeciality: string,
+                              medicalSpecialityIndex: number
+                            ) =>
+                              medicalSpecialityIndex !==
+                                user.medicalSpecialities?.length && (
+                                <span>{medicalSpeciality},&nbsp;</span>
+                              )
+                          )} */}
                     </div>
                     {selectedUserName.toLowerCase() ===
                       `${user.userForename.toLowerCase()} ${user.userSurname.toLowerCase()}` && (
@@ -195,9 +256,11 @@ export const UserPicker: FC<UserPickerProps> = ({ label, roleName }) => {
                 >
                   <div className="w-full flex justify-between items-center">
                     <div>
-                      <span>-</span>
+                      <span>-</span>&nbsp;
                       <span>{filteredUser.userForename}</span>&nbsp;
-                      <span>{filteredUser.userSurname}</span>
+                      <span>{filteredUser.userSurname}</span>&nbsp;
+                      {roleName === "doctor" &&
+                        "(" + filteredUser.medicalSpecialities + ")"}
                     </div>
                     {selectedUserName.toLowerCase() ===
                       `${filteredUser.userForename.toLowerCase()} ${filteredUser.userSurname.toLowerCase()}` && (
