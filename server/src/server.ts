@@ -56,6 +56,8 @@ import { DoctorMedicalSpecialityMappingRepository } from "./repositories/doctorM
 import { MedicalSpecialityMedicalProcedureMappingRepository } from "./repositories/medicalSpecialityMedicalProcedureMapping.repository.js";
 import { medicalSpecialityMedicalProcedureMappingTable } from "./models/medicalSpecialityMedicalProcedureMapping.model.js";
 import { MedicalProcedureService } from "./services/medicalProcedure.service.js";
+import { AppointmentService } from "./services/appointment.service.js";
+import { UserRepository } from "./repositories/user.repository.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -308,6 +310,8 @@ const buildServer = async () => {
     appointmentTable
   );
 
+  // appointmentRepository
+
   const appointments = await appointmentRepository.getAllAppointments(
     "doctor",
     ["userForename", "userSurname"],
@@ -319,6 +323,12 @@ const buildServer = async () => {
     0
   );
   console.log(appointments?.tableData);
+
+  // const userRep = new UserRepository(drizzleInstance, userTable)
+  // userRep.
+
+  // const appointmentService =new AppointmentService()
+  // appointmentService.
 
   // const userRoleMappingService = new UserRoleMappingService();
 

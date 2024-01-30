@@ -1,16 +1,10 @@
 import axios from "axios";
 import { FC, useEffect, useRef, useState } from "react";
-import { User } from "../../types";
+import { User, UserPickerProps } from "../../types";
 import { doctorRoleId, patientRoleId, userPath } from "../../utils/dotenv";
 import { StyledInput } from "../design/StyledInput";
 import { TiTick } from "react-icons/ti";
 import { RiArrowUpSLine } from "react-icons/ri";
-
-type UserPickerProps = {
-  label: string;
-  roleName: string;
-  z: string;
-};
 
 export const UserPicker: FC<UserPickerProps> = ({ label, roleName, z }) => {
   const [users, setUsers] = useState<User[]>([]);

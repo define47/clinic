@@ -71,6 +71,18 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsUserSearchCriterionPickerVisible(false);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isUserSearchCriterionPickerVisible]);
+
   function handleUserSearchCriteriaClick(
     userSearchCriteria: UserSearchCriteria
   ) {
@@ -102,18 +114,6 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
     else if (selectedUserSearchCriteriaName.toLowerCase() === "phone number")
       setSelectedUserSearchCriteriaValue("userPhoneNumber");
   }, [selectedUserSearchCriteriaName]);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsUserSearchCriterionPickerVisible(false);
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isUserSearchCriterionPickerVisible]);
 
   useEffect(() => {
     console.log(

@@ -23,7 +23,7 @@ export type MedicalSpeciality = {
   medicalSpecialityName: string;
 };
 
-export type Appointment = {
+export type AppointmentTableData = {
   appointment: {
     appointmentId: string;
     appointmentDoctorId: string;
@@ -46,7 +46,7 @@ export type Appointment = {
   };
 };
 
-export type TableRow = User | MedicalSpeciality | Appointment;
+export type TableRow = User | MedicalSpeciality | AppointmentTableData;
 
 export type UserToLogin = {
   userEmail: string;
@@ -135,4 +135,40 @@ export type MedicalSpecialityPickerProps = {
   selectedPrimaryMedicalSpecialityId?: string;
   selectedSecondaryMedicalSpecialityId?: string;
   selectedTertiaryMedicalSpecialityId?: string;
+};
+
+export type AppointmentSearchCriterionPickerProps = {
+  selectedTable: string;
+  setSelectedTable: (selectedTable: string) => void;
+  selectedAppointmentCriteriaValue: string;
+  setSelectedAppointmentCriteriaValue: (
+    selectedAppointmentCriteriaValue: string
+  ) => void;
+  selectedAppointmentCriteriaName: string;
+  setSelectedAppointmentCriteriaName: (
+    selectedAppointmentCriteriaName: string
+  ) => void;
+};
+
+export type AppointmentPeriodPickerProps = {
+  selectedAppointmentPeriodValue: string;
+  setSelectedAppointmentPeriodValue: (
+    selectedAppointmentPeriodValue: string
+  ) => void;
+};
+
+export type UserPickerProps = {
+  label: string;
+  roleName: string;
+  z: string;
+};
+
+export type Appointment = {
+  appointmentId?: string;
+  appointmentDoctorId: string;
+  appointmentPatientId: string;
+  appointmentReason: string;
+  appointmentDateTime: string;
+  appointmentStatus: string;
+  appointmentCancellationReason?: string;
 };

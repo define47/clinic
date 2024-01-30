@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FC, useContext, useEffect, useState } from "react";
 import {
-  Appointment,
+  AppointmentTableData,
   GeneralTableProps,
   MedicalSpeciality,
   TableRow,
@@ -26,6 +26,9 @@ import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import { UserSearchCriterionPicker } from "../pickers/UserSearchCriterionPicker";
 import { StyledInput } from "../design/StyledInput";
 import { IoIosSearch } from "react-icons/io";
+import { AppointmentSearchCriterionPicker } from "../pickers/AppointmentSearchCriterionPicker";
+import { AppointmentPeriodPicker } from "../pickers/AppointmentPeriodPicker";
+import { CreateAppointmentOverlay } from "../overlays/appointmentOverlays/CreateAppointmentOverlay";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -50,6 +53,17 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   const [selectedUserSearchCriteriaValue, setSelectedUserSearchCriteriaValue] =
     useState<string>("");
 
+  const [selectedTable, setSelectedTable] = useState<string>("");
+  const [
+    selectedAppointmentCriteriaValue,
+    setSelectedAppointmentCriteriaValue,
+  ] = useState<string>("");
+  const [selectedAppointmentCriteriaName, setSelectedAppointmentCriteriaName] =
+    useState<string>("");
+
+  const [selectedAppointmentPeriodValue, setSelectedAppointmentPeriodValue] =
+    useState<string>("");
+
   useEffect(() => {
     if (entity === "patient") {
       setRoleId(patientRoleId);
@@ -70,7 +84,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     return "medicalSpecialityId" in tableRow;
   }
 
-  function isAppointmentRow(tableRow: TableRow): tableRow is Appointment {
+  function isAppointmentRow(
+    tableRow: TableRow
+  ): tableRow is AppointmentTableData {
     return "appointment" in tableRow && "appointmentId" in tableRow.appointment;
   }
 
@@ -99,34 +115,27 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         };
       else if (entity === "appointment")
         queryParams = {
-          table: "doctor",
-          searchBy: "userForename",
-          searchQuery: "",
-          scheduleFilter: "month",
+          table: selectedTable !== "" ? selectedTable : "doctor",
+          searchBy:
+            selectedAppointmentCriteriaValue !== ""
+              ? selectedAppointmentCriteriaValue
+              : "userForename",
+          searchQuery,
+          scheduleFilter: selectedAppointmentPeriodValue,
           orderBy: "desc:userForename, asc:userSurname",
           limit: 100,
           page: 0,
           doctorId: "",
           patientId: "",
         };
-      console.log("queryParams", queryParams);
 
       const response = await axios.get(URL, {
-        // params: {
-        //   roleId,
-        //   searchBy: "userForename",
-        //   searchQuery: "",
-        //   limit: 5,
-        //   page: 0,
-        //   orderBy: "asc:userForename",
-        // },
         params: {
           ...queryParams,
         },
         withCredentials: true,
       });
 
-      console.log("table data ", response.data);
       if (response.data.success) {
         setTableRows(response.data.payload.tableData);
         setTableTotalCount(response.data.payload.totalCount);
@@ -139,7 +148,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
   useEffect(() => {
     fetchTableData();
-  }, [entity, roleId, orderBy, searchQuery, selectedUserSearchCriteriaValue]);
+  }, [
+    entity,
+    roleId,
+    orderBy,
+    searchQuery,
+    selectedUserSearchCriteriaValue,
+    selectedTable,
+    selectedAppointmentCriteriaValue,
+    selectedAppointmentPeriodValue,
+  ]);
 
   useEffect(() => {
     console.log(tableRows);
@@ -285,6 +303,39 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             onChangeStyledInput={(event) => setSearchQuery(event.target.value)}
             icon={<IoIosSearch />}
           />
+        </div>
+      )}
+
+      {entity === "appointment" && (
+        <div className="flex space-x-3 mb-3">
+          <AppointmentSearchCriterionPicker
+            selectedTable={selectedTable}
+            setSelectedTable={setSelectedTable}
+            selectedAppointmentCriteriaName={selectedAppointmentCriteriaName}
+            setSelectedAppointmentCriteriaName={
+              setSelectedAppointmentCriteriaName
+            }
+            selectedAppointmentCriteriaValue={selectedAppointmentCriteriaValue}
+            setSelectedAppointmentCriteriaValue={
+              setSelectedAppointmentCriteriaValue
+            }
+          />
+          <AppointmentPeriodPicker
+            selectedAppointmentPeriodValue={selectedAppointmentPeriodValue}
+            setSelectedAppointmentPeriodValue={
+              setSelectedAppointmentPeriodValue
+            }
+          />
+          {selectedTable !== "" && selectedAppointmentCriteriaValue !== "" && (
+            <StyledInput
+              label={`${entity} search`}
+              name="appointmentSearch"
+              onChangeStyledInput={(event) =>
+                setSearchQuery(event.target.value)
+              }
+              icon={<IoIosSearch />}
+            />
+          )}
         </div>
       )}
       <div className="w-full border rounded-xl overflow-hidden">
@@ -477,7 +528,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   <tr
                     key={tableRow.appointment.appointmentId}
                     className={`border-b border-neutral-400 odd:bg-neutral-100 even:bg-white transition duration-300 ease-in-out hover:bg-pink-100 ${
-                      (clickedTableRow as Appointment)?.appointment
+                      (clickedTableRow as AppointmentTableData)?.appointment
                         .appointmentId === tableRow.appointment.appointmentId &&
                       "!bg-pink-200"
                     }`}
@@ -545,6 +596,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           <CreateUserOverlay roleId={roleId} roleName={entity} />
         )}
         {entity === "medicalSpeciality" && <CreateMedicalSpecialityOverlay />}
+        {entity === "appointment" && <CreateAppointmentOverlay />}
       </div>
       {/* here notification {JSON.stringify(socketNotificationDataState)} */}
     </div>

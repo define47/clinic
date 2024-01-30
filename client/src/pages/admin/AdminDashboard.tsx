@@ -7,6 +7,7 @@ import { MedicalSpecialityPicker } from "../../components/pickers/MedicalSpecial
 import { TreeTable } from "../../components/TreeTable";
 import { DateTimePicker } from "../../components/pickers/DateTimePicker";
 import { UserPicker } from "../../components/pickers/UserPicker";
+import { AppointmentSearchCriterionPicker } from "../../components/pickers/AppointmentSearchCriterionPicker";
 
 export const AdminDashboard: FC = () => {
   const socketContext = useContext(SocketNotificationDataContext);
@@ -61,30 +62,15 @@ export const AdminDashboard: FC = () => {
           type="create"
         />
         here notification {JSON.stringify(socketNotificationDataState)}
-        <DateTimePicker
+        {/* <DateTimePicker
           isDateOnly={false}
           label="DD/MM/YYYY HH:MM"
           selectedEntity={selectedEntity}
           setSelectedEntity={setSelectedEntity}
-        />
-        {/* <UserSearchCriterionPicker /> */}
-        {/* <div className="flex">
-          <DateTimePicker isDateOnly={true} label="date picker" />
-          <DateTimePicker isDateOnly={false} label="date time picker" />
-          <DateTimePicker
-            isDateOnly={true}
-            label="DEFAULT date picker"
-            defaultDate="1234-08-23"
-          />
-          <DateTimePicker
-            isDateOnly={false}
-            label="DEFAULT date time picker"
-            defaultDate="2025-03-05"
-            defaultTime="10:00"
-          />
-        </div> */}
-        <UserPicker label="doctor picker" roleName="doctor" z="z-50" />
-        <UserPicker label="patient picker" roleName="patient" z="z-40" />
+        /> */}
+        {/* <UserPicker label="doctor picker" roleName="doctor" z="z-50" />
+        <UserPicker label="patient picker" roleName="patient" z="z-40" /> */}
+        <AppointmentSearchCriterionPicker />
       </div>
     </div>
   );
