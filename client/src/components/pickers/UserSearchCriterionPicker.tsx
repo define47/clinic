@@ -125,7 +125,7 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   }, [selectedUserSearchCriteriaName, selectedUserSearchCriteriaValue]);
   return (
     <div className="flex">
-      <div className="relative z-50" ref={userSearchCriterionPickerRef}>
+      <div className="relative" ref={userSearchCriterionPickerRef}>
         <StyledInput
           label={`${entity} Criteria`}
           inputValue={selectedUserSearchCriteriaName}
@@ -197,8 +197,10 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
                         <span>-</span>
                         <span>{userSearchCriteria.userSearchCriteriaName}</span>
                       </div>
-                      {selectedUserSearchCriteriaName ===
-                        userSearchCriteria.userSearchCriteriaName && <TiTick />}
+                      {selectedUserSearchCriteriaName.toLowerCase() ===
+                        userSearchCriteria.userSearchCriteriaName.toLowerCase() && (
+                        <TiTick />
+                      )}
                     </div>
                   </li>
                 )
@@ -219,8 +221,8 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
                           {filteredUserSearchCriteria.userSearchCriteriaName}
                         </span>
                       </div>
-                      {selectedUserSearchCriteriaName ===
-                        filteredUserSearchCriteria.userSearchCriteriaName && (
+                      {selectedUserSearchCriteriaName.toLowerCase() ===
+                        filteredUserSearchCriteria.userSearchCriteriaName.toLowerCase() && (
                         <TiTick />
                       )}
                     </div>

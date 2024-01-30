@@ -106,6 +106,12 @@ export type UserSearchCriteria = {
   userSearchCriteriaValue: string;
 };
 
+export type AppointmentSearchCriteria = {
+  table: string;
+  appointmentSearchCriteriaName: string;
+  appointmentSearchCriteriaValue: string;
+};
+
 export type UserSearchCriterionPickerProps = {
   entity: string;
   selectedUserSearchCriteriaName: string;
