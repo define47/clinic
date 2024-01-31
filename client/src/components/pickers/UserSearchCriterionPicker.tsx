@@ -6,6 +6,7 @@ import {
 import { StyledInput } from "../design/StyledInput";
 import { RiArrowDownSLine, RiArrowUpSLine, RiFilterLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
+import { VscDash } from "react-icons/vsc";
 
 export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   entity,
@@ -125,7 +126,7 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   }, [selectedUserSearchCriteriaName, selectedUserSearchCriteriaValue]);
   return (
     <div className="flex">
-      <div className="relative" ref={userSearchCriterionPickerRef}>
+      <div className="relative z-50" ref={userSearchCriterionPickerRef}>
         <StyledInput
           label={`${entity} Criteria`}
           inputValue={selectedUserSearchCriteriaName}
@@ -193,8 +194,8 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
                     }
                   >
                     <div className="w-full flex justify-between items-center">
-                      <div>
-                        <span>-</span>
+                      <div className="flex items-center">
+                        <VscDash />
                         <span>{userSearchCriteria.userSearchCriteriaName}</span>
                       </div>
                       {selectedUserSearchCriteriaName.toLowerCase() ===
@@ -215,8 +216,8 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
                     }
                   >
                     <div className="w-full flex justify-between items-center">
-                      <div>
-                        <span>-</span>
+                      <div className="flex items-center">
+                        <VscDash />
                         <span>
                           {filteredUserSearchCriteria.userSearchCriteriaName}
                         </span>

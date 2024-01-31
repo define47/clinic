@@ -19,6 +19,10 @@ export const medicalSpecialityPath = `${import.meta.env.VITE_SERVER_SCHEME}${
   import.meta.env.VITE_SERVER_HOST_AND_PORT
 }${import.meta.env.VITE_SERVER_MEDICAL_SPECIALITIES_PATH}`;
 
+export const appointmentsPath = `${serverURL}${
+  import.meta.env.VITE_SERVER_APPOINTMENTS_PATH
+}`;
+
 export const patientRoleId = import.meta.env.VITE_PATIENT_ROLE_ID;
 export const patientRoleName = import.meta.env.VITE_PATIENT_ROLE_NAME;
 

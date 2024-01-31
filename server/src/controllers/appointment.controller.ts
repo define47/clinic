@@ -55,20 +55,20 @@ export class AppointmentController {
           appointmentStatus: body.appointmentStatus,
         });
 
-      if (appointmentToCreate)
-        await this._appointmentHistoryService.createAppointmentHistory({
-          appointmentId: appointmentToCreate?.appointmentId,
-          appointmentHistoryDoctorId: appointmentToCreate.appointmentDoctorId,
-          appointmentHistoryPatientId: appointmentToCreate.appointmentPatientId,
-          appointmentHistoryDateTime: appointmentToCreate.appointmentDateTime,
-          appointmentHistoryReason: appointmentToCreate.appointmentReason,
-          appointmentHistoryCancellationReason: "",
-          appointmentHistoryStatus: appointmentToCreate.appointmentStatus,
-          appointmentHistoryCreatedAt: new Date(),
-          appointmentHistoryUpdatedAt: new Date(),
-          appointmentHistoryCreatedBy: "c27c7196-fd8b-5aee-943e-df266b71fb66",
-          appointmentHistoryUpdatedBy: "c27c7196-fd8b-5aee-943e-df266b71fb66",
-        });
+      // if (appointmentToCreate)
+      //   await this._appointmentHistoryService.createAppointmentHistory({
+      //     appointmentId: appointmentToCreate?.appointmentId,
+      //     appointmentHistoryDoctorId: appointmentToCreate.appointmentDoctorId,
+      //     appointmentHistoryPatientId: appointmentToCreate.appointmentPatientId,
+      //     appointmentHistoryDateTime: appointmentToCreate.appointmentDateTime,
+      //     appointmentHistoryReason: appointmentToCreate.appointmentReason,
+      //     appointmentHistoryCancellationReason: "",
+      //     appointmentHistoryStatus: appointmentToCreate.appointmentStatus,
+      //     appointmentHistoryCreatedAt: new Date(),
+      //     appointmentHistoryUpdatedAt: new Date(),
+      //     appointmentHistoryCreatedBy: "c27c7196-fd8b-5aee-943e-df266b71fb66",
+      //     appointmentHistoryUpdatedBy: "c27c7196-fd8b-5aee-943e-df266b71fb66",
+      //   });
 
       reply.code(200).send({ success: true, appointmentToCreate });
     } catch (error) {}

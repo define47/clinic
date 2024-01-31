@@ -5,11 +5,20 @@ import { doctorRoleId, patientRoleId, userPath } from "../../utils/dotenv";
 import { StyledInput } from "../design/StyledInput";
 import { TiTick } from "react-icons/ti";
 import { RiArrowUpSLine } from "react-icons/ri";
+import { VscDash } from "react-icons/vsc";
 
-export const UserPicker: FC<UserPickerProps> = ({ label, roleName, z }) => {
+export const UserPicker: FC<UserPickerProps> = ({
+  label,
+  roleName,
+  z,
+  selectedUserId,
+  setSelectedUserId,
+  selectedUserName,
+  setSelectedUserName,
+}) => {
   const [users, setUsers] = useState<User[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState<string>("");
-  const [selectedUserName, setSelectedUserName] = useState<string>("");
+  // const [selectedUserId, setSelectedUserId] = useState<string>("");
+  // const [selectedUserName, setSelectedUserName] = useState<string>("");
   const [isUserPickerVisible, setIsUserPickerVisible] =
     useState<boolean>(false);
   const userSearchPickerRef = useRef<HTMLDivElement | null>(null);
@@ -215,8 +224,8 @@ export const UserPicker: FC<UserPickerProps> = ({ label, roleName, z }) => {
                   onClick={() => handleUserClick(user)}
                 >
                   <div className="w-full flex justify-between items-center">
-                    <div>
-                      <span>-</span>&nbsp;
+                    <div className="flex items-center">
+                      <VscDash />
                       <span>{user.userForename}</span>&nbsp;
                       <span>{user.userSurname}</span>&nbsp;
                       {roleName === "doctor" &&
@@ -249,8 +258,8 @@ export const UserPicker: FC<UserPickerProps> = ({ label, roleName, z }) => {
                   onClick={() => handleUserClick(filteredUser)}
                 >
                   <div className="w-full flex justify-between items-center">
-                    <div>
-                      <span>-</span>&nbsp;
+                    <div className="flex items-center">
+                      <VscDash />
                       <span>{filteredUser.userForename}</span>&nbsp;
                       <span>{filteredUser.userSurname}</span>&nbsp;
                       {roleName === "doctor" &&

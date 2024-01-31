@@ -38,13 +38,15 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   const [userDateOfBirth, setUserDateOfBirth] = useState<string>("");
 
   const [defaultDate, setDefaultDate] = useState<string>("");
-  // useEffect(() => {
-  //   if (isCreateUserOverlayVisible) setDefaultDate("1945-01-01");
-  // }, [isCreateUserOverlayVisible]);
-
   useEffect(() => {
-    console.log("defaultDate", defaultDate);
-  }, [defaultDate]);
+    const currentDate = new Date();
+    if (isCreateUserOverlayVisible) setDefaultDate("1980-01-01");
+    // setDefaultDate(currentDate.toISOString());
+  }, [isCreateUserOverlayVisible]);
+
+  // useEffect(() => {
+  //   console.log("defaultDate", defaultDate);
+  // }, [defaultDate]);
 
   const [
     selectedPrimaryMedicalSpecialityId,

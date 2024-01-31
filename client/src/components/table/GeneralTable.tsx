@@ -320,12 +320,6 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               setSelectedAppointmentCriteriaValue
             }
           />
-          <AppointmentPeriodPicker
-            selectedAppointmentPeriodValue={selectedAppointmentPeriodValue}
-            setSelectedAppointmentPeriodValue={
-              setSelectedAppointmentPeriodValue
-            }
-          />
           {selectedTable !== "" && selectedAppointmentCriteriaValue !== "" && (
             <StyledInput
               label={`${entity} search`}
@@ -336,6 +330,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               icon={<IoIosSearch />}
             />
           )}
+
+          <AppointmentPeriodPicker
+            selectedAppointmentPeriodValue={selectedAppointmentPeriodValue}
+            setSelectedAppointmentPeriodValue={
+              setSelectedAppointmentPeriodValue
+            }
+          />
         </div>
       )}
       <div className="w-full border rounded-xl overflow-hidden">

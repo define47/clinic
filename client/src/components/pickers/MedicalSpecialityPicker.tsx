@@ -5,6 +5,7 @@ import { medicalSpecialityPath } from "../../utils/dotenv";
 import { StyledInput } from "../design/StyledInput";
 import { RiArrowUpSLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
+import { VscDash } from "react-icons/vsc";
 
 export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
   label,
@@ -255,8 +256,8 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
                       }
                     >
                       <div className="w-full flex justify-between items-center">
-                        <div>
-                          <span>-&nbsp;</span>
+                        <div className="flex items-center">
+                          <VscDash />
                           <span>{medicalSpeciality.medicalSpecialityName}</span>
                         </div>
                         {selectedMedicalSpecialityName.toLowerCase() ===
@@ -281,8 +282,8 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
                       }
                     >
                       <div className="w-full flex justify-between items-center">
-                        <div>
-                          <span>-&nbsp;</span>
+                        <div className="flex items-center">
+                          <VscDash />
                           <span>
                             {filteredMedicalSpeciality.medicalSpecialityName}
                           </span>

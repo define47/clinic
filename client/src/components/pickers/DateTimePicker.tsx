@@ -20,7 +20,7 @@ const getEndOfMonth = (year: number, month: number) => {
 type DateTimePickerProps = {
   isDateOnly: boolean;
   label: string;
-  defaultDate?: string;
+  defaultDate: string;
   defaultTime?: string;
   selectedEntity: string;
   setSelectedEntity: (selectedEntity: string) => void;
@@ -36,7 +36,8 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   setSelectedEntity,
   isOverlayVisible,
 }) => {
-  const currentDate = new Date("2024-05-20");
+  // "2024-05-20"
+  const currentDate = new Date();
   // const [selectedEntity, setSelectedEntity] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<number>(0);
   const [selectedMonth, setSelectedMonth] = useState<number>(0);
@@ -61,36 +62,40 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   );
 
   useEffect(() => {
-    if (isDateOnly) {
-      if (defaultDate) {
-        const data = defaultDate.split("-");
-        setSelectedYear(parseInt(data[0]));
-        setSelectedMonth(parseInt(data[1]));
-        setSelectedDay(parseInt(data[2]));
-      } else {
-        setSelectedYear(currentDate.getUTCFullYear());
-        setSelectedMonth(currentDate.getUTCMonth());
-        setSelectedDay(currentDate.getDate());
-      }
-    } else {
-      if (defaultTime && defaultDate) {
-        const data = defaultDate.split("-");
-        setSelectedYear(parseInt(data[0]));
-        setSelectedMonth(parseInt(data[1]));
-        setSelectedDay(parseInt(data[2]));
-        setSelectedTimeSlot(defaultTime);
-      } else {
-        setSelectedYear(currentDate.getUTCFullYear());
-        setSelectedMonth(currentDate.getUTCMonth());
-        setSelectedDay(currentDate.getDate());
-        setSelectedTimeSlot("08:00");
-      }
-    }
+    // if (isDateOnly) {
+    //   if (defaultDate) {
+    //     const data = defaultDate.split("-");
+    //     setSelectedYear(parseInt(data[0]));
+    //     setSelectedMonth(parseInt(data[1]));
+    //     setSelectedDay(parseInt(data[2]));
+    //   } else {
+    //     setSelectedYear(currentDate.getUTCFullYear());
+    //     setSelectedMonth(currentDate.getUTCMonth());
+    //     setSelectedDay(currentDate.getDate());
+    //   }
+    // } else {
+    //   if (defaultTime && defaultDate) {
+    //     const data = defaultDate.split("-");
+    //     setSelectedYear(parseInt(data[0]));
+    //     setSelectedMonth(parseInt(data[1]));
+    //     setSelectedDay(parseInt(data[2]));
+    //     setSelectedTimeSlot(defaultTime);
+    //   } else {
+    //     setSelectedYear(currentDate.getUTCFullYear());
+    //     setSelectedMonth(currentDate.getUTCMonth());
+    //     setSelectedDay(currentDate.getDate());
+    //     setSelectedTimeSlot("08:00");
+    //   }
+    // }
 
-    // const data = defaultDate!.split("-");
-    // setSelectedYear(parseInt(data[0]));
-    // setSelectedMonth(parseInt(data[1]));
-    // setSelectedDay(parseInt(data[2]));
+    const data = defaultDate.split("-");
+    setSelectedYear(parseInt(data[0]));
+    setSelectedMonth(parseInt(data[1]) - 1);
+    setSelectedDay(parseInt(data[2]));
+
+    if (defaultTime) {
+      setSelectedTimeSlot(defaultTime);
+    }
   }, [isDateOnly, defaultDate, defaultTime, isOverlayVisible]);
 
   useEffect(() => {
@@ -453,7 +458,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
             //     setAreTimeSlotsShown(false);
             //   }}
             // />
-            <div className="z-10">
+            <div className="">
               {isDateTimePickerShown ? (
                 <RiCalendarFill
                   className="text-pink-300 hover:text-pink-400"

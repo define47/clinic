@@ -6,6 +6,7 @@ import {
 import { RiArrowUpSLine } from "react-icons/ri";
 import { StyledInput } from "../design/StyledInput";
 import { TiTick } from "react-icons/ti";
+import { VscDash } from "react-icons/vsc";
 
 export const AppointmentSearchCriterionPicker: FC<
   AppointmentSearchCriterionPickerProps
@@ -181,7 +182,7 @@ export const AppointmentSearchCriterionPicker: FC<
 
   return (
     <div className="flex">
-      <div className="relative" ref={appointmentSearchCriterionPickerRef}>
+      <div className="relative z-50" ref={appointmentSearchCriterionPickerRef}>
         <StyledInput
           label={`Appointment Criteria`}
           inputValue={selectedAppointmentCriteriaName}
@@ -235,8 +236,8 @@ export const AppointmentSearchCriterionPicker: FC<
                     }
                   >
                     <div className="w-full flex justify-between items-center">
-                      <div>
-                        <span>-</span>
+                      <div className="flex items-center">
+                        <VscDash />
                         <span>
                           {
                             appointmentSearchCriteria.appointmentSearchCriteriaName
@@ -267,8 +268,8 @@ export const AppointmentSearchCriterionPicker: FC<
                     }
                   >
                     <div className="w-full flex justify-between items-center">
-                      <div>
-                        <span>-</span>
+                      <div className="flex items-center">
+                        <VscDash />
                         <span>
                           {
                             filteredAppointmentSearchCriteria.appointmentSearchCriteriaName

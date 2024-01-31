@@ -161,6 +161,10 @@ export type UserPickerProps = {
   label: string;
   roleName: string;
   z: string;
+  selectedUserId: string;
+  setSelectedUserId: (selectedUserId: string) => void;
+  selectedUserName: string;
+  setSelectedUserName: (selectedUserName: string) => void;
 };
 
 export type Appointment = {
@@ -171,4 +175,21 @@ export type Appointment = {
   appointmentDateTime: string;
   appointmentStatus: string;
   appointmentCancellationReason?: string;
+};
+
+export type AppointmentStatus = {
+  appointmentStatusName: string;
+  appointmentStatusValue: string;
+};
+
+export type AppointmentStatusPickerProps = {
+  selectedAppointmentStatusName: string;
+  setSelectedAppointmentStatusName: (
+    selectedAppointmentStatusName: string
+  ) => void;
+  selectedAppointmentStatusValue: string;
+  setSelectedAppointmentStatusValue: (
+    selectedAppointmentStatusValue: string
+  ) => void;
+  z: string;
 };
