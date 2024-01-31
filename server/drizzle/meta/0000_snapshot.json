@@ -1,5 +1,5 @@
 {
-  "id": "7fd83b95-1e65-45fc-bfc6-a1efcdb0ebcf",
+  "id": "7265b1bb-05b3-4278-b5f9-32420133865e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -42,8 +42,7 @@
           "name": "appointmentStatus",
           "type": "appointmentStatus",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'scheduled'"
+          "notNull": true
         },
         "appointmentCancellationReason": {
           "name": "appointmentCancellationReason",
@@ -58,6 +57,7 @@
           "name": "Appointment_appointmentDoctorId_User_userId_fk",
           "tableFrom": "Appointment",
           "tableTo": "User",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "appointmentDoctorId"
           ],
@@ -71,6 +71,7 @@
           "name": "Appointment_appointmentPatientId_User_userId_fk",
           "tableFrom": "Appointment",
           "tableTo": "User",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "appointmentPatientId"
           ],
@@ -126,7 +127,7 @@
         },
         "appointmentHistoryStatus": {
           "name": "appointmentHistoryStatus",
-          "type": "appointmentStatus",
+          "type": "appointmentHistoryStatus",
           "primaryKey": false,
           "notNull": true,
           "default": "'scheduled'"
@@ -170,6 +171,7 @@
           "name": "AppointmentHistory_appointmentId_Appointment_appointmentId_fk",
           "tableFrom": "AppointmentHistory",
           "tableTo": "Appointment",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "appointmentId"
           ],
@@ -183,6 +185,7 @@
           "name": "AppointmentHistory_appointmentHistoryDoctorId_User_userId_fk",
           "tableFrom": "AppointmentHistory",
           "tableTo": "User",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "appointmentHistoryDoctorId"
           ],
@@ -196,6 +199,7 @@
           "name": "AppointmentHistory_appointmentHistoryPatientId_User_userId_fk",
           "tableFrom": "AppointmentHistory",
           "tableTo": "User",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "appointmentHistoryPatientId"
           ],
@@ -209,6 +213,7 @@
           "name": "AppointmentHistory_appointmentHistoryCreatedBy_User_userId_fk",
           "tableFrom": "AppointmentHistory",
           "tableTo": "User",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "appointmentHistoryCreatedBy"
           ],
@@ -222,6 +227,7 @@
           "name": "AppointmentHistory_appointmentHistoryUpdatedBy_User_userId_fk",
           "tableFrom": "AppointmentHistory",
           "tableTo": "User",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "appointmentHistoryUpdatedBy"
           ],
@@ -276,6 +282,7 @@
           "name": "DoctorMedicalSpecialityMapping_userId_User_userId_fk",
           "tableFrom": "DoctorMedicalSpecialityMapping",
           "tableTo": "User",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "userId"
           ],
@@ -289,6 +296,7 @@
           "name": "DoctorMedicalSpecialityMapping_medicalSpecialityId_MedicalSpeciality_medicalSpecialityId_fk",
           "tableFrom": "DoctorMedicalSpecialityMapping",
           "tableTo": "MedicalSpeciality",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "medicalSpecialityId"
           ],
@@ -428,6 +436,7 @@
           "name": "MedicalRecordPatient_appointmentId_Appointment_appointmentId_fk",
           "tableFrom": "MedicalRecordPatient",
           "tableTo": "Appointment",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "appointmentId"
           ],
@@ -494,6 +503,7 @@
           "name": "MedicalSpecialityMedicalProcedureMapping_medicalSpecialityId_MedicalSpeciality_medicalSpecialityId_fk",
           "tableFrom": "MedicalSpecialityMedicalProcedureMapping",
           "tableTo": "MedicalSpeciality",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "medicalSpecialityId"
           ],
@@ -507,6 +517,7 @@
           "name": "MedicalSpecialityMedicalProcedureMapping_medicalProcedureId_MedicalProcedure_medicalProcedureId_fk",
           "tableFrom": "MedicalSpecialityMedicalProcedureMapping",
           "tableTo": "MedicalProcedure",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "medicalProcedureId"
           ],
@@ -687,6 +698,7 @@
           "name": "UserPreferencesMapping_userId_User_userId_fk",
           "tableFrom": "UserPreferencesMapping",
           "tableTo": "User",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "userId"
           ],
@@ -700,6 +712,7 @@
           "name": "UserPreferencesMapping_languageId_Language_languageId_fk",
           "tableFrom": "UserPreferencesMapping",
           "tableTo": "Language",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "languageId"
           ],
@@ -743,6 +756,7 @@
           "name": "UserRoleMapping_userId_User_userId_fk",
           "tableFrom": "UserRoleMapping",
           "tableTo": "User",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "userId"
           ],
@@ -756,6 +770,7 @@
           "name": "UserRoleMapping_roleId_Role_roleId_fk",
           "tableFrom": "UserRoleMapping",
           "tableTo": "Role",
+          "schemaTo": "iatropolis",
           "columnsFrom": [
             "roleId"
           ],
@@ -789,7 +804,22 @@
         "pending approval": "pending approval",
         "waiting": "waiting",
         "confirmed by patient": "confirmed by patient",
-        "canceled by patient": "canceled by patient"
+        "canceled by patient": "canceled by patient",
+        "paid": "paid"
+      }
+    },
+    "appointmentHistoryStatus": {
+      "name": "appointmentHistoryStatus",
+      "values": {
+        "scheduled": "scheduled",
+        "rescheduled": "rescheduled",
+        "completed": "completed",
+        "no-show": "no-show",
+        "pending approval": "pending approval",
+        "waiting": "waiting",
+        "confirmed by patient": "confirmed by patient",
+        "canceled by patient": "canceled by patient",
+        "paid": "paid"
       }
     },
     "userGender": {

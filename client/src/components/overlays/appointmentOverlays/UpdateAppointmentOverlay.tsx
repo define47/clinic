@@ -12,6 +12,8 @@ import { StyledInput } from "../../design/StyledInput";
 import { AppointmentStatusPicker } from "../../pickers/AppointmentStatusPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
+import axios from "axios";
+import { appointmentsPath } from "../../../utils/dotenv";
 
 export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
   appointment,
@@ -93,6 +95,27 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
       setIsUpdateAppointmentOverlayVisible(false);
     }
   };
+
+  async function onUpdateAppointment() {
+    try {
+      const response = await axios.put(
+        appointmentsPath,
+        {
+          appointmentId: appointment.appointmentId,
+          appointmentReason: appointmentToUpdate.appointmentReason,
+          appointmentStatus: selectedAppointmentStatusValue,
+          appointmentDateTime: selectedDateTime,
+          appointmentCancellationReason:
+            appointmentToUpdate.appointmentCancellationReason,
+        },
+        { withCredentials: true }
+      );
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     console.log(appointmentToUpdate);
@@ -178,6 +201,13 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
                 }
                 z="z-40"
               />
+              <StyledInput
+                label="appointment cancellation reason"
+                name="appointmentCancellationReason"
+                onChangeStyledInput={handleStyledInputChange}
+                labelBackgroundColor="bg-white"
+                inputValue={appointmentToUpdate.appointmentCancellationReason}
+              />
             </div>
           </div>
 
@@ -216,9 +246,9 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
               onClick={(e) => e.stopPropagation()}
             >
               <StyledRippleButton
-                label="Create"
+                label="Update"
                 type="yes"
-                onClick={() => {}}
+                onClick={onUpdateAppointment}
               />
               <StyledRippleButton
                 label="Cancel"

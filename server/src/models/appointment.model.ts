@@ -1,14 +1,5 @@
-import {
-  boolean,
-  date,
-  pgEnum,
-  pgSchema,
-  pgTable,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { pgEnum, timestamp, varchar } from "drizzle-orm/pg-core";
 import { clinicSchema } from "../utils/drizzle";
-import { sql } from "drizzle-orm";
 import { userTable } from "./user.model";
 
 export type Appointment = {
@@ -55,21 +46,32 @@ export type AppointmentCreationAttributes = {
 export type AppointmentUpdateAttributes = {
   // appointmentDoctorId: string;
   // appointmentPatientId: string;
-  // appointmentReason: string;
+  appointmentReason: string;
   appointmentDateTime: Date;
   appointmentStatus: string;
   appointmentCancellationReason: string;
 };
 
-export const StatusEnum = pgEnum("appointmentStatus", [
-  // pending approval => scheduled => confirmed by patient => completed (if patient makes appointment from their account)
-  // scheduled => confirmed by patient => completed
+// "scheduled",
+//   "rescheduled",
+//   "completed", // * by doctors to set
+//   "no-show",
+//   "pending approval", // * from reception or admin in the event that patient made appointment from their account
+//   "waiting", // * patient waiting
+//   "confirmed by patient",
+//   "canceled by patient",
+//   "paid",
+
+// pending approval => scheduled => confirmed by patient => completed (if patient makes appointment from their account)
+// scheduled => confirmed by patient => completed
+
+export const AppointmentStatusEnum = pgEnum("appointmentStatus", [
   "scheduled",
   "rescheduled",
-  "completed", // * by doctors to set
+  "completed",
   "no-show",
-  "pending approval", // * from reception or admin in the event that patient made appointment from their account
-  "waiting", // * patient waiting
+  "pending approval",
+  "waiting",
   "confirmed by patient",
   "canceled by patient",
   "paid",
@@ -85,9 +87,7 @@ export const appointmentTable = clinicSchema.table("Appointment", {
     .references(() => userTable.userId),
   appointmentDateTime: timestamp("appointmentDateTime").notNull(),
   appointmentReason: varchar("appointmentReason", { length: 256 }).notNull(),
-  appointmentStatus: StatusEnum("appointmentStatus")
-    .default("scheduled")
-    .notNull(),
+  appointmentStatus: AppointmentStatusEnum("appointmentStatus").notNull(),
   appointmentCancellationReason: varchar("appointmentCancellationReason", {
     length: 256,
   }),

@@ -280,6 +280,8 @@ const buildServer = async () => {
   //   languageName: "English",
   //   languageCode: "en",
   // });
+  // createUsers(0, 5, "doctor");
+  // createUsers(0, 10, "patient");
 
   // const userRoleMappingRepository = new UserRoleMappingRepository(
   //   drizzleInstance,
@@ -302,27 +304,24 @@ const buildServer = async () => {
 
   // await createUsers(0, 250, "patient");
 
-  // createUsers(0, 1, "doctor");
-  // createUsers(0, 10, "patient");
-
-  const appointmentRepository = new AppointmentRepository(
-    drizzleInstance,
-    appointmentTable
-  );
+  // const appointmentRepository = new AppointmentRepository(
+  //   drizzleInstance,
+  //   appointmentTable
+  // );
 
   // appointmentRepository
 
-  const appointments = await appointmentRepository.getAllAppointments(
-    "doctor",
-    ["userForename", "userSurname"],
-    "",
-    "month",
-    // "appointmentDateTime"
-    ["asc:userForename", "desc:userSurname"],
-    3,
-    0
-  );
-  console.log(appointments?.tableData);
+  // const appointments = await appointmentRepository.getAllAppointments(
+  //   "doctor",
+  //   ["userForename", "userSurname"],
+  //   "",
+  //   "month",
+  //   // "appointmentDateTime"
+  //   ["asc:userForename", "desc:userSurname"],
+  //   3,
+  //   0
+  // );
+  // console.log(appointments?.tableData);
 
   // const userRep = new UserRepository(drizzleInstance, userTable)
   // userRep.

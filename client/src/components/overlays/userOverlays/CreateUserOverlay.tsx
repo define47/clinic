@@ -256,6 +256,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 setSelectedEntity={setUserDateOfBirth}
                 defaultDate={defaultDate}
                 isOverlayVisible={isCreateUserOverlayVisible}
+                z="z-50"
               />
             </div>
             <div className="flex flex-col space-y-6">

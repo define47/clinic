@@ -1,5 +1,11 @@
 DO $$ BEGIN
- CREATE TYPE "appointmentStatus" AS ENUM('scheduled', 'rescheduled', 'completed', 'no-show', 'pending approval', 'waiting', 'confirmed by patient', 'canceled by patient');
+ CREATE TYPE "appointmentStatus" AS ENUM('scheduled', 'rescheduled', 'completed', 'no-show', 'pending approval', 'waiting', 'confirmed by patient', 'canceled by patient', 'paid');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "appointmentHistoryStatus" AS ENUM('scheduled', 'rescheduled', 'completed', 'no-show', 'pending approval', 'waiting', 'confirmed by patient', 'canceled by patient', 'paid');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -16,7 +22,7 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Appointment" (
 	"appointmentPatientId" varchar(100) NOT NULL,
 	"appointmentDateTime" timestamp NOT NULL,
 	"appointmentReason" varchar(256) NOT NULL,
-	"appointmentStatus" "appointmentStatus" DEFAULT 'scheduled' NOT NULL,
+	"appointmentStatus" "appointmentStatus" NOT NULL,
 	"appointmentCancellationReason" varchar(256)
 );
 --> statement-breakpoint
@@ -27,7 +33,7 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."AppointmentHistory" (
 	"appointmentHistoryPatientId" varchar(100) NOT NULL,
 	"appointmentHistoryDateTime" timestamp NOT NULL,
 	"appointmentHistoryReason" varchar(256) NOT NULL,
-	"appointmentHistoryStatus" "appointmentStatus" DEFAULT 'scheduled' NOT NULL,
+	"appointmentHistoryStatus" "appointmentHistoryStatus" DEFAULT 'scheduled' NOT NULL,
 	"appointmentHistoryCancellationReason" varchar(256),
 	"appointmentHistoryCreatedBy" varchar(100),
 	"appointmentHistoryUpdatedBy" varchar(100),

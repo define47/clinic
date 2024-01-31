@@ -81,10 +81,12 @@ export class AppointmentController {
     try {
       const body: any = request.body;
       let appointmentToUpdate;
+      console.log(body);
 
       appointmentToUpdate = await this._appointmentService.updateAppointment(
         body.appointmentId,
         {
+          appointmentReason: body.appointmentReason,
           appointmentStatus: body.appointmentStatus,
           appointmentDateTime: new Date(body.appointmentDateTime),
           appointmentCancellationReason: body.appointmentCancellationReason,
@@ -93,32 +95,32 @@ export class AppointmentController {
 
       console.log(appointmentToUpdate);
 
-      if (appointmentToUpdate) {
-        const appointmentHistory =
-          await this._appointmentHistoryService.getAppointmentHistoryByAppointmentId(
-            appointmentToUpdate.appointmentId
-          );
-        // if (appointmentHistory) console.log(appointmentHistory[0]);
+      // if (appointmentToUpdate) {
+      //   const appointmentHistory =
+      //     await this._appointmentHistoryService.getAppointmentHistoryByAppointmentId(
+      //       appointmentToUpdate.appointmentId
+      //     );
+      //   // if (appointmentHistory) console.log(appointmentHistory[0]);
 
-        await this._appointmentHistoryService.createAppointmentHistory({
-          appointmentId: appointmentToUpdate?.appointmentId,
-          appointmentHistoryDoctorId: appointmentToUpdate.appointmentDoctorId,
-          appointmentHistoryPatientId: appointmentToUpdate.appointmentPatientId,
-          appointmentHistoryDateTime: new Date(
-            appointmentToUpdate.appointmentDateTime
-          ),
-          appointmentHistoryReason: appointmentToUpdate.appointmentReason,
-          appointmentHistoryCancellationReason:
-            appointmentToUpdate.appointmentCancellationReason,
-          appointmentHistoryStatus: appointmentToUpdate.appointmentStatus,
-          appointmentHistoryCreatedAt:
-            appointmentHistory?.[0].appointmentHistoryCreatedAt!,
-          appointmentHistoryUpdatedAt: new Date(),
-          appointmentHistoryCreatedBy:
-            appointmentHistory?.[0].appointmentHistoryCreatedBy!,
-          appointmentHistoryUpdatedBy: "c27c7196-fd8b-5aee-943e-df266b71fb66",
-        });
-      }
+      //   await this._appointmentHistoryService.createAppointmentHistory({
+      //     appointmentId: appointmentToUpdate?.appointmentId,
+      //     appointmentHistoryDoctorId: appointmentToUpdate.appointmentDoctorId,
+      //     appointmentHistoryPatientId: appointmentToUpdate.appointmentPatientId,
+      //     appointmentHistoryDateTime: new Date(
+      //       appointmentToUpdate.appointmentDateTime
+      //     ),
+      //     appointmentHistoryReason: appointmentToUpdate.appointmentReason,
+      //     appointmentHistoryCancellationReason:
+      //       appointmentToUpdate.appointmentCancellationReason,
+      //     appointmentHistoryStatus: appointmentToUpdate.appointmentStatus,
+      //     appointmentHistoryCreatedAt:
+      //       appointmentHistory?.[0].appointmentHistoryCreatedAt!,
+      //     appointmentHistoryUpdatedAt: new Date(),
+      //     appointmentHistoryCreatedBy:
+      //       appointmentHistory?.[0].appointmentHistoryCreatedBy!,
+      //     appointmentHistoryUpdatedBy: "c27c7196-fd8b-5aee-943e-df266b71fb66",
+      //   });
+      // }
 
       reply.code(200).send({ success: true, appointmentToUpdate });
     } catch (error) {}

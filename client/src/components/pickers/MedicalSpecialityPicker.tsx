@@ -279,35 +279,37 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
                   )
               )
             : filteredMedicalSpecialities.map(
-                (filteredMedicalSpeciality: MedicalSpeciality) =>
-                  selectedPrimaryMedicalSpecialityId !==
-                    filteredMedicalSpeciality.medicalSpecialityId &&
-                  selectedSecondaryMedicalSpecialityId !==
-                    filteredMedicalSpeciality.medicalSpecialityId && (
-                    <li
-                      className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
-                      key={filteredMedicalSpeciality.medicalSpecialityId}
-                      onClick={() =>
-                        handleMedicalSpecialityClick(filteredMedicalSpeciality)
-                      }
-                    >
-                      <div className="w-full flex justify-between items-center">
-                        <div className="flex items-center">
-                          <VscDash />
-                          <span>
-                            {filteredMedicalSpeciality.medicalSpecialityName}
-                          </span>
-                        </div>
-                        {selectedMedicalSpecialityName.toLowerCase() ===
-                          filteredMedicalSpeciality.medicalSpecialityName.toLocaleLowerCase() && (
-                          <TiTick />
-                        )}
-                        {/* {selectedMedicalSpecialityName}-
-                        {filteredMedicalSpeciality.medicalSpecialityName} */}
-                        {/* {selectedMedicalSpecialityId} */}
+                (filteredMedicalSpeciality: MedicalSpeciality) => (
+                  // selectedPrimaryMedicalSpecialityId !==
+                  //   filteredMedicalSpeciality.medicalSpecialityId &&
+                  // selectedSecondaryMedicalSpecialityId !==
+                  //   filteredMedicalSpeciality.medicalSpecialityId &&
+                  // selectedTertiaryMedicalSpecialityId !==
+                  //   filteredMedicalSpeciality.medicalSpecialityId &&
+                  <li
+                    className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
+                    key={filteredMedicalSpeciality.medicalSpecialityId}
+                    onClick={() =>
+                      handleMedicalSpecialityClick(filteredMedicalSpeciality)
+                    }
+                  >
+                    <div className="w-full flex justify-between items-center">
+                      <div className="flex items-center">
+                        <VscDash />
+                        <span>
+                          {filteredMedicalSpeciality.medicalSpecialityName}
+                        </span>
                       </div>
-                    </li>
-                  )
+                      {selectedMedicalSpecialityName.toLowerCase() ===
+                        filteredMedicalSpeciality.medicalSpecialityName.toLocaleLowerCase() && (
+                        <TiTick />
+                      )}
+                      {/* {selectedMedicalSpecialityName}-
+                        {filteredMedicalSpeciality.medicalSpecialityName} */}
+                      {/* {selectedMedicalSpecialityId} */}
+                    </div>
+                  </li>
+                )
               )}
         </ul>
       </div>

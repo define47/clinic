@@ -33,17 +33,18 @@ export type AppointmentHistoryCreationAttributes = {
   appointmentHistoryUpdatedBy: string;
 };
 
-export const StatusEnum = pgEnum("appointmentStatus", [
+export const AppointmentHistoryStatusEnum = pgEnum("appointmentHistoryStatus", [
   // pending approval => scheduled => confirmed by patient => completed (if patient makes appointment from their account)
   // scheduled => confirmed by patient => completed
   "scheduled",
   "rescheduled",
   "completed",
   "no-show",
-  "pending approval", // * from reception or admin in the event that patient made appointment from their account
-  "waiting", // * patient waiting
+  "pending approval",
+  "waiting",
   "confirmed by patient",
   "canceled by patient",
+  "paid",
 ]);
 
 export const appointmentHistoryTable = clinicSchema.table(
@@ -69,7 +70,9 @@ export const appointmentHistoryTable = clinicSchema.table(
     appointmentHistoryReason: varchar("appointmentHistoryReason", {
       length: 256,
     }).notNull(),
-    appointmentHistoryStatus: StatusEnum("appointmentHistoryStatus")
+    appointmentHistoryStatus: AppointmentHistoryStatusEnum(
+      "appointmentHistoryStatus"
+    )
       .default("scheduled")
       .notNull(),
     appointmentHistoryCancellationReason: varchar(
