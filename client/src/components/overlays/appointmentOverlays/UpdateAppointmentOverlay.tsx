@@ -1,58 +1,88 @@
 import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
-import { Appointment } from "../../../types";
-import { StyledRippleButton } from "../../design/StyledRippleButton";
+import {
+  Appointment,
+  AppointmentTableData,
+  UpdateAppointmentOverlayProps,
+} from "../../../types";
 import Overlay from "../base/Overlay";
-import { StyledInput } from "../../design/StyledInput";
+import { StyledRippleButton } from "../../design/StyledRippleButton";
+import { PiPencil, PiPencilLineFill } from "react-icons/pi";
 import { UserPicker } from "../../pickers/UserPicker";
+import { StyledInput } from "../../design/StyledInput";
+import { AppointmentStatusPicker } from "../../pickers/AppointmentStatusPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
-import { AppointmentStatusPicker } from "../../pickers/AppointmentStatusPicker";
-import { appointmentsPath } from "../../../utils/dotenv";
-import axios from "axios";
 
-export const CreateAppointmentOverlay: FC = () => {
+export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
+  appointment,
+  doctorData,
+  patientData,
+}) => {
   const [
-    isCreateAppointmentOverlayVisible,
-    setIsCreateAppointmentOverlayVisible,
+    isUpdateAppointmentOverlayVisible,
+    setIsUpdateAppointmentOverlayVisible,
   ] = useState<boolean>(false);
   const [
-    isCreateAppointmentConfirmationDialogOverlayVisible,
-    setIsCreateAppointmentConfirmationDialogOverlayVisible,
+    isUpdateAppointmentConfirmationDialogOverlayVisible,
+    setIsUpdateAppointmentConfirmationDialogOverlayVisible,
   ] = useState<boolean>(false);
-  const [appointmentToCreate, setAppointmentToCreate] = useState<Appointment>({
+
+  const [appointmentToUpdate, setAppointmentToUpdate] = useState<Appointment>({
+    appointmentId: "",
     appointmentDoctorId: "",
     appointmentPatientId: "",
     appointmentReason: "",
     appointmentDateTime: "",
     appointmentStatus: "",
+    appointmentCancellationReason: "",
   });
 
   const [selectedDoctorId, setSelectedDoctorId] = useState<string>("");
   const [selectedDoctorName, setSelectedDoctorName] = useState<string>("");
   const [selectedPatientId, setSelectedPatientId] = useState<string>("");
   const [selectedPatientName, setSelectedPatientName] = useState<string>("");
-  const [selectedDateTime, setSelectedDateTime] = useState<string>("");
-
-  const [defaultDate, setDefaultDate] = useState<string>("");
-  const [defaultTime, setDefaultTime] = useState<string>("");
 
   const [selectedAppointmentStatusName, setSelectedAppointmentStatusName] =
     useState<string>("");
   const [selectedAppointmentStatusValue, setSelectedAppointmentStatusValue] =
     useState<string>("");
 
+  const [selectedDateTime, setSelectedDateTime] = useState<string>("");
+
+  const [defaultDate, setDefaultDate] = useState<string>("");
+  const [defaultTime, setDefaultTime] = useState<string>("");
+
   useEffect(() => {
-    const currentDate = new Date();
-    if (isCreateAppointmentOverlayVisible) {
-      setDefaultDate(currentDate.toISOString());
-      setDefaultTime("08:00");
+    if (isUpdateAppointmentOverlayVisible) setAppointmentToUpdate(appointment);
+  }, [isUpdateAppointmentOverlayVisible]);
+
+  useEffect(() => {
+    if (isUpdateAppointmentOverlayVisible) {
+      // setDefaultDate(appointment.appointmentDateTime)
+      console.log(appointment.appointmentDateTime);
+      setDefaultDate(appointment.appointmentDateTime.split("T")[0]);
+      setDefaultTime(
+        appointment.appointmentDateTime.split("T")[1].substring(0, 5)
+      );
+      console.log(`${doctorData.doctorForename} $${doctorData.doctorSurname}`);
+      setSelectedDoctorName(
+        `${doctorData.doctorForename.toLowerCase()} ${doctorData.doctorSurname.toLowerCase()}`
+      );
+      setSelectedPatientName(
+        `${patientData.patientForename.toLowerCase()} ${patientData.patientForename.toLowerCase()}`
+      );
+      setSelectedAppointmentStatusName(appointmentToUpdate.appointmentStatus);
     }
-  }, [isCreateAppointmentOverlayVisible]);
+  }, [
+    isUpdateAppointmentOverlayVisible,
+    appointmentToUpdate,
+    appointment.appointmentDateTime,
+  ]);
 
   function handleStyledInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
-    setAppointmentToCreate((prevAppointmentToCreate) => ({
-      ...prevAppointmentToCreate,
+    setAppointmentToUpdate((prevAppointmentToUpdate) => ({
+      ...prevAppointmentToUpdate,
       [name]: value,
     }));
   }
@@ -60,39 +90,28 @@ export const CreateAppointmentOverlay: FC = () => {
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     // Close the overlay if the click is outside the content
     if (e.target === e.currentTarget) {
-      setIsCreateAppointmentOverlayVisible(false);
+      setIsUpdateAppointmentOverlayVisible(false);
     }
   };
 
-  async function onCreateAppointment() {
-    try {
-      const response = await axios.post(
-        appointmentsPath,
-        {
-          appointmentDoctorId: selectedDoctorId,
-          appointmentPatientId: selectedPatientId,
-          appointmentDateTime: selectedDateTime,
-          appointmentReason: appointmentToCreate.appointmentReason,
-          appointmentStatus: "scheduled",
-        },
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  useEffect(() => {
+    console.log(appointmentToUpdate);
+  }, [appointmentToUpdate]);
 
   return (
     <>
-      <StyledRippleButton
-        label={`Create Appointment`}
-        type="create"
-        onClick={() => setIsCreateAppointmentOverlayVisible(true)}
-      />
+      {isUpdateAppointmentOverlayVisible ? (
+        <PiPencilLineFill className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
+      ) : (
+        <PiPencil
+          onClick={() => setIsUpdateAppointmentOverlayVisible(true)}
+          className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
+        />
+      )}
 
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
-          isCreateAppointmentOverlayVisible
+          isUpdateAppointmentOverlayVisible
             ? "visible backdrop-blur-sm"
             : "invisible"
         }`}
@@ -101,12 +120,12 @@ export const CreateAppointmentOverlay: FC = () => {
       >
         <div
           className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
-            isCreateAppointmentOverlayVisible
+            isUpdateAppointmentOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
           }`}
         >
-          <span className="flex justify-center mb-8">Create Appointment</span>
+          <span className="flex justify-center mb-8">Update Appointment</span>
           <div className="w-full flex justify-between">
             <div className="flex flex-col space-y-6">
               <UserPicker
@@ -116,6 +135,7 @@ export const CreateAppointmentOverlay: FC = () => {
                 setSelectedUserId={setSelectedDoctorId}
                 selectedUserName={selectedDoctorName}
                 setSelectedUserName={setSelectedDoctorName}
+                disabled
                 z="z-50"
               />
               <UserPicker
@@ -125,17 +145,18 @@ export const CreateAppointmentOverlay: FC = () => {
                 setSelectedUserId={setSelectedPatientId}
                 selectedUserName={selectedPatientName}
                 setSelectedUserName={setSelectedPatientName}
+                disabled
                 z="z-40"
               />
-            </div>
-            <div className="flex flex-col space-y-6">
               <StyledInput
                 label="appointment reason"
                 name="appointmentReason"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
-                defaultValue={`appointmentReason`}
+                inputValue={appointmentToUpdate.appointmentReason}
               />
+            </div>
+            <div className="flex flex-col space-y-6">
               <DateTimePicker
                 label="Appointment Date Time"
                 isDateOnly={false}
@@ -143,10 +164,10 @@ export const CreateAppointmentOverlay: FC = () => {
                 setSelectedEntity={setSelectedDateTime}
                 defaultDate={defaultDate}
                 defaultTime={defaultTime}
-                isOverlayVisible={isCreateAppointmentOverlayVisible}
+                isOverlayVisible={isUpdateAppointmentOverlayVisible}
                 z="z-50"
               />
-              {/* <AppointmentStatusPicker
+              <AppointmentStatusPicker
                 selectedAppointmentStatusName={selectedAppointmentStatusName}
                 setSelectedAppointmentStatusName={
                   setSelectedAppointmentStatusName
@@ -155,39 +176,40 @@ export const CreateAppointmentOverlay: FC = () => {
                 setSelectedAppointmentStatusValue={
                   setSelectedAppointmentStatusValue
                 }
-                z="z-50"
-              /> */}
+                z="z-40"
+              />
             </div>
           </div>
+
           <div className="w-full mt-14 flex justify-between">
             <StyledRippleButton
               label="Continue"
               type="create"
               onClick={() =>
-                setIsCreateAppointmentConfirmationDialogOverlayVisible(true)
+                setIsUpdateAppointmentConfirmationDialogOverlayVisible(true)
               }
             />
 
             <StyledRippleButton
               label="Cancel"
               type="delete"
-              onClick={() => setIsCreateAppointmentOverlayVisible(false)}
+              onClick={() => setIsUpdateAppointmentOverlayVisible(false)}
             />
           </div>
 
           <ConfirmationDialogOverlay
             className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
-              isCreateAppointmentConfirmationDialogOverlayVisible
+              isUpdateAppointmentConfirmationDialogOverlayVisible
                 ? "visible backdrop-blur-sm"
                 : "invisible"
             }`}
             closeConfirmationDialogModal={() =>
-              setIsCreateAppointmentConfirmationDialogOverlayVisible(false)
+              setIsUpdateAppointmentConfirmationDialogOverlayVisible(false)
             }
           >
             <div
               className={`w-96 h-96 bg-white flex items-center justify-center transition-all ${
-                isCreateAppointmentConfirmationDialogOverlayVisible
+                isUpdateAppointmentConfirmationDialogOverlayVisible
                   ? "scale-100 opacity-100 duration-200"
                   : "scale-125 opacity-0 duration-200"
               }`}
@@ -196,13 +218,13 @@ export const CreateAppointmentOverlay: FC = () => {
               <StyledRippleButton
                 label="Create"
                 type="yes"
-                onClick={onCreateAppointment}
+                onClick={() => {}}
               />
               <StyledRippleButton
                 label="Cancel"
                 type="delete"
                 onClick={() =>
-                  setIsCreateAppointmentConfirmationDialogOverlayVisible(false)
+                  setIsUpdateAppointmentConfirmationDialogOverlayVisible(false)
                 }
               />
             </div>

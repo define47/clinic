@@ -9,6 +9,7 @@ import { userPath } from "../../../utils/dotenv";
 import { PiPencil, PiPencilLineFill } from "react-icons/pi";
 import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
 import { determineSpecialityOrder } from "../../../utils/utils";
+import { DateTimePicker } from "../../pickers/DateTimePicker";
 
 export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   user,
@@ -68,6 +69,14 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   //   useEffect(() => {
   //     console.log("userToUpdate useEffect", userToUpdate);
   //   }, [userToUpdate]);
+
+  const [userDateOfBirth, setUserDateOfBirth] = useState<string>("");
+  const [defaultDate, setDefaultDate] = useState<string>("");
+  useEffect(() => {
+    const currentDate = new Date();
+    if (isUpdateUserOverlayVisible) setDefaultDate(user.userDateOfBirth);
+    // setDefaultDate(currentDate.toISOString());
+  }, [isUpdateUserOverlayVisible]);
 
   useEffect(() => {
     if (isUpdateUserOverlayVisible) {
@@ -263,12 +272,21 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 labelBackgroundColor="bg-white"
                 inputValue={userToUpdate.userGender}
               />
-              <StyledInput
+              {/* <StyledInput
                 label="userDateOfBirth"
                 name="userDateOfBirth"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColor="bg-white"
                 inputValue={userToUpdate.userDateOfBirth}
+              /> */}
+
+              <DateTimePicker
+                isDateOnly={true}
+                label={"Date of Birth"}
+                selectedEntity={userDateOfBirth}
+                setSelectedEntity={setUserDateOfBirth}
+                defaultDate={defaultDate}
+                isOverlayVisible={isUpdateUserOverlayVisible}
               />
             </div>
             <div className="flex flex-col space-y-6">

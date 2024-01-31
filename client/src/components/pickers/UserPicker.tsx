@@ -10,11 +10,12 @@ import { VscDash } from "react-icons/vsc";
 export const UserPicker: FC<UserPickerProps> = ({
   label,
   roleName,
-  z,
   selectedUserId,
   setSelectedUserId,
   selectedUserName,
   setSelectedUserName,
+  disabled,
+  z,
 }) => {
   const [users, setUsers] = useState<User[]>([]);
   // const [selectedUserId, setSelectedUserId] = useState<string>("");
@@ -201,13 +202,14 @@ export const UserPicker: FC<UserPickerProps> = ({
             >
               <RiArrowUpSLine
                 onClick={() => {
-                  setIsUserPickerVisible(!isUserPickerVisible);
+                  // setIsUserPickerVisible(!isUserPickerVisible);
                 }}
               />
             </div>
           }
           isPicker={true}
           isPickerVisible={isUserPickerVisible}
+          disabled={disabled}
         />
         <ul
           className={`absolute w-full bg-white overflow-y-auto h-40 ${

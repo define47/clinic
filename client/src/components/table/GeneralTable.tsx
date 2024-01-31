@@ -29,6 +29,7 @@ import { IoIosSearch } from "react-icons/io";
 import { AppointmentSearchCriterionPicker } from "../pickers/AppointmentSearchCriterionPicker";
 import { AppointmentPeriodPicker } from "../pickers/AppointmentPeriodPicker";
 import { CreateAppointmentOverlay } from "../overlays/appointmentOverlays/CreateAppointmentOverlay";
+import { UpdateAppointmentOverlay } from "../overlays/appointmentOverlays/UpdateAppointmentOverlay";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -121,7 +122,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               ? selectedAppointmentCriteriaValue
               : "userForename",
           searchQuery,
-          scheduleFilter: selectedAppointmentPeriodValue,
+          scheduleFilter:
+            selectedAppointmentPeriodValue === ""
+              ? "today"
+              : selectedAppointmentPeriodValue,
           orderBy: "desc:userForename, asc:userSurname",
           limit: 100,
           page: 0,
@@ -266,7 +270,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   }
 
   return (
-    <div className="w-full hidden lg:block border p-4 rounded-xl font-roboto">
+    <div className="w-full h-full hidden lg:block border p-4 rounded-xl font-roboto">
       {(entity === "doctor" ||
         entity === "patient" ||
         entity === "receptionist" ||
@@ -339,7 +343,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           />
         </div>
       )}
-      <div className="w-full border rounded-xl overflow-hidden">
+      <div className="w-full border rounded-xl h-4/5 overflow-auto">
         {tableRows.length > 0 && (
           <table className="w-full text-center text-xs font-light border rounded-xl">
             <thead className="w-full border-b bg-white font-medium">
@@ -566,7 +570,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     <td className="px-6 py-4 font-medium">
                       {tableRow.appointment.appointmentCancellationReason}
                     </td>
-                    <td></td>
+                    <td className="h-14 flex items-center justify-center space-x-2">
+                      <UpdateAppointmentOverlay
+                        appointment={tableRow.appointment}
+                        doctorData={tableRow.doctor}
+                        patientData={tableRow.patient}
+                      />
+                    </td>
                   </tr>
                 ) : (
                   ""

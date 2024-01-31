@@ -64,20 +64,34 @@ export const StyledInput: FC<StyledInputProps> = ({
     setHasText(event.target.value.trim() !== "");
   };
 
-  useEffect(() => {
-    const handleDocumentClick = (event: MouseEvent) => {
-      // console.log(styledInputRef.current === document.activeElement);
-      setIsStyledInputFocused(
-        styledInputRef.current === document.activeElement
-      );
-    };
+  // useEffect(() => {
+  //   const handleDocumentClick = (event: MouseEvent) => {
+  //     // console.log(styledInputRef.current === document.activeElement);
+  //     setIsStyledInputFocused(
+  //       styledInputRef.current === document.activeElement
+  //     );
+  //   };
 
-    document.addEventListener("click", handleDocumentClick);
+  //   document.addEventListener("click", handleDocumentClick);
 
-    return () => {
-      document.removeEventListener("click", handleDocumentClick);
-    };
-  }, [styledInputRef]);
+  //   return () => {
+  //     document.removeEventListener("click", handleDocumentClick);
+  //   };
+  // }, [styledInputRef]);
+
+  // useEffect(() => {
+  //   const handleDocumentClick = () => {
+  //     setIsStyledInputFocused(
+  //       styledInputRef.current === document.activeElement
+  //     );
+  //   };
+
+  //   document.addEventListener("click", handleDocumentClick);
+
+  //   return () => {
+  //     document.removeEventListener("click", handleDocumentClick);
+  //   };
+  // }, [styledInputRef]);
 
   // useEffect(() => {
   //   if (inputValue) {
@@ -148,18 +162,20 @@ export const StyledInput: FC<StyledInputProps> = ({
         <span
           className="absolute right-2 top-2.5 text-xl"
           onClick={() => {
-            if (isPicker) {
-              if (isPickerVisible) {
-                styledInputRef.current?.blur();
-                if (typeof onClickInput === "function") onClickInput();
+            if (!disabled) {
+              if (isPicker) {
+                if (isPickerVisible) {
+                  styledInputRef.current?.blur();
+                  if (typeof onClickInput === "function") onClickInput();
+                } else {
+                  styledInputRef.current?.focus();
+                  if (typeof onClickInput === "function") onClickInput();
+                }
               } else {
-                styledInputRef.current?.focus();
-                if (typeof onClickInput === "function") onClickInput();
+                if (isStyledInputFocused) {
+                  styledInputRef.current?.blur();
+                } else styledInputRef.current?.focus();
               }
-            } else {
-              if (isStyledInputFocused) {
-                styledInputRef.current?.blur();
-              } else styledInputRef.current?.focus();
             }
           }}
         >

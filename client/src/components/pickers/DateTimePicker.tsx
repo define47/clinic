@@ -25,6 +25,7 @@ type DateTimePickerProps = {
   selectedEntity: string;
   setSelectedEntity: (selectedEntity: string) => void;
   isOverlayVisible?: boolean;
+  z: string;
 };
 
 export const DateTimePicker: FC<DateTimePickerProps> = ({
@@ -35,6 +36,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   selectedEntity,
   setSelectedEntity,
   isOverlayVisible,
+  z,
 }) => {
   // "2024-05-20"
   const currentDate = new Date();
@@ -427,7 +429,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   // }, [selectedEntity]);
 
   return (
-    <div className="relative" ref={dateTimePickerRef}>
+    <div className={`relative ${z}`} ref={dateTimePickerRef}>
       <div className="w-72">
         <StyledInput
           label={label}

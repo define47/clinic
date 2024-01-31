@@ -31,7 +31,7 @@ export type AppointmentTableData = {
     appointmentReason: string;
     appointmentDateTime: string;
     appointmentStatus: string;
-    appointmentCancellationReason: string | null;
+    appointmentCancellationReason: string;
   };
   doctor: {
     doctorId: string;
@@ -160,11 +160,12 @@ export type AppointmentPeriodPickerProps = {
 export type UserPickerProps = {
   label: string;
   roleName: string;
-  z: string;
   selectedUserId: string;
   setSelectedUserId: (selectedUserId: string) => void;
   selectedUserName: string;
   setSelectedUserName: (selectedUserName: string) => void;
+  disabled?: boolean;
+  z: string;
 };
 
 export type Appointment = {
@@ -192,4 +193,23 @@ export type AppointmentStatusPickerProps = {
     selectedAppointmentStatusValue: string
   ) => void;
   z: string;
+};
+
+export type UpdateAppointmentOverlayDoctorData = {
+  doctorId: string;
+  doctorForename: string;
+  doctorSurname: string;
+};
+
+export type UpdateAppointmentOverlayPatientData = {
+  patientId: string;
+  patientForename: string;
+  patientSurname: string;
+  patientEmail: string;
+};
+
+export type UpdateAppointmentOverlayProps = {
+  appointment: Appointment;
+  doctorData: UpdateAppointmentOverlayDoctorData;
+  patientData: UpdateAppointmentOverlayPatientData;
 };
