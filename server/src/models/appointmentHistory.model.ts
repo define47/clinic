@@ -75,6 +75,7 @@ export const appointmentHistoryTable = clinicSchema.table(
     )
       .default("scheduled")
       .notNull(),
+    // appointmentHistoryStatus: varchar("appointmentHistoryStatus"),
     appointmentHistoryCancellationReason: varchar(
       "appointmentHistoryCancellationReason",
       {

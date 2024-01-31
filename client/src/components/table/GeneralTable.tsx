@@ -30,6 +30,7 @@ import { AppointmentSearchCriterionPicker } from "../pickers/AppointmentSearchCr
 import { AppointmentPeriodPicker } from "../pickers/AppointmentPeriodPicker";
 import { CreateAppointmentOverlay } from "../overlays/appointmentOverlays/CreateAppointmentOverlay";
 import { UpdateAppointmentOverlay } from "../overlays/appointmentOverlays/UpdateAppointmentOverlay";
+import { DeleteAppointmentOverlay } from "../overlays/appointmentOverlays/DeleteAppointmentOverlay";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -575,6 +576,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                         appointment={tableRow.appointment}
                         doctorData={tableRow.doctor}
                         patientData={tableRow.patient}
+                      />
+                      <DeleteAppointmentOverlay
+                        appointmentId={tableRow.appointment.appointmentId}
                       />
                     </td>
                   </tr>

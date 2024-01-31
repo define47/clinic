@@ -195,6 +195,10 @@ export type AppointmentStatusPickerProps = {
   z: string;
 };
 
+export type DeleteAppointmentOverlayPros = {
+  appointmentId: string;
+};
+
 export type UpdateAppointmentOverlayDoctorData = {
   doctorId: string;
   doctorForename: string;

@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { AppointmentService } from "../services/appointment.service";
 import { request } from "node:http";
 import { AppointmentHistoryService } from "../services/appointmentHistory.service";
+import { fastifyServer } from "../server";
 
 export class AppointmentController {
   private readonly _appointmentService: AppointmentService;
@@ -55,20 +56,26 @@ export class AppointmentController {
           appointmentStatus: body.appointmentStatus,
         });
 
-      // if (appointmentToCreate)
-      //   await this._appointmentHistoryService.createAppointmentHistory({
-      //     appointmentId: appointmentToCreate?.appointmentId,
-      //     appointmentHistoryDoctorId: appointmentToCreate.appointmentDoctorId,
-      //     appointmentHistoryPatientId: appointmentToCreate.appointmentPatientId,
-      //     appointmentHistoryDateTime: appointmentToCreate.appointmentDateTime,
-      //     appointmentHistoryReason: appointmentToCreate.appointmentReason,
-      //     appointmentHistoryCancellationReason: "",
-      //     appointmentHistoryStatus: appointmentToCreate.appointmentStatus,
-      //     appointmentHistoryCreatedAt: new Date(),
-      //     appointmentHistoryUpdatedAt: new Date(),
-      //     appointmentHistoryCreatedBy: "c27c7196-fd8b-5aee-943e-df266b71fb66",
-      //     appointmentHistoryUpdatedBy: "c27c7196-fd8b-5aee-943e-df266b71fb66",
-      //   });
+      const { redis } = fastifyServer;
+
+      const userSessionData = JSON.parse(
+        (await redis.sessionRedis.get(`sessionId:${request.cookieData.value}`))!
+      );
+
+      if (appointmentToCreate)
+        await this._appointmentHistoryService.createAppointmentHistory({
+          appointmentId: appointmentToCreate?.appointmentId,
+          appointmentHistoryDoctorId: appointmentToCreate.appointmentDoctorId,
+          appointmentHistoryPatientId: appointmentToCreate.appointmentPatientId,
+          appointmentHistoryDateTime: appointmentToCreate.appointmentDateTime,
+          appointmentHistoryReason: appointmentToCreate.appointmentReason,
+          appointmentHistoryCancellationReason: "",
+          appointmentHistoryStatus: appointmentToCreate.appointmentStatus,
+          appointmentHistoryCreatedAt: new Date(),
+          appointmentHistoryUpdatedAt: new Date(),
+          appointmentHistoryCreatedBy: userSessionData.userId,
+          appointmentHistoryUpdatedBy: userSessionData.userId,
+        });
 
       reply.code(200).send({ success: true, appointmentToCreate });
     } catch (error) {}
@@ -92,38 +99,44 @@ export class AppointmentController {
           appointmentCancellationReason: body.appointmentCancellationReason,
         }
       );
+      const { redis } = fastifyServer;
 
-      console.log(appointmentToUpdate);
+      const userSessionData = JSON.parse(
+        (await redis.sessionRedis.get(`sessionId:${request.cookieData.value}`))!
+      );
 
-      // if (appointmentToUpdate) {
-      //   const appointmentHistory =
-      //     await this._appointmentHistoryService.getAppointmentHistoryByAppointmentId(
-      //       appointmentToUpdate.appointmentId
-      //     );
-      //   // if (appointmentHistory) console.log(appointmentHistory[0]);
+      console.log(userSessionData.userId);
 
-      //   await this._appointmentHistoryService.createAppointmentHistory({
-      //     appointmentId: appointmentToUpdate?.appointmentId,
-      //     appointmentHistoryDoctorId: appointmentToUpdate.appointmentDoctorId,
-      //     appointmentHistoryPatientId: appointmentToUpdate.appointmentPatientId,
-      //     appointmentHistoryDateTime: new Date(
-      //       appointmentToUpdate.appointmentDateTime
-      //     ),
-      //     appointmentHistoryReason: appointmentToUpdate.appointmentReason,
-      //     appointmentHistoryCancellationReason:
-      //       appointmentToUpdate.appointmentCancellationReason,
-      //     appointmentHistoryStatus: appointmentToUpdate.appointmentStatus,
-      //     appointmentHistoryCreatedAt:
-      //       appointmentHistory?.[0].appointmentHistoryCreatedAt!,
-      //     appointmentHistoryUpdatedAt: new Date(),
-      //     appointmentHistoryCreatedBy:
-      //       appointmentHistory?.[0].appointmentHistoryCreatedBy!,
-      //     appointmentHistoryUpdatedBy: "c27c7196-fd8b-5aee-943e-df266b71fb66",
-      //   });
-      // }
+      if (appointmentToUpdate) {
+        const appointmentHistory =
+          await this._appointmentHistoryService.getAppointmentHistoryByAppointmentId(
+            appointmentToUpdate.appointmentId
+          );
 
-      reply.code(200).send({ success: true, appointmentToUpdate });
-    } catch (error) {}
+        await this._appointmentHistoryService.createAppointmentHistory({
+          appointmentId: appointmentToUpdate?.appointmentId,
+          appointmentHistoryDoctorId: appointmentToUpdate.appointmentDoctorId,
+          appointmentHistoryPatientId: appointmentToUpdate.appointmentPatientId,
+          appointmentHistoryDateTime: new Date(
+            appointmentToUpdate.appointmentDateTime
+          ),
+          appointmentHistoryReason: appointmentToUpdate.appointmentReason,
+          appointmentHistoryCancellationReason:
+            appointmentToUpdate.appointmentCancellationReason,
+          appointmentHistoryStatus: appointmentToUpdate.appointmentStatus,
+          appointmentHistoryCreatedAt:
+            appointmentHistory?.[0].appointmentHistoryCreatedAt!,
+          appointmentHistoryUpdatedAt: new Date(),
+          appointmentHistoryCreatedBy:
+            appointmentHistory?.[0].appointmentHistoryCreatedBy!,
+          appointmentHistoryUpdatedBy: userSessionData.userId,
+        });
+      }
+
+      reply.code(200).send({ success: true });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   public deleteAppointment = async (
