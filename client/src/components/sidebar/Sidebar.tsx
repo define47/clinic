@@ -40,39 +40,50 @@ export const Sidebar: FC<SidebarProps> = ({
   const adminGuidePathname = "/admins/guide";
 
   return (
-    <aside
-      // fixed top-0 left-0 z-20
-      className={`h-full overflow-hidden transition-all ${
-        isSidebarExpanded ? "w-64" : "w-20"
-      }`}
-      onMouseEnter={() => {
-        setIsSidebarExpanded(true);
-      }}
-      onMouseLeave={() => {
-        setIsSidebarExpanded(false);
-      }}
-    >
-      <nav className="h-full flex flex-col bg-lightMode-sidebarColor dark:bg-darkMode-sidebarColor border-r shadow-sm">
-        <div className="h-14 flex justify-between items-center border-b">
-          {/* <img
+    <>
+      <div
+        className={`transition-all ${
+          // fixed top-0 left-20 w-full h-full bg-black opacity-0 z-0 ease-out duration-200
+          isSidebarExpanded
+            ? "fixed top-0 left-64 w-full h-full bg-black opacity-50 z-0 ease-in duration-300"
+            : ""
+        } `}
+        onClick={() => setIsSidebarExpanded(false)}
+      ></div>
+
+      <aside
+        // fixed top-0 left-0 z-20
+        className={`h-full overflow-hidden transition-all ${
+          isSidebarExpanded ? "w-64 " : "w-20"
+        }`}
+        onMouseEnter={() => {
+          setIsSidebarExpanded(true);
+        }}
+        onMouseLeave={() => {
+          setIsSidebarExpanded(false);
+        }}
+      >
+        <nav className="h-full flex flex-col bg-lightMode-sidebarColor dark:bg-darkMode-sidebarColor border-r shadow-sm">
+          <div className="h-14 flex justify-between items-center border-b">
+            {/* <img
             src="https://img.logoipsum.com/243.svg"
             className={`overflow-hidden transition-all ${
               isSidebarExpanded ? "w-32" : "w-32"
             }`}
             alt=""
           /> */}
-          <span
-            className={`overflow-hidden transition-all flex items-center justify-center  ${
-              isSidebarExpanded ? "w-full text-2xl" : "w-full text-sm"
-            }`}
-          >
-            Iatropolis
-          </span>
+            <span
+              className={`overflow-hidden transition-all flex items-center justify-center  ${
+                isSidebarExpanded ? "w-full text-2xl" : "w-full text-sm"
+              }`}
+            >
+              Iatropolis
+            </span>
 
-          {/* fixed ${
+            {/* fixed ${
               isSidebarExpanded ? "left-60 top-16" : "left-[70px] top-7"
             }  */}
-          {/* <button
+            {/* <button
             onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
             className={`${
               !isSidebarExpanded && "flex w-full items-center justify-center"
@@ -80,134 +91,135 @@ export const Sidebar: FC<SidebarProps> = ({
           >
             {isSidebarExpanded ? <ChevronFirst /> : <ChevronLast />}
           </button> */}
-        </div>
+          </div>
 
-        <ul className="flex-1 px-3">
-          <SidebarItem
-            to={adminDashboardPathname}
-            icon={
-              pathname === adminDashboardPathname ? (
-                <MdSpaceDashboard />
-              ) : (
-                <MdOutlineSpaceDashboard />
-              )
-            }
-            title="Dashboard"
-            active={pathname === adminDashboardPathname}
-            isSidebarExpanded={isSidebarExpanded}
-          />
-          <SidebarItem
-            to={appointmentsPathname}
-            icon={
-              pathname === appointmentsPathname ? (
-                <GiBookmarklet />
-              ) : (
-                <GiBookmark />
-              )
-            }
-            title="Appointments"
-            active={pathname === appointmentsPathname}
-            isSidebarExpanded={isSidebarExpanded}
-          />
-          <SidebarItem
-            to={patientsPathname}
-            icon={
-              pathname === patientsPathname ? (
-                <MdPersonalInjury />
-              ) : (
-                <MdOutlinePersonalInjury />
-              )
-            }
-            title="Patients"
-            active={pathname === patientsPathname}
-            isSidebarExpanded={isSidebarExpanded}
-          />
-          <SidebarItem
-            to={doctorsPathname}
-            icon={
-              pathname === doctorsPathname ? (
-                <RiUserHeartFill />
-              ) : (
-                <RiUserHeartLine />
-              )
-            }
-            title="Doctors"
-            active={pathname === doctorsPathname}
-            isSidebarExpanded={isSidebarExpanded}
-          />
-          <SidebarItem
-            to={medicalSpecialitiesPathname}
-            icon={
-              pathname === medicalSpecialitiesPathname ? (
-                <RiShieldCrossFill />
-              ) : (
-                <RiShieldCrossLine />
-              )
-            }
-            title="Medical Specialities"
-            active={pathname === medicalSpecialitiesPathname}
-            isSidebarExpanded={isSidebarExpanded}
-          />
-          <SidebarItem
-            to={medicalProceduresPathname}
-            icon={
-              pathname === medicalProceduresPathname ? (
-                <BiSolidInjection />
-              ) : (
-                <BiInjection />
-              )
-            }
-            title="Medical Procedures"
-            active={pathname === medicalProceduresPathname}
-            isSidebarExpanded={isSidebarExpanded}
-          />
-          <SidebarItem
-            to={nursesPathname}
-            icon={
-              pathname === nursesPathname ? <RiNurseFill /> : <RiNurseLine />
-            }
-            title="Nurses"
-            active={pathname === nursesPathname}
-            isSidebarExpanded={isSidebarExpanded}
-          />
-          <SidebarItem
-            to={receptionistsPathname}
-            icon={
-              pathname === receptionistsPathname ? <FaUser /> : <FaRegUser />
-            }
-            title="Receptionists"
-            active={pathname === receptionistsPathname}
-            isSidebarExpanded={isSidebarExpanded}
-          />
-          <li className="border-b"></li>
-          <SidebarItem
-            to={settingsPathname}
-            icon={
-              pathname === settingsPathname ? (
-                <TbSettingsFilled />
-              ) : (
-                <TbSettings />
-              )
-            }
-            title="Settings"
-            active={pathname === settingsPathname}
-            isSidebarExpanded={isSidebarExpanded}
-          />
-          <SidebarItem
-            to={adminGuidePathname}
-            icon={
-              pathname === adminGuidePathname ? (
-                <IoHelpCircle />
-              ) : (
-                <IoHelpCircleOutline />
-              )
-            }
-            title="Guide"
-            active={pathname === adminGuidePathname}
-            isSidebarExpanded={isSidebarExpanded}
-          />
-        </ul>
-      </nav>
-    </aside>
+          <ul className="flex-1 px-3">
+            <SidebarItem
+              to={adminDashboardPathname}
+              icon={
+                pathname === adminDashboardPathname ? (
+                  <MdSpaceDashboard />
+                ) : (
+                  <MdOutlineSpaceDashboard />
+                )
+              }
+              title="Dashboard"
+              active={pathname === adminDashboardPathname}
+              isSidebarExpanded={isSidebarExpanded}
+            />
+            <SidebarItem
+              to={appointmentsPathname}
+              icon={
+                pathname === appointmentsPathname ? (
+                  <GiBookmarklet />
+                ) : (
+                  <GiBookmark />
+                )
+              }
+              title="Appointments"
+              active={pathname === appointmentsPathname}
+              isSidebarExpanded={isSidebarExpanded}
+            />
+            <SidebarItem
+              to={patientsPathname}
+              icon={
+                pathname === patientsPathname ? (
+                  <MdPersonalInjury />
+                ) : (
+                  <MdOutlinePersonalInjury />
+                )
+              }
+              title="Patients"
+              active={pathname === patientsPathname}
+              isSidebarExpanded={isSidebarExpanded}
+            />
+            <SidebarItem
+              to={doctorsPathname}
+              icon={
+                pathname === doctorsPathname ? (
+                  <RiUserHeartFill />
+                ) : (
+                  <RiUserHeartLine />
+                )
+              }
+              title="Doctors"
+              active={pathname === doctorsPathname}
+              isSidebarExpanded={isSidebarExpanded}
+            />
+            <SidebarItem
+              to={medicalSpecialitiesPathname}
+              icon={
+                pathname === medicalSpecialitiesPathname ? (
+                  <RiShieldCrossFill />
+                ) : (
+                  <RiShieldCrossLine />
+                )
+              }
+              title="Medical Specialities"
+              active={pathname === medicalSpecialitiesPathname}
+              isSidebarExpanded={isSidebarExpanded}
+            />
+            <SidebarItem
+              to={medicalProceduresPathname}
+              icon={
+                pathname === medicalProceduresPathname ? (
+                  <BiSolidInjection />
+                ) : (
+                  <BiInjection />
+                )
+              }
+              title="Medical Procedures"
+              active={pathname === medicalProceduresPathname}
+              isSidebarExpanded={isSidebarExpanded}
+            />
+            <SidebarItem
+              to={nursesPathname}
+              icon={
+                pathname === nursesPathname ? <RiNurseFill /> : <RiNurseLine />
+              }
+              title="Nurses"
+              active={pathname === nursesPathname}
+              isSidebarExpanded={isSidebarExpanded}
+            />
+            <SidebarItem
+              to={receptionistsPathname}
+              icon={
+                pathname === receptionistsPathname ? <FaUser /> : <FaRegUser />
+              }
+              title="Receptionists"
+              active={pathname === receptionistsPathname}
+              isSidebarExpanded={isSidebarExpanded}
+            />
+            <li className="border-b"></li>
+            <SidebarItem
+              to={settingsPathname}
+              icon={
+                pathname === settingsPathname ? (
+                  <TbSettingsFilled />
+                ) : (
+                  <TbSettings />
+                )
+              }
+              title="Settings"
+              active={pathname === settingsPathname}
+              isSidebarExpanded={isSidebarExpanded}
+            />
+            <SidebarItem
+              to={adminGuidePathname}
+              icon={
+                pathname === adminGuidePathname ? (
+                  <IoHelpCircle />
+                ) : (
+                  <IoHelpCircleOutline />
+                )
+              }
+              title="Guide"
+              active={pathname === adminGuidePathname}
+              isSidebarExpanded={isSidebarExpanded}
+            />
+          </ul>
+        </nav>
+      </aside>
+    </>
   );
 };

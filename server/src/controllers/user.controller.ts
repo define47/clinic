@@ -64,8 +64,8 @@ export class UserController {
         query.roleId,
         query.searchBy.split(","),
         query.searchQuery,
-        query.limit,
-        query.page,
+        parseInt(query.limit),
+        parseInt(query.page),
         query.orderBy
       );
 
@@ -327,7 +327,9 @@ export class UserController {
       console.log("bodypostuser", body);
 
       const roleIds: string[] = body.roleIds;
-      const specialityIds = body.specialityIds.filter(function (value: string) {
+      const specialityIds = body.specialityIds?.filter(function (
+        value: string
+      ) {
         return value !== "";
       });
 

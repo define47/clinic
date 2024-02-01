@@ -109,7 +109,7 @@ export const StyledInput: FC<StyledInputProps> = ({
   //   console.log(ref?.current);
   // }, [ref]);
   return (
-    <div className="">
+    <div className="flex">
       {/* <div className="input-group">
         <input type="text" required />
         <label htmlFor="">username</label>
@@ -123,11 +123,11 @@ export const StyledInput: FC<StyledInputProps> = ({
             textColorUnfocused ? textColorUnfocused : "text-black"
           }  ${
             textColorFocused ? textColorFocused : "text-black"
-          }  p-2 bg-transparent border ${
+          }  p-2 bg-transparent border-y border-l ${
             borderColorUnfocused ? borderColorUnfocused : "border-black"
           } ${
             borderColorFocused ? borderColorFocused : "focus:border-gray-300"
-          }  outline-none rounded-md  transition-all duration-200 ${
+          }  outline-none rounded-tl-lg rounded-bl-lg  transition-all duration-200 ${
             focused || hasText || inputValue ? "border-gray-300" : ""
           }`}
           onFocus={handleFocus}
@@ -159,7 +159,7 @@ export const StyledInput: FC<StyledInputProps> = ({
         >
           {label}
         </label>
-        <span
+        {/* <span
           className="absolute right-2 top-2.5 text-xl"
           onClick={() => {
             if (!disabled) {
@@ -180,8 +180,41 @@ export const StyledInput: FC<StyledInputProps> = ({
           }}
         >
           {icon}
-        </span>
+        </span> */}
       </div>
+
+      <span
+        className={`flex items-center cursor-pointer ${
+          textColorUnfocused ? textColorUnfocused : "text-black"
+        }  ${
+          textColorFocused ? textColorFocused : "text-black"
+        }  p-2 bg-transparent border-y border-r ${
+          borderColorUnfocused ? borderColorUnfocused : "border-black"
+        } ${
+          borderColorFocused ? borderColorFocused : "focus:border-gray-300"
+        }  outline-none rounded-tr-lg rounded-br-lg transition-all duration-200 ${
+          focused || hasText || inputValue ? "border-gray-300" : ""
+        }`}
+        onClick={() => {
+          if (!disabled) {
+            if (isPicker) {
+              if (isPickerVisible) {
+                styledInputRef.current?.blur();
+                if (typeof onClickInput === "function") onClickInput();
+              } else {
+                styledInputRef.current?.focus();
+                if (typeof onClickInput === "function") onClickInput();
+              }
+            } else {
+              if (isStyledInputFocused) {
+                styledInputRef.current?.blur();
+              } else styledInputRef.current?.focus();
+            }
+          }
+        }}
+      >
+        {icon}
+      </span>
     </div>
   );
 };

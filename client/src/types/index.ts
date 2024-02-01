@@ -53,7 +53,11 @@ export type MedicalProcedure = {
   // medicalProcedureEstimatedTimeMinutes: number;
 };
 
-export type TableRow = User | MedicalSpeciality | AppointmentTableData;
+export type TableRow =
+  | User
+  | MedicalSpeciality
+  | AppointmentTableData
+  | MedicalProcedure;
 
 export type UserToLogin = {
   userEmail: string;
@@ -223,4 +227,8 @@ export type UpdateAppointmentOverlayProps = {
   appointment: Appointment;
   doctorData: UpdateAppointmentOverlayDoctorData;
   patientData: UpdateAppointmentOverlayPatientData;
+};
+
+export type AppointmentHistoryProps = {
+  appointmentId: string;
 };

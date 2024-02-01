@@ -64,7 +64,14 @@ export class MedicalSpecialityMedicalProcedureMappingRepository
     limit: number,
     page: number,
     orderBy: string
-  ) {
+  ): Promise<
+    | {
+        tableData: MedicalProcedure[];
+        totalCount: number;
+        totalPages: number;
+      }
+    | undefined
+  > {
     let orderByFinalColumn;
     const orderDirection = orderBy.split(":")[0];
     const orderColumn = orderBy.split(":")[1];
@@ -122,11 +129,11 @@ export class MedicalSpecialityMedicalProcedureMappingRepository
 
     const data = await this._drizzle
       .select({
-        medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
-        medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
-        procedureId: medicalProcedureTable.medicalProcedureId,
-        procedureName: medicalProcedureTable.medicalProcedureName,
-        procedurePrice: medicalProcedureTable.medicalProcedurePrice,
+        // medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
+        // medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
+        medicalProcedureId: medicalProcedureTable.medicalProcedureId,
+        medicalProcedureName: medicalProcedureTable.medicalProcedureName,
+        medicalProcedurePrice: medicalProcedureTable.medicalProcedurePrice,
       })
       .from(this._table)
       .innerJoin(

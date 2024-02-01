@@ -1,12 +1,37 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { MedicalProcedureService } from "../services/medicalProcedure.service";
+import { MedicalSpecialityMedicalProcedureMappingService } from "../services/medicalSpecialityMedicalProcedureMapping.service";
 
 export class MedicalProcedureController {
   private readonly _medicalProcedureService: MedicalProcedureService;
-
+  private readonly _medicalSpecialityMedicalProcedureMappingService: MedicalSpecialityMedicalProcedureMappingService;
   public constructor() {
     this._medicalProcedureService = new MedicalProcedureService();
+    this._medicalSpecialityMedicalProcedureMappingService =
+      new MedicalSpecialityMedicalProcedureMappingService();
   }
+
+  public getMedicalProceduresByMedicalSpeciality = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const query: any = request.query;
+
+      const payload =
+        await this._medicalSpecialityMedicalProcedureMappingService.getAllMedicalProceduresByMedicalSpeciality(
+          query.medicalSpecialityId,
+          query.searchQuery,
+          parseInt(query.limit),
+          parseInt(query.page),
+          query.orderBy
+        );
+
+      reply.code(200).send({ success: true, payload });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   public postMedicalProcedure = async (
     request: FastifyRequest,

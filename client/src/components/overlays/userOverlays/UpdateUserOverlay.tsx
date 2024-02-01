@@ -161,7 +161,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
           userEmail: userToUpdate.userEmail,
           userPhoneNumber: userToUpdate.userPhoneNumber,
           userGender: userToUpdate.userGender,
-          userDateOfBirth: userToUpdate.userDateOfBirth,
+          userDateOfBirth: userDateOfBirth,
           userAddress: userToUpdate.userAddress,
           userEncryptedPassword: "",
           ...(roleName === "doctor" && {
@@ -287,6 +287,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 setSelectedEntity={setUserDateOfBirth}
                 defaultDate={defaultDate}
                 isOverlayVisible={isUpdateUserOverlayVisible}
+                z="z-50"
               />
             </div>
             <div className="flex flex-col space-y-6">

@@ -3,6 +3,7 @@ import { FC, useContext, useEffect, useState } from "react";
 import {
   AppointmentTableData,
   GeneralTableProps,
+  MedicalProcedure,
   MedicalSpeciality,
   TableRow,
   User,
@@ -22,7 +23,11 @@ import {
 import { CreateMedicalSpecialityOverlay } from "../overlays/medicalSpecialityOverlays/CreateMedicalSpecialityOverlay";
 import { DeleteMedicalSpecialityOverlay } from "../overlays/medicalSpecialityOverlays/DeleteMedicalSpecialityOverlay";
 import { UpdateMedicalSpeciality } from "../overlays/medicalSpecialityOverlays/UpdateMedicalSpeciality";
-import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
+import {
+  RiArrowDownSFill,
+  RiArrowUpSFill,
+  RiTreasureMapLine,
+} from "react-icons/ri";
 import { UserSearchCriterionPicker } from "../pickers/UserSearchCriterionPicker";
 import { StyledInput } from "../design/StyledInput";
 import { IoIosSearch } from "react-icons/io";
@@ -31,6 +36,8 @@ import { AppointmentPeriodPicker } from "../pickers/AppointmentPeriodPicker";
 import { CreateAppointmentOverlay } from "../overlays/appointmentOverlays/CreateAppointmentOverlay";
 import { UpdateAppointmentOverlay } from "../overlays/appointmentOverlays/UpdateAppointmentOverlay";
 import { DeleteAppointmentOverlay } from "../overlays/appointmentOverlays/DeleteAppointmentOverlay";
+import { MedicalSpecialityPicker } from "../pickers/MedicalSpecialityPicker";
+import { useNavigate } from "react-router-dom";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -38,13 +45,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   // roleId,
   // roleName,
 }) => {
+  const navigate = useNavigate();
   const socketContext = useContext(SocketNotificationDataContext);
   const { socketNotificationDataState, socketNotificationDataSetState } =
     socketContext!;
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
   const [tableTotalCount, setTableTotalCount] = useState<number>(0);
   const [tableTotalPages, setTableTotalPages] = useState<number>(0);
-  const [tableLimit, setTableLimit] = useState<number>(10);
+  const [tableLimit, setTableLimit] = useState<number>(5);
   const [clickedTableRow, setClickedTableRow] = useState<TableRow>();
   const [orderBy, setOrderBy] = useState<string>("asc:userForename");
   const [roleId, setRoleId] = useState<string>("");
@@ -64,6 +72,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     useState<string>("");
 
   const [selectedAppointmentPeriodValue, setSelectedAppointmentPeriodValue] =
+    useState<string>("");
+
+  const [selectedMedicalSpecialityId, setSelectedMedicalSpecialityId] =
+    useState<string>("");
+  const [selectedMedicalSpecialityName, setSelectedMedicalSpecialityName] =
     useState<string>("");
 
   useEffect(() => {
@@ -90,6 +103,12 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     tableRow: TableRow
   ): tableRow is AppointmentTableData {
     return "appointment" in tableRow && "appointmentId" in tableRow.appointment;
+  }
+
+  function isMedicalProcedureRow(
+    tableRow: TableRow
+  ): tableRow is MedicalProcedure {
+    return "medicalProcedureId" in tableRow;
   }
 
   async function fetchTableData() {
@@ -133,6 +152,15 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           doctorId: "",
           patientId: "",
         };
+      else if (entity === "medicalProcedure") {
+        queryParams = {
+          medicalSpecialityId: selectedMedicalSpecialityId,
+          searchQuery,
+          limit: tableLimit,
+          page: 0,
+          orderBy: "asc:medicalProcedureName",
+        };
+      }
 
       const response = await axios.get(URL, {
         params: {
@@ -162,6 +190,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     selectedTable,
     selectedAppointmentCriteriaValue,
     selectedAppointmentPeriodValue,
+    selectedMedicalSpecialityId,
   ]);
 
   useEffect(() => {
@@ -344,12 +373,46 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           />
         </div>
       )}
+      {entity === "medicalProcedure" && (
+        <div className="flex mb-3">
+          <div className="flex-none">
+            <StyledInput
+              label={`medical procedure search`}
+              name="medicalProcedureSearch"
+              onChangeStyledInput={(event) =>
+                setSearchQuery(event.target.value)
+              }
+              icon={<IoIosSearch />}
+            />
+          </div>
+          <div className="grow flex justify-center items-center">
+            <MedicalSpecialityPicker
+              label="select medical speciality"
+              selectedMedicalSpecialityId={selectedMedicalSpecialityId}
+              setSelectedMedicalSpecialityId={setSelectedMedicalSpecialityId}
+              selectedMedicalSpecialityName={selectedMedicalSpecialityName}
+              setSelectedMedicalSpecialityName={
+                setSelectedMedicalSpecialityName
+              }
+            />
+          </div>
+          <div className="w-72 flex-none"></div>
+        </div>
+        // <div className="flex ">
+        //   <div className="flex-none w-14 h-14 ...">01</div>
+        //   <div className="flex justify-center items-center grow bg-red-200 h-14 ...">
+        //     02
+        //   </div>
+        //   <div className="flex-none w-14 h-14 ...">03</div>
+        // </div>
+      )}
       <div className="w-full border rounded-xl h-4/5 overflow-auto">
         {tableRows.length > 0 && (
           <table className="w-full text-center text-xs font-light border rounded-xl">
             <thead className="w-full border-b bg-white font-medium">
               {isUserRow(tableRows[0]) ? (
                 <tr>
+                  <td>Index</td>
                   <td className="px-6 py-4 font-bold">
                     <div className="flex items-center justify-center">
                       userId
@@ -419,6 +482,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                 </tr>
               ) : isMedicalSpecialityRow(tableRows[0]) ? (
                 <tr>
+                  <td>Index</td>
                   <td className="px-6 py-4 font-bold w-1/3">
                     Medical Speciality Id
                   </td>
@@ -429,6 +493,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                 </tr>
               ) : isAppointmentRow(tableRows[0]) ? (
                 <tr>
+                  <td>Index</td>
                   <td className="px-6 py-4 font-bold">appointmentId</td>
                   <td className="px-6 py-4 font-bold">doctor</td>
                   <td className="px-6 py-4 font-bold">patient</td>
@@ -440,12 +505,20 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   </td>
                   <td className="px-6 py-4 font-bold">Actions</td>
                 </tr>
+              ) : isMedicalProcedureRow(tableRows[0]) ? (
+                <tr>
+                  <td>Index</td>
+                  <td className="px-6 py-4 font-bold">medicalProcedureId</td>
+                  <td className="px-6 py-4 font-bold">medicalProcedureName</td>
+                  <td className="px-6 py-4 font-bold">medicalProcedurePrice</td>
+                  <td className="px-6 py-4 font-bold">Actions</td>
+                </tr>
               ) : (
                 ""
               )}
             </thead>
             <tbody>
-              {tableRows.map((tableRow: TableRow) =>
+              {tableRows.map((tableRow: TableRow, tableRowIndex: number) =>
                 isUserRow(tableRow) ? (
                   <tr
                     key={tableRow.userId}
@@ -455,6 +528,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     }`}
                     onClick={() => setClickedTableRow(tableRow)}
                   >
+                    <td>{tableRowIndex}</td>
                     <td className="px-6 py-4 font-medium text-gray-700">
                       {tableRow.userId}
                     </td>
@@ -521,6 +595,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     }`}
                     onClick={() => setClickedTableRow(tableRow)}
                   >
+                    <td>{tableRowIndex}</td>
                     <td className="">{tableRow.medicalSpecialityId}</td>
                     <td className="">{tableRow.medicalSpecialityName}</td>
                     <td className="h-14 flex items-center justify-center space-x-2">
@@ -540,6 +615,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     }`}
                     onClick={() => setClickedTableRow(tableRow)}
                   >
+                    <td>{tableRowIndex}</td>
                     <td className="px-6 py-4 font-medium">
                       {tableRow.appointment.appointmentId}
                     </td>
@@ -580,7 +656,36 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       <DeleteAppointmentOverlay
                         appointmentId={tableRow.appointment.appointmentId}
                       />
+                      <RiTreasureMapLine
+                        className="text-xl hover:text-lightMode-sidebarItemIconColor hover:scale-125"
+                        onClick={() => {
+                          navigate(`/admins/appointment-history/2`);
+                          navigate(0);
+                        }}
+                      />
                     </td>
+                  </tr>
+                ) : isMedicalProcedureRow(tableRow) ? (
+                  <tr
+                    key={tableRow.medicalProcedureId}
+                    className={`border-b border-neutral-400 odd:bg-neutral-100 even:bg-white transition duration-300 ease-in-out hover:bg-pink-100 ${
+                      (clickedTableRow as MedicalProcedure)
+                        ?.medicalProcedureId === tableRow.medicalProcedureId &&
+                      "!bg-pink-200"
+                    }`}
+                    onClick={() => setClickedTableRow(tableRow)}
+                  >
+                    <td>{tableRowIndex}</td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.medicalProcedureId}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.medicalProcedureName}
+                    </td>
+                    <td className="px-6 py-4 font-medium">
+                      {tableRow.medicalProcedurePrice}
+                    </td>
+                    <td className="h-14 flex items-center justify-center space-x-2 px-6 py-4 font-medium"></td>
                   </tr>
                 ) : (
                   ""

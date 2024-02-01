@@ -4,10 +4,8 @@ import {
   MedicalSpecialityMedicalProcedureMappingCreationAttributes,
   MedicalSpecialityMedicalProcedureMappingUpdateAttributes,
 } from "../models/medicalSpecialityMedicalProcedureMapping.model";
-import { IBaseRepository } from "./base.irepository";
 
-export interface IMedicalSpecialityMedicalProcedureMappingRepository
-  extends IBaseRepository<MedicalSpecialityMedicalProcedureMapping> {
+export interface IMedicalSpecialityMedicalProcedureMappingService {
   getMedicalSpecialityMedicalProcedureMappingsBySpecialityId(
     medicalSpecialityId: string
   ): Promise<MedicalSpecialityMedicalProcedureMapping[] | undefined>;

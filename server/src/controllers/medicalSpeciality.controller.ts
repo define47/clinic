@@ -19,8 +19,8 @@ export class MedicalSpecialityController {
       const payload =
         await this._medicalSpecialityService.getAllMedicalSpecialities(
           query.searchQuery,
-          query.limit,
-          query.page
+          parseInt(query.limit),
+          parseInt(query.page)
         );
 
       reply.code(200).send({ success: true, payload });

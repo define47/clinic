@@ -465,20 +465,21 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
                 <RiCalendarFill
                   className="text-pink-300 hover:text-pink-400"
                   onClick={() => {
-                    // setIsDateTimePickerShown(false);
-                    // setAreMonthsShown(false);
-                    // setAreYearsShown(false);
-                    // setAreTimeSlotsShown(false);
+                    setIsDateTimePickerShown(false);
+                    setAreMonthsShown(false);
+                    setAreYearsShown(false);
+                    setAreTimeSlotsShown(false);
                   }}
                 />
               ) : (
-                <RiCalendarLine
+                <RiCalendarFill
+                  // RiCalendarLine
                   className="hover:text-pink-400"
                   onClick={() => {
-                    // setIsDateTimePickerShown(true);
-                    // setAreMonthsShown(false);
-                    // setAreYearsShown(false);
-                    // setAreTimeSlotsShown(false);
+                    setIsDateTimePickerShown(true);
+                    setAreMonthsShown(false);
+                    setAreYearsShown(false);
+                    setAreTimeSlotsShown(false);
                   }}
                 />
               )}

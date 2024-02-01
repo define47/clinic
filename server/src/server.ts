@@ -58,6 +58,8 @@ import { medicalSpecialityMedicalProcedureMappingTable } from "./models/medicalS
 import { MedicalProcedureService } from "./services/medicalProcedure.service.js";
 import { AppointmentService } from "./services/appointment.service.js";
 import { UserRepository } from "./repositories/user.repository.js";
+import { medicalProcedureRoutes } from "./routes/medicalProcedure.routes.js";
+import { appointmentHistoryRoutes } from "./routes/appointmentHistory.routes.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -173,6 +175,10 @@ const buildServer = async () => {
     prefix: "api/medical-specialities",
   });
 
+  await fastifyServer.register(medicalProcedureRoutes, {
+    prefix: "api/medical-procedures",
+  });
+
   await fastifyServer.register(appointmentRoutes, {
     prefix: "api/appointments",
   });
@@ -183,6 +189,10 @@ const buildServer = async () => {
 
   await fastifyServer.register(userPreferencesRoutes, {
     prefix: "api/user-preferences",
+  });
+
+  await fastifyServer.register(appointmentHistoryRoutes, {
+    prefix: "api/appointments-history",
   });
 
   await fastifyServer;
@@ -281,6 +291,7 @@ const buildServer = async () => {
   //   languageCode: "en",
   // });
   // createUsers(0, 5, "doctor");
+  // createUsers(5, 25, "doctor");
   // createUsers(0, 10, "patient");
   // createProcedures();
 
@@ -352,21 +363,21 @@ const buildServer = async () => {
   // await createAppointments(5, "2024", "01", "18");
   // createProcedures();
 
-  const medicalSpecialityMedicalProcedureMappingRepository =
-    new MedicalSpecialityMedicalProcedureMappingRepository(
-      drizzleInstance,
-      medicalSpecialityMedicalProcedureMappingTable
-    );
+  // const medicalSpecialityMedicalProcedureMappingRepository =
+  //   new MedicalSpecialityMedicalProcedureMappingRepository(
+  //     drizzleInstance,
+  //     medicalSpecialityMedicalProcedureMappingTable
+  //   );
 
-  console.log(
-    await medicalSpecialityMedicalProcedureMappingRepository.getAllMedicalProceduresByMedicalSpeciality(
-      "21041809-4d79-57ce-818a-712c959e936c",
-      "",
-      3,
-      1,
-      "desc:medicalProcedurePrice"
-    )
-  );
+  // console.log(
+  //   await medicalSpecialityMedicalProcedureMappingRepository.getAllMedicalProceduresByMedicalSpeciality(
+  //     "21041809-4d79-57ce-818a-712c959e936c",
+  //     "",
+  //     5,
+  //     0,
+  //     "desc:medicalProcedurePrice"
+  //   )
+  // );
 
   return fastifyServer;
 };

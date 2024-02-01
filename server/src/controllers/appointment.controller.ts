@@ -28,8 +28,8 @@ export class AppointmentController {
         query.searchQuery,
         query.scheduleFilter,
         query.orderBy.split(","),
-        query.limit,
-        query.page,
+        parseInt(query.limit),
+        parseInt(query.page),
         query.doctorId,
         query.patientId
       );

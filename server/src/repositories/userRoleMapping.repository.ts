@@ -267,6 +267,7 @@ export class UserRoleMappingRepository
           )
         )
         .where(condition.doctorSearchQuery)
+
         // .orderBy(
         //   asc(
         //     orderBy === "medicalSpecialityName"
@@ -329,7 +330,7 @@ export class UserRoleMappingRepository
             return doctorMap;
           }, new Map())
           .values()
-      );
+      ).slice(offset, limit + offset);
 
       return {
         tableData:
