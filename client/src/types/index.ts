@@ -50,7 +50,7 @@ export type MedicalProcedure = {
   medicalProcedureId: string;
   medicalProcedureName: string;
   medicalProcedurePrice: number;
-  medicalProcedureEstimatedTimeMinutes: number;
+  // medicalProcedureEstimatedTimeMinutes: number;
 };
 
 export type TableRow = User | MedicalSpeciality | AppointmentTableData;

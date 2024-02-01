@@ -327,7 +327,9 @@ export class UserController {
       console.log("bodypostuser", body);
 
       const roleIds: string[] = body.roleIds;
-      const specialityIds = body.specialityIds;
+      const specialityIds = body.specialityIds.filter(function (value: string) {
+        return value !== "";
+      });
 
       for (let i = 0; i < roleIds.length; i++) {
         const role = await this._roleService.getRoleById(roleIds[i]);
@@ -350,8 +352,6 @@ export class UserController {
               message: `speciality ${roleIds[i]} not found`,
             });
         }
-
-      console.log("hello");
 
       const isUserEmailValid = await this.checkUserEmailValidity(
         body.userEmail
@@ -412,6 +412,7 @@ export class UserController {
         .send({ success: postUser !== undefined, message: "" });
     } catch (error) {
       console.log(error);
+
       return reply.code(400).send({ error: (error as Error).message });
     }
   };

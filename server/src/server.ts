@@ -282,6 +282,7 @@ const buildServer = async () => {
   // });
   // createUsers(0, 5, "doctor");
   // createUsers(0, 10, "patient");
+  // createProcedures();
 
   // const userRoleMappingRepository = new UserRoleMappingRepository(
   //   drizzleInstance,
@@ -351,15 +352,21 @@ const buildServer = async () => {
   // await createAppointments(5, "2024", "01", "18");
   // createProcedures();
 
-  // const medicalSpecialityMedicalProcedureMappingRepository =
-  //   new MedicalSpecialityMedicalProcedureMappingRepository(
-  //     drizzleInstance,
-  //     medicalSpecialityMedicalProcedureMappingTable
-  //   );
+  const medicalSpecialityMedicalProcedureMappingRepository =
+    new MedicalSpecialityMedicalProcedureMappingRepository(
+      drizzleInstance,
+      medicalSpecialityMedicalProcedureMappingTable
+    );
 
-  // console.log(
-  //   await medicalSpecialityMedicalProcedureMappingRepository.getAllMedicalSpecialitiesAndProcedures()
-  // );
+  console.log(
+    await medicalSpecialityMedicalProcedureMappingRepository.getAllMedicalProceduresByMedicalSpeciality(
+      "21041809-4d79-57ce-818a-712c959e936c",
+      "",
+      5,
+      0,
+      "desc:medicalProcedurePrice"
+    )
+  );
 
   return fastifyServer;
 };
