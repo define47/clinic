@@ -362,8 +362,8 @@ const buildServer = async () => {
     await medicalSpecialityMedicalProcedureMappingRepository.getAllMedicalProceduresByMedicalSpeciality(
       "21041809-4d79-57ce-818a-712c959e936c",
       "",
-      5,
-      0,
+      3,
+      1,
       "desc:medicalProcedurePrice"
     )
   );

@@ -79,14 +79,14 @@ export class MedicalSpecialityMedicalProcedureMappingRepository
       );
     }
 
-    if (orderBy === "asc:medicalProcedureName")
-      orderByFinalColumn = asc(medicalProcedureTable.medicalProcedureName);
-    else if (orderBy === "desc:medicalProcedureName")
-      orderByFinalColumn = desc(medicalProcedureTable.medicalProcedureName);
-    else if (orderBy === "asc:medicalProcedurePrice")
-      orderByFinalColumn = asc(medicalProcedureTable.medicalProcedurePrice);
-    else if (orderBy === "desc:medicalProcedurePrice")
-      orderByFinalColumn = desc(medicalProcedureTable.medicalProcedurePrice);
+    // if (orderBy === "asc:medicalProcedureName")
+    //   orderByFinalColumn = asc(medicalProcedureTable.medicalProcedureName);
+    // else if (orderBy === "desc:medicalProcedureName")
+    //   orderByFinalColumn = desc(medicalProcedureTable.medicalProcedureName);
+    // else if (orderBy === "asc:medicalProcedurePrice")
+    //   orderByFinalColumn = asc(medicalProcedureTable.medicalProcedurePrice);
+    // else if (orderBy === "desc:medicalProcedurePrice")
+    //   orderByFinalColumn = desc(medicalProcedureTable.medicalProcedurePrice);
 
     const medicalProcedureSearchQuery = {
       condition: and(
@@ -148,7 +148,11 @@ export class MedicalSpecialityMedicalProcedureMappingRepository
       .offset(offset)
       .orderBy(orderByFinalColumn!);
 
-    return data;
+    return {
+      tableData: data,
+      totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
+      totalCount: totalCount[0].totalCount,
+    };
   }
 
   public async getMedicalSpecialityMedicalProcedureMappingBySpecialityIdAndProcedureId(

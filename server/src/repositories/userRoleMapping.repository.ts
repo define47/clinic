@@ -130,6 +130,7 @@ export class UserRoleMappingRepository
     const columnToOrderByData = orderBy.split(":");
     let columnToOrderBy;
 
+    // * Make it nicer
     if (
       columnToOrderByData[0] === "asc" &&
       columnToOrderByData[1] !== "medicalSpecialityName"
