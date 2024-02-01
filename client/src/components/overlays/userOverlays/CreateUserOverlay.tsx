@@ -5,7 +5,7 @@ import Overlay from "../base/Overlay";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import axios from "axios";
-import { userPath } from "../../../utils/dotenv";
+import { usersPath } from "../../../utils/dotenv";
 import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 
@@ -141,7 +141,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   async function onCreateUser() {
     try {
       const response = await axios.post(
-        userPath,
+        usersPath,
         {
           userForename: userToCreate.userForename,
           userSurname: userToCreate.userSurname,

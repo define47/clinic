@@ -12,13 +12,12 @@ export const loginUserPath = `${import.meta.env.VITE_SERVER_SCHEME}${
   import.meta.env.VITE_SERVER_HOST_AND_PORT
 }${import.meta.env.VITE_SERVER_AUTH_PATH}/login`;
 
-export const userPath = `${import.meta.env.VITE_SERVER_SCHEME}${
+export const usersPath = `${import.meta.env.VITE_SERVER_SCHEME}${
   import.meta.env.VITE_SERVER_HOST_AND_PORT
 }${import.meta.env.VITE_SERVER_USERS_PATH}`;
-export const medicalSpecialityPath = `${import.meta.env.VITE_SERVER_SCHEME}${
+export const medicalSpecialitiesPath = `${import.meta.env.VITE_SERVER_SCHEME}${
   import.meta.env.VITE_SERVER_HOST_AND_PORT
 }${import.meta.env.VITE_SERVER_MEDICAL_SPECIALITIES_PATH}`;
-
 export const appointmentsPath = `${serverURL}${
   import.meta.env.VITE_SERVER_APPOINTMENTS_PATH
 }`;
@@ -31,3 +30,6 @@ export const receptionistRoleName = import.meta.env.VITE_RECEPTIONIST_ROLE_NAME;
 
 export const doctorRoleId = import.meta.env.VITE_DOCTOR_ROLE_ID;
 export const doctorRoleName = import.meta.env.VITE_DOCTOR_ROLE_NAME;
+
+export const nurseRoleId = import.meta.env.VITE_NURSE_ROLE_ID;
+export const nurseRoleName = import.meta.env.VITE_NURSE_ROLE_NAME;

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { medicalSpecialityPath } from "../../utils/dotenv";
+import { medicalSpecialitiesPath } from "../../utils/dotenv";
 import { GeneralTable } from "../../components/table/GeneralTable";
 
 export const MedicalSpecialities: FC = () => {
@@ -7,7 +7,7 @@ export const MedicalSpecialities: FC = () => {
     <div className="w-full">
       <div className="w-full p-4">
         <GeneralTable
-          URL={medicalSpecialityPath}
+          URL={medicalSpecialitiesPath}
           entity={"medicalSpeciality"}
         />
       </div>

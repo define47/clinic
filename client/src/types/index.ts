@@ -46,6 +46,13 @@ export type AppointmentTableData = {
   };
 };
 
+export type MedicalProcedure = {
+  medicalProcedureId: string;
+  medicalProcedureName: string;
+  medicalProcedurePrice: number;
+  medicalProcedureEstimatedTimeMinutes: number;
+};
+
 export type TableRow = User | MedicalSpeciality | AppointmentTableData;
 
 export type UserToLogin = {

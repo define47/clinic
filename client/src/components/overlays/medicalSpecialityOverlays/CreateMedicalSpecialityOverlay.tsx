@@ -3,7 +3,7 @@ import { StyledRippleButton } from "../../design/StyledRippleButton";
 import Overlay from "../base/Overlay";
 import { MedicalSpeciality } from "../../../types";
 import { StyledInput } from "../../design/StyledInput";
-import { medicalSpecialityPath } from "../../../utils/dotenv";
+import { medicalSpecialitiesPath } from "../../../utils/dotenv";
 import axios from "axios";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 
@@ -56,7 +56,7 @@ export const CreateMedicalSpecialityOverlay: FC = () => {
   async function onCreateMedicalSpeciality() {
     try {
       const response = await axios.post(
-        medicalSpecialityPath,
+        medicalSpecialitiesPath,
         {
           medicalSpecialityName:
             medicalSpecialityToCreate.medicalSpecialityName,
