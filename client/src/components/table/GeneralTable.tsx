@@ -39,6 +39,7 @@ import { DeleteAppointmentOverlay } from "../overlays/appointmentOverlays/Delete
 import { MedicalSpecialityPicker } from "../pickers/MedicalSpecialityPicker";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from "../design/Tooltip";
+import { StyledRippleButton } from "../design/StyledRippleButton";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -54,6 +55,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   const [tableTotalCount, setTableTotalCount] = useState<number>(0);
   const [tableTotalPages, setTableTotalPages] = useState<number>(0);
   const [tableLimit, setTableLimit] = useState<number>(5);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [clickedTableRow, setClickedTableRow] = useState<TableRow>();
   const [orderBy, setOrderBy] = useState<string>("asc:userForename");
   const [roleId, setRoleId] = useState<string>("");
@@ -126,14 +128,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           searchBy: selectedUserSearchCriteriaValue,
           searchQuery,
           limit: tableLimit,
-          page: 0,
+          page: currentPage,
           orderBy,
         };
       else if (entity === "medicalSpeciality")
         queryParams = {
           searchQuery,
           limit: tableLimit,
-          page: 0,
+          page: currentPage,
         };
       else if (entity === "appointment")
         queryParams = {
@@ -149,7 +151,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               : selectedAppointmentPeriodValue,
           orderBy: "desc:userForename, asc:userSurname",
           limit: 100,
-          page: 0,
+          page: currentPage,
           doctorId: "",
           patientId: "",
         };
@@ -158,7 +160,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           medicalSpecialityId: selectedMedicalSpecialityId,
           searchQuery,
           limit: tableLimit,
-          page: 0,
+          page: currentPage,
           orderBy: "asc:medicalProcedureName",
         };
       }
@@ -192,6 +194,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     selectedAppointmentCriteriaValue,
     selectedAppointmentPeriodValue,
     selectedMedicalSpecialityId,
+    currentPage,
   ]);
 
   useEffect(() => {
@@ -301,7 +304,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   }
 
   return (
-    <div className="w-full h-full hidden lg:block border p-4 rounded-xl font-roboto">
+    <div className="w-full bg-white h-full hidden lg:block border p-4 rounded-xl font-roboto">
       {(entity === "doctor" ||
         entity === "patient" ||
         entity === "receptionist" ||
@@ -529,7 +532,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     }`}
                     onClick={() => setClickedTableRow(tableRow)}
                   >
-                    <td>{tableRowIndex}</td>
+                    <td>{tableRowIndex + 1 + currentPage * 5}</td>
                     <td className="px-6 py-4 font-medium text-gray-700">
                       {tableRow.userId}
                     </td>
@@ -658,10 +661,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       <DeleteAppointmentOverlay
                         appointmentId={tableRow.appointment.appointmentId}
                       />
-                      <Tooltip
-                        text="View Appointment History"
-                        isAtTheEnd={true}
-                      >
+                      <Tooltip text="View Appointment History">
                         <RiTreasureMapLine
                           className="text-xl hover:text-lightMode-sidebarItemIconColor hover:scale-125 cursor-pointer"
                           onClick={() => {
@@ -714,6 +714,24 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           />
         )}
       </div> */}
+
+      <div className="w-full flex items-center justify-between mt-2">
+        <StyledRippleButton
+          label={`Previous Page`}
+          type="create"
+          onClick={() => {
+            if (currentPage > 0) setCurrentPage(currentPage - 1);
+          }}
+        />
+        {currentPage}
+        <StyledRippleButton
+          label={`Next Page`}
+          type="create"
+          onClick={() => {
+            if (currentPage < tableTotalPages) setCurrentPage(currentPage + 1);
+          }}
+        />
+      </div>
       <div className="w-full flex flex-col justify-center items-center">
         <span>total count: {tableTotalCount}</span>
         <span>total pages: {tableTotalPages}</span>

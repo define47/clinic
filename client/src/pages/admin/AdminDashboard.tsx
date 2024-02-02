@@ -70,7 +70,6 @@ export const AdminDashboard: FC = () => {
         /> */}
         {/* <UserPicker label="doctor picker" roleName="doctor" z="z-50" />
         <UserPicker label="patient picker" roleName="patient" z="z-40" /> */}
-        <AppointmentSearchCriterionPicker />
       </div>
     </div>
   );

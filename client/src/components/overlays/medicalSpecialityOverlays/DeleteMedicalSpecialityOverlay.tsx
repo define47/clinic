@@ -5,6 +5,7 @@ import axios from "axios";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
+import { Tooltip } from "../../design/Tooltip";
 
 export const DeleteMedicalSpecialityOverlay: FC<
   DeleteMedicalSpecialityOverlayPros
@@ -45,12 +46,14 @@ export const DeleteMedicalSpecialityOverlay: FC<
       {isDeleteMedicalSpecialityConfirmationDialogOverlayVisible ? (
         <IoTrashSharp className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
       ) : (
-        <IoTrashOutline
-          onClick={() =>
-            setIsDeleteMedicalSpecialityConfirmationDialogOverlayVisible(true)
-          }
-          className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
-        />
+        <Tooltip text="Delete Appointment">
+          <IoTrashOutline
+            onClick={() =>
+              setIsDeleteMedicalSpecialityConfirmationDialogOverlayVisible(true)
+            }
+            className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
+          />
+        </Tooltip>
       )}
       <ConfirmationDialogOverlay
         className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${

@@ -124,7 +124,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
       {isUpdateAppointmentOverlayVisible ? (
         <PiPencilLineFill className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
       ) : (
-        <Tooltip text="Update Appointment" isAtTheEnd={true}>
+        <Tooltip text="Update Appointment">
           <PiPencil
             onClick={() => setIsUpdateAppointmentOverlayVisible(true)}
             className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"

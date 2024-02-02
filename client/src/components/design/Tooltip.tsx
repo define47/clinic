@@ -3,10 +3,9 @@ import { FC, ReactNode, useState } from "react";
 type TooltipProps = {
   text: string;
   children: ReactNode;
-  isAtTheEnd?: boolean;
 };
 
-export const Tooltip: FC<TooltipProps> = ({ text, children, isAtTheEnd }) => {
+export const Tooltip: FC<TooltipProps> = ({ text, children }) => {
   const [isCursorOn, setIsCursorOn] = useState<boolean>(false);
 
   return (
@@ -19,9 +18,7 @@ export const Tooltip: FC<TooltipProps> = ({ text, children, isAtTheEnd }) => {
       </div>
 
       <div
-        className={`w-40 absolute z-50 top-6 ${
-          isAtTheEnd && "right-0"
-        } transition-opacity duration-300 bg-black text-white rounded-xl text-xs ${
+        className={`w-40 absolute z-50 top-6 right-0 transition-opacity duration-300 bg-black text-white rounded-xl text-xs ${
           isCursorOn ? "opacity-100" : "opacity-0"
         } p-2`}
       >

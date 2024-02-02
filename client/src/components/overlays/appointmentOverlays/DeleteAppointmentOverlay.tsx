@@ -44,7 +44,7 @@ export const DeleteAppointmentOverlay: FC<DeleteAppointmentOverlayPros> = ({
       {isDeleteAppointmentConfirmationDialogOverlayVisible ? (
         <IoTrashSharp className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
       ) : (
-        <Tooltip text="Delete Appointment" isAtTheEnd={true}>
+        <Tooltip text="Delete Appointment">
           <IoTrashOutline
             onClick={() =>
               setIsDeleteAppointmentConfirmationDialogOverlayVisible(true)
