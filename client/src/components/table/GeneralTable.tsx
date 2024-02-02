@@ -659,7 +659,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       <RiTreasureMapLine
                         className="text-xl hover:text-lightMode-sidebarItemIconColor hover:scale-125"
                         onClick={() => {
-                          navigate(`/admins/appointment-history/2`);
+                          navigate(
+                            `/admins/appointment-history/${tableRow.appointment.appointmentId}`
+                          );
                           navigate(0);
                         }}
                       />

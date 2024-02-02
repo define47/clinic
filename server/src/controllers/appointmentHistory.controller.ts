@@ -15,7 +15,7 @@ export class AppointmentHistoryController {
     const query: any = request.query;
 
     const payload =
-      await this._appointmentHistoryService.getAppointmentHistoryByAppointmentId(
+      await this._appointmentHistoryService.getAllAppointmentHistoryByAppointmentId(
         query.appointmentId
       );
 

@@ -60,6 +60,9 @@ import { AppointmentService } from "./services/appointment.service.js";
 import { UserRepository } from "./repositories/user.repository.js";
 import { medicalProcedureRoutes } from "./routes/medicalProcedure.routes.js";
 import { appointmentHistoryRoutes } from "./routes/appointmentHistory.routes.js";
+import { AppointmentHistoryService } from "./services/appointmentHistory.service.js";
+import { AppointmentHistoryRepository } from "./repositories/appointmentHistory.repository.js";
+import { appointmentHistoryTable } from "./models/appointmentHistory.model.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -378,6 +381,17 @@ const buildServer = async () => {
   //     "desc:medicalProcedurePrice"
   //   )
   // );
+
+  const appointmentHistoryService = new AppointmentHistoryRepository(
+    drizzleInstance,
+    appointmentHistoryTable
+  );
+
+  console.log(
+    await appointmentHistoryService.getAllAppointmentHistoryByAppointmentId(
+      "055ec6e2-5484-52bd-976e-83c12f116649"
+    )
+  );
 
   return fastifyServer;
 };

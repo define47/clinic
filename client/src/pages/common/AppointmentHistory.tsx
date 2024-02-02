@@ -1,8 +1,9 @@
 import axios from "axios";
 import { FC, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const AppointmentHistory: FC = () => {
+  const navigate = useNavigate();
   const { appointmentId } = useParams();
 
   async function getAppointmentHistory() {
@@ -17,7 +18,7 @@ export const AppointmentHistory: FC = () => {
         }
       );
 
-      console.log(response);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -27,5 +28,16 @@ export const AppointmentHistory: FC = () => {
     getAppointmentHistory();
   }, [appointmentId]);
 
-  return <div>hello {appointmentId}</div>;
+  return (
+    <div>
+      <span
+        onClick={() => {
+          navigate(-1);
+        }}
+      >
+        Go back
+      </span>
+      hello {appointmentId}
+    </div>
+  );
 };

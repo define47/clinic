@@ -1,9 +1,5 @@
 import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
-import {
-  Appointment,
-  AppointmentTableData,
-  UpdateAppointmentOverlayProps,
-} from "../../../types";
+import { Appointment, UpdateAppointmentOverlayProps } from "../../../types";
 import Overlay from "../base/Overlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { PiPencil, PiPencilLineFill } from "react-icons/pi";

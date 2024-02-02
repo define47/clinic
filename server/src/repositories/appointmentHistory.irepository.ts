@@ -1,14 +1,15 @@
 import {
   AppointmentHistory,
   AppointmentHistoryCreationAttributes,
+  AppointmentHistoryInnerJoinPatientAndDoctorAndUser,
 } from "../models/appointmentHistory.model";
 import { IBaseRepository } from "./base.irepository";
 
 export interface IAppointmentHistoryRepository
   extends IBaseRepository<AppointmentHistory> {
-  getAppointmentHistoryByAppointmentId(
+  getAllAppointmentHistoryByAppointmentId(
     appointmentId: string
-  ): Promise<AppointmentHistory[] | undefined>;
+  ): Promise<AppointmentHistoryInnerJoinPatientAndDoctorAndUser[] | undefined>;
 
   createAppointmentHistory(
     appointmentHistoryCreationAttributes: AppointmentHistoryCreationAttributes

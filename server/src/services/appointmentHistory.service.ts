@@ -6,6 +6,7 @@ import {
 import {
   AppointmentHistory,
   AppointmentHistoryCreationAttributes,
+  AppointmentHistoryInnerJoinPatientAndDoctorAndUser,
   appointmentHistoryTable,
 } from "../models/appointmentHistory.model";
 import { AppointmentHistoryRepository } from "../repositories/appointmentHistory.repository";
@@ -27,6 +28,14 @@ export class AppointmentHistoryService implements IAppointmentHistoryService {
     appointmentId: string
   ): Promise<AppointmentHistory[] | undefined> {
     return await this._appointmentHistoryRepository.getAppointmentHistoryByAppointmentId(
+      appointmentId
+    );
+  }
+
+  public async getAllAppointmentHistoryByAppointmentId(
+    appointmentId: string
+  ): Promise<AppointmentHistoryInnerJoinPatientAndDoctorAndUser[] | undefined> {
+    return await this._appointmentHistoryRepository.getAllAppointmentHistoryByAppointmentId(
       appointmentId
     );
   }
