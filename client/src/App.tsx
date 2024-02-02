@@ -23,7 +23,7 @@ import { AdminGuide } from "./pages/admin/AdminGuide";
 import { ThemeContext } from "./contexts/ThemeContext";
 import { MedicalProcedures } from "./pages/admin/MedicalProcedures";
 import { authPath, verifyUserPath } from "./utils/dotenv";
-import { AppointmentHistory } from "./pages/common/AppointmentHistory";
+import { AppointmentHistoryCards } from "./pages/common/AppointmentHistoryCards";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -161,7 +161,7 @@ const App: FC = () => {
               <Route path="/admins/guide" element={<AdminGuide />} />
               <Route
                 path="/admins/appointment-history/:appointmentId"
-                element={<AppointmentHistory />}
+                element={<AppointmentHistoryCards />}
               />
               <Route path="*" element={<p>Path not resolved</p>} />
             </Route>

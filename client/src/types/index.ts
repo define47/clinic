@@ -232,3 +232,44 @@ export type UpdateAppointmentOverlayProps = {
 export type AppointmentHistoryProps = {
   appointmentId: string;
 };
+
+export type AppointmentHistory = {
+  appointmentHistory: {
+    appointmentHistoryId: string;
+    appointmentId: string;
+    appointmentHistoryDoctorId: string;
+    appointmentHistoryPatientId: string;
+    appointmentHistoryReason: string;
+    appointmentHistoryDateTime: string;
+    appointmentHistoryStatus: string;
+    appointmentHistoryCancellationReason: string | null;
+  };
+  creator: {
+    appointmentHistoryCreatedBy: string;
+    appointmentHistoryCreatedByForename: string;
+    appointmentHistoryCreatedBySurname: string;
+    appointmentHistoryCreatedAt: string;
+  };
+  modifier: {
+    appointmentHistoryUpdatedBy: string;
+    appointmentHistoryUpdatedByForename: string;
+    appointmentHistoryUpdatedBySurname: string;
+    appointmentHistoryUpdatedAt: string;
+  };
+  doctor: {
+    doctorId: string;
+    doctorForename: string;
+    doctorSurname: string;
+  };
+  patient: {
+    patientId: string;
+    patientForename: string;
+    patientSurname: string;
+  };
+};
+
+export type CardEntryProps = {
+  cardEntryType?: string;
+  cardEntryTitle: string;
+  cardEntryData: string;
+};

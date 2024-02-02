@@ -69,12 +69,13 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
       setSelectedPatientName(
         `${patientData.patientForename.toLowerCase()} ${patientData.patientForename.toLowerCase()}`
       );
-      setSelectedAppointmentStatusName(appointmentToUpdate.appointmentStatus);
+      setSelectedAppointmentStatusName(appointment.appointmentStatus);
     }
   }, [
     isUpdateAppointmentOverlayVisible,
-    appointmentToUpdate,
-    appointment.appointmentDateTime,
+    appointment,
+    // appointmentToUpdate,
+    // appointment.appointmentDateTime,
   ]);
 
   function handleStyledInputChange(event: ChangeEvent<HTMLInputElement>) {
