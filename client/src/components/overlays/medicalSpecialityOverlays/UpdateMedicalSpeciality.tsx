@@ -10,6 +10,7 @@ import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import Overlay from "../base/Overlay";
 import axios from "axios";
 import { StyledInput } from "../../design/StyledInput";
+import { Tooltip } from "../../design/Tooltip";
 
 export const UpdateMedicalSpeciality: FC<
   UpdateMedicalSpecialityOverlayProps
@@ -88,10 +89,12 @@ export const UpdateMedicalSpeciality: FC<
       {isUpdateMedicalSpecialityOverlayVisible ? (
         <PiPencilLineFill className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
       ) : (
-        <PiPencil
-          onClick={() => setIsUpdateMedicalSpecialityOverlayVisible(true)}
-          className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
-        />
+        <Tooltip text={`Update Medical Speciality`}>
+          <PiPencil
+            onClick={() => setIsUpdateMedicalSpecialityOverlayVisible(true)}
+            className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
+          />
+        </Tooltip>
       )}
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${

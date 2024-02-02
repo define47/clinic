@@ -10,6 +10,7 @@ import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import axios from "axios";
 import { appointmentsPath } from "../../../utils/dotenv";
+import { Tooltip } from "../../design/Tooltip";
 
 export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
   appointment,
@@ -123,10 +124,12 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
       {isUpdateAppointmentOverlayVisible ? (
         <PiPencilLineFill className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
       ) : (
-        <PiPencil
-          onClick={() => setIsUpdateAppointmentOverlayVisible(true)}
-          className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
-        />
+        <Tooltip text="Update Appointment" isAtTheEnd={true}>
+          <PiPencil
+            onClick={() => setIsUpdateAppointmentOverlayVisible(true)}
+            className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
+          />
+        </Tooltip>
       )}
 
       <Overlay

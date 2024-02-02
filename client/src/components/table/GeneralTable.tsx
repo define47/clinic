@@ -38,6 +38,7 @@ import { UpdateAppointmentOverlay } from "../overlays/appointmentOverlays/Update
 import { DeleteAppointmentOverlay } from "../overlays/appointmentOverlays/DeleteAppointmentOverlay";
 import { MedicalSpecialityPicker } from "../pickers/MedicalSpecialityPicker";
 import { useNavigate } from "react-router-dom";
+import { Tooltip } from "../design/Tooltip";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -653,18 +654,24 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                         doctorData={tableRow.doctor}
                         patientData={tableRow.patient}
                       />
+
                       <DeleteAppointmentOverlay
                         appointmentId={tableRow.appointment.appointmentId}
                       />
-                      <RiTreasureMapLine
-                        className="text-xl hover:text-lightMode-sidebarItemIconColor hover:scale-125"
-                        onClick={() => {
-                          navigate(
-                            `/admins/appointment-history/${tableRow.appointment.appointmentId}`
-                          );
-                          navigate(0);
-                        }}
-                      />
+                      <Tooltip
+                        text="View Appointment History"
+                        isAtTheEnd={true}
+                      >
+                        <RiTreasureMapLine
+                          className="text-xl hover:text-lightMode-sidebarItemIconColor hover:scale-125 cursor-pointer"
+                          onClick={() => {
+                            navigate(
+                              `/admins/appointment-history/${tableRow.appointment.appointmentId}`
+                            );
+                            navigate(0);
+                          }}
+                        />
+                      </Tooltip>
                     </td>
                   </tr>
                 ) : isMedicalProcedureRow(tableRow) ? (

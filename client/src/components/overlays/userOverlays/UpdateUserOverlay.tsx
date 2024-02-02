@@ -10,6 +10,7 @@ import { PiPencil, PiPencilLineFill } from "react-icons/pi";
 import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
 import { determineSpecialityOrder } from "../../../utils/utils";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
+import { Tooltip } from "../../design/Tooltip";
 
 export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   user,
@@ -205,10 +206,12 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
       {isUpdateUserOverlayVisible ? (
         <PiPencilLineFill className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
       ) : (
-        <PiPencil
-          onClick={() => setIsUpdateUserOverlayVisible(true)}
-          className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
-        />
+        <Tooltip text={`Update ${roleName}`}>
+          <PiPencil
+            onClick={() => setIsUpdateUserOverlayVisible(true)}
+            className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
+          />
+        </Tooltip>
       )}
 
       <Overlay

@@ -45,7 +45,7 @@ export const Sidebar: FC<SidebarProps> = ({
         className={`transition-all ${
           // fixed top-0 left-20 w-full h-full bg-black opacity-0 z-0 ease-out duration-200
           isSidebarExpanded
-            ? "fixed top-0 left-64 w-full h-full bg-black opacity-50 z-0 ease-in duration-300"
+            ? "fixed top-0 left-64 w-full h-full bg-black opacity-50 z-0 ease-in duration-200"
             : ""
         } `}
         onClick={() => setIsSidebarExpanded(false)}

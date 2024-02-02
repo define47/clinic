@@ -5,7 +5,7 @@ import { GeneralTable } from "../../components/table/GeneralTable";
 export const MedicalSpecialities: FC = () => {
   return (
     <div className="w-full h-full">
-      <div className="w-full h-full p-4">
+      <div className="w-full h-full">
         <GeneralTable
           URL={medicalSpecialitiesPath}
           entity={"medicalSpeciality"}

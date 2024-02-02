@@ -5,7 +5,7 @@ import { receptionistRoleName, usersPath } from "../../utils/dotenv";
 export const Receptionists: FC = () => {
   return (
     <div className="w-full h-full">
-      <div className="w-full h-full p-4">
+      <div className="w-full h-full">
         <GeneralTable URL={usersPath} entity={receptionistRoleName} />
       </div>
     </div>
