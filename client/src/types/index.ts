@@ -47,7 +47,7 @@ export type AppointmentTableData = {
 };
 
 export type MedicalProcedure = {
-  medicalProcedureId: string;
+  medicalProcedureId?: string;
   medicalProcedureName: string;
   medicalProcedurePrice: number;
   // medicalProcedureEstimatedTimeMinutes: number;
@@ -272,4 +272,18 @@ export type CardEntryProps = {
   cardEntryType?: string;
   cardEntryTitle: string;
   cardEntryData: string;
+};
+
+export type LimitPickerProps = {
+  selectedLimit: number;
+  setSelectedLimit: (selectedLimit: number) => void;
+};
+
+export type DeleteMedicalProcedureOverlayProps = {
+  medicalSpecialityId: string;
+  medicalProcedure: MedicalProcedure;
+};
+
+export type UpdateMedicalProcedureOverlayProps = {
+  medicalProcedure: MedicalProcedure;
 };

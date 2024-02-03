@@ -382,16 +382,16 @@ const buildServer = async () => {
   //   )
   // );
 
-  const appointmentHistoryService = new AppointmentHistoryRepository(
-    drizzleInstance,
-    appointmentHistoryTable
-  );
+  // const appointmentHistoryService = new AppointmentHistoryRepository(
+  //   drizzleInstance,
+  //   appointmentHistoryTable
+  // );
 
-  console.log(
-    await appointmentHistoryService.getAllAppointmentHistoryByAppointmentId(
-      "055ec6e2-5484-52bd-976e-83c12f116649"
-    )
-  );
+  // console.log(
+  //   await appointmentHistoryService.getAllAppointmentHistoryByAppointmentId(
+  //     "055ec6e2-5484-52bd-976e-83c12f116649"
+  //   )
+  // );
 
   return fastifyServer;
 };

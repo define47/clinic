@@ -42,7 +42,7 @@ export const StyledRippleButton: FC<StyledRippleButton> = ({
   return (
     <button
       ref={buttonRef}
-      className={`relative z-0 flex items-center justify-center w-40 overflow-hidden ${
+      className={`relative z-0 text-xs flex items-center justify-center w-40 overflow-hidden ${
         type === "create"
           ? "bg-blue-500 dark:bg-blue-800"
           : type === "delete"

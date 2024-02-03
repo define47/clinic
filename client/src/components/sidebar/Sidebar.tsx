@@ -8,7 +8,7 @@ import {
   MdPersonalInjury,
   MdSpaceDashboard,
 } from "react-icons/md";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GiBookmark, GiBookmarklet } from "react-icons/gi";
 import {
   RiNurseFill,
@@ -22,11 +22,14 @@ import { FaRegUser, FaUser } from "react-icons/fa";
 import { TbSettings, TbSettingsFilled } from "react-icons/tb";
 import { IoHelpCircle, IoHelpCircleOutline } from "react-icons/io5";
 import { BiInjection, BiSolidInjection } from "react-icons/bi";
+import { CiLogout } from "react-icons/ci";
+import axios from "axios";
 
 export const Sidebar: FC<SidebarProps> = ({
   isSidebarExpanded,
   setIsSidebarExpanded,
 }) => {
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const appointmentsPathname = "/admins/appointments";
   const adminDashboardPathname = "/admins/dashboard";
@@ -38,6 +41,19 @@ export const Sidebar: FC<SidebarProps> = ({
   const receptionistsPathname = "/admins/receptionists";
   const settingsPathname = "/admins/settings";
   const adminGuidePathname = "/admins/guide";
+
+  async function onLogout() {
+    try {
+      const response = await axios.post(
+        "http://192.168.2.16:40587/api/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -217,7 +233,19 @@ export const Sidebar: FC<SidebarProps> = ({
               active={pathname === adminGuidePathname}
               isSidebarExpanded={isSidebarExpanded}
             />
+            {/* <SidebarItem
+              to={"/login"}
+              icon={<CiLogout onClick={onLogout} />}
+              title="Logout"
+              active={pathname === adminGuidePathname}
+              isSidebarExpanded={isSidebarExpanded}
+            /> */}
           </ul>
+          {/* <span onClick={onLogout}>logout</span> */}
+          <div className="flex items-center">
+            <CiLogout className="text-xl" />
+            <span>Logout</span>
+          </div>
         </nav>
       </aside>
     </>

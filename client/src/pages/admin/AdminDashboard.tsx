@@ -8,6 +8,7 @@ import { TreeTable } from "../../components/TreeTable";
 import { DateTimePicker } from "../../components/pickers/DateTimePicker";
 import { UserPicker } from "../../components/pickers/UserPicker";
 import { AppointmentSearchCriterionPicker } from "../../components/pickers/AppointmentSearchCriterionPicker";
+import { LimitPicker } from "../../components/pickers/LimitPicker";
 
 export const AdminDashboard: FC = () => {
   const socketContext = useContext(SocketNotificationDataContext);
@@ -70,6 +71,7 @@ export const AdminDashboard: FC = () => {
         /> */}
         {/* <UserPicker label="doctor picker" roleName="doctor" z="z-50" />
         <UserPicker label="patient picker" roleName="patient" z="z-40" /> */}
+        {/* <LimitPicker /> */}
       </div>
     </div>
   );

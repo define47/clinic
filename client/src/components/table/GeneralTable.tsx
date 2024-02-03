@@ -40,6 +40,10 @@ import { MedicalSpecialityPicker } from "../pickers/MedicalSpecialityPicker";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from "../design/Tooltip";
 import { StyledRippleButton } from "../design/StyledRippleButton";
+import { LimitPicker } from "../pickers/LimitPicker";
+import { CreateMedicalProcedureOverlay } from "../overlays/medicalProcedureOverlays/CreateMedicalProcedureOverlay";
+import { DeleteMedicalProcedureOverlay } from "../overlays/medicalProcedureOverlays/DeleteMedicalProcedureOverlay";
+import { UpdateMedicalProcedureOverlay } from "../overlays/medicalProcedureOverlays/UpdateMedicalProcedureOverlay";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -195,7 +199,12 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     selectedAppointmentPeriodValue,
     selectedMedicalSpecialityId,
     currentPage,
+    tableLimit,
   ]);
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [tableLimit]);
 
   useEffect(() => {
     console.log(tableRows);
@@ -305,111 +314,142 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
   return (
     <div className="w-full bg-white h-full hidden lg:block border p-4 rounded-xl font-roboto">
-      {(entity === "doctor" ||
-        entity === "patient" ||
-        entity === "receptionist" ||
-        entity === "nurse") && (
-        <div className="flex space-x-3 mb-3">
-          <UserSearchCriterionPicker
-            entity={entity}
-            selectedUserSearchCriteriaName={selectedUserSearchCriteriaName}
-            setSelectedUserSearchCriteriaName={
-              setSelectedUserSearchCriteriaName
-            }
-            selectedUserSearchCriteriaValue={selectedUserSearchCriteriaValue}
-            setSelectedUserSearchCriteriaValue={
-              setSelectedUserSearchCriteriaValue
-            }
-          />
-          {selectedUserSearchCriteriaValue !== "" && (
+      <div className="flex items-center justify-between">
+        {(entity === "doctor" ||
+          entity === "patient" ||
+          entity === "receptionist" ||
+          entity === "nurse") && (
+          <div className="flex items-center space-x-3 mb-3">
+            <UserSearchCriterionPicker
+              entity={entity}
+              selectedUserSearchCriteriaName={selectedUserSearchCriteriaName}
+              setSelectedUserSearchCriteriaName={
+                setSelectedUserSearchCriteriaName
+              }
+              selectedUserSearchCriteriaValue={selectedUserSearchCriteriaValue}
+              setSelectedUserSearchCriteriaValue={
+                setSelectedUserSearchCriteriaValue
+              }
+            />
+            {selectedUserSearchCriteriaValue !== "" && (
+              <StyledInput
+                label={`${entity} search`}
+                name="name"
+                onChangeStyledInput={(event) =>
+                  setSearchQuery(event.target.value)
+                }
+                icon={<IoIosSearch />}
+              />
+            )}
+          </div>
+        )}
+        {entity === "medicalSpeciality" && (
+          <div className="mb-3">
             <StyledInput
               label={`${entity} search`}
-              name="name"
+              name="medicalSpecialitySearch"
               onChangeStyledInput={(event) =>
                 setSearchQuery(event.target.value)
               }
               icon={<IoIosSearch />}
             />
-          )}
-        </div>
-      )}
-      {entity === "medicalSpeciality" && (
-        <div className="mb-3">
-          <StyledInput
-            label={`${entity} search`}
-            name="medicalSpecialitySearch"
-            onChangeStyledInput={(event) => setSearchQuery(event.target.value)}
-            icon={<IoIosSearch />}
-          />
-        </div>
-      )}
+          </div>
+        )}
 
-      {entity === "appointment" && (
-        <div className="flex space-x-3 mb-3">
-          <AppointmentSearchCriterionPicker
-            selectedTable={selectedTable}
-            setSelectedTable={setSelectedTable}
-            selectedAppointmentCriteriaName={selectedAppointmentCriteriaName}
-            setSelectedAppointmentCriteriaName={
-              setSelectedAppointmentCriteriaName
-            }
-            selectedAppointmentCriteriaValue={selectedAppointmentCriteriaValue}
-            setSelectedAppointmentCriteriaValue={
-              setSelectedAppointmentCriteriaValue
-            }
-          />
-          {selectedTable !== "" && selectedAppointmentCriteriaValue !== "" && (
-            <StyledInput
-              label={`${entity} search`}
-              name="appointmentSearch"
-              onChangeStyledInput={(event) =>
-                setSearchQuery(event.target.value)
+        {entity === "appointment" && (
+          <div className="flex space-x-3 mb-3">
+            <AppointmentSearchCriterionPicker
+              selectedTable={selectedTable}
+              setSelectedTable={setSelectedTable}
+              selectedAppointmentCriteriaName={selectedAppointmentCriteriaName}
+              setSelectedAppointmentCriteriaName={
+                setSelectedAppointmentCriteriaName
               }
-              icon={<IoIosSearch />}
+              selectedAppointmentCriteriaValue={
+                selectedAppointmentCriteriaValue
+              }
+              setSelectedAppointmentCriteriaValue={
+                setSelectedAppointmentCriteriaValue
+              }
             />
-          )}
+            {selectedTable !== "" &&
+              selectedAppointmentCriteriaValue !== "" && (
+                <StyledInput
+                  label={`${entity} search`}
+                  name="appointmentSearch"
+                  onChangeStyledInput={(event) =>
+                    setSearchQuery(event.target.value)
+                  }
+                  icon={<IoIosSearch />}
+                />
+              )}
 
+            {/* <AppointmentPeriodPicker
+              selectedAppointmentPeriodValue={selectedAppointmentPeriodValue}
+              setSelectedAppointmentPeriodValue={
+                setSelectedAppointmentPeriodValue
+              }
+            /> */}
+          </div>
+        )}
+        {entity === "medicalProcedure" && (
+          <div className="flex mb-3">
+            <div className="flex-none">
+              <StyledInput
+                label={`medical procedure search`}
+                name="medicalProcedureSearch"
+                onChangeStyledInput={(event) =>
+                  setSearchQuery(event.target.value)
+                }
+                icon={<IoIosSearch />}
+              />
+            </div>
+            {/* <div className="grow flex justify-center items-center">
+              <MedicalSpecialityPicker
+                label="select medical speciality"
+                selectedMedicalSpecialityId={selectedMedicalSpecialityId}
+                setSelectedMedicalSpecialityId={setSelectedMedicalSpecialityId}
+                selectedMedicalSpecialityName={selectedMedicalSpecialityName}
+                setSelectedMedicalSpecialityName={
+                  setSelectedMedicalSpecialityName
+                }
+              />
+            </div>
+            <div className="w-72 flex-none"></div> */}
+          </div>
+          // <div className="flex ">
+          //   <div className="flex-none w-14 h-14 ...">01</div>
+          //   <div className="flex justify-center items-center grow bg-red-200 h-14 ...">
+          //     02
+          //   </div>
+          //   <div className="flex-none w-14 h-14 ...">03</div>
+          // </div>
+        )}
+
+        {entity === "medicalProcedure" && (
+          <MedicalSpecialityPicker
+            label="select medical speciality"
+            selectedMedicalSpecialityId={selectedMedicalSpecialityId}
+            setSelectedMedicalSpecialityId={setSelectedMedicalSpecialityId}
+            selectedMedicalSpecialityName={selectedMedicalSpecialityName}
+            setSelectedMedicalSpecialityName={setSelectedMedicalSpecialityName}
+          />
+        )}
+
+        {entity === "appointment" && (
           <AppointmentPeriodPicker
             selectedAppointmentPeriodValue={selectedAppointmentPeriodValue}
             setSelectedAppointmentPeriodValue={
               setSelectedAppointmentPeriodValue
             }
           />
-        </div>
-      )}
-      {entity === "medicalProcedure" && (
-        <div className="flex mb-3">
-          <div className="flex-none">
-            <StyledInput
-              label={`medical procedure search`}
-              name="medicalProcedureSearch"
-              onChangeStyledInput={(event) =>
-                setSearchQuery(event.target.value)
-              }
-              icon={<IoIosSearch />}
-            />
-          </div>
-          <div className="grow flex justify-center items-center">
-            <MedicalSpecialityPicker
-              label="select medical speciality"
-              selectedMedicalSpecialityId={selectedMedicalSpecialityId}
-              setSelectedMedicalSpecialityId={setSelectedMedicalSpecialityId}
-              selectedMedicalSpecialityName={selectedMedicalSpecialityName}
-              setSelectedMedicalSpecialityName={
-                setSelectedMedicalSpecialityName
-              }
-            />
-          </div>
-          <div className="w-72 flex-none"></div>
-        </div>
-        // <div className="flex ">
-        //   <div className="flex-none w-14 h-14 ...">01</div>
-        //   <div className="flex justify-center items-center grow bg-red-200 h-14 ...">
-        //     02
-        //   </div>
-        //   <div className="flex-none w-14 h-14 ...">03</div>
-        // </div>
-      )}
+        )}
+
+        <LimitPicker
+          selectedLimit={tableLimit}
+          setSelectedLimit={setTableLimit}
+        />
+      </div>
       <div className="w-full border rounded-xl h-4/5 overflow-auto">
         {tableRows.length > 0 && (
           <table className="w-full text-center text-xs font-light border rounded-xl">
@@ -694,7 +734,15 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     <td className="px-6 py-4 font-medium">
                       {tableRow.medicalProcedurePrice}
                     </td>
-                    <td className="h-14 flex items-center justify-center space-x-2 px-6 py-4 font-medium"></td>
+                    <td className="h-14 flex items-center justify-center space-x-2 px-6 py-4 font-medium">
+                      <UpdateMedicalProcedureOverlay
+                        medicalProcedure={tableRow}
+                      />
+                      <DeleteMedicalProcedureOverlay
+                        medicalSpecialityId={selectedMedicalSpecialityId}
+                        medicalProcedure={tableRow}
+                      />
+                    </td>
                   </tr>
                 ) : (
                   ""
@@ -744,6 +792,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         )}
         {entity === "medicalSpeciality" && <CreateMedicalSpecialityOverlay />}
         {entity === "appointment" && <CreateAppointmentOverlay />}
+      </div>
+      <div>
+        {entity === "medicalProcedure" && (
+          <CreateMedicalProcedureOverlay
+            medicalSpecialityId={selectedMedicalSpecialityId}
+            medicalSpecialityName={selectedMedicalSpecialityName}
+          />
+        )}
       </div>
       {/* here notification {JSON.stringify(socketNotificationDataState)} */}
     </div>

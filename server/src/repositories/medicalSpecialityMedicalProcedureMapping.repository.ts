@@ -194,7 +194,28 @@ export class MedicalSpecialityMedicalProcedureMappingRepository
   public async deleteMedicalSpecialityMedicalProcedureMappingBySpecialityIdAndProcedureId(
     medicalSpecialityId: string,
     medicalProcedureId: string
-  ): Promise<string | undefined> {
-    throw new Error("Method not implemented.");
+  ): Promise<MedicalSpecialityMedicalProcedureMapping | undefined> {
+    return (
+      await this._drizzle
+        .delete(medicalSpecialityMedicalProcedureMappingTable)
+        .where(
+          and(
+            eq(
+              medicalSpecialityMedicalProcedureMappingTable.medicalSpecialityId,
+              medicalSpecialityId
+            ),
+            eq(
+              medicalSpecialityMedicalProcedureMappingTable.medicalProcedureId,
+              medicalProcedureId
+            )
+          )
+        )
+        .returning({
+          medicalSpecialityId:
+            medicalSpecialityMedicalProcedureMappingTable.medicalSpecialityId,
+          medicalProcedureId:
+            medicalSpecialityMedicalProcedureMappingTable.medicalProcedureId,
+        })
+    )[0];
   }
 }

@@ -47,5 +47,5 @@ export interface IMedicalSpecialityMedicalProcedureMappingService {
   deleteMedicalSpecialityMedicalProcedureMappingBySpecialityIdAndProcedureId(
     medicalSpecialityId: string,
     medicalProcedureId: string
-  ): Promise<string | undefined>;
+  ): Promise<MedicalSpecialityMedicalProcedureMapping | undefined>;
 }

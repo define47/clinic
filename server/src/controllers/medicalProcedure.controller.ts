@@ -39,12 +39,20 @@ export class MedicalProcedureController {
   ) => {
     try {
       const body: any = request.body;
+      console.log(body);
 
       const postMedicalProcedure =
         await this._medicalProcedureService.createMedicalProcedure({
           medicalProcedureName: body.medicalProcedureName,
           medicalProcedurePrice: parseInt(body.medicalProcedurePrice),
         });
+
+      await this._medicalSpecialityMedicalProcedureMappingService.createMedicalSpecialityMedicalProcedureMapping(
+        {
+          medicalProcedureId: postMedicalProcedure?.medicalProcedureId!,
+          medicalSpecialityId: body.medicalSpecialityId,
+        }
+      );
 
       return reply
         .code(200)
@@ -86,6 +94,11 @@ export class MedicalProcedureController {
   ) => {
     try {
       const body: any = request.body;
+
+      await this._medicalSpecialityMedicalProcedureMappingService.deleteMedicalSpecialityMedicalProcedureMappingBySpecialityIdAndProcedureId(
+        body.medicalSpecialityId,
+        body.medicalProcedureId
+      );
 
       const deleteMedicalProcedure =
         await this._medicalProcedureService.deleteMedicalProcedure(

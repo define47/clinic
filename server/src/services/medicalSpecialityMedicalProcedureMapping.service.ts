@@ -75,7 +75,10 @@ export class MedicalSpecialityMedicalProcedureMappingService
   public async deleteMedicalSpecialityMedicalProcedureMappingBySpecialityIdAndProcedureId(
     medicalSpecialityId: string,
     medicalProcedureId: string
-  ): Promise<string | undefined> {
-    throw new Error("Method not implemented.");
+  ): Promise<MedicalSpecialityMedicalProcedureMapping | undefined> {
+    return await this._medicalSpecialityMedicalProcedureRepository.deleteMedicalSpecialityMedicalProcedureMappingBySpecialityIdAndProcedureId(
+      medicalSpecialityId,
+      medicalProcedureId
+    );
   }
 }
