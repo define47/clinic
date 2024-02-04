@@ -64,7 +64,7 @@ export class DoctorMedicalSpecialityMappingRepository
     else if (rank === "secondary")
       rankColumn =
         doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality;
-    else
+    else if (rank === "tertiary")
       rankColumn =
         doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality;
 
@@ -86,93 +86,6 @@ export class DoctorMedicalSpecialityMappingRepository
           and(
             eq(doctorMedicalSpecialityMappingTable.userId, doctorId),
             eq(rankColumn, true)
-          )
-        )
-    )[0];
-  }
-
-  public async getPrimaryDoctorMedicalSpecialityMapping(
-    doctorId: string
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return (
-      await this._drizzle
-        .select({
-          userId: doctorMedicalSpecialityMappingTable.userId,
-          medicalSpecialityId:
-            doctorMedicalSpecialityMappingTable.medicalSpecialityId,
-          isPrimaryMedicalSpeciality:
-            doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
-          isSecondaryMedicalSpeciality:
-            doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
-          isTertiaryMedicalSpeciality:
-            doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
-        })
-        .from(doctorMedicalSpecialityMappingTable)
-        .where(
-          and(
-            eq(doctorMedicalSpecialityMappingTable.userId, doctorId),
-            eq(
-              doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
-              true
-            )
-          )
-        )
-    )[0];
-  }
-
-  public async getSecondaryDoctorMedicalSpecialityMapping(
-    doctorId: string
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return (
-      await this._drizzle
-        .select({
-          userId: doctorMedicalSpecialityMappingTable.userId,
-          medicalSpecialityId:
-            doctorMedicalSpecialityMappingTable.medicalSpecialityId,
-          isPrimaryMedicalSpeciality:
-            doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
-          isSecondaryMedicalSpeciality:
-            doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
-          isTertiaryMedicalSpeciality:
-            doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
-        })
-        .from(doctorMedicalSpecialityMappingTable)
-        .where(
-          and(
-            eq(doctorMedicalSpecialityMappingTable.userId, doctorId),
-            eq(
-              doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
-              true
-            )
-          )
-        )
-    )[0];
-  }
-
-  public async getTertiaryDoctorMedicalSpecialityMapping(
-    doctorId: string
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return (
-      await this._drizzle
-        .select({
-          userId: doctorMedicalSpecialityMappingTable.userId,
-          medicalSpecialityId:
-            doctorMedicalSpecialityMappingTable.medicalSpecialityId,
-          isPrimaryMedicalSpeciality:
-            doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
-          isSecondaryMedicalSpeciality:
-            doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
-          isTertiaryMedicalSpeciality:
-            doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
-        })
-        .from(doctorMedicalSpecialityMappingTable)
-        .where(
-          and(
-            eq(doctorMedicalSpecialityMappingTable.userId, doctorId),
-            eq(
-              doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
-              true
-            )
           )
         )
     )[0];

@@ -667,26 +667,35 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     </td>
                     {entity === "doctor" && (
                       <td className="px-6 py-4 font-medium">
-                        {determineSpecialityOrder(
-                          tableRow.medicalSpecialities!,
-                          "P"
-                        )?.slice(0, -3)}
+                        {
+                          determineSpecialityOrder(
+                            tableRow.medicalSpecialities!,
+                            "P"
+                          )
+                          // ?.slice(0, -3)
+                        }
                       </td>
                     )}
                     {entity === "doctor" && (
                       <td className="px-6 py-4 font-medium">
-                        {determineSpecialityOrder(
-                          tableRow.medicalSpecialities!,
-                          "S"
-                        )?.slice(0, -3)}
+                        {
+                          determineSpecialityOrder(
+                            tableRow.medicalSpecialities!,
+                            "S"
+                          )
+                          // ?.slice(0, -3)
+                        }
                       </td>
                     )}
                     {entity === "doctor" && (
                       <td className="px-6 py-4 font-medium">
-                        {determineSpecialityOrder(
-                          tableRow.medicalSpecialities!,
-                          "T"
-                        )?.slice(0, -3)}
+                        {
+                          determineSpecialityOrder(
+                            tableRow.medicalSpecialities!,
+                            "T"
+                          )
+                          // ?.slice(0, -3)
+                        }
                       </td>
                     )}
                     <td className="h-14 flex items-center justify-center space-x-2">

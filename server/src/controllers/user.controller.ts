@@ -468,6 +468,14 @@ export class UserController {
 
       console.log(body.specialityIds);
 
+      console.log(
+        await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
+          putUser?.userId!
+        )
+      );
+
+      // * add pk to doctor medical speciality mapping
+
       if (body.specialityIds) {
         const specialityIds = body.specialityIds;
         const currentDoctorSpecialities =
@@ -477,24 +485,47 @@ export class UserController {
         if (currentDoctorSpecialities)
           for (let i = 0; i < specialityIds.length; i++) {
             let current = specialityIds[i].split(":");
-            console.log(current);
 
-            console.log(
-              "currentDoctorSpecialities",
-              currentDoctorSpecialities[i]
-            );
+            if (current[0] === "tertiary") {
+              const currentTertiaryDoctorMedicalSpecialityMappingToUpdate =
+                await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByRank(
+                  putUser?.userId!,
+                  "tertiary"
+                );
 
-            if (current[0] === "primary") {
+              const tertiaryDoctorMedicalSpecialityMappingToUpdate =
+                await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
+                  putUser?.userId!,
+                  currentTertiaryDoctorMedicalSpecialityMappingToUpdate!
+                    .medicalSpecialityId,
+                  current[1],
+                  false,
+                  false,
+                  current[0] === "tertiary"
+                );
+            } else if (current[0] === "secondary") {
+              const currentSecondaryDoctorMedicalSpecialityMappingToUpdate =
+                await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByRank(
+                  putUser?.userId!,
+                  "secondary"
+                );
+
+              const secondaryDoctorMedicalSpecialityMappingToUpdate =
+                await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
+                  putUser?.userId!,
+                  currentSecondaryDoctorMedicalSpecialityMappingToUpdate!
+                    .medicalSpecialityId,
+                  current[1],
+                  false,
+                  current[0] === "secondary",
+                  false
+                );
+            } else if (current[0] === "primary") {
               const currentPrimaryDoctorMedicalSpecialityMappingToUpdate =
                 await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByRank(
                   putUser?.userId!,
                   "primary"
                 );
-
-              console.log(
-                "currentPrimaryDoctorMedicalSpecialityMappingToUpdate",
-                currentPrimaryDoctorMedicalSpecialityMappingToUpdate
-              );
 
               const primaryDoctorMedicalSpecialityMappingToUpdate =
                 await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
@@ -510,60 +541,6 @@ export class UserController {
               console.log(
                 "primaryDoctorMedicalSpecialityMappingToUpdate",
                 primaryDoctorMedicalSpecialityMappingToUpdate
-              );
-            } else if (current[0] === "secondary") {
-              const currentSecondaryDoctorMedicalSpecialityMappingToUpdate =
-                await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByRank(
-                  putUser?.userId!,
-                  "secondary"
-                );
-
-              console.log(
-                "currentSecondaryDoctorMedicalSpecialityMappingToUpdate",
-                currentSecondaryDoctorMedicalSpecialityMappingToUpdate
-              );
-
-              const secondaryDoctorMedicalSpecialityMappingToUpdate =
-                await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
-                  putUser?.userId!,
-                  currentSecondaryDoctorMedicalSpecialityMappingToUpdate!
-                    .medicalSpecialityId,
-                  current[1],
-                  false,
-                  current[0] === "secondary",
-                  false
-                );
-
-              console.log(
-                "secondaryDoctorMedicalSpecialityMappingToUpdate",
-                secondaryDoctorMedicalSpecialityMappingToUpdate
-              );
-            } else if (current[0] === "tertiary") {
-              const currentTertiaryDoctorMedicalSpecialityMappingToUpdate =
-                await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByRank(
-                  putUser?.userId!,
-                  "tertiary"
-                );
-
-              console.log(
-                "currentTertiaryDoctorMedicalSpecialityMappingToUpdate",
-                currentTertiaryDoctorMedicalSpecialityMappingToUpdate
-              );
-
-              const tertiaryDoctorMedicalSpecialityMappingToUpdate =
-                await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
-                  putUser?.userId!,
-                  currentTertiaryDoctorMedicalSpecialityMappingToUpdate!
-                    .medicalSpecialityId,
-                  current[1],
-                  false,
-                  false,
-                  current[0] === "tertiary"
-                );
-
-              console.log(
-                "tertiaryDoctorMedicalSpecialityMappingToUpdate",
-                tertiaryDoctorMedicalSpecialityMappingToUpdate
               );
             }
 

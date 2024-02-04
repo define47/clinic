@@ -380,21 +380,21 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 
       if (UUIDv5Attributes.length === 1)
         id = uuidv5(
-          creationAttributes[UUIDv5Attributes[0]],
+          creationAttributes[UUIDv5Attributes[0]] + "-" + new Date(),
           getUUIDv5NamespaceEnv()
         );
       else if (UUIDv5Attributes.length === 2)
         id = uuidv5(
-          `${creationAttributes[UUIDv5Attributes[0]]} ${
+          `${creationAttributes[UUIDv5Attributes[0]]}-${
             creationAttributes[UUIDv5Attributes[1]]
-          }`,
+          }-${new Date()}`,
           getUUIDv5NamespaceEnv()
         );
       else if (UUIDv5Attributes.length === 3)
         id = uuidv5(
-          `${creationAttributes[UUIDv5Attributes[0]]} ${
+          `${creationAttributes[UUIDv5Attributes[0]]}-${
             creationAttributes[UUIDv5Attributes[1]]
-          } ${creationAttributes[UUIDv5Attributes[2]]}`,
+          }-${creationAttributes[UUIDv5Attributes[2]]}-${new Date()}`,
           getUUIDv5NamespaceEnv()
         );
 

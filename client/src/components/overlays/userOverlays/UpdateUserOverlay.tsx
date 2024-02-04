@@ -204,20 +204,20 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
           );
         }
 
-        console.log(
-          "specialityIdsToUpdate",
-          specialityIdsToUpdate,
-          "selectedPrimaryMedicalSpecialityName",
-          selectedPrimaryMedicalSpecialityName,
-          determineSpecialityOrder(user.medicalSpecialities!, "P")?.slice(
-            0,
-            -3
-          ),
-          selectedPrimaryMedicalSpecialityName.trim() !==
-            determineSpecialityOrder(user.medicalSpecialities!, "P")
-              ?.slice(0, -3)
-              .trim()
-        );
+        // console.log(
+        //   "specialityIdsToUpdate",
+        //   specialityIdsToUpdate,
+        //   "selectedPrimaryMedicalSpecialityName",
+        //   selectedPrimaryMedicalSpecialityName,
+        //   determineSpecialityOrder(user.medicalSpecialities!, "P")?.slice(
+        //     0,
+        //     -3
+        //   ),
+        //   selectedPrimaryMedicalSpecialityName.trim() !==
+        //     determineSpecialityOrder(user.medicalSpecialities!, "P")
+        //       ?.slice(0, -3)
+        //       .trim()
+        // );
       }
 
       const response = await axios.put(

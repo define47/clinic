@@ -298,9 +298,9 @@ const buildServer = async () => {
   //   languageName: "English",
   //   languageCode: "en",
   // });
-  // createUsers(0, 5, "doctor");
+  // createUsers(0, 100, "doctor");
   // createUsers(5, 25, "doctor");
-  // createUsers(0, 10, "patient");
+  // createUsers(0, 100, "patient");
   // createProcedures();
 
   // const userRoleMappingRepository = new UserRoleMappingRepository(
