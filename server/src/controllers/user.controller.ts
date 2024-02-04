@@ -18,6 +18,7 @@ import {
 import { MESSAGE_CHANNEL, fastifyServer } from "../server";
 import { LanguageService } from "../services/language.service";
 import { UserPreferencesMappingService } from "../services/userPreferencesMapping.service";
+import { MedicalSpeciality } from "../models/medicalSpeciality.model";
 
 export class UserController {
   private readonly _userService: UserService;
@@ -327,6 +328,8 @@ export class UserController {
       console.log("bodypostuser", body);
 
       const roleIds: string[] = body.roleIds;
+      let foundRoles: string[] = [];
+      let foundMedicalSpecialities: string[] = [];
       const specialityIds = body.specialityIds?.filter(function (
         value: string
       ) {
@@ -335,11 +338,13 @@ export class UserController {
 
       for (let i = 0; i < roleIds.length; i++) {
         const role = await this._roleService.getRoleById(roleIds[i]);
+
         if (!role)
           return reply.code(200).send({
             success: false,
             message: `role ${roleIds[i]} not found`,
           });
+        foundRoles.push(role?.roleName);
       }
 
       if (specialityIds)
@@ -353,6 +358,17 @@ export class UserController {
               success: false,
               message: `speciality ${roleIds[i]} not found`,
             });
+          foundMedicalSpecialities.push(
+            // medicalSpecialityId:
+            i === 0
+              ? speciality.medicalSpecialityName + " (P)"
+              : i === 1
+              ? speciality.medicalSpecialityName + " (S)"
+              : i === 2
+              ? speciality.medicalSpecialityName + " (T)"
+              : ""
+            // medicalSpecialityName: speciality.medicalSpecialityName,
+          );
         }
 
       const isUserEmailValid = await this.checkUserEmailValidity(
@@ -407,7 +423,18 @@ export class UserController {
 
       const { redis } = fastifyServer;
 
-      await redis.publisher.publish(MESSAGE_CHANNEL, JSON.stringify(postUser));
+      if (postUser)
+        await redis.publisher.publish(
+          MESSAGE_CHANNEL,
+          JSON.stringify({
+            action: "createUser",
+            data: {
+              user: postUser,
+              roles: foundRoles,
+              medicalSpecialities: foundMedicalSpecialities,
+            },
+          })
+        );
 
       return reply
         .code(200)
@@ -422,12 +449,12 @@ export class UserController {
   public putUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body: any = request.body;
-
       const { redis } = fastifyServer;
 
       const userSessionData = await redis.sessionRedis.get(
         `sessionId:${request.cookieData.value}`
       );
+      let foundMedicalSpecialities: string[] = [];
 
       const putUser = await this._userService.updateUser(body.userId, {
         userForename: body.userForename,
@@ -439,6 +466,8 @@ export class UserController {
         userGender: body.userGender,
       });
 
+      console.log(body.specialityIds);
+
       if (body.specialityIds) {
         const specialityIds = body.specialityIds;
         const currentDoctorSpecialities =
@@ -447,16 +476,126 @@ export class UserController {
           );
         if (currentDoctorSpecialities)
           for (let i = 0; i < specialityIds.length; i++) {
-            await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
-              putUser?.userId!,
-              currentDoctorSpecialities[i].medicalSpecialityId,
-              specialityIds[i],
-              i === 0,
-              i === 1,
-              i === 2
+            let current = specialityIds[i].split(":");
+            console.log(current);
+
+            console.log(
+              "currentDoctorSpecialities",
+              currentDoctorSpecialities[i]
             );
+
+            if (
+              currentDoctorSpecialities[i].isPrimaryMedicalSpeciality &&
+              current[0] === "primary"
+            ) {
+              const doctorMedicalSpecialityMappingToUpdate =
+                await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
+                  putUser?.userId!,
+                  currentDoctorSpecialities[i].medicalSpecialityId,
+                  current[1],
+                  current[0] === "primary",
+                  false,
+                  false
+                );
+            }
+            // else if (
+            //   currentDoctorSpecialities[i].isSecondaryMedicalSpeciality
+            // ) {
+            //   const doctorMedicalSpecialityMappingToUpdate =
+            //     await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
+            //       putUser?.userId!,
+            //       currentDoctorSpecialities[i].medicalSpecialityId,
+            //       current[1],
+            //       false,
+            //       current[0] === "secondary",
+            //       false
+            //     );
+            // }
+
+            // const doctorMedicalSpecialityMappingToUpdate =
+            //   await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
+            //     putUser?.userId!,
+            //     currentDoctorSpecialities[i].medicalSpecialityId,
+            //     current[1],
+            //     current[0] === "primary",
+            //     current[0] === "secondary",
+            //     current[0] === "tertiary"
+            //   );
+
+            // const medicalSpeciality =
+            //   await this._medicalSpecialityService.getMedicalSpecialityById(
+            //     doctorMedicalSpecialityMappingToUpdate?.medicalSpecialityId!
+            //   );
+
+            // foundMedicalSpecialities.push(
+            //   doctorMedicalSpecialityMappingToUpdate?.isPrimaryMedicalSpeciality
+            //     ? medicalSpeciality?.medicalSpecialityName + " (P)"
+            //     : doctorMedicalSpecialityMappingToUpdate?.isSecondaryMedicalSpeciality
+            //     ? medicalSpeciality?.medicalSpecialityName + " (S)"
+            //     : doctorMedicalSpecialityMappingToUpdate?.isTertiaryMedicalSpeciality
+            //     ? medicalSpeciality?.medicalSpecialityName + " (T)"
+            //     : ""
+            // );
           }
       }
+
+      // if (body.specialityIds) {
+      //   const specialityIds = body.specialityIds;
+      //   const currentDoctorSpecialities =
+      //     await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
+      //       putUser?.userId!
+      //     );
+      //   if (currentDoctorSpecialities)
+      //     for (let i = 0; i < specialityIds.length; i++) {
+      //       const doctorMedicalSpecialityMappingToUpdate =
+      //         await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
+      //           putUser?.userId!,
+      //           currentDoctorSpecialities[i].medicalSpecialityId,
+      //           specialityIds[i],
+      //           i === 0,
+      //           i === 1,
+      //           i === 2
+      //         );
+
+      //       const medicalSpeciality =
+      //         await this._medicalSpecialityService.getMedicalSpecialityById(
+      //           doctorMedicalSpecialityMappingToUpdate?.medicalSpecialityId!
+      //         );
+
+      //       foundMedicalSpecialities.push(
+      //         doctorMedicalSpecialityMappingToUpdate?.isPrimaryMedicalSpeciality
+      //           ? medicalSpeciality?.medicalSpecialityName + " (P)"
+      //           : doctorMedicalSpecialityMappingToUpdate?.isSecondaryMedicalSpeciality
+      //           ? medicalSpeciality?.medicalSpecialityName + " (S)"
+      //           : doctorMedicalSpecialityMappingToUpdate?.isTertiaryMedicalSpeciality
+      //           ? medicalSpeciality?.medicalSpecialityName + " (T)"
+      //           : ""
+      //       );
+      //     }
+      // }
+
+      // console.log(foundMedicalSpecialities);
+      // const roles =
+      //   await this._userRoleMappingService.getUserRoleMappingsByUserId(
+      //     putUser?.userId!
+      //   );
+
+      // console.log(roles);
+
+      if (putUser)
+        await redis.publisher.publish(
+          MESSAGE_CHANNEL,
+          JSON.stringify({
+            action: "updateUser",
+            data: {
+              user: putUser,
+              ...(foundMedicalSpecialities.length !== 0 && {
+                roles: ["doctor"],
+              }),
+              medicalSpecialities: foundMedicalSpecialities,
+            },
+          })
+        );
 
       // if (body.specialityNames) {
       //   const specialityNames = body.specialityNames;
@@ -499,6 +638,7 @@ export class UserController {
 
   public deleteUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
+      const { redis } = fastifyServer;
       const body: any = request.body;
 
       let user = await this._userService.getUserById(body.userId);
@@ -521,7 +661,16 @@ export class UserController {
         user?.userId!
       );
 
-      await this._userService.deleteUser(user?.userId!);
+      const userToDelete = await this._userService.deleteUser(user?.userId!);
+      console.log("userToDelete", userToDelete);
+
+      await redis.publisher.publish(
+        MESSAGE_CHANNEL,
+        JSON.stringify({
+          action: "deleteUser",
+          data: userToDelete,
+        })
+      );
 
       return reply.code(200).send({ success: true, message: "" });
       // const userRoleMappings = await this._userRoleMappingService.getUserRoleMappingsByUserId(user?.userId!)

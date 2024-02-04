@@ -242,7 +242,7 @@ export const Sidebar: FC<SidebarProps> = ({
             /> */}
           </ul>
           {/* <span onClick={onLogout}>logout</span> */}
-          <div className="flex items-center">
+          <div className="flex items-center" onClick={onLogout}>
             <CiLogout className="text-xl" />
             <span>Logout</span>
           </div>

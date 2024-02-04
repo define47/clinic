@@ -24,6 +24,9 @@ export const appointmentsPath = `${serverURL}${
 export const medicalProceduresPath = `${serverURL}${
   import.meta.env.VITE_SERVER_MEDICAL_PROCEDURES_PATH
 }`;
+export const appointmentsDoctorAvailabilityPath = `${serverURL}${
+  import.meta.env.VITE_SERVER_APPOINTMENTS_DOCTOR_AVAILABILITY
+}`;
 
 export const patientRoleId = import.meta.env.VITE_PATIENT_ROLE_ID;
 export const patientRoleName = import.meta.env.VITE_PATIENT_ROLE_NAME;

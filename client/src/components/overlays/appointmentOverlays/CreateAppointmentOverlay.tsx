@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
-import { Appointment } from "../../../types";
+import { Appointment, DoctorAvailabilityAppointment } from "../../../types";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import Overlay from "../base/Overlay";
 import { StyledInput } from "../../design/StyledInput";
@@ -7,7 +7,10 @@ import { UserPicker } from "../../pickers/UserPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { AppointmentStatusPicker } from "../../pickers/AppointmentStatusPicker";
-import { appointmentsPath } from "../../../utils/dotenv";
+import {
+  appointmentsDoctorAvailabilityPath,
+  appointmentsPath,
+} from "../../../utils/dotenv";
 import axios from "axios";
 
 export const CreateAppointmentOverlay: FC = () => {
@@ -26,12 +29,15 @@ export const CreateAppointmentOverlay: FC = () => {
     appointmentDateTime: "",
     appointmentStatus: "",
   });
+  const [doctorAppointmentsAvailability, setDoctorAppointmentsAvailability] =
+    useState<DoctorAvailabilityAppointment[]>([]);
 
   const [selectedDoctorId, setSelectedDoctorId] = useState<string>("");
   const [selectedDoctorName, setSelectedDoctorName] = useState<string>("");
   const [selectedPatientId, setSelectedPatientId] = useState<string>("");
   const [selectedPatientName, setSelectedPatientName] = useState<string>("");
-  const [selectedDateTime, setSelectedDateTime] = useState<string>("");
+  const [selectedAppointmentDateTime, setSelectedAppointmentDateTime] =
+    useState<string>("");
 
   const [defaultDate, setDefaultDate] = useState<string>("");
   const [defaultTime, setDefaultTime] = useState<string>("");
@@ -72,7 +78,7 @@ export const CreateAppointmentOverlay: FC = () => {
         {
           appointmentDoctorId: selectedDoctorId,
           appointmentPatientId: selectedPatientId,
-          appointmentDateTime: selectedDateTime,
+          appointmentDateTime: selectedAppointmentDateTime,
           appointmentReason: appointmentToCreate.appointmentReason,
           appointmentStatus: "scheduled",
         },
@@ -85,10 +91,42 @@ export const CreateAppointmentOverlay: FC = () => {
     }
   }
 
+  useEffect(() => {
+    async function getDoctorAppointmentAvailability() {
+      try {
+        if (selectedDoctorId) {
+          const response = await axios.get(appointmentsDoctorAvailabilityPath, {
+            params: {
+              doctorId: selectedDoctorId,
+              date: selectedAppointmentDateTime.split("T")[0],
+            },
+            withCredentials: true,
+          });
+          console.log(doctorAppointmentsAvailability, response.data.payload);
+
+          if (response.data.success)
+            setDoctorAppointmentsAvailability(response.data.payload);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getDoctorAppointmentAvailability();
+  }, [selectedDoctorId, selectedAppointmentDateTime]);
+
+  // useEffect(() => {
+  //   console.log(
+  //     "doctorAppointmentAvailability",
+  //     doctorAppointmentsAvailability
+  //   );
+  // }, [doctorAppointmentsAvailability]);
+
   // useEffect(() => {
   //   console.log(appointmentToCreate);
-  //   console.log(selectedDateTime);
-  // }, [appointmentToCreate, selectedDateTime]);
+  //   // console.log(selectedDateTime);
+  //   console.log(selectedDoctorId);
+  // }, [appointmentToCreate, selectedDoctorId]);
 
   return (
     <>
@@ -147,8 +185,8 @@ export const CreateAppointmentOverlay: FC = () => {
               <DateTimePicker
                 label="Appointment Date Time"
                 isDateOnly={false}
-                selectedEntity={selectedDateTime}
-                setSelectedEntity={setSelectedDateTime}
+                selectedEntity={selectedAppointmentDateTime}
+                setSelectedEntity={setSelectedAppointmentDateTime}
                 defaultDate={defaultDate}
                 defaultTime={defaultTime}
                 isOverlayVisible={isCreateAppointmentOverlayVisible}
@@ -167,6 +205,42 @@ export const CreateAppointmentOverlay: FC = () => {
               /> */}
             </div>
           </div>
+
+          <div className="w-full flex flex-col items-center justify-center">
+            <span
+              className={`mb-3 transition-all ${
+                doctorAppointmentsAvailability.length > 0
+                  ? "scale-100 opacity-100 duration-500"
+                  : "scale-125 opacity-0 duration-500"
+              }`}
+            >
+              Already Booked Appointments
+            </span>
+
+            <div
+              className={`grid grid-cols-4 w-96 ${
+                doctorAppointmentsAvailability.length > 0
+                  ? "scale-100 opacity-100 duration-500"
+                  : "scale-125 opacity-0 duration-500"
+              }`}
+            >
+              {doctorAppointmentsAvailability.map(
+                (
+                  doctorAppointmentAvailability: DoctorAvailabilityAppointment,
+                  doctorAppointmentAvailabilityIndex: number
+                ) => (
+                  <span>
+                    {doctorAppointmentAvailability.appointmentDateTime
+                      .split("T")[1]
+                      .substring(0, 5)}
+                    {doctorAppointmentAvailabilityIndex !==
+                      doctorAppointmentsAvailability.length - 1 && ","}
+                  </span>
+                )
+              )}
+            </div>
+          </div>
+
           <div className="w-full mt-14 flex justify-between">
             <StyledRippleButton
               label="Continue"
@@ -182,7 +256,6 @@ export const CreateAppointmentOverlay: FC = () => {
               onClick={() => setIsCreateAppointmentOverlayVisible(false)}
             />
           </div>
-
           <ConfirmationDialogOverlay
             className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
               isCreateAppointmentConfirmationDialogOverlayVisible

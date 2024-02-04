@@ -19,7 +19,7 @@ export interface IDoctorMedicalSpecialityMappingService {
     isPrimaryMedicalSpeciality: boolean,
     isSecondaryMedicalSpeciality: boolean,
     isTertiaryMedicalSpeciality: boolean
-  ): Promise<void>;
+  ): Promise<DoctorMedicalSpecialityMapping | null>;
 
   deleteDoctorMedicalSpecialityMappingByDoctorIdAndSpecialityId(
     doctorId: string,

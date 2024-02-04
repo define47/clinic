@@ -354,10 +354,7 @@ export class AppointmentRepository
     return await this.delete(appointmentId);
   }
 
-  public async getAppointmentDoctorAvailability(
-    doctorId: string,
-    date: string
-  ) {
+  public async getDoctorAppointmentBookedSlots(doctorId: string, date: string) {
     const doctor = alias(userTable, "doctor");
     const patient = alias(userTable, "patient");
 
@@ -383,9 +380,8 @@ export class AppointmentRepository
           gte(appointmentTable.appointmentDateTime, startCustomDateFinal),
           lte(appointmentTable.appointmentDateTime, endCustomDateFinal)
         )
-      );
-
-    console.log(data);
+      )
+      .orderBy(asc(appointmentTable.appointmentDateTime));
 
     return data;
   }

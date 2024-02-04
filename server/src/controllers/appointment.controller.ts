@@ -12,8 +12,8 @@ export class AppointmentController {
     this._appointmentService = new AppointmentService();
     this._appointmentHistoryService = new AppointmentHistoryService();
   }
-
-  public getAppointmentDoctorAvailability = async (
+  // doctor-appointment-booked-slots
+  public getDoctorAppointmentBookedSlots = async (
     request: FastifyRequest,
     reply: FastifyReply
   ) => {
@@ -21,7 +21,7 @@ export class AppointmentController {
     console.log(query.doctorId);
 
     const payload =
-      await this._appointmentService.getAppointmentDoctorAvailability(
+      await this._appointmentService.getDoctorAppointmentBookedSlots(
         query.doctorId,
         query.date
       );

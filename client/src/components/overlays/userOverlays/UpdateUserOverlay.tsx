@@ -153,6 +153,73 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
 
   async function onUpdateUser() {
     try {
+      const specialityIdsToUpdate: string[] = [];
+
+      if (roleName === "doctor") {
+        const primarySpeciality = determineSpecialityOrder(
+          user.medicalSpecialities!,
+          "P"
+        )
+          ?.slice(0, -3)
+          .trim();
+
+        const secondarySpeciality = determineSpecialityOrder(
+          user.medicalSpecialities!,
+          "S"
+        )
+          ?.slice(0, -3)
+          .trim();
+
+        const tertiarySpeciality = determineSpecialityOrder(
+          user.medicalSpecialities!,
+          "T"
+        )
+          ?.slice(0, -3)
+          .trim();
+        if (
+          selectedPrimaryMedicalSpecialityName.trim() !== primarySpeciality &&
+          primarySpeciality?.length! > 0
+        ) {
+          specialityIdsToUpdate.push(
+            `primary:${selectedPrimaryMedicalSpecialityId}`
+          );
+        }
+
+        if (
+          selectedSecondaryMedicalSpecialityName.trim() !==
+            secondarySpeciality &&
+          secondarySpeciality?.length! > 0
+        ) {
+          specialityIdsToUpdate.push(
+            `secondary:${selectedSecondaryMedicalSpecialityId}`
+          );
+        }
+
+        if (
+          selectedTertiaryMedicalSpecialityName.trim() !== tertiarySpeciality &&
+          tertiarySpeciality?.length! > 0
+        ) {
+          specialityIdsToUpdate.push(
+            `tertiary:${selectedTertiaryMedicalSpecialityId}`
+          );
+        }
+
+        console.log(
+          "specialityIdsToUpdate",
+          specialityIdsToUpdate,
+          "selectedPrimaryMedicalSpecialityName",
+          selectedPrimaryMedicalSpecialityName,
+          determineSpecialityOrder(user.medicalSpecialities!, "P")?.slice(
+            0,
+            -3
+          ),
+          selectedPrimaryMedicalSpecialityName.trim() !==
+            determineSpecialityOrder(user.medicalSpecialities!, "P")
+              ?.slice(0, -3)
+              .trim()
+        );
+      }
+
       const response = await axios.put(
         usersPath,
         {
@@ -165,13 +232,14 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
           userDateOfBirth: userDateOfBirth,
           userAddress: userToUpdate.userAddress,
           userEncryptedPassword: "",
-          ...(roleName === "doctor" && {
-            specialityIds: [
-              selectedPrimaryMedicalSpecialityId,
-              selectedSecondaryMedicalSpecialityId,
-              selectedTertiaryMedicalSpecialityId,
-            ],
-          }),
+          // ...(roleName === "doctor" && {
+          //   specialityIds: [
+          //     selectedPrimaryMedicalSpecialityId,
+          //     selectedSecondaryMedicalSpecialityId,
+          //     selectedTertiaryMedicalSpecialityId,
+          //   ],
+          // }),
+          specialityIds: specialityIdsToUpdate,
         },
         {
           withCredentials: true,

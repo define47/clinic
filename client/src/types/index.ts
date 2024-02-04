@@ -11,9 +11,9 @@ export type User = {
   userAddress: string;
   userEncryptedPassword?: string;
   medicalSpecialities?: string[];
-  isUserEmailActivated: boolean;
-  isUserApprovedByAdmin: boolean;
-  isUserBanned: boolean;
+  isUserEmailActivated?: boolean;
+  isUserApprovedByAdmin?: boolean;
+  isUserBanned?: boolean;
   userRoleId: string;
   userRoleName: string;
 };
@@ -286,4 +286,8 @@ export type DeleteMedicalProcedureOverlayProps = {
 
 export type UpdateMedicalProcedureOverlayProps = {
   medicalProcedure: MedicalProcedure;
+};
+
+export type DoctorAvailabilityAppointment = {
+  appointmentDateTime: string;
 };

@@ -5,6 +5,7 @@ import {
 import { AppointmentHistoryCreationAttributes } from "../models/appointmentHistory.model";
 import {
   DoctorMedicalSpecialityMappingCreationAttributes,
+  DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes,
   DoctorSpecialityMappingUpdateAttributes,
 } from "../models/doctorMedicalSpecialityMapping.model";
 import { LanguageCreationAttributes } from "../models/language.model";
@@ -56,6 +57,7 @@ export interface IBaseRepository<T> {
       | LanguageCreationAttributes
       | UserPreferencesMappingCreationAttributes
       | MedicalSpecialityMedicalProcedureMappingCreationAttributes
+      | DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
   ): Promise<T | undefined>;
 
   update(

@@ -21,7 +21,7 @@ export interface IDoctorSpecialityMappingRepository
     isPrimaryMedicalSpeciality: boolean,
     isSecondaryMedicalSpeciality: boolean,
     isTertiaryMedicalSpeciality: boolean
-  ): Promise<void>;
+  ): Promise<DoctorMedicalSpecialityMapping | null>;
 
   deleteDoctorMedicalSpecialityMappingByDoctorIdAndMedicalSpecialityId(
     doctorId: string,

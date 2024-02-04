@@ -216,7 +216,76 @@ export const GeneralTable: FC<GeneralTableProps> = ({
       const action = receivedSocketData.action;
       let data = receivedSocketData.data;
 
-      if (action === "createMedicalSpeciality") {
+      console.log("socket data", data, "socket action", action);
+
+      // console.log(
+      //   "🚀 ~ useEffect ~ socketNotificationDataState:",
+      //   receivedSocketData
+      // );
+
+      // console.log("🚀 ~ useEffect ~ action:", action);
+
+      // console.log("receivedSocketData", data);
+
+      if (action === "createUser") {
+        const user = data.user as User;
+        const roles = data.roles as string[];
+        const medicalSpecialities = data.medicalSpecialities as string[];
+
+        setTableRows((prevUsers: TableRow[]) => [
+          {
+            userId: user.userId,
+            userForename: user.userForename,
+            userSurname: user.userSurname,
+            userEmail: user.userEmail,
+            userPhoneNumber: user.userPhoneNumber,
+            userGender: user.userGender,
+            userDateOfBirth: user.userDateOfBirth,
+            userAddress: user.userAddress,
+            userRoleName: roles[0],
+            ...(roles[0] === "doctor" && {
+              medicalSpecialities: medicalSpecialities,
+            }),
+          } as User,
+          ...prevUsers,
+        ]);
+      } else if (action === "deleteUser") {
+        setTableRows((prevUsers: TableRow[]) =>
+          prevUsers.filter((user: TableRow) => {
+            if ("userId" in user) {
+              return user.userId !== data;
+            }
+            return true;
+          })
+        );
+      } else if (action === "updateUser") {
+        const user = data.user as User;
+        // const roles = data.roles as string[];
+        // const medicalSpecialities = data.medicalSpecialities as string[];
+        setTableRows((prevUsers: TableRow[]) => {
+          const updatedEvents = prevUsers.map((event: TableRow) => {
+            if (isUserRow(event) && event.userId === user.userId) {
+              return {
+                ...event,
+                userId: user.userId,
+                userForename: user.userForename,
+                userSurname: user.userSurname,
+                userEmail: user.userEmail,
+                userPhoneNumber: user.userPhoneNumber,
+                userGender: user.userGender,
+                userDateOfBirth: user.userDateOfBirth,
+                userAddress: user.userAddress,
+                // ...(roles[0] === "doctor" && {
+                //   medicalSpecialities: medicalSpecialities,
+                // }),
+              };
+            } else {
+              return event;
+            }
+          });
+          return updatedEvents;
+        });
+      } else if (action === "createMedicalSpeciality") {
         data = data as MedicalSpeciality;
         setTableRows((prevMedicalSpecialities: TableRow[]) => [
           {
@@ -256,15 +325,6 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           return updatedEvents;
         });
       }
-
-      console.log(
-        "🚀 ~ useEffect ~ socketNotificationDataState:",
-        receivedSocketData
-      );
-
-      console.log("🚀 ~ useEffect ~ action:", action);
-
-      console.log("receivedSocketData", data);
     }
 
     // if (

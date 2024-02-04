@@ -27,6 +27,7 @@ import {
 } from "../models/userRoleMapping.model";
 import {
   DoctorMedicalSpecialityMappingCreationAttributes,
+  DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes,
   DoctorSpecialityMappingUpdateAttributes,
   doctorMedicalSpecialityMappingTable,
 } from "../models/doctorMedicalSpecialityMapping.model";
@@ -371,6 +372,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | UserPreferencesMappingCreationAttributes
       | MedicalProcedureCreationAttributes
       | MedicalSpecialityMedicalProcedureMappingCreationAttributes
+      | DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
   ): Promise<T | undefined> {
     try {
       let id;
