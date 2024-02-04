@@ -65,7 +65,7 @@ export const UserPicker: FC<UserPickerProps> = ({
               : "",
           searchBy: "userForename",
           searchQuery: "",
-          limit: 5,
+          limit: 9999999,
           page: 0,
           orderBy: "asc:userForename",
         },

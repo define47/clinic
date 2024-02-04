@@ -46,6 +46,7 @@ export const CreateAppointmentOverlay: FC = () => {
     if (isCreateAppointmentOverlayVisible) {
       setDefaultDate(currentDate.toISOString());
       setDefaultTime("08:00");
+      // setSelectedDateTime(`${currentDate.toISOString()}T08:00:00:000Z`);
     }
   }, [isCreateAppointmentOverlayVisible]);
 
@@ -77,10 +78,17 @@ export const CreateAppointmentOverlay: FC = () => {
         },
         { withCredentials: true }
       );
+
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
   }
+
+  // useEffect(() => {
+  //   console.log(appointmentToCreate);
+  //   console.log(selectedDateTime);
+  // }, [appointmentToCreate, selectedDateTime]);
 
   return (
     <>

@@ -353,4 +353,40 @@ export class AppointmentRepository
   ): Promise<string | undefined> {
     return await this.delete(appointmentId);
   }
+
+  public async getAppointmentDoctorAvailability(
+    doctorId: string,
+    date: string
+  ) {
+    const doctor = alias(userTable, "doctor");
+    const patient = alias(userTable, "patient");
+
+    const startCustomDateFinal = new Date(date);
+    startCustomDateFinal.setUTCHours(0, 0, 0);
+    const endCustomDateFinal = new Date(date);
+    endCustomDateFinal.setUTCHours(23, 59, 59);
+
+    const data = await this._drizzle
+      .select({ appointmentDateTime: appointmentTable.appointmentDateTime })
+      .from(appointmentTable)
+      .innerJoin(
+        doctor,
+        eq(appointmentTable.appointmentDoctorId, doctor.userId)
+      )
+      .innerJoin(
+        patient,
+        eq(appointmentTable.appointmentPatientId, patient.userId)
+      )
+      .where(
+        and(
+          eq(doctor.userId, doctorId),
+          gte(appointmentTable.appointmentDateTime, startCustomDateFinal),
+          lte(appointmentTable.appointmentDateTime, endCustomDateFinal)
+        )
+      );
+
+    console.log(data);
+
+    return data;
+  }
 }

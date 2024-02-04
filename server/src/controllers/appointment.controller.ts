@@ -13,6 +13,24 @@ export class AppointmentController {
     this._appointmentHistoryService = new AppointmentHistoryService();
   }
 
+  public getAppointmentDoctorAvailability = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    const query: any = request.query;
+    console.log(query.doctorId);
+
+    const payload =
+      await this._appointmentService.getAppointmentDoctorAvailability(
+        query.doctorId,
+        query.date
+      );
+
+    console.log(payload);
+
+    reply.code(200).send({ success: true, payload });
+  };
+
   public retrieveAllUsersRelatedData = async (
     request: FastifyRequest,
     reply: FastifyReply

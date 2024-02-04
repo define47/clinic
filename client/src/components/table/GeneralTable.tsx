@@ -771,7 +771,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             if (currentPage > 0) setCurrentPage(currentPage - 1);
           }}
         />
-        {currentPage}
+        {currentPage + 1}
         <StyledRippleButton
           label={`Next Page`}
           type="create"

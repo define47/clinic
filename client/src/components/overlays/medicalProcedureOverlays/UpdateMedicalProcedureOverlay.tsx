@@ -32,7 +32,7 @@ export const UpdateMedicalProcedureOverlay: FC<
   useEffect(() => {
     if (isUpdateMedicalProcedureOverlayVisible)
       setMedicalProcedureToUpdate(medicalProcedure);
-  }, [medicalProcedure]);
+  }, [medicalProcedure, isUpdateMedicalProcedureOverlayVisible]);
 
   useEffect(() => {
     function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
@@ -72,7 +72,11 @@ export const UpdateMedicalProcedureOverlay: FC<
     try {
       const response = await axios.put(
         "http://192.168.2.16:40587/api/medical-procedures",
-        {},
+        {
+          medicalProcedureId: medicalProcedure.medicalProcedureId,
+          medicalProcedureName: medicalProcedureToUpdate.medicalProcedureName,
+          medicalProcedurePrice: medicalProcedureToUpdate.medicalProcedurePrice,
+        },
         { withCredentials: true }
       );
 
@@ -88,6 +92,10 @@ export const UpdateMedicalProcedureOverlay: FC<
       setIsUpdateMedicalProcedureOverlayVisible(false);
     }
   };
+
+  useEffect(() => {
+    console.log(medicalProcedureToUpdate);
+  }, [medicalProcedureToUpdate]);
 
   return (
     <>
@@ -121,9 +129,22 @@ export const UpdateMedicalProcedureOverlay: FC<
             Update Medical Speciality
           </span>
           <div className="w-full flex justify-between">
-            <div className="flex flex-col space-y-6"></div>
-            <div className="flex flex-col space-y-6"></div>
-            <div className="flex flex-col space-y-6"></div>
+            <div className="flex flex-col space-y-6">
+              <StyledInput
+                label="medicalProcedureName"
+                name="medicalProcedureName"
+                onChangeStyledInput={handleStyledInputChange}
+                labelBackgroundColor="bg-white"
+                inputValue={medicalProcedureToUpdate.medicalProcedureName}
+              />
+              <StyledInput
+                label="medicalProcedurePrice"
+                name="medicalProcedurePrice"
+                onChangeStyledInput={handleStyledInputChange}
+                labelBackgroundColor="bg-white"
+                inputValue={medicalProcedureToUpdate.medicalProcedurePrice.toString()}
+              />
+            </div>
           </div>
           <div className="w-full mt-14 flex justify-between">
             <StyledRippleButton
@@ -164,7 +185,7 @@ export const UpdateMedicalProcedureOverlay: FC<
               <StyledRippleButton
                 label="Update"
                 type="yes"
-                onClick={() => {}}
+                onClick={onUpdateMedicalProcedure}
               />
               <StyledRippleButton
                 label="Cancel"

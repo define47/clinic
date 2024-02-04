@@ -8,6 +8,8 @@ import {
 import { AppointmentRepository } from "../repositories/appointment.repository";
 import { drizzleInstance } from "../utils/drizzle";
 import { IAppointmentService } from "./appointment.iservice";
+import { userTable } from "../models/user.model";
+import { alias } from "drizzle-orm/pg-core";
 
 export class AppointmentService implements IAppointmentService {
   private readonly _appointmentRepository: AppointmentRepository;
@@ -72,5 +74,15 @@ export class AppointmentService implements IAppointmentService {
     appointmentId: string
   ): Promise<string | undefined> {
     return this._appointmentRepository.deleteAppointment(appointmentId);
+  }
+
+  public async getAppointmentDoctorAvailability(
+    doctorId: string,
+    date: string
+  ) {
+    return this._appointmentRepository.getAppointmentDoctorAvailability(
+      doctorId,
+      date
+    );
   }
 }

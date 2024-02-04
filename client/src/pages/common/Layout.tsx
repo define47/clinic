@@ -119,7 +119,8 @@ export const Layout: FC = () => {
       authenticatedUserDataState.roleNames[0] === "admin"
     )
       content = (
-        <div className="select-none w-screen h-screen flex">
+        // select-none
+        <div className="w-screen h-screen flex">
           <div className="lg:fixed h-full hidden lg:block z-10">
             <Sidebar
               isSidebarExpanded={isSidebarExpanded}

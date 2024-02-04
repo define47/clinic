@@ -63,6 +63,7 @@ import { appointmentHistoryRoutes } from "./routes/appointmentHistory.routes.js"
 import { AppointmentHistoryService } from "./services/appointmentHistory.service.js";
 import { AppointmentHistoryRepository } from "./repositories/appointmentHistory.repository.js";
 import { appointmentHistoryTable } from "./models/appointmentHistory.model.js";
+import { appointmentDoctorAvailabilityRoutes } from "./routes/appointmentDoctorAvailability.routes.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -196,6 +197,10 @@ const buildServer = async () => {
 
   await fastifyServer.register(appointmentHistoryRoutes, {
     prefix: "api/appointments-history",
+  });
+
+  await fastifyServer.register(appointmentDoctorAvailabilityRoutes, {
+    prefix: "api/appointments-doctor-availability",
   });
 
   await fastifyServer;
