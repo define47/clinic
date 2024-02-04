@@ -260,8 +260,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         );
       } else if (action === "updateUser") {
         const user = data.user as User;
-        // const roles = data.roles as string[];
-        // const medicalSpecialities = data.medicalSpecialities as string[];
+        const roles = data.roles as string[];
+        const medicalSpecialities = data.medicalSpecialities as string[];
+        console.log("medicalSpecialities event", medicalSpecialities);
+
         setTableRows((prevUsers: TableRow[]) => {
           const updatedEvents = prevUsers.map((event: TableRow) => {
             if (isUserRow(event) && event.userId === user.userId) {
@@ -275,9 +277,12 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                 userGender: user.userGender,
                 userDateOfBirth: user.userDateOfBirth,
                 userAddress: user.userAddress,
-                // ...(roles[0] === "doctor" && {
-                //   medicalSpecialities: medicalSpecialities,
-                // }),
+                ...(roles?.length >= 1 &&
+                  roles[0] === "doctor" &&
+                  medicalSpecialities?.length >= 1 && {
+                    medicalSpecialities: medicalSpecialities,
+                  }),
+                // medicalSpecialities,
               };
             } else {
               return event;

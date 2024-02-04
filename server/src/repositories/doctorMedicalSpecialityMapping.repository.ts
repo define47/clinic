@@ -12,6 +12,7 @@ import {
   MedicalSpeciality,
   medicalSpecialityTable,
 } from "../models/medicalSpeciality.model";
+import { PgColumn } from "drizzle-orm/pg-core";
 
 export class DoctorMedicalSpecialityMappingRepository
   extends BaseRepository<DoctorMedicalSpecialityMapping>
@@ -39,37 +40,55 @@ export class DoctorMedicalSpecialityMappingRepository
     return await this.create(doctorMedicalSpecialityMappingCreationAttributes);
   }
 
-  public async createPrimaryDoctorMedicalSpecialityMapping(
-    primaryDoctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
+  public async createDoctorMedicalSpecialityMappingByRank(
+    primaryDoctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes,
+    rank: string
   ): Promise<DoctorMedicalSpecialityMapping | undefined> {
     return await this.create({
       ...primaryDoctorMedicalSpecialityMappingCreationAttributes,
-      isPrimaryMedicalSpeciality: true,
-      isSecondaryMedicalSpeciality: false,
-      isTertiaryMedicalSpeciality: false,
+      isPrimaryMedicalSpeciality: rank === "primary",
+      isSecondaryMedicalSpeciality: rank === "secondary",
+      isTertiaryMedicalSpeciality: rank === "tertiary",
     });
   }
 
-  public async createSecondaryDoctorMedicalSpecialityMapping(
-    secondaryDoctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
+  public async getDoctorMedicalSpecialityMappingByRank(
+    doctorId: string,
+    rank: string
   ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this.create({
-      ...secondaryDoctorMedicalSpecialityMappingCreationAttributes,
-      isPrimaryMedicalSpeciality: false,
-      isSecondaryMedicalSpeciality: true,
-      isTertiaryMedicalSpeciality: false,
-    });
-  }
+    let rankColumn: PgColumn<any>;
 
-  public async createTertiaryDoctorMedicalSpecialityMapping(
-    tertiaryDoctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this.create({
-      ...tertiaryDoctorMedicalSpecialityMappingCreationAttributes,
-      isPrimaryMedicalSpeciality: false,
-      isSecondaryMedicalSpeciality: false,
-      isTertiaryMedicalSpeciality: true,
-    });
+    if (rank === "primary")
+      rankColumn =
+        doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality;
+    else if (rank === "secondary")
+      rankColumn =
+        doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality;
+    else
+      rankColumn =
+        doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality;
+
+    return (
+      await this._drizzle
+        .select({
+          userId: doctorMedicalSpecialityMappingTable.userId,
+          medicalSpecialityId:
+            doctorMedicalSpecialityMappingTable.medicalSpecialityId,
+          isPrimaryMedicalSpeciality:
+            doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
+          isSecondaryMedicalSpeciality:
+            doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
+          isTertiaryMedicalSpeciality:
+            doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
+        })
+        .from(doctorMedicalSpecialityMappingTable)
+        .where(
+          and(
+            eq(doctorMedicalSpecialityMappingTable.userId, doctorId),
+            eq(rankColumn, true)
+          )
+        )
+    )[0];
   }
 
   public async getPrimaryDoctorMedicalSpecialityMapping(

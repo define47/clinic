@@ -484,103 +484,113 @@ export class UserController {
               currentDoctorSpecialities[i]
             );
 
-            if (
-              currentDoctorSpecialities[i].isPrimaryMedicalSpeciality &&
-              current[0] === "primary"
-            ) {
-              const doctorMedicalSpecialityMappingToUpdate =
+            if (current[0] === "primary") {
+              const currentPrimaryDoctorMedicalSpecialityMappingToUpdate =
+                await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByRank(
+                  putUser?.userId!,
+                  "primary"
+                );
+
+              console.log(
+                "currentPrimaryDoctorMedicalSpecialityMappingToUpdate",
+                currentPrimaryDoctorMedicalSpecialityMappingToUpdate
+              );
+
+              const primaryDoctorMedicalSpecialityMappingToUpdate =
                 await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
                   putUser?.userId!,
-                  currentDoctorSpecialities[i].medicalSpecialityId,
+                  currentPrimaryDoctorMedicalSpecialityMappingToUpdate!
+                    .medicalSpecialityId,
                   current[1],
                   current[0] === "primary",
                   false,
                   false
                 );
+
+              console.log(
+                "primaryDoctorMedicalSpecialityMappingToUpdate",
+                primaryDoctorMedicalSpecialityMappingToUpdate
+              );
+            } else if (current[0] === "secondary") {
+              const currentSecondaryDoctorMedicalSpecialityMappingToUpdate =
+                await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByRank(
+                  putUser?.userId!,
+                  "secondary"
+                );
+
+              console.log(
+                "currentSecondaryDoctorMedicalSpecialityMappingToUpdate",
+                currentSecondaryDoctorMedicalSpecialityMappingToUpdate
+              );
+
+              const secondaryDoctorMedicalSpecialityMappingToUpdate =
+                await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
+                  putUser?.userId!,
+                  currentSecondaryDoctorMedicalSpecialityMappingToUpdate!
+                    .medicalSpecialityId,
+                  current[1],
+                  false,
+                  current[0] === "secondary",
+                  false
+                );
+
+              console.log(
+                "secondaryDoctorMedicalSpecialityMappingToUpdate",
+                secondaryDoctorMedicalSpecialityMappingToUpdate
+              );
+            } else if (current[0] === "tertiary") {
+              const currentTertiaryDoctorMedicalSpecialityMappingToUpdate =
+                await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByRank(
+                  putUser?.userId!,
+                  "tertiary"
+                );
+
+              console.log(
+                "currentTertiaryDoctorMedicalSpecialityMappingToUpdate",
+                currentTertiaryDoctorMedicalSpecialityMappingToUpdate
+              );
+
+              const tertiaryDoctorMedicalSpecialityMappingToUpdate =
+                await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
+                  putUser?.userId!,
+                  currentTertiaryDoctorMedicalSpecialityMappingToUpdate!
+                    .medicalSpecialityId,
+                  current[1],
+                  false,
+                  false,
+                  current[0] === "tertiary"
+                );
+
+              console.log(
+                "tertiaryDoctorMedicalSpecialityMappingToUpdate",
+                tertiaryDoctorMedicalSpecialityMappingToUpdate
+              );
             }
-            // else if (
-            //   currentDoctorSpecialities[i].isSecondaryMedicalSpeciality
-            // ) {
-            //   const doctorMedicalSpecialityMappingToUpdate =
-            //     await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
-            //       putUser?.userId!,
-            //       currentDoctorSpecialities[i].medicalSpecialityId,
-            //       current[1],
-            //       false,
-            //       current[0] === "secondary",
-            //       false
-            //     );
-            // }
 
-            // const doctorMedicalSpecialityMappingToUpdate =
-            //   await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
-            //     putUser?.userId!,
-            //     currentDoctorSpecialities[i].medicalSpecialityId,
-            //     current[1],
-            //     current[0] === "primary",
-            //     current[0] === "secondary",
-            //     current[0] === "tertiary"
-            //   );
+            const mappings =
+              await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
+                putUser?.userId!
+              );
 
-            // const medicalSpeciality =
-            //   await this._medicalSpecialityService.getMedicalSpecialityById(
-            //     doctorMedicalSpecialityMappingToUpdate?.medicalSpecialityId!
-            //   );
+            if (mappings)
+              for (let i = 0; i < mappings.length; i++) {
+                const medicalSpeciality =
+                  await this._medicalSpecialityService.getMedicalSpecialityById(
+                    mappings[i]?.medicalSpecialityId!
+                  );
 
-            // foundMedicalSpecialities.push(
-            //   doctorMedicalSpecialityMappingToUpdate?.isPrimaryMedicalSpeciality
-            //     ? medicalSpeciality?.medicalSpecialityName + " (P)"
-            //     : doctorMedicalSpecialityMappingToUpdate?.isSecondaryMedicalSpeciality
-            //     ? medicalSpeciality?.medicalSpecialityName + " (S)"
-            //     : doctorMedicalSpecialityMappingToUpdate?.isTertiaryMedicalSpeciality
-            //     ? medicalSpeciality?.medicalSpecialityName + " (T)"
-            //     : ""
-            // );
+                foundMedicalSpecialities.push(
+                  mappings[i]?.isPrimaryMedicalSpeciality
+                    ? medicalSpeciality?.medicalSpecialityName + " (P)"
+                    : mappings[i]?.isSecondaryMedicalSpeciality
+                    ? medicalSpeciality?.medicalSpecialityName + " (S)"
+                    : mappings[i]?.isTertiaryMedicalSpeciality
+                    ? medicalSpeciality?.medicalSpecialityName + " (T)"
+                    : ""
+                );
+              }
           }
       }
-
-      // if (body.specialityIds) {
-      //   const specialityIds = body.specialityIds;
-      //   const currentDoctorSpecialities =
-      //     await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
-      //       putUser?.userId!
-      //     );
-      //   if (currentDoctorSpecialities)
-      //     for (let i = 0; i < specialityIds.length; i++) {
-      //       const doctorMedicalSpecialityMappingToUpdate =
-      //         await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
-      //           putUser?.userId!,
-      //           currentDoctorSpecialities[i].medicalSpecialityId,
-      //           specialityIds[i],
-      //           i === 0,
-      //           i === 1,
-      //           i === 2
-      //         );
-
-      //       const medicalSpeciality =
-      //         await this._medicalSpecialityService.getMedicalSpecialityById(
-      //           doctorMedicalSpecialityMappingToUpdate?.medicalSpecialityId!
-      //         );
-
-      //       foundMedicalSpecialities.push(
-      //         doctorMedicalSpecialityMappingToUpdate?.isPrimaryMedicalSpeciality
-      //           ? medicalSpeciality?.medicalSpecialityName + " (P)"
-      //           : doctorMedicalSpecialityMappingToUpdate?.isSecondaryMedicalSpeciality
-      //           ? medicalSpeciality?.medicalSpecialityName + " (S)"
-      //           : doctorMedicalSpecialityMappingToUpdate?.isTertiaryMedicalSpeciality
-      //           ? medicalSpeciality?.medicalSpecialityName + " (T)"
-      //           : ""
-      //       );
-      //     }
-      // }
-
-      // console.log(foundMedicalSpecialities);
-      // const roles =
-      //   await this._userRoleMappingService.getUserRoleMappingsByUserId(
-      //     putUser?.userId!
-      //   );
-
-      // console.log(roles);
 
       if (putUser)
         await redis.publisher.publish(
@@ -596,36 +606,6 @@ export class UserController {
             },
           })
         );
-
-      // if (body.specialityNames) {
-      //   const specialityNames = body.specialityNames;
-      // const currentDoctorSpecialities =
-      //   await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
-      //     putUser?.userId!
-      //   );
-      //   console.log(putUser);
-
-      //   for (let i = 0; i < specialityNames.length; i++) {
-      //     const currentSpecialityToUpdateTo =
-      //       await this._medicalSpecialityService.getMedicalSpecialityByName(
-      //         specialityNames[i]
-      //       );
-      //     if (
-      //       currentDoctorSpecialities &&
-      //       currentDoctorSpecialities[i].medicalSpecialityId !==
-      //         currentSpecialityToUpdateTo?.medicalSpecialityId
-      //     ) {
-      //       await this._doctorSpecialityMappingService.updateDoctorMedicalSpecialityMapping(
-      //         putUser?.userId!,
-      //         currentDoctorSpecialities[i]?.medicalSpecialityId!,
-      //         currentSpecialityToUpdateTo?.medicalSpecialityId!,
-      // i === 0,
-      // i === 1,
-      // i === 2
-      //       );
-      //     }
-      //   }
-      // }
 
       return reply
         .code(200)

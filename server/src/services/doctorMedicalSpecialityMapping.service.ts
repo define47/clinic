@@ -29,6 +29,16 @@ export class DoctorMedicalSpecialityMappingService
     );
   }
 
+  public async getDoctorMedicalSpecialityMappingByRank(
+    doctorId: string,
+    rank: string
+  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
+    return await this._doctorMedicalSpecialityMappingRepository.getDoctorMedicalSpecialityMappingByRank(
+      doctorId,
+      rank
+    );
+  }
+
   public async createMedicalDoctorSpecialityMapping(
     doctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingCreationAttributes
   ): Promise<DoctorMedicalSpecialityMapping | undefined> {
@@ -37,46 +47,14 @@ export class DoctorMedicalSpecialityMappingService
     );
   }
 
-  public async createPrimaryDoctorMedicalSpecialityMapping(
-    primaryDoctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
+  public async createDoctorMedicalSpecialityMappingByRank(
+    primaryDoctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes,
+    rank: string
   ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this.createPrimaryDoctorMedicalSpecialityMapping(
-      primaryDoctorMedicalSpecialityMappingCreationAttributes
+    return await this._doctorMedicalSpecialityMappingRepository.createDoctorMedicalSpecialityMappingByRank(
+      primaryDoctorMedicalSpecialityMappingCreationAttributes,
+      rank
     );
-  }
-
-  public async createSecondaryDoctorMedicalSpecialityMapping(
-    secondaryDoctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this.createSecondaryDoctorMedicalSpecialityMapping(
-      secondaryDoctorMedicalSpecialityMappingCreationAttributes
-    );
-  }
-
-  public async createTertiaryDoctorMedicalSpecialityMapping(
-    tertiaryDoctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this.createTertiaryDoctorMedicalSpecialityMapping(
-      tertiaryDoctorMedicalSpecialityMappingCreationAttributes
-    );
-  }
-
-  public async getPrimaryDoctorMedicalSpecialityMapping(
-    doctorId: string
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this.getPrimaryDoctorMedicalSpecialityMapping(doctorId);
-  }
-
-  public async getSecondaryDoctorMedicalSpecialityMapping(
-    doctorId: string
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this.getSecondaryDoctorMedicalSpecialityMapping(doctorId);
-  }
-
-  public async getTertiaryDoctorMedicalSpecialityMapping(
-    doctorId: string
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this.getTertiaryDoctorMedicalSpecialityMapping(doctorId);
   }
 
   public async updateDoctorMedicalSpecialityMapping(
