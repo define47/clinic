@@ -11,9 +11,6 @@ export const TopBar: FC<TopBarProps> = ({
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState } = authContext!;
   const { pathname } = useLocation();
-  // useEffect(() => {
-  //   console.log("topbar", authenticatedUserDataState);
-  // }, [authenticatedUserDataState]);
 
   return (
     <div
@@ -22,11 +19,12 @@ export const TopBar: FC<TopBarProps> = ({
       //     ? "lg:w-[calc(100%-256px)] lg:left-64"
       //     : "lg:w-[calc(100%-40px)] lg:left-20"
       // }
-      className={`h-14 fixed flex items-center justify-between left-20  w-[calc(100%-40px)] transition-all 
+      // fixed left-20 w-[calc(100%-40px)]
+      className={`h-14 flex items-center justify-between w-full transition-all
        
        bg-lightMode-topBarColor dark:bg-darkMode-topBarColor border-b px-2`}
     >
-      <div className="w-full">{pathname}</div>
+      <div className="w-full bg-red-200 pl-20">{pathname}</div>
       <div className="w-full flex justify-center">b</div>
       <div className="w-full flex items-center justify-end text-sm">
         <ThemeSwitcher />

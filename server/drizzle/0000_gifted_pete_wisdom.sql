@@ -35,19 +35,19 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."AppointmentHistory" (
 	"appointmentHistoryReason" varchar(256) NOT NULL,
 	"appointmentHistoryStatus" "appointmentHistoryStatus" DEFAULT 'scheduled' NOT NULL,
 	"appointmentHistoryCancellationReason" varchar(256),
-	"appointmentHistoryCreatedBy" varchar(100),
-	"appointmentHistoryUpdatedBy" varchar(100),
-	"appointmentHistoryCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"appointmentHistoryUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
+	"appointmentHistoryCreatedBy" varchar(100) NOT NULL,
+	"appointmentHistoryUpdatedBy" varchar(100) NOT NULL,
+	"appointmentHistoryCreatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"appointmentHistoryUpdatedAt" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."DoctorMedicalSpecialityMapping" (
+	"doctorMedicalSpecialityMappingId" varchar(256) PRIMARY KEY NOT NULL,
 	"userId" varchar NOT NULL,
 	"medicalSpecialityId" varchar NOT NULL,
 	"isPrimaryMedicalSpeciality" boolean NOT NULL,
 	"isSecondaryMedicalSpeciality" boolean NOT NULL,
-	"isTertiaryMedicalSpeciality" boolean NOT NULL,
-	CONSTRAINT "DoctorMedicalSpecialityMapping_userId_medicalSpecialityId_pk" PRIMARY KEY("userId","medicalSpecialityId")
+	"isTertiaryMedicalSpeciality" boolean NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."Language" (

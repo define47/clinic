@@ -84,8 +84,6 @@ export const CreateAppointmentOverlay: FC = () => {
         },
         { withCredentials: true }
       );
-
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -102,7 +100,6 @@ export const CreateAppointmentOverlay: FC = () => {
             },
             withCredentials: true,
           });
-          console.log(doctorAppointmentsAvailability, response.data.payload);
 
           if (response.data.success)
             setDoctorAppointmentsAvailability(response.data.payload);
@@ -114,19 +111,6 @@ export const CreateAppointmentOverlay: FC = () => {
 
     getDoctorAppointmentAvailability();
   }, [selectedDoctorId, selectedAppointmentDateTime]);
-
-  // useEffect(() => {
-  //   console.log(
-  //     "doctorAppointmentAvailability",
-  //     doctorAppointmentsAvailability
-  //   );
-  // }, [doctorAppointmentsAvailability]);
-
-  // useEffect(() => {
-  //   console.log(appointmentToCreate);
-  //   // console.log(selectedDateTime);
-  //   console.log(selectedDoctorId);
-  // }, [appointmentToCreate, selectedDoctorId]);
 
   return (
     <>

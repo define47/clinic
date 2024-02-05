@@ -52,9 +52,6 @@ export const CreateMedicalProcedureOverlay: FC<
     }
   }
 
-  useEffect(() => {
-    console.log(medicalProcedureToCreate);
-  }, [medicalProcedureToCreate]);
   return (
     <>
       <StyledRippleButton

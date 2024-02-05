@@ -116,14 +116,6 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
       setSelectedUserSearchCriteriaValue("userPhoneNumber");
   }, [selectedUserSearchCriteriaName]);
 
-  useEffect(() => {
-    console.log(
-      "criteria name:",
-      selectedUserSearchCriteriaName,
-      "criteria value:",
-      selectedUserSearchCriteriaValue
-    );
-  }, [selectedUserSearchCriteriaName, selectedUserSearchCriteriaValue]);
   return (
     <div className="flex">
       <div className="relative z-50" ref={userSearchCriterionPickerRef}>

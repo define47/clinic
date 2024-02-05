@@ -73,7 +73,6 @@ export const UserPicker: FC<UserPickerProps> = ({
         withCredentials: true,
       });
 
-      // console.log("USERS data ", response.data);
       if (response.data.success) setUsers(response.data.payload.tableData);
     } catch (error) {
       console.log(error);
@@ -83,10 +82,6 @@ export const UserPicker: FC<UserPickerProps> = ({
   useEffect(() => {
     fetchTableData();
   }, []);
-
-  useEffect(() => {
-    console.log("USERS data ", users);
-  }, [users]);
 
   function filterUsers() {
     // const filteredUsers = users.filter((filteredUser: User) =>
@@ -149,15 +144,6 @@ export const UserPicker: FC<UserPickerProps> = ({
 
     setIsUserPickerVisible(false);
   }
-
-  useEffect(() => {
-    console.log(
-      "selectedUserId",
-      selectedUserId,
-      "selectedUserName",
-      selectedUserName
-    );
-  }, [selectedUserName, selectedUserId]);
 
   useEffect(() => {
     for (let i = 0; i < filteredUsers.length; i++) {

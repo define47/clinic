@@ -157,14 +157,6 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
     }
   }, [selectedMedicalSpecialityName, filterMedicalSpecialities]);
 
-  useEffect(() => {
-    console.log(
-      "medical speciality picker",
-      selectedMedicalSpecialityName,
-      selectedMedicalSpecialityId
-    );
-  }, [selectedMedicalSpecialityName, selectedMedicalSpecialityId]);
-
   // useEffect(() => {
   //   setSelectedMedicalSpecialityName("anesthesiology");
   // }, []);

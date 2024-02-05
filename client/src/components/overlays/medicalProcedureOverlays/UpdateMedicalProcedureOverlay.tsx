@@ -93,10 +93,6 @@ export const UpdateMedicalProcedureOverlay: FC<
     }
   };
 
-  useEffect(() => {
-    console.log(medicalProcedureToUpdate);
-  }, [medicalProcedureToUpdate]);
-
   return (
     <>
       {isUpdateMedicalProcedureOverlayVisible ? (

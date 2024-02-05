@@ -71,6 +71,8 @@ export class DoctorMedicalSpecialityMappingRepository
     return (
       await this._drizzle
         .select({
+          doctorMedicalSpecialityMappingId:
+            doctorMedicalSpecialityMappingTable.doctorMedicalSpecialityMappingId,
           userId: doctorMedicalSpecialityMappingTable.userId,
           medicalSpecialityId:
             doctorMedicalSpecialityMappingTable.medicalSpecialityId,
@@ -108,6 +110,8 @@ export class DoctorMedicalSpecialityMappingRepository
           )
         )
         .returning({
+          doctorMedicalSpecialityMappingId:
+            doctorMedicalSpecialityMappingTable.doctorMedicalSpecialityMappingId,
           userId: doctorMedicalSpecialityMappingTable.userId,
           medicalSpecialityId:
             doctorMedicalSpecialityMappingTable.medicalSpecialityId,
@@ -148,6 +152,8 @@ export class DoctorMedicalSpecialityMappingRepository
           )
         )
         .returning({
+          doctorMedicalSpecialityMappingId:
+            doctorMedicalSpecialityMappingTable.doctorMedicalSpecialityMappingId,
           medicalSpecialityId:
             doctorMedicalSpecialityMappingTable.medicalSpecialityId,
           userId: doctorMedicalSpecialityMappingTable.userId,

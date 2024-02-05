@@ -278,105 +278,6 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
     return timeSlots;
   }
 
-  //   function computeSundays() {
-  //     const sundays = [];
-
-  //     for (
-  //       let i = 0;
-  //       i <= new Date(selectedYear, selectedMonth, 0).getDate();
-  //       i++
-  //     ) {
-  //       const date = new Date(selectedYear, selectedMonth, i);
-
-  //       //   if (date.getDay() == 6) {
-  //       //     saturdays.push(date);
-  //       //   } else if (date.getDay() == 0) {
-  //       //     sundays.push(date.getDate());
-  //       //   }
-
-  //       if (date.getDay() === 0) sundays.push(date.getDate());
-  //     }
-
-  //     // console.log(sundays, saturdays);
-  //     return sundays;
-  //   }
-
-  //   function computeCalendar() {
-  //     const currentDate = new Date();
-  //     // console.log(currentDate.toISOString());
-
-  //     const firstDayOfCurrentMonth = getStartOfMonth(selectedYear, selectedMonth);
-  //     const lastDayOfCurrentMonth = getEndOfMonth(selectedYear, selectedMonth);
-  //     const lastDayOfPreviousMonth = getEndOfMonth(
-  //       selectedYear,
-  //       selectedMonth - 1
-  //     );
-
-  //     // console.log(
-  //     //   firstDayOfCurrentMonth.toISOString(),
-  //     //   "first day of month:",
-  //     //   firstDayOfCurrentMonth.getUTCDate()
-  //     // );
-  //     // console.log(
-  //     //   lastDayOfCurrentMonth.toISOString(),
-  //     //   "last day of month:",
-  //     //   lastDayOfCurrentMonth.getUTCDate()
-  //     // );
-
-  //     const nameOfFirstDayOfCurrentMonth =
-  //       firstDayOfCurrentMonth.toLocaleDateString("en-US", { weekday: "long" });
-
-  //     const nameOfLastDayOfCurrentMonth =
-  //       lastDayOfCurrentMonth.toLocaleDateString("en-US", { weekday: "long" });
-
-  //     // console.log(nameOfFirstDayOfCurrentMonth);
-  //     // console.log(nameOfLastDayOfCurrentMonth);
-
-  //     const calendarArray = [];
-  //     const emptyCellsBefore = [];
-  //     const emptyCellsAfter = [];
-
-  //     const emptyCellsBeforeFirstDayOfCurrentMonth = weekDays.indexOf(
-  //       nameOfFirstDayOfCurrentMonth
-  //     );
-  //     // console.log(
-  //     //   "emptyCellsBeforeFirstDayOfCurrentMonth",
-  //     //   emptyCellsBeforeFirstDayOfCurrentMonth
-  //     // );
-
-  //     for (let i = 0; i < emptyCellsBeforeFirstDayOfCurrentMonth; i++) {
-  //       emptyCellsBefore.push(lastDayOfPreviousMonth.getDate() - i);
-  //     }
-
-  //     for (
-  //       let i = firstDayOfCurrentMonth.getUTCDate();
-  //       i <= lastDayOfCurrentMonth.getUTCDate();
-  //       i++
-  //     ) {
-  //       calendarArray.push(i);
-  //     }
-
-  //   for (
-  //     let i = 0;
-  //     i < 42 - (calendarArray.length + emptyCellsBefore.length);
-  //     i++
-  //   ) {
-  //     emptyCellsAfter.push(i + 1);
-  //   }
-
-  //     const final = emptyCellsBefore
-  //       .reverse()
-  //       .concat(calendarArray)
-  //       .concat(emptyCellsAfter);
-
-  //     // console.log("emptyCellsBefore", emptyCellsBefore);
-  //     // console.log("calendarArray", calendarArray);
-  //     // console.log("emptyCellsAfter", emptyCellsAfter);
-  //     // console.log("final", final);
-
-  //     return final;
-  //   }
-
   useEffect(() => {
     setEmptyCellsBefore(computeEmptyCellsBefore());
     setCalendar(computeCalendar());
@@ -422,11 +323,6 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           }T${selectedTimeSlot}:00.000Z`
     );
   }, [selectedYear, selectedMonth, selectedDay, selectedTimeSlot, isDateOnly]);
-
-  // useEffect(() => {
-  //   // const saturdays = [];
-  //   console.log(selectedEntity);
-  // }, [selectedEntity]);
 
   return (
     <div className={`relative ${z}`} ref={dateTimePickerRef}>

@@ -267,14 +267,6 @@ export class UserRoleMappingRepository
           )
         )
         .where(condition.doctorSearchQuery)
-
-        // .orderBy(
-        //   asc(
-        //     orderBy === "medicalSpecialityName"
-        //       ? medicalSpecialityTable[orderBy as keyof MedicalSpeciality]
-        //       : userTable[orderBy as keyof User]
-        //   )
-        // );
         .orderBy(columnToOrderBy!);
 
       const resultArray = Array.from(

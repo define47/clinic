@@ -1,5 +1,5 @@
 {
-  "id": "7265b1bb-05b3-4278-b5f9-32420133865e",
+  "id": "51ef67ef-aab1-47ac-85ef-8652d1472073",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -142,26 +142,26 @@
           "name": "appointmentHistoryCreatedBy",
           "type": "varchar(100)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "appointmentHistoryUpdatedBy": {
           "name": "appointmentHistoryUpdatedBy",
           "type": "varchar(100)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "appointmentHistoryCreatedAt": {
           "name": "appointmentHistoryCreatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
         "appointmentHistoryUpdatedAt": {
           "name": "appointmentHistoryUpdatedAt",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         }
       },
@@ -245,6 +245,12 @@
       "name": "DoctorMedicalSpecialityMapping",
       "schema": "iatropolis",
       "columns": {
+        "doctorMedicalSpecialityMappingId": {
+          "name": "doctorMedicalSpecialityMappingId",
+          "type": "varchar(256)",
+          "primaryKey": true,
+          "notNull": true
+        },
         "userId": {
           "name": "userId",
           "type": "varchar",
@@ -307,15 +313,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "DoctorMedicalSpecialityMapping_userId_medicalSpecialityId_pk": {
-          "name": "DoctorMedicalSpecialityMapping_userId_medicalSpecialityId_pk",
-          "columns": [
-            "userId",
-            "medicalSpecialityId"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "Language": {

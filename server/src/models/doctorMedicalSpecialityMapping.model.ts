@@ -5,6 +5,7 @@ import { medicalSpecialityTable } from "./medicalSpeciality.model";
 import { sql } from "drizzle-orm";
 
 export type DoctorMedicalSpecialityMapping = {
+  doctorMedicalSpecialityMappingId: string;
   userId: string;
   medicalSpecialityId: string;
   isPrimaryMedicalSpeciality: boolean;
@@ -64,9 +65,14 @@ export type DoctorSpecialityMappingUpdateAttributes =
 export const doctorMedicalSpecialityMappingTable = clinicSchema.table(
   "DoctorMedicalSpecialityMapping",
   {
-    // doctorSpecialityMappingId: varchar("doctorSpecialityMappingId", {
-    //   length: 256,
-    // }).primaryKey(),
+    doctorMedicalSpecialityMappingId: varchar(
+      "doctorMedicalSpecialityMappingId",
+      {
+        length: 256,
+      }
+    )
+      .primaryKey()
+      .notNull(),
     userId: varchar("userId")
       .notNull()
       .references(() => userTable.userId),
@@ -80,10 +86,10 @@ export const doctorMedicalSpecialityMappingTable = clinicSchema.table(
     isTertiaryMedicalSpeciality: boolean(
       "isTertiaryMedicalSpeciality"
     ).notNull(),
-  },
-  (table) => {
-    return {
-      pk: primaryKey({ columns: [table.userId, table.medicalSpecialityId] }),
-    };
   }
+  // (table) => {
+  //   return {
+  //     pk: primaryKey({ columns: [table.userId, table.medicalSpecialityId] }),
+  //   };
+  // }
 );

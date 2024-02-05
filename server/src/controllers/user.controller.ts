@@ -402,7 +402,7 @@ export class UserController {
         });
 
         // * if doctor
-        if (roleIds[i] === "0db07f94-ca81-5fa0-9497-1967481f576a") {
+        if (roleIds[i] === getDoctorRoleIdEnv()) {
           console.log("specialityIds", specialityIds);
 
           for (let j = 0; j < specialityIds.length; j++) {

@@ -27,8 +27,3 @@ export const Tooltip: FC<TooltipProps> = ({ text, children }) => {
     </div>
   );
 };
-
-{
-  /* top-6 -left-4 */
-}
-//   absolute flex items-center justify-center w-full

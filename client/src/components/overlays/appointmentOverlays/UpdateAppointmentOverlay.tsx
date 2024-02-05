@@ -57,13 +57,10 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
 
   useEffect(() => {
     if (isUpdateAppointmentOverlayVisible) {
-      // setDefaultDate(appointment.appointmentDateTime)
-      console.log(appointment.appointmentDateTime);
       setDefaultDate(appointment.appointmentDateTime.split("T")[0]);
       setDefaultTime(
         appointment.appointmentDateTime.split("T")[1].substring(0, 5)
       );
-      console.log(`${doctorData.doctorForename} $${doctorData.doctorSurname}`);
       setSelectedDoctorName(
         `${doctorData.doctorForename.toLowerCase()} ${doctorData.doctorSurname.toLowerCase()}`
       );
@@ -108,16 +105,10 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
         },
         { withCredentials: true }
       );
-
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    console.log(appointmentToUpdate);
-  }, [appointmentToUpdate]);
 
   return (
     <>

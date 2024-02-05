@@ -44,10 +44,6 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
     // setDefaultDate(currentDate.toISOString());
   }, [isCreateUserOverlayVisible]);
 
-  // useEffect(() => {
-  //   console.log("defaultDate", defaultDate);
-  // }, [defaultDate]);
-
   const [
     selectedPrimaryMedicalSpecialityId,
     setSelectedPrimaryMedicalSpecialityId,
@@ -108,35 +104,6 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
       [name]: value,
     }));
   }
-
-  useEffect(() => {
-    console.log("userToCreate", {
-      userForename: userToCreate.userForename,
-      userSurname: userToCreate.userSurname,
-      userEmail: userToCreate.userEmail,
-      userPhoneNumber: userToCreate.userPhoneNumber,
-      userGender: userToCreate.userGender,
-      userDateOfBirth,
-      userAddress: userToCreate.userAddress,
-      userEncryptedPassword: "",
-      roleIds: [roleId],
-      ...(roleName === "doctor" && {
-        specialityIds: [
-          selectedPrimaryMedicalSpecialityId,
-          selectedSecondaryMedicalSpecialityId,
-          selectedTertiaryMedicalSpecialityId,
-        ],
-      }),
-    });
-  }, [
-    userToCreate,
-    selectedPrimaryMedicalSpecialityId,
-    selectedSecondaryMedicalSpecialityId,
-    selectedTertiaryMedicalSpecialityId,
-    userDateOfBirth,
-    roleId,
-    roleName,
-  ]);
 
   async function onCreateUser() {
     try {

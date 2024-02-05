@@ -67,10 +67,6 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
     setSelectedTertiaryMedicalSpecialityName,
   ] = useState<string>("");
 
-  //   useEffect(() => {
-  //     console.log("userToUpdate useEffect", userToUpdate);
-  //   }, [userToUpdate]);
-
   const [userDateOfBirth, setUserDateOfBirth] = useState<string>("");
   const [defaultDate, setDefaultDate] = useState<string>("");
   useEffect(() => {
@@ -110,10 +106,6 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   }, [user, isUpdateUserOverlayVisible]);
 
   useEffect(() => {
-    console.log("userToUpdate", userToUpdate);
-  }, [userToUpdate, isUpdateUserOverlayVisible]);
-
-  useEffect(() => {
     function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
       if (event.key === "Escape") {
         if (
@@ -146,10 +138,6 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
       [name]: value,
     }));
   }
-
-  //   useEffect(() => {
-  //     console.log("userToUpdate", userToUpdate);
-  //   }, [userToUpdate]);
 
   async function onUpdateUser() {
     try {

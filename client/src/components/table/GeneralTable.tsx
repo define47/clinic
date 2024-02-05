@@ -207,10 +207,6 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   }, [tableLimit]);
 
   useEffect(() => {
-    console.log(tableRows);
-  }, [tableRows]);
-
-  useEffect(() => {
     if (socketNotificationDataState) {
       const receivedSocketData = JSON.parse(socketNotificationDataState);
       const action = receivedSocketData.action;

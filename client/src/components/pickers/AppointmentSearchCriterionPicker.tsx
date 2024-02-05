@@ -167,19 +167,6 @@ export const AppointmentSearchCriterionPicker: FC<
     // }
   }, [filteredAppointmentSearchCriterion, selectedAppointmentCriteriaName]);
 
-  useEffect(() => {
-    console.log(
-      "current",
-      selectedAppointmentCriteriaName,
-      selectedAppointmentCriteriaValue,
-      selectedTable
-    );
-  }, [
-    selectedAppointmentCriteriaName,
-    selectedAppointmentCriteriaValue,
-    selectedTable,
-  ]);
-
   return (
     <div className="flex">
       <div className="relative z-50" ref={appointmentSearchCriterionPickerRef}>

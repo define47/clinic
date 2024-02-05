@@ -125,15 +125,6 @@ export const AppointmentStatusPicker: FC<AppointmentStatusPickerProps> = ({
     }
   }, [filteredAppointmentStatuses, selectedAppointmentStatusName]);
 
-  useEffect(() => {
-    console.log(
-      "selectedAppointmentStatusName",
-      selectedAppointmentStatusName,
-      "selectedAppointmentStatusValue",
-      selectedAppointmentStatusValue
-    );
-  }, [selectedAppointmentStatusName, selectedAppointmentStatusValue]);
-
   return (
     <div className="flex">
       <div className={`relative ${z}`} ref={appointmentStatusPickerRef}>

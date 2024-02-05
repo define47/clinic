@@ -19,10 +19,6 @@ const ParticlesBackground: FC<ParticlesBackgroundProps> = ({ children }) => {
     });
   }, []);
 
-  // const particlesLoaded = (container: Container) => {
-  //   console.log(container);
-  // };
-
   return (
     <div>
       {init && (

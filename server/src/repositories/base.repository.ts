@@ -99,6 +99,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       this._tableColumns = ["userId", "roleId"];
     else if (table === doctorMedicalSpecialityMappingTable)
       this._tableColumns = [
+        "doctorMedicalSpecialityMappingId",
         "userId",
         "medicalSpecialityId",
         "isPrimaryMedicalSpeciality",
@@ -409,10 +410,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 
       // console.log(returningObject);
 
-      if (
-        this._table === userRoleMappingTable ||
-        this._table === doctorMedicalSpecialityMappingTable
-      )
+      if (this._table === userRoleMappingTable)
         return (
           await this._drizzle
             .insert(this._table)
