@@ -167,10 +167,10 @@ export class DoctorMedicalSpecialityMappingRepository
     )[0];
   }
 
-  public async deleteDoctorMedicalSpecialityMappingsByDoctorId(
-    doctorId: string
+  public async deleteDoctorMedicalSpecialityMappingByMappingId(
+    doctorMedicalSpecialityMappingId: string
   ): Promise<string | undefined> {
-    return await this.delete(doctorId);
+    return await this.delete(doctorMedicalSpecialityMappingId);
     // console.log(await this.delete(doctorId));
 
     // await this.delete(doctorId)

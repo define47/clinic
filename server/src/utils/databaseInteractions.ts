@@ -172,7 +172,7 @@ export const deleteUserRolesMappingById = async (userId: string) => {
 export const deleteDoctorSpecialityMappingsByDoctorId = async (
   doctorId: string
 ) => {
-  await doctorSpecialityMappingRepository.deleteDoctorMedicalSpecialityMappingsByDoctorId(
+  await doctorSpecialityMappingRepository.deleteDoctorMedicalSpecialityMappingByMappingId(
     doctorId
   );
 };

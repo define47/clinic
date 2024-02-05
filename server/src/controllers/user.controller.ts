@@ -607,9 +607,18 @@ export class UserController {
 
       for (let i = 0; i < userRoleMappings.length; i++) {
         if (userRoleMappings[i].roleId === getDoctorRoleIdEnv()) {
-          await this._doctorSpecialityMappingService.deleteDoctorMedicalSpecialityMappingsByDoctorId(
-            user?.userId!
-          );
+          const doctorMedicalSpecialityMappings =
+            await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
+              user?.userId!
+            );
+
+          for (let i = 0; i < doctorMedicalSpecialityMappings!.length; i++) {
+            await this._doctorSpecialityMappingService.deleteDoctorMedicalSpecialityMappingByMappingId(
+              doctorMedicalSpecialityMappings![i]
+                .doctorMedicalSpecialityMappingId
+            );
+          }
+
           break;
         }
       }
@@ -619,7 +628,6 @@ export class UserController {
       );
 
       const userToDelete = await this._userService.deleteUser(user?.userId!);
-      console.log("userToDelete", userToDelete);
 
       await redis.publisher.publish(
         MESSAGE_CHANNEL,
@@ -630,11 +638,6 @@ export class UserController {
       );
 
       return reply.code(200).send({ success: true, message: "" });
-      // const userRoleMappings = await this._userRoleMappingService.getUserRoleMappingsByUserId(user?.userId!)
-      // for (let i = 0; i < userRoleMappings!.length; i++) {
-      //     await this._userRoleMappingService.deleteUserRoleMappingByUserIdAndRoleId
-
-      // }
     } catch (error) {}
   };
 }

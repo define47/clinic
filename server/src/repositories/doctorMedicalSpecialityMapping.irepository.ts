@@ -28,7 +28,7 @@ export interface IDoctorSpecialityMappingRepository
     medicalSpecialityId: string
   ): Promise<DoctorMedicalSpecialityMapping | undefined>;
 
-  deleteDoctorMedicalSpecialityMappingsByDoctorId(
-    doctorId: string
+  deleteDoctorMedicalSpecialityMappingByMappingId(
+    doctorMedicalSpecialityMappingId: string
   ): Promise<string | undefined>;
 }

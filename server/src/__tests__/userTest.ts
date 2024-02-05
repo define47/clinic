@@ -396,7 +396,7 @@ export const testUser = async () => {
 
     it("delete doctor ALL speciality mappings", async () => {
       const deletedMedicalSpecialitiesMappings =
-        await doctorMedicalSpecialityMappingService.deleteDoctorMedicalSpecialityMappingsByDoctorId(
+        await doctorMedicalSpecialityMappingService.deleteDoctorMedicalSpecialityMappingByMappingId(
           dummyDoctorId
         );
 

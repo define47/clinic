@@ -85,11 +85,11 @@ export class DoctorMedicalSpecialityMappingService
     );
   }
 
-  public async deleteDoctorMedicalSpecialityMappingsByDoctorId(
-    doctorId: string
+  public async deleteDoctorMedicalSpecialityMappingByMappingId(
+    doctorMedicalSpecialityMappingId: string
   ): Promise<string | undefined> {
-    return await this._doctorMedicalSpecialityMappingRepository.deleteDoctorMedicalSpecialityMappingsByDoctorId(
-      doctorId
+    return await this._doctorMedicalSpecialityMappingRepository.deleteDoctorMedicalSpecialityMappingByMappingId(
+      doctorMedicalSpecialityMappingId
     );
   }
 }
