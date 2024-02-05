@@ -1,6 +1,7 @@
 import {
   DoctorMedicalSpecialityMapping,
   DoctorMedicalSpecialityMappingCreationAttributes,
+  DoctorMedicalSpecialityMappingUpdateAttributes,
 } from "../models/doctorMedicalSpecialityMapping.model";
 
 export interface IDoctorMedicalSpecialityMappingService {
@@ -13,12 +14,8 @@ export interface IDoctorMedicalSpecialityMappingService {
   ): Promise<DoctorMedicalSpecialityMapping | undefined>;
 
   updateDoctorMedicalSpecialityMapping(
-    doctorId: string,
-    currentMedicalSpecialityId: string,
-    newMedicalSpecialityId: string,
-    isPrimaryMedicalSpeciality: boolean,
-    isSecondaryMedicalSpeciality: boolean,
-    isTertiaryMedicalSpeciality: boolean
+    doctorMedicalSpecialityMappingId: string,
+    doctorMedicalSpecialityMappingUpdateAttributes: DoctorMedicalSpecialityMappingUpdateAttributes
   ): Promise<DoctorMedicalSpecialityMapping | null>;
 
   deleteDoctorMedicalSpecialityMappingByDoctorIdAndSpecialityId(

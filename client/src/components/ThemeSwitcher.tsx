@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 
 import { PiSunHorizon } from "react-icons/pi";
 import {
@@ -8,18 +8,57 @@ import {
   RiSunLine,
 } from "react-icons/ri";
 import { ThemeContext } from "../contexts/ThemeContext";
+import { AuthenticatedUserDataContext } from "../contexts/UserContext";
+import axios from "axios";
+import { userPreferencesPath } from "../utils/dotenv";
 
 export const ThemeSwitcher: FC = () => {
   const { themeValue, setThemeValue } = useContext(ThemeContext);
   const [isCursorOnSun, setIsCursorOnSun] = useState<boolean>(false);
   const [isCursorOnMoon, setIsCursorOnMoon] = useState<boolean>(false);
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
 
-  function switchToLightMode() {
-    setThemeValue("light");
+  useEffect(() => {
+    console.log(authenticatedUserDataState);
+    // if (authenticatedUserDataState.isDarkModeOn) {
+    // const stringValue = authenticatedUserDataState.isDarkModeOn.toString();
+    if (authenticatedUserDataState)
+      setThemeValue(authenticatedUserDataState.isDarkModeOn ? "dark" : "light");
+    // }
+  }, [authenticatedUserDataState]);
+
+  async function switchToLightMode() {
+    try {
+      setThemeValue("light");
+      const response = await axios.put(
+        userPreferencesPath,
+        {
+          languageId: "865d0c39-ebba-54be-9f66-7059c8394c13",
+          isDarkModeOn: false,
+        },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  function switchToDarkMode() {
-    setThemeValue("dark");
+  async function switchToDarkMode() {
+    try {
+      setThemeValue("dark");
+      const response = await axios.put(
+        userPreferencesPath,
+        {
+          languageId: "865d0c39-ebba-54be-9f66-7059c8394c13",
+          isDarkModeOn: true,
+        },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

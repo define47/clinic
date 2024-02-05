@@ -53,6 +53,13 @@ export type DoctorMedicalSpecialityMappingCreationAttributes = {
   isTertiaryMedicalSpeciality: boolean;
 };
 
+export type DoctorMedicalSpecialityMappingUpdateAttributes = {
+  medicalSpecialityId: string;
+  isPrimaryMedicalSpeciality: boolean;
+  isSecondaryMedicalSpeciality: boolean;
+  isTertiaryMedicalSpeciality: boolean;
+};
+
 export type DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes =
   {
     userId: string;

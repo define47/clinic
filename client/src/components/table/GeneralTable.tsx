@@ -325,6 +325,58 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           );
           return updatedEvents;
         });
+      } else if (action === "createMedicalProcedure") {
+        const medicalSpecialityId = data.medicalSpecialityId as string;
+        const medicalProcedure = data.medicalProcedure as MedicalProcedure;
+
+        console.log(
+          "medicalProcedure",
+          medicalProcedure,
+          "medicalSpecialityId",
+          medicalSpecialityId
+        );
+
+        if (medicalSpecialityId === selectedMedicalSpecialityId)
+          setTableRows((prevMedicalProcedures: TableRow[]) => [
+            {
+              medicalProcedureId: medicalProcedure.medicalProcedureId,
+              medicalProcedureName: medicalProcedure.medicalProcedureName,
+              medicalProcedurePrice: medicalProcedure.medicalProcedurePrice,
+            } as MedicalProcedure,
+            ...prevMedicalProcedures,
+          ]);
+      } else if (action === "updateMedicalProcedure") {
+        data = data as MedicalProcedure;
+
+        console.log("data medical procedure update", data);
+
+        setTableRows((prevMedicalProcedures: TableRow[]) => {
+          const updatedEvents = prevMedicalProcedures.map((event: TableRow) => {
+            if (
+              isMedicalProcedureRow(event) &&
+              event.medicalProcedureId === data.medicalProcedureId
+            ) {
+              return {
+                ...event,
+                medicalProcedureId: data.medicalProcedureId,
+                medicalProcedureName: data.medicalProcedureName,
+                medicalProcedurePrice: data.medicalProcedurePrice,
+              };
+            } else {
+              return event;
+            }
+          });
+          return updatedEvents;
+        });
+      } else if (action === "deleteMedicalProcedure") {
+        setTableRows((prevMedicalProcedures: TableRow[]) =>
+          prevMedicalProcedures.filter((medicalProcedure: TableRow) => {
+            if ("medicalProcedureId" in medicalProcedure) {
+              return medicalProcedure.medicalProcedureId !== data;
+            }
+            return true;
+          })
+        );
       }
     }
 
@@ -361,7 +413,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     //   } as User,
     //   ...prevUsers,
     // ]);
-  }, [socketNotificationDataState]);
+  }, [socketNotificationDataState, selectedMedicalSpecialityId]);
 
   function determineSpecialityOrder(
     medicalSpecialities: string[],

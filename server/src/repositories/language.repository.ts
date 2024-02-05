@@ -21,6 +21,12 @@ export class LanguageRepository
     return await this.getById(languageId);
   }
 
+  public async getLanguageByName(
+    languageName: string
+  ): Promise<Language | undefined> {
+    return await this.getByAttribute("languageName", languageName);
+  }
+
   public async createLanguage(
     languageCreationAttributes: LanguageCreationAttributes
   ): Promise<Language | undefined> {

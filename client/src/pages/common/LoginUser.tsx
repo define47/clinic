@@ -37,7 +37,7 @@ export const LoginUser: FC = () => {
   }
   return (
     <div className="h-full w-full flex absolute items-center justify-center">
-      <div className="flex flex-col space-y-2">
+      <div className="h-96 w-96 bg-transparent backdrop-blur-sm border border-gray-300 rounded-xl flex flex-col justify-center items-center space-y-4">
         <StyledInput
           label="userEmail"
           name="userEmail"

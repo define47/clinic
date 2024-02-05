@@ -2,6 +2,7 @@ import {
   DoctorMedicalSpecialityMapping,
   DoctorMedicalSpecialityMappingCreationAttributes,
   DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes,
+  DoctorMedicalSpecialityMappingUpdateAttributes,
   doctorMedicalSpecialityMappingTable,
 } from "../models/doctorMedicalSpecialityMapping.model";
 import { DoctorMedicalSpecialityMappingRepository } from "../repositories/doctorMedicalSpecialityMapping.repository";
@@ -29,15 +30,23 @@ export class DoctorMedicalSpecialityMappingService
     );
   }
 
-  public async getDoctorMedicalSpecialityMappingByRank(
-    doctorId: string,
-    rank: string
+  public async getDoctorMedicalSpecialityMappingsByMappingId(
+    doctorMedicalSpecialityMappingId: string
   ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this._doctorMedicalSpecialityMappingRepository.getDoctorMedicalSpecialityMappingByRank(
-      doctorId,
-      rank
+    return await this._doctorMedicalSpecialityMappingRepository.getDoctorMedicalSpecialityMappingsByMappingId(
+      doctorMedicalSpecialityMappingId
     );
   }
+
+  // public async getDoctorMedicalSpecialityMappingByRank(
+  //   doctorId: string,
+  //   rank: string
+  // ): Promise<DoctorMedicalSpecialityMapping | undefined> {
+  //   return await this._doctorMedicalSpecialityMappingRepository.getDoctorMedicalSpecialityMappingByRank(
+  //     doctorId,
+  //     rank
+  //   );
+  // }
 
   public async createMedicalDoctorSpecialityMapping(
     doctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingCreationAttributes
@@ -58,20 +67,12 @@ export class DoctorMedicalSpecialityMappingService
   }
 
   public async updateDoctorMedicalSpecialityMapping(
-    doctorId: string,
-    currentMedicalSpecialityId: string,
-    newMedicalSpecialityId: string,
-    isPrimaryMedicalSpeciality: boolean,
-    isSecondaryMedicalSpeciality: boolean,
-    isTertiaryMedicalSpeciality: boolean
+    doctorMedicalSpecialityMappingId: string,
+    doctorMedicalSpecialityMappingUpdateAttributes: DoctorMedicalSpecialityMappingUpdateAttributes
   ): Promise<DoctorMedicalSpecialityMapping | null> {
-    return await this._doctorMedicalSpecialityMappingRepository.updateMedicalDoctorSpecialityMapping(
-      doctorId,
-      currentMedicalSpecialityId,
-      newMedicalSpecialityId,
-      isPrimaryMedicalSpeciality,
-      isSecondaryMedicalSpeciality,
-      isTertiaryMedicalSpeciality
+    return await this._doctorMedicalSpecialityMappingRepository.updateDoctorMedicalSpecialityMapping(
+      doctorMedicalSpecialityMappingId,
+      doctorMedicalSpecialityMappingUpdateAttributes
     );
   }
 

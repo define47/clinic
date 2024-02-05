@@ -35,13 +35,12 @@ export class MedicalSpecialityController {
   ) => {
     try {
       const body: any = request.body;
+      const { redis } = fastifyServer;
 
       let medicalSpecialityToCreate =
         await this._medicalSpecialityService.createMedicalSpeciality({
           medicalSpecialityName: body.medicalSpecialityName,
         });
-
-      const { redis } = fastifyServer;
 
       if (medicalSpecialityToCreate)
         await redis.publisher.publish(

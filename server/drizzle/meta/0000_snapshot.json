@@ -1,5 +1,5 @@
 {
-  "id": "51ef67ef-aab1-47ac-85ef-8652d1472073",
+  "id": "dc932801-d3b1-4d85-8ca5-7cdffccf86cd",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -685,7 +685,7 @@
         },
         "isDarkModeOn": {
           "name": "isDarkModeOn",
-          "type": "varchar",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true
         }

@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { MedicalProcedureService } from "../services/medicalProcedure.service";
 import { MedicalSpecialityMedicalProcedureMappingService } from "../services/medicalSpecialityMedicalProcedureMapping.service";
+import { MESSAGE_CHANNEL, fastifyServer } from "../server";
 
 export class MedicalProcedureController {
   private readonly _medicalProcedureService: MedicalProcedureService;
@@ -39,7 +40,7 @@ export class MedicalProcedureController {
   ) => {
     try {
       const body: any = request.body;
-      console.log(body);
+      const { redis } = fastifyServer;
 
       const postMedicalProcedure =
         await this._medicalProcedureService.createMedicalProcedure({
@@ -53,6 +54,18 @@ export class MedicalProcedureController {
           medicalSpecialityId: body.medicalSpecialityId,
         }
       );
+
+      if (postMedicalProcedure)
+        await redis.publisher.publish(
+          MESSAGE_CHANNEL,
+          JSON.stringify({
+            action: "createMedicalProcedure",
+            data: {
+              medicalSpecialityId: body.medicalSpecialityId,
+              medicalProcedure: postMedicalProcedure,
+            },
+          })
+        );
 
       return reply
         .code(200)
@@ -69,6 +82,7 @@ export class MedicalProcedureController {
   ) => {
     try {
       const body: any = request.body;
+      const { redis } = fastifyServer;
 
       const putMedicalProcedure =
         await this._medicalProcedureService.updateMedicalProcedure(
@@ -78,6 +92,14 @@ export class MedicalProcedureController {
             medicalProcedurePrice: parseInt(body.medicalProcedurePrice),
           }
         );
+
+      await redis.publisher.publish(
+        MESSAGE_CHANNEL,
+        JSON.stringify({
+          action: "updateMedicalProcedure",
+          data: putMedicalProcedure,
+        })
+      );
 
       return reply
         .code(200)
@@ -94,20 +116,29 @@ export class MedicalProcedureController {
   ) => {
     try {
       const body: any = request.body;
+      const { redis } = fastifyServer;
 
       await this._medicalSpecialityMedicalProcedureMappingService.deleteMedicalSpecialityMedicalProcedureMappingBySpecialityIdAndProcedureId(
         body.medicalSpecialityId,
         body.medicalProcedureId
       );
 
-      const deleteMedicalProcedure =
+      const medicalProcedureToDelete =
         await this._medicalProcedureService.deleteMedicalProcedure(
           body.medicalProcedureId
         );
 
+      await redis.publisher.publish(
+        MESSAGE_CHANNEL,
+        JSON.stringify({
+          action: "deleteMedicalProcedure",
+          data: medicalProcedureToDelete,
+        })
+      );
+
       return reply
         .code(200)
-        .send({ success: deleteMedicalProcedure !== undefined, message: "" });
+        .send({ success: medicalProcedureToDelete !== undefined, message: "" });
     } catch (error) {
       console.log(error);
       return reply.code(400).send({ error: (error as Error).message });

@@ -24,6 +24,7 @@ import { ThemeContext } from "./contexts/ThemeContext";
 import { MedicalProcedures } from "./pages/admin/MedicalProcedures";
 import { authPath, verifyUserPath } from "./utils/dotenv";
 import { AppointmentHistoryCards } from "./pages/common/AppointmentHistoryCards";
+import useDeviceDetection from "./utils/useDeviceDetection";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -126,9 +127,13 @@ const App: FC = () => {
   //   console.log("state", authenticatedUserDataState);
   // }, [authenticatedUserDataState]);
 
+  const { device, orientation } = useDeviceDetection();
+  useEffect(() => {
+    console.log(`Current device type: ${device} ${orientation}`);
+  }, [device, orientation]);
+
   return (
     <div>
-      {/* {JSON.stringify(authenticatedUserDataState)} */}
       <Routes>
         <Route path="/login" element={<Login />} />
         {authenticatedUserDataState.roleNames[0] === "admin" && (

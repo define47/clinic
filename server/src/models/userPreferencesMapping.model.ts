@@ -1,4 +1,4 @@
-import { primaryKey, varchar } from "drizzle-orm/pg-core";
+import { boolean, primaryKey, varchar } from "drizzle-orm/pg-core";
 import { clinicSchema } from "../utils/drizzle";
 import { userTable } from "./user.model";
 import { languageTable } from "./language.model";
@@ -29,7 +29,7 @@ export const userPreferencesMappingTable = clinicSchema.table(
     languageId: varchar("languageId")
       .notNull()
       .references(() => languageTable.languageId),
-    isDarkModeOn: varchar("isDarkModeOn").notNull(),
+    isDarkModeOn: boolean("isDarkModeOn").notNull(),
   },
   (table) => {
     return {

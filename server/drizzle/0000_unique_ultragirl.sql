@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."User" (
 CREATE TABLE IF NOT EXISTS "iatropolis"."UserPreferencesMapping" (
 	"userId" varchar NOT NULL,
 	"languageId" varchar NOT NULL,
-	"isDarkModeOn" varchar NOT NULL,
+	"isDarkModeOn" boolean NOT NULL,
 	CONSTRAINT "UserPreferencesMapping_userId_pk" PRIMARY KEY("userId")
 );
 --> statement-breakpoint

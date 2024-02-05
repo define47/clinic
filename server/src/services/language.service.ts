@@ -23,6 +23,10 @@ export class LanguageService implements ILanguageService {
     return this._languageRepository.getLanguageById(languageId);
   }
 
+  public async getLanguageByName(languageName: string) {
+    return await this._languageRepository.getLanguageByName(languageName);
+  }
+
   public async createLanguage(
     languageCreationAttributes: LanguageCreationAttributes
   ): Promise<Language | undefined> {
