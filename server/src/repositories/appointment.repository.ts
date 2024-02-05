@@ -35,6 +35,21 @@ export class AppointmentRepository
     super(drizzle, table);
   }
 
+  public async getAppointmentDoctor(appointmentId: string) {
+    const doctor = alias(userTable, "doctor");
+    return await this._drizzle
+      .select({
+        userForename: doctor.userForename,
+        userSurname: doctor.userSurname,
+      })
+      .from(this._table)
+      .innerJoin(
+        doctor,
+        eq(appointmentTable.appointmentDoctorId, doctor.userId)
+      )
+      .where(eq(appointmentTable.appointmentDoctorId, appointmentId));
+  }
+
   public getFirstDayOfWeek(d: any) {
     // 👇️ clone date object, so we don't mutate it
     const date = new Date(d);

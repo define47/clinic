@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { AppointmentService } from "../services/appointment.service";
-import { request } from "node:http";
 import { AppointmentHistoryService } from "../services/appointmentHistory.service";
 import { fastifyServer } from "../server";
 
@@ -64,6 +63,7 @@ export class AppointmentController {
   ) => {
     try {
       const body: any = request.body;
+      const { redis } = fastifyServer;
 
       const appointmentToCreate =
         await this._appointmentService.createAppointment({
@@ -73,8 +73,6 @@ export class AppointmentController {
           appointmentReason: body.appointmentReason,
           appointmentStatus: body.appointmentStatus,
         });
-
-      const { redis } = fastifyServer;
 
       const userSessionData = JSON.parse(
         (await redis.sessionRedis.get(`sessionId:${request.cookieData.value}`))!

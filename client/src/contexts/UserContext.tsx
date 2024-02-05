@@ -14,6 +14,7 @@ interface AuthenticatedUserDataContextInterface {
   userEmail: string;
   roleNames: string[];
   specialityNames?: string[];
+  languageId: string;
   languageCode: string;
   isDarkModeOn: boolean;
 }
@@ -43,6 +44,7 @@ export const AuthenticatedUserDataContextProvider: FC<Props> = ({
       userSurname: "",
       userEmail: "",
       roleNames: [],
+      languageId: "",
       languageCode: "",
       isDarkModeOn: false,
     });

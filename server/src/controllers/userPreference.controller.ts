@@ -63,6 +63,7 @@ export class UserPreferencesController {
         userEmail: currentSessionValue?.userEmail,
         roleNames: currentSessionValue.roleNames,
         specialityNames: currentSessionValue.specialityNames,
+        languageId: currentSessionValue.languageId,
         languageCode: newLanguage?.languageCode,
         languageName: newLanguage?.languageName,
         isDarkModeOn: body.isDarkModeOn,

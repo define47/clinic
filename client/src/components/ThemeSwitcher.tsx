@@ -35,7 +35,7 @@ export const ThemeSwitcher: FC = () => {
       const response = await axios.put(
         userPreferencesPath,
         {
-          languageId: "865d0c39-ebba-54be-9f66-7059c8394c13",
+          languageId: authenticatedUserDataState.languageId,
           isDarkModeOn: false,
         },
         { withCredentials: true }
@@ -51,7 +51,7 @@ export const ThemeSwitcher: FC = () => {
       const response = await axios.put(
         userPreferencesPath,
         {
-          languageId: "865d0c39-ebba-54be-9f66-7059c8394c13",
+          languageId: authenticatedUserDataState.languageId,
           isDarkModeOn: true,
         },
         { withCredentials: true }

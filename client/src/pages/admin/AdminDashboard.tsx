@@ -9,8 +9,12 @@ import { DateTimePicker } from "../../components/pickers/DateTimePicker";
 import { UserPicker } from "../../components/pickers/UserPicker";
 import { AppointmentSearchCriterionPicker } from "../../components/pickers/AppointmentSearchCriterionPicker";
 import { LimitPicker } from "../../components/pickers/LimitPicker";
+import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 
 export const AdminDashboard: FC = () => {
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
   const socketContext = useContext(SocketNotificationDataContext);
   const { socketNotificationDataState, socketNotificationDataSetState } =
     socketContext!;
@@ -38,6 +42,7 @@ export const AdminDashboard: FC = () => {
     <div className="">
       {/* admin dashboard <Overlay /> */}
       <div className="space-y-10">
+        {JSON.stringify(authenticatedUserDataState)}
         {/* <StyledInput
           label="label1"
           textColorUnfocused="text-red-500"

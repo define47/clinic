@@ -208,6 +208,7 @@ export class UserController {
         userEmail: userToLogin?.userEmail,
         roleNames: userRoleNames,
         specialityNames: doctorSpecialityNames,
+        languageId: language?.languageId,
         languageCode: language?.languageCode,
         isDarkModeOn: userPreferencesMapping?.isDarkModeOn,
       };

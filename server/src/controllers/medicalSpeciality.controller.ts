@@ -66,6 +66,7 @@ export class MedicalSpecialityController {
   ) => {
     try {
       const body: any = request.body;
+      const { redis } = fastifyServer;
 
       let medicalSpecialityToUpdate =
         await this._medicalSpecialityService.updateMedicalSpeciality(
@@ -74,8 +75,6 @@ export class MedicalSpecialityController {
             medicalSpecialityName: body.medicalSpecialityName,
           }
         );
-
-      const { redis } = fastifyServer;
 
       await redis.publisher.publish(
         MESSAGE_CHANNEL,
