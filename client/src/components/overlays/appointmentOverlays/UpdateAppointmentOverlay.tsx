@@ -62,10 +62,10 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
         appointment.appointmentDateTime.split("T")[1].substring(0, 5)
       );
       setSelectedDoctorName(
-        `${doctorData.doctorForename.toLowerCase()} ${doctorData.doctorSurname.toLowerCase()}`
+        `${doctorData.doctorForename} ${doctorData.doctorSurname}`
       );
       setSelectedPatientName(
-        `${patientData.patientForename.toLowerCase()} ${patientData.patientForename.toLowerCase()}`
+        `${patientData.patientForename} ${patientData.patientForename}`
       );
       setSelectedAppointmentStatusName(appointment.appointmentStatus);
     }

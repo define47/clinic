@@ -270,7 +270,7 @@ export const CreateAppointmentOverlay: FC = () => {
           <div className="w-full flex flex-col items-center justify-center">
             <span
               className={`mb-3 transition-all ${
-                bookedDoctorAppointmentSlots.length > 0 && selectedDoctorId
+                selectedDoctorId
                   ? "scale-100 opacity-100 duration-500"
                   : "scale-125 opacity-0 duration-500"
               }`}

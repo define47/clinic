@@ -56,16 +56,6 @@ export class DoctorMedicalSpecialityMappingService
     );
   }
 
-  public async createDoctorMedicalSpecialityMappingByRank(
-    primaryDoctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes,
-    rank: string
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this._doctorMedicalSpecialityMappingRepository.createDoctorMedicalSpecialityMappingByRank(
-      primaryDoctorMedicalSpecialityMappingCreationAttributes,
-      rank
-    );
-  }
-
   public async updateDoctorMedicalSpecialityMapping(
     doctorMedicalSpecialityMappingId: string,
     doctorMedicalSpecialityMappingUpdateAttributes: DoctorMedicalSpecialityMappingUpdateAttributes

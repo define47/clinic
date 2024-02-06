@@ -396,6 +396,10 @@ export class UserController {
         userAddress: body.userAddress,
         userGender: body.userGender,
         userEncryptedPassword: await argon2.hash(body.userEncryptedPassword),
+        isUserEmailActivated: false,
+        isUserApprovedByAdmin: false,
+        isUserSuspended: false,
+        isUserBanned: false,
       });
 
       postUser = postUser as User;

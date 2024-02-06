@@ -103,6 +103,7 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."User" (
 	"userEncryptedPassword" varchar(256) NOT NULL,
 	"isUserEmailActivated" boolean DEFAULT false NOT NULL,
 	"isUserApprovedByAdmin" boolean DEFAULT false NOT NULL,
+	"isUserSuspended" boolean DEFAULT false NOT NULL,
 	"isUserBanned" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "User_userEmail_unique" UNIQUE("userEmail"),
 	CONSTRAINT "User_userPhoneNumber_unique" UNIQUE("userPhoneNumber")

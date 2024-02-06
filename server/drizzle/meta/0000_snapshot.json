@@ -1,5 +1,5 @@
 {
-  "id": "dc932801-d3b1-4d85-8ca5-7cdffccf86cd",
+  "id": "d8890051-f0b3-494a-9e1b-29202f402be3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -634,6 +634,13 @@
         },
         "isUserApprovedByAdmin": {
           "name": "isUserApprovedByAdmin",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "isUserSuspended": {
+          "name": "isUserSuspended",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,

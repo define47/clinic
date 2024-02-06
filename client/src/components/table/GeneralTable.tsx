@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import {
   AppointmentTableData,
   GeneralTableProps,
@@ -44,6 +44,7 @@ import { LimitPicker } from "../pickers/LimitPicker";
 import { CreateMedicalProcedureOverlay } from "../overlays/medicalProcedureOverlays/CreateMedicalProcedureOverlay";
 import { DeleteMedicalProcedureOverlay } from "../overlays/medicalProcedureOverlays/DeleteMedicalProcedureOverlay";
 import { UpdateMedicalProcedureOverlay } from "../overlays/medicalProcedureOverlays/UpdateMedicalProcedureOverlay";
+import { useReactToPrint } from "react-to-print";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -484,8 +485,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     }
   }
 
+  const componentRef = useRef<any>();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    onAfterPrint: () => console.log("print completed"),
+  });
   return (
     <div className="w-full bg-white h-full hidden lg:block border p-4 rounded-xl font-roboto">
+      <button onClick={handlePrint}>print</button>
       <div className="flex items-center justify-between">
         {(entity === "doctor" ||
           entity === "patient" ||
@@ -622,7 +629,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           setSelectedLimit={setTableLimit}
         />
       </div>
-      <div className="w-full border rounded-xl h-4/5 overflow-auto">
+      <div
+        ref={componentRef}
+        className="w-full border rounded-xl h-4/5 overflow-auto"
+      >
         {tableRows.length > 0 && (
           <table className="w-full text-center text-xs font-light border rounded-xl">
             <thead className="w-full border-b bg-white font-medium">

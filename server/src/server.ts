@@ -17,53 +17,27 @@ import {
 import { drizzleInstance, migrateToDb } from "./utils/drizzle.js";
 import { BaseRepository } from "./repositories/base.repository.js";
 import { User, userTable } from "./models/user.model.js";
+import { authenticationMiddleware } from "./middlewares/auth.middleware.js";
+import fastifySocketIO from "fastify-socket.io";
+
+import { authRoutes } from "./routes/auth.routes.js";
 import { userRoutes } from "./routes/user.routes.js";
 import { appointmentRoutes } from "./routes/appointment.routes.js";
 import { medicalRecordPatientRoutes } from "./routes/medicalRecordPatient.routes.js";
-import { authRoutes } from "./routes/auth.routes.js";
-import { authenticationMiddleware } from "./middlewares/auth.middleware.js";
-import fastifySocketIO from "fastify-socket.io";
-import {
-  createAppointments,
-  createDoctors,
-  createPatients,
-  createProcedures,
-  createRoles,
-  createSpecialities,
-  createUsers,
-} from "./utils/databaseInteractions.js";
-import { LanguageService } from "./services/language.service.js";
 import { userPreferencesRoutes } from "./routes/userPreferences.routes.js";
-import { UserRoleMappingRepository } from "./repositories/userRoleMapping.repository.js";
-import { userRoleMappingTable } from "./models/userRoleMapping.model.js";
-import { MedicalSpecialityRepository } from "./repositories/medicalSpeciality.repository.js";
-import { medicalSpecialityTable } from "./models/medicalSpeciality.model.js";
-import { AppointmentRepository } from "./repositories/appointment.repository.js";
-import { appointmentTable } from "./models/appointment.model.js";
-import { UserService } from "./services/user.service.js";
-import { describe, it } from "node:test";
-import assert from "node:assert";
-import { UserRoleMappingService } from "./services/userRoleMapping.service.js";
 import { medicalSpecialityRoutes } from "./routes/medicalSpeciality.routes.js";
-import { MedicalSpecialityService } from "./services/medicalSpeciality.service.js";
-import {
-  testDoctorSpecialityMapping,
-  testUserRoleMapping,
-  testUsers,
-} from "./utils/models.test.js";
-import { doctorMedicalSpecialityMappingTable } from "./models/doctorMedicalSpecialityMapping.model.js";
-import { DoctorMedicalSpecialityMappingRepository } from "./repositories/doctorMedicalSpecialityMapping.repository.js";
-import { MedicalSpecialityMedicalProcedureMappingRepository } from "./repositories/medicalSpecialityMedicalProcedureMapping.repository.js";
-import { medicalSpecialityMedicalProcedureMappingTable } from "./models/medicalSpecialityMedicalProcedureMapping.model.js";
-import { MedicalProcedureService } from "./services/medicalProcedure.service.js";
-import { AppointmentService } from "./services/appointment.service.js";
-import { UserRepository } from "./repositories/user.repository.js";
 import { medicalProcedureRoutes } from "./routes/medicalProcedure.routes.js";
 import { appointmentHistoryRoutes } from "./routes/appointmentHistory.routes.js";
-import { AppointmentHistoryService } from "./services/appointmentHistory.service.js";
-import { AppointmentHistoryRepository } from "./repositories/appointmentHistory.repository.js";
-import { appointmentHistoryTable } from "./models/appointmentHistory.model.js";
 import { appointmentDoctorBookedSlotsRoutes } from "./routes/appointmentDoctorAvailability.routes.js";
+import {
+  createRoles,
+  createSpecialities,
+  createUser,
+  deleteUser,
+  performAdminInteractions,
+  performDoctorInteractions,
+  updateUser,
+} from "./utils/databaseInteractions.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -286,117 +260,11 @@ const buildServer = async () => {
   });
 
   // await migrateToDb();
+  // createRoles();
+  // createSpecialities();
 
-  // await createRoles();
-  // await createSpecialities();
-  // const languageService = new LanguageService();
-  // await languageService.createLanguage({
-  //   languageName: "Romanian",
-  //   languageCode: "ro",
-  // });
-  // await languageService.createLanguage({
-  //   languageName: "English",
-  //   languageCode: "en",
-  // });
-  // createUsers(0, 100, "doctor");
-  // createUsers(5, 25, "doctor");
-  // createUsers(0, 100, "patient");
-  // createProcedures();
-
-  // const userRoleMappingRepository = new UserRoleMappingRepository(
-  //   drizzleInstance,
-  //   userRoleMappingTable
-  // );
-  // const usersByRole = await userRoleMappingRepository.getAllUsersRelatedData(
-  //   getDoctorRoleIdEnv(),
-  //   ["userForename", "userSurname"],
-  //   "",
-  //   10,
-  //   0,
-  //   "medicalSpecialityName"
-  // );
-  // console.log(usersByRole?.usersRelatedData);
-
-  // const medicalSpecialityService = new MedicalSpecialityService();
-  // const medicalSpecialities =
-  //   await medicalSpecialityService.getAllMedicalSpecialities("", 5, 0);
-  // console.log(medicalSpecialities);
-
-  // await createUsers(0, 250, "patient");
-
-  // const appointmentRepository = new AppointmentRepository(
-  //   drizzleInstance,
-  //   appointmentTable
-  // );
-
-  // appointmentRepository
-
-  // const appointments = await appointmentRepository.getAllAppointments(
-  //   "doctor",
-  //   ["userForename", "userSurname"],
-  //   "",
-  //   "month",
-  //   // "appointmentDateTime"
-  //   ["asc:userForename", "desc:userSurname"],
-  //   3,
-  //   0
-  // );
-  // console.log(appointments?.tableData);
-
-  // const userRep = new UserRepository(drizzleInstance, userTable)
-  // userRep.
-
-  // const appointmentService =new AppointmentService()
-  // appointmentService.
-
-  // const userRoleMappingService = new UserRoleMappingService();
-
-  // const usersData = await userRoleMappingService.getAllUsersRelatedData(
-  //   getPatientRoleIdEnv(),
-  //   ["userForename"],
-  //   "",
-  //   5,
-  //   0,
-  //   "asc:userForename"
-  // );
-
-  // console.log(usersData?.usersRelatedData);
-
-  // await testUsers(false);
-  // await testUserRoleMapping(false);
-  // testDoctorSpecialityMapping(true);
-
-  // createDoctors();
-  // createPatients();
-  // await createAppointments(5, "2024", "01", "18");
-  // createProcedures();
-
-  // const medicalSpecialityMedicalProcedureMappingRepository =
-  //   new MedicalSpecialityMedicalProcedureMappingRepository(
-  //     drizzleInstance,
-  //     medicalSpecialityMedicalProcedureMappingTable
-  //   );
-
-  // console.log(
-  //   await medicalSpecialityMedicalProcedureMappingRepository.getAllMedicalProceduresByMedicalSpeciality(
-  //     "21041809-4d79-57ce-818a-712c959e936c",
-  //     "",
-  //     5,
-  //     0,
-  //     "desc:medicalProcedurePrice"
-  //   )
-  // );
-
-  // const appointmentHistoryService = new AppointmentHistoryRepository(
-  //   drizzleInstance,
-  //   appointmentHistoryTable
-  // );
-
-  // console.log(
-  //   await appointmentHistoryService.getAllAppointmentHistoryByAppointmentId(
-  //     "055ec6e2-5484-52bd-976e-83c12f116649"
-  //   )
-  // );
+  // performAdminInteractions();
+  performDoctorInteractions(true);
 
   return fastifyServer;
 };

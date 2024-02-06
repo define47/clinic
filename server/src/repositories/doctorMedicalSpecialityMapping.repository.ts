@@ -47,58 +47,11 @@ export class DoctorMedicalSpecialityMappingRepository
     return await this.create(doctorMedicalSpecialityMappingCreationAttributes);
   }
 
-  public async createDoctorMedicalSpecialityMappingByRank(
-    primaryDoctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes,
-    rank: string
-  ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this.create({
-      ...primaryDoctorMedicalSpecialityMappingCreationAttributes,
-      isPrimaryMedicalSpeciality: rank === "primary",
-      isSecondaryMedicalSpeciality: rank === "secondary",
-      isTertiaryMedicalSpeciality: rank === "tertiary",
-    });
+  public async deleteDoctorMedicalSpecialityMappingByMappingId(
+    doctorMedicalSpecialityMappingId: string
+  ): Promise<string | undefined> {
+    return await this.delete(doctorMedicalSpecialityMappingId);
   }
-
-  // public async getDoctorMedicalSpecialityMappingByRank(
-  //   doctorId: string,
-  //   rank: string
-  // ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-  //   let rankColumn: PgColumn<any>;
-
-  //   if (rank === "primary")
-  //     rankColumn =
-  //       doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality;
-  //   else if (rank === "secondary")
-  //     rankColumn =
-  //       doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality;
-  //   else if (rank === "tertiary")
-  //     rankColumn =
-  //       doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality;
-
-  //   return (
-  //     await this._drizzle
-  //       .select({
-  //         doctorMedicalSpecialityMappingId:
-  //           doctorMedicalSpecialityMappingTable.doctorMedicalSpecialityMappingId,
-  //         userId: doctorMedicalSpecialityMappingTable.userId,
-  //         medicalSpecialityId:
-  //           doctorMedicalSpecialityMappingTable.medicalSpecialityId,
-  //         isPrimaryMedicalSpeciality:
-  //           doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
-  //         isSecondaryMedicalSpeciality:
-  //           doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
-  //         isTertiaryMedicalSpeciality:
-  //           doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
-  //       })
-  //       .from(doctorMedicalSpecialityMappingTable)
-  //       .where(
-  //         and(
-  //           eq(doctorMedicalSpecialityMappingTable.userId, doctorId),
-  //           eq(rankColumn, true)
-  //         )
-  //       )
-  //   )[0];
-  // }
 
   public async deleteDoctorMedicalSpecialityMappingByDoctorIdAndMedicalSpecialityId(
     doctorId: string,
@@ -169,56 +122,5 @@ export class DoctorMedicalSpecialityMappingRepository
             doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
         })
     )[0];
-  }
-
-  // public async updateMedicalDoctorSpecialityMapping(
-  //   doctorId: string,
-  //   currentMedicalSpecialityId: string,
-  //   newMedicalSpecialityId: string,
-  //   isPrimaryMedicalSpeciality: boolean,
-  //   isSecondaryMedicalSpeciality: boolean,
-  //   isTertiaryMedicalSpeciality: boolean
-  // ): Promise<DoctorMedicalSpecialityMapping | null> {
-  //   return (
-  //     await this._drizzle
-  //       .update(doctorMedicalSpecialityMappingTable)
-  //       .set({
-  //         medicalSpecialityId: newMedicalSpecialityId,
-  //         isPrimaryMedicalSpeciality,
-  //         isSecondaryMedicalSpeciality,
-  //         isTertiaryMedicalSpeciality,
-  //       })
-  //       .where(
-  //         and(
-  //           eq(doctorMedicalSpecialityMappingTable.userId, doctorId),
-  //           eq(
-  //             doctorMedicalSpecialityMappingTable.medicalSpecialityId,
-  //             currentMedicalSpecialityId
-  //           )
-  //         )
-  //       )
-  //       .returning({
-  //         doctorMedicalSpecialityMappingId:
-  //           doctorMedicalSpecialityMappingTable.doctorMedicalSpecialityMappingId,
-  //         medicalSpecialityId:
-  //           doctorMedicalSpecialityMappingTable.medicalSpecialityId,
-  //         userId: doctorMedicalSpecialityMappingTable.userId,
-  //         isPrimaryMedicalSpeciality:
-  //           doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
-  //         isSecondaryMedicalSpeciality:
-  //           doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
-  //         isTertiaryMedicalSpeciality:
-  //           doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
-  //       })
-  //   )[0];
-  // }
-
-  public async deleteDoctorMedicalSpecialityMappingByMappingId(
-    doctorMedicalSpecialityMappingId: string
-  ): Promise<string | undefined> {
-    return await this.delete(doctorMedicalSpecialityMappingId);
-    // console.log(await this.delete(doctorId));
-
-    // await this.delete(doctorId)
   }
 }
