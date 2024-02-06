@@ -97,11 +97,8 @@ export const UserPicker: FC<UserPickerProps> = ({
       const userSurnameMatch = filteredUser.userSurname
         .toLowerCase()
         .startsWith(selectedUserName);
-      // const specialityName = filteredUser
-      //   .medicalSpecialities![0]?.toLowerCase()
-      //   .startsWith(selectedUserName);
-      let specialityNameMatch = false;
 
+      let specialityNameMatch = false;
       if (roleName === "doctor" && filteredUser.medicalSpecialities) {
         for (let i = 0; i < filteredUser.medicalSpecialities.length; i++) {
           const speciality = filteredUser.medicalSpecialities[i]?.toLowerCase();
@@ -117,7 +114,7 @@ export const UserPicker: FC<UserPickerProps> = ({
 
       const fullName =
         `${filteredUser.userForename} ${filteredUser.userSurname}`.toLowerCase();
-      const fullNameMatch = fullName.startsWith(selectedUserName);
+      const fullNameMatch = fullName.startsWith(selectedUserName.toLowerCase());
       return (
         userForenameMatch ||
         userSurnameMatch ||
@@ -136,35 +133,50 @@ export const UserPicker: FC<UserPickerProps> = ({
   function handleUserClick(user: User) {
     setSelectedUserId(user.userId);
 
+    // (
+    // ${roleName === "doctor" && user.medicalSpecialities})
     if (roleName === "patient")
       setSelectedUserName(`${user.userForename} ${user.userSurname}`);
     else if (roleName === "doctor")
-      setSelectedUserName(`${user.userForename} ${user.userSurname} (
-        ${roleName === "doctor" && user.medicalSpecialities})`);
+      setSelectedUserName(`${user.userForename} ${user.userSurname}`);
 
     setIsUserPickerVisible(false);
   }
 
-  // useEffect(() => {
-  //   for (let i = 0; i < filteredUsers.length; i++) {
-  //     if (
-  //       selectedUserName.toLowerCase() !==
-  //       `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
-  //         i
-  //       ].userSurname.toLowerCase()}`
-  //     ) {
-  //       setSelectedUserId("");
-  //     } else if (
-  //       selectedUserName.toLowerCase() ===
-  //       `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
-  //         i
-  //       ].userSurname.toLowerCase()}`
-  //     ) {
-  //       setSelectedUserId(filteredUsers[i].userId);
-  //       break;
-  //     }
-  //   }
-  // }, [filteredUsers, selectedUserName]);
+  useEffect(() => {
+    for (let i = 0; i < filteredUsers.length; i++) {
+      const leftParenthesesIndex = selectedUserName.indexOf("(") - 1;
+
+      console.log(
+        leftParenthesesIndex,
+        selectedUserName.toLowerCase().substring(0, leftParenthesesIndex)
+      );
+
+      // let test =
+      //   leftParenthesesIndex !== -1 && roleName === "doctor"
+      //     ? selectedUserName.toLowerCase().substring(0, leftParenthesesIndex)
+      //     : selectedUserName.toLowerCase();
+
+      let test = selectedUserName.toLowerCase();
+
+      if (
+        test !==
+        `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
+          i
+        ].userSurname.toLowerCase()}`
+      ) {
+        setSelectedUserId("");
+      } else if (
+        test ===
+        `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
+          i
+        ].userSurname.toLowerCase()}`
+      ) {
+        setSelectedUserId(filteredUsers[i].userId);
+        break;
+      }
+    }
+  }, [filteredUsers, selectedUserName]);
 
   return (
     <div className="flex">

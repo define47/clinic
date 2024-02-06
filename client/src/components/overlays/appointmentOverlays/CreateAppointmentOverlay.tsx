@@ -130,13 +130,6 @@ export const CreateAppointmentOverlay: FC = () => {
       const data = receivedSocketData.data;
 
       if (action === "createAppointment") {
-        console.log(
-          "data appointments",
-          data.appointment.appointmentDoctorId,
-          data.appointment.appointmentDateTime,
-          selectedDoctorId,
-          selectedAppointmentDateTime
-        );
         if (
           data.appointment.appointmentDoctorId === selectedDoctorId &&
           data.appointment.appointmentDateTime.split("T")[0] ===
@@ -151,7 +144,7 @@ export const CreateAppointmentOverlay: FC = () => {
             ]
           );
       } else if (action === "updateAppointment") {
-        console.log("updateAppointment", data.appointment.appointmentId);
+        console.log("updateAppointment slots", data);
 
         setBookedDoctorAppointmentSlots(
           (prevBookedDoctorAppointmentSlots: BookedDoctorAppointmentSlot[]) => {
@@ -277,7 +270,7 @@ export const CreateAppointmentOverlay: FC = () => {
           <div className="w-full flex flex-col items-center justify-center">
             <span
               className={`mb-3 transition-all ${
-                bookedDoctorAppointmentSlots.length > 0
+                bookedDoctorAppointmentSlots.length > 0 && selectedDoctorId
                   ? "scale-100 opacity-100 duration-500"
                   : "scale-125 opacity-0 duration-500"
               }`}
@@ -287,7 +280,7 @@ export const CreateAppointmentOverlay: FC = () => {
 
             <div
               className={`grid grid-cols-4 w-96 ${
-                bookedDoctorAppointmentSlots.length > 0
+                bookedDoctorAppointmentSlots.length > 0 && selectedDoctorId
                   ? "scale-100 opacity-100 duration-500"
                   : "scale-125 opacity-0 duration-500"
               }`}
@@ -297,7 +290,7 @@ export const CreateAppointmentOverlay: FC = () => {
                   doctorAppointmentAvailability: BookedDoctorAppointmentSlot,
                   doctorAppointmentAvailabilityIndex: number
                 ) => (
-                  <span>
+                  <span key={doctorAppointmentAvailability.appointmentId}>
                     {doctorAppointmentAvailability.appointmentDateTime
                       .split("T")[1]
                       .substring(0, 5)}
