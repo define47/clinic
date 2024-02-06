@@ -21,6 +21,12 @@ export class AppointmentService implements IAppointmentService {
     );
   }
 
+  public async getAppointmentJoinDoctorAndPatient(appointmentId: string) {
+    return await this._appointmentRepository.getAppointmentJoinDoctorAndPatient(
+      appointmentId
+    );
+  }
+
   public async getAllAppointments(
     table: string,
     searchBy: string[],

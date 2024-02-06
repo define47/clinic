@@ -145,26 +145,26 @@ export const UserPicker: FC<UserPickerProps> = ({
     setIsUserPickerVisible(false);
   }
 
-  useEffect(() => {
-    for (let i = 0; i < filteredUsers.length; i++) {
-      if (
-        selectedUserName.toLowerCase() !==
-        `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
-          i
-        ].userSurname.toLowerCase()}`
-      ) {
-        setSelectedUserId("");
-      } else if (
-        selectedUserName.toLowerCase() ===
-        `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
-          i
-        ].userSurname.toLowerCase()}`
-      ) {
-        setSelectedUserId(filteredUsers[i].userId);
-        break;
-      }
-    }
-  }, [filteredUsers, selectedUserName]);
+  // useEffect(() => {
+  //   for (let i = 0; i < filteredUsers.length; i++) {
+  //     if (
+  //       selectedUserName.toLowerCase() !==
+  //       `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
+  //         i
+  //       ].userSurname.toLowerCase()}`
+  //     ) {
+  //       setSelectedUserId("");
+  //     } else if (
+  //       selectedUserName.toLowerCase() ===
+  //       `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
+  //         i
+  //       ].userSurname.toLowerCase()}`
+  //     ) {
+  //       setSelectedUserId(filteredUsers[i].userId);
+  //       break;
+  //     }
+  //   }
+  // }, [filteredUsers, selectedUserName]);
 
   return (
     <div className="flex">

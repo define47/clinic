@@ -1,5 +1,12 @@
-import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
-import { Appointment, DoctorAvailabilityAppointment } from "../../../types";
+import {
+  ChangeEvent,
+  FC,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { Appointment, BookedDoctorAppointmentSlot } from "../../../types";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import Overlay from "../base/Overlay";
 import { StyledInput } from "../../design/StyledInput";
@@ -12,8 +19,12 @@ import {
   appointmentsPath,
 } from "../../../utils/dotenv";
 import axios from "axios";
+import { SocketNotificationDataContext } from "../../../contexts/SocketNotificationContext";
 
 export const CreateAppointmentOverlay: FC = () => {
+  const socketContext = useContext(SocketNotificationDataContext);
+  const { socketNotificationDataState, socketNotificationDataSetState } =
+    socketContext!;
   const [
     isCreateAppointmentOverlayVisible,
     setIsCreateAppointmentOverlayVisible,
@@ -29,8 +40,8 @@ export const CreateAppointmentOverlay: FC = () => {
     appointmentDateTime: "",
     appointmentStatus: "",
   });
-  const [doctorAppointmentsAvailability, setDoctorAppointmentsAvailability] =
-    useState<DoctorAvailabilityAppointment[]>([]);
+  const [bookedDoctorAppointmentSlots, setBookedDoctorAppointmentSlots] =
+    useState<BookedDoctorAppointmentSlot[]>([]);
 
   const [selectedDoctorId, setSelectedDoctorId] = useState<string>("");
   const [selectedDoctorName, setSelectedDoctorName] = useState<string>("");
@@ -102,7 +113,7 @@ export const CreateAppointmentOverlay: FC = () => {
           });
 
           if (response.data.success)
-            setDoctorAppointmentsAvailability(response.data.payload);
+            setBookedDoctorAppointmentSlots(response.data.payload);
         }
       } catch (error) {
         console.log(error);
@@ -111,6 +122,79 @@ export const CreateAppointmentOverlay: FC = () => {
 
     getDoctorAppointmentAvailability();
   }, [selectedDoctorId, selectedAppointmentDateTime]);
+
+  useEffect(() => {
+    if (socketNotificationDataState) {
+      const receivedSocketData = JSON.parse(socketNotificationDataState);
+      const action = receivedSocketData.action;
+      const data = receivedSocketData.data;
+
+      if (action === "createAppointment") {
+        console.log(
+          "data appointments",
+          data.appointment.appointmentDoctorId,
+          data.appointment.appointmentDateTime,
+          selectedDoctorId,
+          selectedAppointmentDateTime
+        );
+        if (
+          data.appointment.appointmentDoctorId === selectedDoctorId &&
+          data.appointment.appointmentDateTime.split("T")[0] ===
+            selectedAppointmentDateTime.split("T")[0]
+        )
+          setBookedDoctorAppointmentSlots(
+            (prevBookedSlots: BookedDoctorAppointmentSlot[]) => [
+              {
+                appointmentDateTime: data.appointment.appointmentDateTime,
+              } as BookedDoctorAppointmentSlot,
+              ...prevBookedSlots,
+            ]
+          );
+      } else if (action === "updateAppointment") {
+        console.log("updateAppointment", data.appointment.appointmentId);
+
+        setBookedDoctorAppointmentSlots(
+          (prevBookedDoctorAppointmentSlots: BookedDoctorAppointmentSlot[]) => {
+            const updatedEvents = prevBookedDoctorAppointmentSlots.map(
+              (event: BookedDoctorAppointmentSlot) => {
+                console.log("event.appointmentId", event.appointmentId);
+
+                if (event.appointmentId === data.appointment.appointmentId) {
+                  return {
+                    ...event,
+                    appointmentId: data.appointment.appointmentId,
+                    appointmentDateTime: data.appointment.appointmentDateTime,
+                  };
+                } else {
+                  return event;
+                }
+              }
+            );
+            return updatedEvents;
+          }
+        );
+      } else if (action === "deleteAppointment") {
+        setBookedDoctorAppointmentSlots(
+          (prevBookedSlots: BookedDoctorAppointmentSlot[]) =>
+            prevBookedSlots.filter(
+              (prevBookedSlot: BookedDoctorAppointmentSlot) => {
+                console.log("prevBookedSlot", prevBookedSlot);
+
+                return prevBookedSlot.appointmentId !== data;
+              }
+            )
+        );
+      }
+    }
+  }, [
+    socketNotificationDataState,
+    selectedDoctorId,
+    selectedAppointmentDateTime,
+  ]);
+
+  useEffect(() => {
+    console.log("selectedDoctorId", selectedDoctorId);
+  }, [selectedDoctorId]);
 
   return (
     <>
@@ -193,7 +277,7 @@ export const CreateAppointmentOverlay: FC = () => {
           <div className="w-full flex flex-col items-center justify-center">
             <span
               className={`mb-3 transition-all ${
-                doctorAppointmentsAvailability.length > 0
+                bookedDoctorAppointmentSlots.length > 0
                   ? "scale-100 opacity-100 duration-500"
                   : "scale-125 opacity-0 duration-500"
               }`}
@@ -203,14 +287,14 @@ export const CreateAppointmentOverlay: FC = () => {
 
             <div
               className={`grid grid-cols-4 w-96 ${
-                doctorAppointmentsAvailability.length > 0
+                bookedDoctorAppointmentSlots.length > 0
                   ? "scale-100 opacity-100 duration-500"
                   : "scale-125 opacity-0 duration-500"
               }`}
             >
-              {doctorAppointmentsAvailability.map(
+              {bookedDoctorAppointmentSlots.map(
                 (
-                  doctorAppointmentAvailability: DoctorAvailabilityAppointment,
+                  doctorAppointmentAvailability: BookedDoctorAppointmentSlot,
                   doctorAppointmentAvailabilityIndex: number
                 ) => (
                   <span>
@@ -218,7 +302,8 @@ export const CreateAppointmentOverlay: FC = () => {
                       .split("T")[1]
                       .substring(0, 5)}
                     {doctorAppointmentAvailabilityIndex !==
-                      doctorAppointmentsAvailability.length - 1 && ","}
+                      bookedDoctorAppointmentSlots.length - 1 && ","}
+                    {/* {doctorAppointmentAvailability.appointmentDateTime} */}
                   </span>
                 )
               )}

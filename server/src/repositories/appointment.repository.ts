@@ -35,19 +35,47 @@ export class AppointmentRepository
     super(drizzle, table);
   }
 
-  public async getAppointmentDoctor(appointmentId: string) {
+  public async getAppointmentJoinDoctorAndPatient(
+    appointmentId: string
+  ): Promise<AppointmentJoinDoctorAndPatient | undefined> {
     const doctor = alias(userTable, "doctor");
-    return await this._drizzle
-      .select({
-        userForename: doctor.userForename,
-        userSurname: doctor.userSurname,
-      })
-      .from(this._table)
-      .innerJoin(
-        doctor,
-        eq(appointmentTable.appointmentDoctorId, doctor.userId)
-      )
-      .where(eq(appointmentTable.appointmentDoctorId, appointmentId));
+    const patient = alias(userTable, "patient");
+    return (
+      await this._drizzle
+        .select({
+          appointment: {
+            appointmentId: appointmentTable.appointmentId,
+            appointmentDoctorId: appointmentTable.appointmentDoctorId,
+            appointmentPatientId: appointmentTable.appointmentPatientId,
+            appointmentReason: appointmentTable.appointmentReason,
+            appointmentDateTime: appointmentTable.appointmentDateTime,
+            appointmentStatus: appointmentTable.appointmentStatus,
+            appointmentCancellationReason:
+              appointmentTable.appointmentCancellationReason,
+          },
+          doctor: {
+            doctorId: doctor.userId,
+            doctorForename: doctor.userForename,
+            doctorSurname: doctor.userSurname,
+          },
+          patient: {
+            patientId: patient.userId,
+            patientForename: patient.userForename,
+            patientSurname: patient.userSurname,
+            patientEmail: patient.userEmail,
+          },
+        })
+        .from(this._table)
+        .innerJoin(
+          doctor,
+          eq(appointmentTable.appointmentDoctorId, doctor.userId)
+        )
+        .innerJoin(
+          patient,
+          eq(appointmentTable.appointmentPatientId, patient.userId)
+        )
+        .where(eq(appointmentTable.appointmentId, appointmentId))
+    )[0];
   }
 
   public getFirstDayOfWeek(d: any) {
@@ -379,7 +407,10 @@ export class AppointmentRepository
     endCustomDateFinal.setUTCHours(23, 59, 59);
 
     const data = await this._drizzle
-      .select({ appointmentDateTime: appointmentTable.appointmentDateTime })
+      .select({
+        appointmentId: appointmentTable.appointmentId,
+        appointmentDateTime: appointmentTable.appointmentDateTime,
+      })
       .from(appointmentTable)
       .innerJoin(
         doctor,

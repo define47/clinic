@@ -288,6 +288,7 @@ export type UpdateMedicalProcedureOverlayProps = {
   medicalProcedure: MedicalProcedure;
 };
 
-export type DoctorAvailabilityAppointment = {
+export type BookedDoctorAppointmentSlot = {
+  appointmentId: string;
   appointmentDateTime: string;
 };

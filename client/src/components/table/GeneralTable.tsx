@@ -154,7 +154,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               ? "today"
               : selectedAppointmentPeriodValue,
           orderBy: "desc:userForename, asc:userSurname",
-          limit: 100,
+          limit: tableLimit,
           page: currentPage,
           doctorId: "",
           patientId: "",
@@ -329,13 +329,6 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         const medicalSpecialityId = data.medicalSpecialityId as string;
         const medicalProcedure = data.medicalProcedure as MedicalProcedure;
 
-        console.log(
-          "medicalProcedure",
-          medicalProcedure,
-          "medicalSpecialityId",
-          medicalSpecialityId
-        );
-
         if (medicalSpecialityId === selectedMedicalSpecialityId)
           setTableRows((prevMedicalProcedures: TableRow[]) => [
             {
@@ -375,6 +368,72 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               return medicalProcedure.medicalProcedureId !== data;
             }
             return true;
+          })
+        );
+      } else if (action === "createAppointment") {
+        data = data as AppointmentTableData;
+        console.log("appointment data event", data.appointment.appointmentId);
+
+        setTableRows((prevAppointments: TableRow[]) => [
+          {
+            // appointment: {
+            // appointmentId: data.appointment.appointmentId,
+            // appointmentDoctorId: data.appointment.appointmentDoctorId,
+            // appointmentPatientId: data.appointment.appointmentPatientId,
+            // appointmentReason: data.appointment.appointmentReason,
+            // appointmentDateTime: data.appointment.appointmentDateTime,
+            // appointmentStatus: data.appointment.appointmentStatus,
+            // appointmentCancellationReason:
+            //   data.appointment.appointmentCancellationReason,
+            // },
+            // doctor: {
+            //   doctorId: data.doctor.doctorId,
+            //   doctorForename: data.doctor.doctorForename,
+            //   doctorSurname: data.doctor.doctorSurname,
+            // },
+            // patient: {
+            //   patientId: data.patientId.patientId,
+            //   patientForename: data.patientId.patientForename,
+            //   patientSurname: data.patientId.patientSurname,
+            //   patientEmail: data.patientId.patientEmail,
+            // },
+            ...data,
+          } as AppointmentTableData,
+          ...prevAppointments,
+        ]);
+      } else if (action === "updateAppointment") {
+        data = data as AppointmentTableData;
+
+        console.log("data medical procedure update", data);
+
+        setTableRows((prevAppointments: TableRow[]) => {
+          const updatedEvents = prevAppointments.map((event: TableRow) => {
+            if (
+              isAppointmentRow(event) &&
+              event.appointment.appointmentId === data.appointment.appointmentId
+            ) {
+              return {
+                ...event,
+                ...data,
+              };
+            } else {
+              return event;
+            }
+          });
+          return updatedEvents;
+        });
+      } else if (action === "deleteAppointment") {
+        console.log("data to delete", data);
+
+        setTableRows((prevAppointments: TableRow[]) =>
+          prevAppointments.filter((appointment: TableRow) => {
+            // if ('appointmentId' in appointment.appointment) {
+            return (
+              (appointment as AppointmentTableData).appointment
+                .appointmentId !== data
+            );
+            // }
+            // return true;
           })
         );
       }

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { AppointmentService } from "../services/appointment.service";
 import { AppointmentHistoryService } from "../services/appointmentHistory.service";
-import { fastifyServer } from "../server";
+import { MESSAGE_CHANNEL, fastifyServer } from "../server";
 
 export class AppointmentController {
   private readonly _appointmentService: AppointmentService;
@@ -74,6 +74,12 @@ export class AppointmentController {
           appointmentStatus: body.appointmentStatus,
         });
 
+      const appointmentData =
+        await this._appointmentService.getAppointmentJoinDoctorAndPatient(
+          appointmentToCreate?.appointmentId!
+        );
+      console.log("data", appointmentData);
+
       const userSessionData = JSON.parse(
         (await redis.sessionRedis.get(`sessionId:${request.cookieData.value}`))!
       );
@@ -92,6 +98,15 @@ export class AppointmentController {
           appointmentHistoryCreatedBy: userSessionData.userId,
           appointmentHistoryUpdatedBy: userSessionData.userId,
         });
+
+      if (appointmentData)
+        await redis.publisher.publish(
+          MESSAGE_CHANNEL,
+          JSON.stringify({
+            action: "createAppointment",
+            data: appointmentData,
+          })
+        );
 
       reply.code(200).send({ success: true, appointmentToCreate });
     } catch (error) {}
@@ -149,6 +164,20 @@ export class AppointmentController {
         });
       }
 
+      const appointmentData =
+        await this._appointmentService.getAppointmentJoinDoctorAndPatient(
+          appointmentToUpdate?.appointmentId!
+        );
+
+      if (appointmentData)
+        await redis.publisher.publish(
+          MESSAGE_CHANNEL,
+          JSON.stringify({
+            action: "updateAppointment",
+            data: appointmentData,
+          })
+        );
+
       reply.code(200).send({ success: true });
     } catch (error) {
       console.log(error);
@@ -161,6 +190,7 @@ export class AppointmentController {
   ) => {
     try {
       const body: any = request.body;
+      const { redis } = fastifyServer;
 
       await this._appointmentHistoryService.deleteAppointmentHistory(
         body.appointmentId
@@ -168,6 +198,14 @@ export class AppointmentController {
 
       const appointmentToDelete =
         await this._appointmentService.deleteAppointment(body.appointmentId);
+
+      await redis.publisher.publish(
+        MESSAGE_CHANNEL,
+        JSON.stringify({
+          action: "deleteAppointment",
+          data: appointmentToDelete,
+        })
+      );
 
       reply.code(200).send({ success: true, appointmentToDelete });
     } catch (error) {}
