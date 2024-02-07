@@ -458,10 +458,13 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         case appointmentHistoryTable:
           creationAttributes =
             creationAttributes as AppointmentHistoryCreationAttributes;
+          console.log(
+            "creationAttributes",
+            creationAttributes.appointmentHistoryCreatedAt!.toISOString()
+          );
+
           id = uuidv5(
-            `${
-              creationAttributes.appointmentId
-            }-${creationAttributes.appointmentHistoryCreatedAt!.toISOString()}`,
+            `${creationAttributes.appointmentId}-${new Date()}`,
             getUUIDv5NamespaceEnv()
           );
           break;
@@ -483,7 +486,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
             creationAttributes as NotificationCreationAttributes;
           id = uuidv5(
             `${creationAttributes.notificationDateTime.toISOString()}-${
-              creationAttributes.notificationSender
+              creationAttributes.notificationSenderId
             }`,
             getUUIDv5NamespaceEnv()
           );
@@ -491,6 +494,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         default:
           break;
       }
+
+      console.log("generated ID", id);
 
       const entityAttributes: Record<string, any> = {};
 

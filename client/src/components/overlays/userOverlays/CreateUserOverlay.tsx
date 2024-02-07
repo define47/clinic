@@ -8,6 +8,7 @@ import axios from "axios";
 import { usersPath } from "../../../utils/dotenv";
 import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
+import { ConfirmationDialogEntry } from "../../design/ConfirmationDialogEntry";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -162,7 +163,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
         closeModal={handleOverlayClick}
       >
         <div
-          className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
+          className={`w-11/12 h-3/5 overflow-y-auto lg:w-3/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
             isCreateUserOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
@@ -170,8 +171,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
           // onClick={(e) => e.stopPropagation()}
         >
           <span className="flex justify-center mb-8">Create {roleName}</span>
-          <div className="w-full flex justify-between">
-            <div className="flex flex-col space-y-6">
+          <div className="w-full lg:flex lg:justify-between">
+            <div className="flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
               <StyledInput
                 label="userForename"
                 name="userForename"
@@ -194,7 +195,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 defaultValue={`${roleName}EM`}
               />
             </div>
-            <div className="flex flex-col space-y-6">
+            <div className="flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
               <StyledInput
                 label="userPhoneNumber"
                 name="userPhoneNumber"
@@ -216,6 +217,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 labelBackgroundColor="bg-white"
                 defaultValue="1765-05-23"
               /> */}
+
               <DateTimePicker
                 isDateOnly={true}
                 label={"Date of Birth"}
@@ -226,7 +228,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 z="z-50"
               />
             </div>
-            <div className="flex flex-col space-y-6">
+            <div className="flex flex-col items-center lg:items-baseline space-y-6">
               <StyledInput
                 label="userAddress"
                 name="userAddress"
@@ -315,7 +317,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
               )}
             </div>
           </div>
-          <div className="w-full mt-14 flex justify-between">
+          <div className="w-full mt-14 flex items-center justify-between">
             <StyledRippleButton
               label="Continue"
               type="create"
@@ -342,25 +344,85 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
             }
           >
             <div
-              className={`w-96 h-96 bg-white flex items-center justify-center transition-all ${
+              className={`lg:w-2/3 lg:h-1/3 p-4 bg-white flex flex-col rounded-xl transition-all ${
                 isCreateUserConfirmationDialogOverlayVisible
                   ? "scale-100 opacity-100 duration-200"
                   : "scale-125 opacity-0 duration-200"
               }`}
               onClick={(e) => e.stopPropagation()}
             >
-              <StyledRippleButton
-                label="Create"
-                type="yes"
-                onClick={onCreateUser}
-              />
-              <StyledRippleButton
-                label="Cancel"
-                type="delete"
-                onClick={() =>
-                  setIsCreateUserConfirmationDialogOverlayVisible(false)
-                }
-              />
+              <div className="flex flex-col">
+                <span className="w-full flex items-center justify-center text-xl font-bold">
+                  Are You Sure You Want To Create The {roleName}?
+                </span>
+                <div className="w=full flex justify-between mt-4">
+                  <div className="">
+                    <ConfirmationDialogEntry
+                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitle="userForename"
+                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBody={userToCreate.userForename}
+                    />
+                    <ConfirmationDialogEntry
+                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitle="userSurname"
+                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBody={userToCreate.userSurname}
+                    />
+                    <ConfirmationDialogEntry
+                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitle="userEmail"
+                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBody={userToCreate.userEmail}
+                    />
+                  </div>
+                  <div className="">
+                    <ConfirmationDialogEntry
+                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitle="Phone Number"
+                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBody={userToCreate.userPhoneNumber}
+                    />
+                    <ConfirmationDialogEntry
+                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitle="userGender"
+                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBody={userToCreate.userGender}
+                    />
+                    <ConfirmationDialogEntry
+                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitle="userEmail"
+                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBody={userToCreate.userDateOfBirth
+                        .split("-")
+                        .reverse()
+                        .join("-")}
+                    />
+                  </div>
+                  <div className="">
+                    <ConfirmationDialogEntry
+                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitle="userAddress"
+                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBody={userToCreate.userAddress}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="w-full flex justify-between mt-10">
+                <StyledRippleButton
+                  label="Create"
+                  type="yes"
+                  onClick={onCreateUser}
+                />
+                <StyledRippleButton
+                  label="Cancel"
+                  type="delete"
+                  onClick={() =>
+                    setIsCreateUserConfirmationDialogOverlayVisible(false)
+                  }
+                />
+              </div>
             </div>
           </ConfirmationDialogOverlay>
         </div>

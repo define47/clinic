@@ -3,6 +3,7 @@ import { ChangeEventHandler, FC, ReactNode, useRef, useState } from "react";
 type StyledInputProps = {
   label: string;
   name: string;
+  styledInputWidth?: string;
   onChangeStyledInput: ChangeEventHandler<HTMLInputElement>;
   // MouseEventHandler<HTMLInputElement>
   onClickInput?: () => void;
@@ -26,6 +27,7 @@ type StyledInputProps = {
 export const StyledInput: FC<StyledInputProps> = ({
   label,
   name,
+  styledInputWidth,
   onChangeStyledInput,
   onClickInput,
   textColor,
@@ -116,7 +118,7 @@ export const StyledInput: FC<StyledInputProps> = ({
         <input
           ref={styledInputRef}
           type="text"
-          className={`w-72 h-10 ${
+          className={`${styledInputWidth ? styledInputWidth : "w-72"} h-10 ${
             textColor ? textColor : "text-black"
           } text-base cursor-pointer ${
             textColorUnfocused ? textColorUnfocused : "text-black"
@@ -184,7 +186,7 @@ export const StyledInput: FC<StyledInputProps> = ({
         </span> */}
       </div>
 
-      <span
+      <div
         className={`flex items-center cursor-pointer ${
           textColorUnfocused ? textColorUnfocused : "text-black"
         }  ${
@@ -214,8 +216,8 @@ export const StyledInput: FC<StyledInputProps> = ({
           }
         }}
       >
-        {icon}
-      </span>
+        <span className="absolute top-3 right-2">{icon}</span>
+      </div>
     </div>
   );
 };

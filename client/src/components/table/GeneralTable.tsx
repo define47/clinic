@@ -491,7 +491,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     onAfterPrint: () => console.log("print completed"),
   });
   return (
-    <div className="w-full bg-white h-full hidden lg:block border p-4 rounded-xl font-roboto">
+    <div className="w-full bg-white h-full border p-4 rounded-xl font-roboto">
       {/* <button onClick={handlePrint}>print</button> */}
       <div className="flex items-center justify-between">
         {(entity === "doctor" ||
@@ -631,7 +631,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
       </div>
       <div
         ref={componentRef}
-        className="w-full border rounded-xl h-4/5 overflow-auto"
+        className="w-full border rounded-xl h-4/5 overflow-auto hidden lg:block"
       >
         {tableRows.length > 0 && (
           <table className="w-full text-center text-xs font-light border rounded-xl">

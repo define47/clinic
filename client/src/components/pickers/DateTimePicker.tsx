@@ -326,7 +326,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
 
   return (
     <div className={`relative ${z}`} ref={dateTimePickerRef}>
-      <div className="w-72">
+      <div className="">
         <StyledInput
           label={label}
           inputValue={
@@ -404,13 +404,13 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           }
         />
         <span
-          className="absolute top-0 h-10 w-72 bg-transparent cursor-pointer"
+          className="absolute top-0 h-10 w-80 bg-transparent cursor-pointer"
           onClick={() => setIsDateTimePickerShown(!isDateTimePickerShown)}
         ></span>
       </div>
       {/* {isDateTimePickerShown && ( */}
       <div
-        className={`h-52 flex flex-col absolute top-10 bg-white rounded-xl w-72 ${
+        className={`h-52 flex flex-col absolute top-10 bg-white rounded-xl w-80 ${
           isDateTimePickerShown
             ? "opacity-100 duration-700 shadow-2xl shadow-black/40"
             : "opacity-0 duration-700 pointer-events-none"
@@ -513,7 +513,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           {/* <span>{selectedTimeSlot}</span> */}
         </div>
         <div
-          className={`transition-opacity ease-linear w-72 grid grid-cols-7 gap-1 text-xs items-center justify-center p-1 ${
+          className={`transition-opacity ease-linear w-80 grid grid-cols-7 gap-1 text-xs items-center justify-center p-1 ${
             !areMonthsShown && !areYearsShown && !areTimeSlotsShown
               ? "h-full opacity-100 duration-700"
               : "h-0 opacity-0 duration-700 pointer-events-none"
@@ -596,7 +596,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           }`}
         >
           {areMonthsShown && (
-            <div className="w-72 h-full grid grid-cols-4 text-xs">
+            <div className="w-80 h-full grid grid-cols-4 text-xs">
               {monthData.months.map((month: string, monthIndex: number) => (
                 <span
                   key={monthIndex}
@@ -625,7 +625,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           }`}
         >
           {areYearsShown && (
-            <div className="w-72 h-full grid grid-cols-3 text-xs">
+            <div className="w-80 h-full grid grid-cols-3 text-xs">
               {years.map((year: number) => (
                 <span
                   key={year}
@@ -651,7 +651,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           }`}
         >
           {areTimeSlotsShown && (
-            <div className="w-72 h-full grid grid-cols-3 gap-1 p-1 text-xs">
+            <div className="w-80 h-full grid grid-cols-3 gap-1 p-1 text-xs">
               {timeSlots.map((timeSlot: string) => (
                 <span
                   key={timeSlot}

@@ -10,6 +10,7 @@ import { UserPicker } from "../../components/pickers/UserPicker";
 import { AppointmentSearchCriterionPicker } from "../../components/pickers/AppointmentSearchCriterionPicker";
 import { LimitPicker } from "../../components/pickers/LimitPicker";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
+import { ConfirmationDialogEntry } from "../../components/design/ConfirmationDialogEntry";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -42,7 +43,8 @@ export const AdminDashboard: FC = () => {
     <div className="">
       {/* admin dashboard <Overlay /> */}
       <div className="space-y-10">
-        {JSON.stringify(authenticatedUserDataState)}
+        {/* {JSON.stringify(authenticatedUserDataState)}
+        here notification {JSON.stringify(socketNotificationDataState)} */}
         {/* <StyledInput
           label="label1"
           textColorUnfocused="text-red-500"
@@ -61,13 +63,13 @@ export const AdminDashboard: FC = () => {
           labelUnfocused="text-green-500"
           labelFocused="text-green-500"
         /> */}
-        <TreeTable />
+        {/* <TreeTable /> */}
         <StyledRippleButton
           onClick={() => console.log("Button Clicked")}
           label="label"
           type="create"
         />
-        here notification {JSON.stringify(socketNotificationDataState)}
+
         {/* <DateTimePicker
           isDateOnly={false}
           label="DD/MM/YYYY HH:MM"
@@ -78,6 +80,19 @@ export const AdminDashboard: FC = () => {
         <UserPicker label="patient picker" roleName="patient" z="z-40" /> */}
         {/* <LimitPicker /> */}
       </div>
+      {/* <ConfirmationDialogEntry
+        confirmationDialogEntryTitleWidth="w-10"
+        confirmationDialogEntryTitle={"userForename"}
+        confirmationDialogEntryBodyWidth="w-72"
+        confirmationDialogEntryBody={"mihai tudor"}
+      /> */}
+
+      {/* <ConfirmationDialogEntry
+        confirmationDialogEntryTitle={"userForename"}
+        confirmationDialogEntryBody={
+          "abc tudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudortudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudortudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudor"
+        }
+      /> */}
     </div>
   );
 };

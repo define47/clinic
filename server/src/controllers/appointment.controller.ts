@@ -119,7 +119,7 @@ export class AppointmentController {
     try {
       const body: any = request.body;
       let appointmentToUpdate;
-      console.log(body);
+      console.log("body update appointment", body);
 
       appointmentToUpdate = await this._appointmentService.updateAppointment(
         body.appointmentId,

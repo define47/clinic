@@ -7,6 +7,7 @@ import { Socket, io } from "socket.io-client";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
 import { serverURL, verifyUserPath } from "../../utils/dotenv";
 import axios from "axios";
+import useDeviceDetection from "../../utils/useDeviceDetection";
 
 // const App: React.FC = () => {
 
@@ -111,6 +112,11 @@ export const Layout: FC = () => {
     };
   }, [socket]);
 
+  const { device, orientation } = useDeviceDetection();
+  useEffect(() => {
+    console.log(`LAyout Current device type: ${device} ${orientation}`);
+  }, [device, orientation]);
+
   function determineUserLayout() {
     let content = <div></div>;
 
@@ -118,35 +124,40 @@ export const Layout: FC = () => {
       authenticatedUserDataState.roleNames.length === 1 &&
       authenticatedUserDataState.roleNames[0] === "admin"
     )
-      content = (
+      content =
         // select-none
-        <div className="w-screen h-screen flex">
-          <div className="lg:fixed h-full hidden lg:block z-10">
-            <Sidebar
-              isSidebarExpanded={isSidebarExpanded}
-              setIsSidebarExpanded={setIsSidebarExpanded}
-            />
-          </div>
-
-          <div className="w-full flex flex-col h-full flex-wrap">
-            <div className="w-full">
-              <TopBar
-                isSidebarExtended={isSidebarExpanded}
-                setIsSidebarExtended={setIsSidebarExpanded}
+        device === "Desktop" ? (
+          <div className="w-screen h-screen flex">
+            <div className="lg:fixed h-full hidden lg:block z-10">
+              <Sidebar
+                isSidebarExpanded={isSidebarExpanded}
+                setIsSidebarExpanded={setIsSidebarExpanded}
               />
             </div>
-            <div
-              // md:static
-              // left-20 top-14
-              // flex justify-center
-              className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-screen overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
-            >
-              {/* connected? {isSocketConnected.toString()} here: {welcome} */}
-              <Outlet />
+
+            <div className="w-full flex flex-col h-full flex-wrap">
+              <div className="w-full">
+                <TopBar
+                  isSidebarExtended={isSidebarExpanded}
+                  setIsSidebarExtended={setIsSidebarExpanded}
+                />
+              </div>
+              <div
+                // md:static
+                // left-20 top-14
+                // flex justify-center
+                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
+              >
+                {/* connected? {isSocketConnected.toString()} here: {welcome} */}
+                <Outlet />
+              </div>
             </div>
           </div>
-        </div>
-      );
+        ) : device === "Mobile" ? (
+          <div className="relative h-dvh bg-red-200">hello</div>
+        ) : (
+          <div></div>
+        );
 
     return content;
   }
