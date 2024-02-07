@@ -37,6 +37,7 @@ import {
   MedicalSpecialityMedicalProcedureMappingCreationAttributes,
   MedicalSpecialityMedicalProcedureMappingUpdateAttributes,
 } from "../models/medicalSpecialityMedicalProcedureMapping.model";
+import { NotificationCreationAttributes } from "../models/notification.model";
 
 export interface IBaseRepository<T> {
   getById(id: string): Promise<T | undefined>;
@@ -58,6 +59,7 @@ export interface IBaseRepository<T> {
       | UserPreferencesMappingCreationAttributes
       | MedicalSpecialityMedicalProcedureMappingCreationAttributes
       | DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
+      | NotificationCreationAttributes
   ): Promise<T | undefined>;
 
   update(

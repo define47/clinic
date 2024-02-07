@@ -185,7 +185,7 @@ export class UserController {
       let doctorSpecialityNames = [];
       if (userRoleNames[0] === "doctor" || userRoleNames[1] === "doctor") {
         const userToLoginSpecialities =
-          await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
+          await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByDoctorId(
             userToLogin?.userId!
           );
 
@@ -480,7 +480,7 @@ export class UserController {
       if (body.specialityIds.length !== 0) {
         const specialityIds = body.specialityIds;
         const currentDoctorMedicalSpecialitiesMappings =
-          await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
+          await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByDoctorId(
             putUser?.userId!
           );
         // console.log(currentDoctorMedicalSpecialitiesMappings);
@@ -564,7 +564,7 @@ export class UserController {
       }
 
       const updatedDoctorMedicalSpecialityMappings =
-        await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
+        await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByDoctorId(
           putUser?.userId!
         );
 
@@ -634,7 +634,7 @@ export class UserController {
       for (let i = 0; i < userRoleMappings.length; i++) {
         if (userRoleMappings[i].roleId === getDoctorRoleIdEnv()) {
           const doctorMedicalSpecialityMappings =
-            await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingsByDoctorId(
+            await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByDoctorId(
               user?.userId!
             );
 

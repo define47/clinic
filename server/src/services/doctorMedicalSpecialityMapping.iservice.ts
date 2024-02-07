@@ -5,7 +5,7 @@ import {
 } from "../models/doctorMedicalSpecialityMapping.model";
 
 export interface IDoctorMedicalSpecialityMappingService {
-  getDoctorMedicalSpecialityMappingsByDoctorId(
+  getDoctorMedicalSpecialityMappingByDoctorId(
     doctorId: string
   ): Promise<DoctorMedicalSpecialityMapping[] | undefined>;
 

@@ -26,7 +26,7 @@ export class DoctorMedicalSpecialityMappingRepository
     super(drizzle, table);
   }
 
-  public async getDoctorMedicalSpecialityMappingsByMappingId(
+  public async getDoctorMedicalSpecialityMappingByMappingId(
     doctorMedicalSpecialityMappingId: string
   ): Promise<DoctorMedicalSpecialityMapping | undefined> {
     return await this.getById(doctorMedicalSpecialityMappingId);

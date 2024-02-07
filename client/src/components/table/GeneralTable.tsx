@@ -492,7 +492,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   });
   return (
     <div className="w-full bg-white h-full hidden lg:block border p-4 rounded-xl font-roboto">
-      <button onClick={handlePrint}>print</button>
+      {/* <button onClick={handlePrint}>print</button> */}
       <div className="flex items-center justify-between">
         {(entity === "doctor" ||
           entity === "patient" ||

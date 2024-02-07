@@ -30,6 +30,8 @@ import { medicalProcedureRoutes } from "./routes/medicalProcedure.routes.js";
 import { appointmentHistoryRoutes } from "./routes/appointmentHistory.routes.js";
 import { appointmentDoctorBookedSlotsRoutes } from "./routes/appointmentDoctorAvailability.routes.js";
 import {
+  createLanguages,
+  createPatients,
   createRoles,
   createSpecialities,
   createUser,
@@ -259,12 +261,14 @@ const buildServer = async () => {
     return { counter };
   });
 
-  // await migrateToDb();
+  await migrateToDb();
   // createRoles();
   // createSpecialities();
+  // createLanguages();
 
   // performAdminInteractions();
-  performDoctorInteractions(true);
+  // performDoctorInteractions(true);
+  // createPatients(0, 100);
 
   return fastifyServer;
 };

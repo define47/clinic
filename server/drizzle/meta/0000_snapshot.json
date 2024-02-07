@@ -1,5 +1,5 @@
 {
-  "id": "d8890051-f0b3-494a-9e1b-29202f402be3",
+  "id": "5dbcc72b-f419-4bac-997d-3d4cbb16eea8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -385,7 +385,15 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "MedicalProcedure_medicalProcedureName_unique": {
+          "name": "MedicalProcedure_medicalProcedureName_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "medicalProcedureName"
+          ]
+        }
+      }
     },
     "MedicalRecordPatient": {
       "name": "MedicalRecordPatient",
@@ -537,6 +545,68 @@
       },
       "uniqueConstraints": {}
     },
+    "Notification": {
+      "name": "Notification",
+      "schema": "iatropolis",
+      "columns": {
+        "notificationId": {
+          "name": "notificationId",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "notificationSenderId": {
+          "name": "notificationSenderId",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notificationAction": {
+          "name": "notificationAction",
+          "type": "notificationAction",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notificationEntity": {
+          "name": "notificationEntity",
+          "type": "notificationEntity",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notificationBody": {
+          "name": "notificationBody",
+          "type": "varchar(999)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notificationDateTime": {
+          "name": "notificationDateTime",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Notification_notificationSenderId_User_userId_fk": {
+          "name": "Notification_notificationSenderId_User_userId_fk",
+          "tableFrom": "Notification",
+          "tableTo": "User",
+          "schemaTo": "iatropolis",
+          "columnsFrom": [
+            "notificationSenderId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "Role": {
       "name": "Role",
       "schema": "iatropolis",
@@ -673,6 +743,72 @@
           ]
         }
       }
+    },
+    "UserNotificationMapping": {
+      "name": "UserNotificationMapping",
+      "schema": "iatropolis",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notificationId": {
+          "name": "notificationId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isNotificationRead": {
+          "name": "isNotificationRead",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UserNotificationMapping_userId_User_userId_fk": {
+          "name": "UserNotificationMapping_userId_User_userId_fk",
+          "tableFrom": "UserNotificationMapping",
+          "tableTo": "User",
+          "schemaTo": "iatropolis",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "UserNotificationMapping_notificationId_Notification_notificationId_fk": {
+          "name": "UserNotificationMapping_notificationId_Notification_notificationId_fk",
+          "tableFrom": "UserNotificationMapping",
+          "tableTo": "Notification",
+          "schemaTo": "iatropolis",
+          "columnsFrom": [
+            "notificationId"
+          ],
+          "columnsTo": [
+            "notificationId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserNotificationMapping_userId_notificationId_pk": {
+          "name": "UserNotificationMapping_userId_notificationId_pk",
+          "columns": [
+            "userId",
+            "notificationId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
     },
     "UserPreferencesMapping": {
       "name": "UserPreferencesMapping",
@@ -825,6 +961,24 @@
         "confirmed by patient": "confirmed by patient",
         "canceled by patient": "canceled by patient",
         "paid": "paid"
+      }
+    },
+    "notificationAction": {
+      "name": "notificationAction",
+      "values": {
+        "create": "create",
+        "update": "update",
+        "delete": "delete"
+      }
+    },
+    "notificationEntity": {
+      "name": "notificationEntity",
+      "values": {
+        "user": "user",
+        "speciality": "speciality",
+        "appointment": "appointment",
+        "medical record": "medical record",
+        "appointment reminder": "appointment reminder"
       }
     },
     "userGender": {

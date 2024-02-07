@@ -11,6 +11,18 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ CREATE TYPE "notificationAction" AS ENUM('create', 'update', 'delete');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "notificationEntity" AS ENUM('user', 'speciality', 'appointment', 'medical record', 'appointment reminder');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  CREATE TYPE "userGender" AS ENUM('male', 'female');
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -61,7 +73,8 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Language" (
 CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalProcedure" (
 	"medicalProcedureId" varchar PRIMARY KEY NOT NULL,
 	"medicalProcedureName" varchar NOT NULL,
-	"medicalProcedurePrice" integer NOT NULL
+	"medicalProcedurePrice" integer NOT NULL,
+	CONSTRAINT "MedicalProcedure_medicalProcedureName_unique" UNIQUE("medicalProcedureName")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalRecordPatient" (
@@ -83,6 +96,15 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."MedicalSpecialityMedicalProcedureMappin
 	"medicalSpecialityId" varchar NOT NULL,
 	"medicalProcedureId" varchar NOT NULL,
 	CONSTRAINT "MedicalSpecialityMedicalProcedureMapping_medicalSpecialityId_medicalProcedureId_pk" PRIMARY KEY("medicalSpecialityId","medicalProcedureId")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "iatropolis"."Notification" (
+	"notificationId" varchar PRIMARY KEY NOT NULL,
+	"notificationSenderId" varchar(100) NOT NULL,
+	"notificationAction" "notificationAction" NOT NULL,
+	"notificationEntity" "notificationEntity" NOT NULL,
+	"notificationBody" varchar(999) NOT NULL,
+	"notificationDateTime" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."Role" (
@@ -107,6 +129,13 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."User" (
 	"isUserBanned" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "User_userEmail_unique" UNIQUE("userEmail"),
 	CONSTRAINT "User_userPhoneNumber_unique" UNIQUE("userPhoneNumber")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "iatropolis"."UserNotificationMapping" (
+	"userId" varchar NOT NULL,
+	"notificationId" varchar NOT NULL,
+	"isNotificationRead" boolean DEFAULT false NOT NULL,
+	CONSTRAINT "UserNotificationMapping_userId_notificationId_pk" PRIMARY KEY("userId","notificationId")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."UserPreferencesMapping" (
@@ -190,6 +219,24 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "iatropolis"."MedicalSpecialityMedicalProcedureMapping" ADD CONSTRAINT "MedicalSpecialityMedicalProcedureMapping_medicalProcedureId_MedicalProcedure_medicalProcedureId_fk" FOREIGN KEY ("medicalProcedureId") REFERENCES "iatropolis"."MedicalProcedure"("medicalProcedureId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "iatropolis"."Notification" ADD CONSTRAINT "Notification_notificationSenderId_User_userId_fk" FOREIGN KEY ("notificationSenderId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "iatropolis"."UserNotificationMapping" ADD CONSTRAINT "UserNotificationMapping_userId_User_userId_fk" FOREIGN KEY ("userId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "iatropolis"."UserNotificationMapping" ADD CONSTRAINT "UserNotificationMapping_notificationId_Notification_notificationId_fk" FOREIGN KEY ("notificationId") REFERENCES "iatropolis"."Notification"("notificationId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

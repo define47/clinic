@@ -6,10 +6,6 @@ import {
 } from "../models/medicalSpecialityMedicalProcedureMapping.model";
 
 export interface IMedicalSpecialityMedicalProcedureMappingService {
-  getMedicalSpecialityMedicalProcedureMappingsBySpecialityId(
-    medicalSpecialityId: string
-  ): Promise<MedicalSpecialityMedicalProcedureMapping[] | undefined>;
-
   getAllMedicalProceduresByMedicalSpeciality(
     medicalSpecialityId: string,
     searchQuery: string,

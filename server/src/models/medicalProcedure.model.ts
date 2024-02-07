@@ -19,6 +19,6 @@ export type MedicalProcedureUpdateAttributes = {
 
 export const medicalProcedureTable = clinicSchema.table("MedicalProcedure", {
   medicalProcedureId: varchar("medicalProcedureId").primaryKey(),
-  medicalProcedureName: varchar("medicalProcedureName").notNull(),
+  medicalProcedureName: varchar("medicalProcedureName").notNull().unique(),
   medicalProcedurePrice: integer("medicalProcedurePrice").notNull(),
 });

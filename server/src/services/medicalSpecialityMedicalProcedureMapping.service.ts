@@ -18,12 +18,6 @@ export class MedicalSpecialityMedicalProcedureMappingService
       medicalSpecialityMedicalProcedureMappingTable
     );
 
-  public async getMedicalSpecialityMedicalProcedureMappingsBySpecialityId(
-    medicalSpecialityId: string
-  ): Promise<MedicalSpecialityMedicalProcedureMapping[] | undefined> {
-    throw new Error("Method not implemented.");
-  }
-
   public async getAllMedicalProceduresByMedicalSpeciality(
     medicalSpecialityId: string,
     searchQuery: string,

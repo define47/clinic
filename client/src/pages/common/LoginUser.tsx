@@ -42,13 +42,17 @@ export const LoginUser: FC = () => {
           label="userEmail"
           name="userEmail"
           onChangeStyledInput={handleInputChange}
-          labelBackgroundColor="bg-white"
+          labelBackgroundColor="bg-black"
+          textColor="text-white"
+          labelColor="text-white"
         />
         <StyledInput
           label="userPassword"
           name="userPassword"
           onChangeStyledInput={handleInputChange}
-          labelBackgroundColor="bg-white"
+          labelBackgroundColor="bg-black"
+          textColor="text-white"
+          labelColor="text-white"
         />
         <button onClick={onLogin}>Submit</button>
       </div>

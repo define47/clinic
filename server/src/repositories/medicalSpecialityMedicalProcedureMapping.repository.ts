@@ -25,12 +25,6 @@ export class MedicalSpecialityMedicalProcedureMappingRepository
     super(drizzle, table);
   }
 
-  public async getMedicalSpecialityMedicalProcedureMappingsBySpecialityId(
-    medicalSpecialityId: string
-  ): Promise<MedicalSpecialityMedicalProcedureMapping[] | undefined> {
-    throw new Error("Method not implemented.");
-  }
-
   public async getAllMedicalSpecialitiesAndProcedures() {
     const data = await this._drizzle
       .select({

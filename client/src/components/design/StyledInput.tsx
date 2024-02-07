@@ -1,11 +1,4 @@
-import {
-  ChangeEventHandler,
-  FC,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEventHandler, FC, ReactNode, useRef, useState } from "react";
 
 type StyledInputProps = {
   label: string;
@@ -13,10 +6,12 @@ type StyledInputProps = {
   onChangeStyledInput: ChangeEventHandler<HTMLInputElement>;
   // MouseEventHandler<HTMLInputElement>
   onClickInput?: () => void;
+  textColor?: string;
   textColorUnfocused?: string;
   textColorFocused?: string;
   borderColorUnfocused?: string;
   borderColorFocused?: string;
+  labelColor?: string;
   labelUnfocused?: string;
   labelFocused?: string;
   labelBackgroundColor?: string;
@@ -33,10 +28,12 @@ export const StyledInput: FC<StyledInputProps> = ({
   name,
   onChangeStyledInput,
   onClickInput,
+  textColor,
   textColorUnfocused,
   textColorFocused,
   borderColorUnfocused,
   borderColorFocused,
+  labelColor,
   labelUnfocused,
   labelFocused,
   labelBackgroundColor,
@@ -119,7 +116,9 @@ export const StyledInput: FC<StyledInputProps> = ({
         <input
           ref={styledInputRef}
           type="text"
-          className={`w-72 h-10 text-base cursor-pointer ${
+          className={`w-72 h-10 ${
+            textColor ? textColor : "text-black"
+          } text-base cursor-pointer ${
             textColorUnfocused ? textColorUnfocused : "text-black"
           }  ${
             textColorFocused ? textColorFocused : "text-black"
@@ -147,7 +146,9 @@ export const StyledInput: FC<StyledInputProps> = ({
 
         <label
           htmlFor=""
-          className={`absolute left-2 transform ${
+          className={`absolute left-2 ${
+            labelColor ? labelColor : "text-black"
+          } transform ${
             focused || hasText || inputValue
               ? `-translate-y-2 text-xs`
               : `translate-y-2`

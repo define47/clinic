@@ -64,6 +64,11 @@ import {
   MedicalSpecialityMedicalProcedureMappingUpdateAttributes,
   medicalSpecialityMedicalProcedureMappingTable,
 } from "../models/medicalSpecialityMedicalProcedureMapping.model";
+import {
+  NotificationCreationAttributes,
+  notificationTable,
+} from "../models/notification.model";
+import { userNotificationMappingTable } from "../models/userNotificationMapping.model";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
@@ -153,6 +158,17 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       ];
     else if (table === medicalSpecialityMedicalProcedureMappingTable)
       this._tableColumns = ["medicalSpecialityId", "medicalProcedureId"];
+    else if (table === notificationTable)
+      this._tableColumns = [
+        "notificationId",
+        "notificationSenderId",
+        "notificationAction",
+        "notificationEntity",
+        "notificationBody",
+        "notificationDateTime",
+      ];
+    else if (table === userNotificationMappingTable)
+      this._tableColumns = ["userId", "notificationId", "isNotificationRead"];
     else this._tableColumns = [];
 
     // type MyKeys = keyof typeof this._table.$inferSelect;
@@ -326,6 +342,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         | LanguageCreationAttributes
         | MedicalProcedureCreationAttributes
       );
+    // else if (this._drizzle === notificationTable)
+    //     return ["notificationDateTime"]
     else {
       return "" as keyof (
         | UserCreationAttributes
@@ -375,30 +393,104 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | MedicalProcedureCreationAttributes
       | MedicalSpecialityMedicalProcedureMappingCreationAttributes
       | DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
+      | NotificationCreationAttributes
   ): Promise<T | undefined> {
     try {
       let id;
-      const UUIDv5Attributes = this.getNecessaryAttributesForUUIDv5();
 
-      if (UUIDv5Attributes.length === 1)
-        id = uuidv5(
-          creationAttributes[UUIDv5Attributes[0]] + "-" + new Date(),
-          getUUIDv5NamespaceEnv()
-        );
-      else if (UUIDv5Attributes.length === 2)
-        id = uuidv5(
-          `${creationAttributes[UUIDv5Attributes[0]]}-${
-            creationAttributes[UUIDv5Attributes[1]]
-          }-${new Date()}`,
-          getUUIDv5NamespaceEnv()
-        );
-      else if (UUIDv5Attributes.length === 3)
-        id = uuidv5(
-          `${creationAttributes[UUIDv5Attributes[0]]}-${
-            creationAttributes[UUIDv5Attributes[1]]
-          }-${creationAttributes[UUIDv5Attributes[2]]}-${new Date()}`,
-          getUUIDv5NamespaceEnv()
-        );
+      // if (this._table === userTable) {
+      // id = uuidv5(
+      //   (creationAttributes as UserCreationAttributes).userEmail + "-" + new Date(),
+      //   getUUIDv5NamespaceEnv()
+      // );
+      // } else if (this._table === roleTable) {
+      // id = uuidv5(
+      //   (creationAttributes as RoleCreationAttributes).roleName,
+      //   getUUIDv5NamespaceEnv()
+      // );
+      // } else if (this._)
+
+      switch (this._table) {
+        case userTable:
+          id = uuidv5(
+            (creationAttributes as UserCreationAttributes).userEmail +
+              "-" +
+              new Date(),
+            getUUIDv5NamespaceEnv()
+          );
+          break;
+        case roleTable:
+          id = uuidv5(
+            (creationAttributes as RoleCreationAttributes).roleName,
+            getUUIDv5NamespaceEnv()
+          );
+          break;
+        case medicalSpecialityTable:
+          id = uuidv5(
+            (creationAttributes as MedicalSpecialityCreationAttributes)
+              .medicalSpecialityName,
+            getUUIDv5NamespaceEnv()
+          );
+          break;
+        case medicalProcedureTable:
+          id = uuidv5(
+            (creationAttributes as MedicalProcedureCreationAttributes)
+              .medicalProcedureName,
+            getUUIDv5NamespaceEnv()
+          );
+          break;
+        case doctorMedicalSpecialityMappingTable:
+          creationAttributes =
+            creationAttributes as DoctorMedicalSpecialityMappingCreationAttributes;
+          id = uuidv5(
+            `${creationAttributes.userId}-${creationAttributes.medicalSpecialityId}`,
+            getUUIDv5NamespaceEnv()
+          );
+          break;
+        case appointmentTable:
+          id = uuidv5(
+            (
+              creationAttributes as AppointmentCreationAttributes
+            ).appointmentDateTime.toISOString(),
+            getUUIDv5NamespaceEnv()
+          );
+          break;
+        case appointmentHistoryTable:
+          creationAttributes =
+            creationAttributes as AppointmentHistoryCreationAttributes;
+          id = uuidv5(
+            `${
+              creationAttributes.appointmentId
+            }-${creationAttributes.appointmentHistoryCreatedAt!.toISOString()}`,
+            getUUIDv5NamespaceEnv()
+          );
+          break;
+        case medicalRecordPatientTable:
+          id = uuidv5(
+            (creationAttributes as MedicalRecordPatientCreationAttributes)
+              .appointmentId,
+            getUUIDv5NamespaceEnv()
+          );
+          break;
+        case languageTable:
+          id = uuidv5(
+            (creationAttributes as LanguageCreationAttributes).languageName,
+            getUUIDv5NamespaceEnv()
+          );
+          break;
+        case notificationTable:
+          creationAttributes =
+            creationAttributes as NotificationCreationAttributes;
+          id = uuidv5(
+            `${creationAttributes.notificationDateTime.toISOString()}-${
+              creationAttributes.notificationSender
+            }`,
+            getUUIDv5NamespaceEnv()
+          );
+          break;
+        default:
+          break;
+      }
 
       const entityAttributes: Record<string, any> = {};
 
@@ -411,7 +503,12 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 
       // console.log(returningObject);
 
-      if (this._table === userRoleMappingTable)
+      if (
+        this._table === userRoleMappingTable ||
+        this._table === userNotificationMappingTable ||
+        this._table === userPreferencesMappingTable ||
+        this._table === medicalSpecialityMedicalProcedureMappingTable
+      )
         return (
           await this._drizzle
             .insert(this._table)
@@ -429,6 +526,76 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       console.log(error);
     }
   }
+
+  // public async create(
+  //   creationAttributes:
+  //     | UserCreationAttributes
+  //     | RoleCreationAttributes
+  //     | MedicalSpecialityCreationAttributes
+  //     | UserRoleMappingCreationAttributes
+  //     | DoctorMedicalSpecialityMappingCreationAttributes
+  //     | AppointmentCreationAttributes
+  //     | AppointmentHistoryCreationAttributes
+  //     | MedicalRecordPatientCreationAttributes
+  //     | LanguageCreationAttributes
+  //     | UserPreferencesMappingCreationAttributes
+  //     | MedicalProcedureCreationAttributes
+  //     | MedicalSpecialityMedicalProcedureMappingCreationAttributes
+  //     | DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
+  // ): Promise<T | undefined> {
+  //   try {
+  //     let id;
+  //     const UUIDv5Attributes = this.getNecessaryAttributesForUUIDv5();
+
+  //     if (UUIDv5Attributes.length === 1)
+  //       id = uuidv5(
+  //         creationAttributes[UUIDv5Attributes[0]] + "-" + new Date(),
+  //         getUUIDv5NamespaceEnv()
+  //       );
+  //     else if (UUIDv5Attributes.length === 2)
+  //       id = uuidv5(
+  //         `${creationAttributes[UUIDv5Attributes[0]]}-${
+  //           creationAttributes[UUIDv5Attributes[1]]
+  //         }-${new Date()}`,
+  //         getUUIDv5NamespaceEnv()
+  //       );
+  //     else if (UUIDv5Attributes.length === 3)
+  //       id = uuidv5(
+  //         `${creationAttributes[UUIDv5Attributes[0]]}-${
+  //           creationAttributes[UUIDv5Attributes[1]]
+  //         }-${creationAttributes[UUIDv5Attributes[2]]}-${new Date()}`,
+  //         getUUIDv5NamespaceEnv()
+  //       );
+
+  //     const entityAttributes: Record<string, any> = {};
+
+  //     entityAttributes[this._tableColumns[0]] =
+  //       this._table[this._tableColumns[0] as keyof T];
+
+  //     for (const key in creationAttributes) {
+  //       entityAttributes[key] = this._table[key as keyof T];
+  //     }
+
+  //     // console.log(returningObject);
+
+  //     if (this._table === userRoleMappingTable)
+  //       return (
+  //         await this._drizzle
+  //           .insert(this._table)
+  //           .values({ ...creationAttributes })
+  //           .returning(entityAttributes)
+  //       )[0] as T;
+
+  //     return (
+  //       await this._drizzle
+  //         .insert(this._table)
+  //         .values({ [this._tableColumns[0]]: id, ...creationAttributes })
+  //         .returning(entityAttributes)
+  //     )[0] as T;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   public async update(
     id: string,

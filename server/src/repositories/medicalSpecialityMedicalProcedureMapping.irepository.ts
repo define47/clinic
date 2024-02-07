@@ -8,10 +8,6 @@ import { IBaseRepository } from "./base.irepository";
 
 export interface IMedicalSpecialityMedicalProcedureMappingRepository
   extends IBaseRepository<MedicalSpecialityMedicalProcedureMapping> {
-  getMedicalSpecialityMedicalProcedureMappingsBySpecialityId(
-    medicalSpecialityId: string
-  ): Promise<MedicalSpecialityMedicalProcedureMapping[] | undefined>;
-
   getAllMedicalProceduresByMedicalSpeciality(
     medicalSpecialityId: string,
     searchQuery: string,

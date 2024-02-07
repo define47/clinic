@@ -6,6 +6,7 @@ import { UserRoleMappingService } from "../services/userRoleMapping.service";
 import { MedicalSpecialityService } from "../services/medicalSpeciality.service";
 import { MedicalProcedureService } from "../services/medicalProcedure.service";
 import { DoctorMedicalSpecialityMappingService } from "../services/doctorMedicalSpecialityMapping.service";
+import { LanguageService } from "../services/language.service";
 
 const userService = new UserService();
 const userRoleMappingService = new UserRoleMappingService();
@@ -14,6 +15,7 @@ const medicalSpecialityService = new MedicalSpecialityService();
 const medicalProcedureService = new MedicalProcedureService();
 const doctorMedicalSpecialityMappingService =
   new DoctorMedicalSpecialityMappingService();
+const languageService = new LanguageService();
 
 export async function createUser(
   userForename: string,
@@ -257,7 +259,7 @@ export async function performDoctorInteractions(shouldDelete: boolean) {
 
   const doctorNeurologyMappingToCreate = await createDoctorSpecialityMapping(
     userToCreate?.userId!,
-    "b1665b13-8448-54af-8243-accff2555108",
+    "108aa19f-40e9-561c-a88a-53ad20a6c99e",
     true,
     false,
     false
@@ -266,7 +268,7 @@ export async function performDoctorInteractions(shouldDelete: boolean) {
   const doctorNeurologyMappingToUpdateToInternalMedicine =
     updateDoctorSpecialityMapping(
       doctorNeurologyMappingToCreate?.doctorMedicalSpecialityMappingId!,
-      "635ec41e-fad3-5147-ae0c-3298ba892237",
+      "08721aa2-0b17-5173-8fa2-746443d2aa5f",
       true,
       false,
       false
@@ -283,6 +285,28 @@ export async function performDoctorInteractions(shouldDelete: boolean) {
     );
 
     const userToDelete = await deleteUser(userToCreate?.userId!);
+  }
+}
+
+export async function createPatients(start: number, end: number) {
+  const patientRole = await roleService.getRoleByName("patient");
+  for (let i = start; i < end; i++) {
+    let user = await createUser(
+      "patientFN",
+      "patientLN" + i,
+      "patientEM" + i,
+      "patientPH" + i,
+      "male",
+      "1678-10-15",
+      "patientADDR" + i,
+      "patientPASS" + i,
+      false,
+      false,
+      false,
+      false
+    );
+
+    await createUserRoleMapping(user?.userId!, patientRole?.roleId!);
   }
 }
 
@@ -308,5 +332,20 @@ export const createSpecialities = async () => {
   });
   await medicalSpecialityService.createMedicalSpeciality({
     medicalSpecialityName: "Dermatology",
+  });
+};
+
+export const createLanguages = async () => {
+  await languageService.createLanguage({
+    languageName: "Romanian",
+    languageCode: "ro",
+  });
+  await languageService.createLanguage({
+    languageName: "British English",
+    languageCode: "en-GB",
+  });
+  await languageService.createLanguage({
+    languageName: "American English",
+    languageCode: "en-US",
   });
 };

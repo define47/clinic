@@ -22,7 +22,7 @@ export class DoctorMedicalSpecialityMappingService
       );
   }
 
-  public async getDoctorMedicalSpecialityMappingsByDoctorId(
+  public async getDoctorMedicalSpecialityMappingByDoctorId(
     doctorId: string
   ): Promise<DoctorMedicalSpecialityMapping[] | undefined> {
     return await this._doctorMedicalSpecialityMappingRepository.getDoctorMedicalSpecialityMappingsByDoctorId(
@@ -33,20 +33,10 @@ export class DoctorMedicalSpecialityMappingService
   public async getDoctorMedicalSpecialityMappingsByMappingId(
     doctorMedicalSpecialityMappingId: string
   ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-    return await this._doctorMedicalSpecialityMappingRepository.getDoctorMedicalSpecialityMappingsByMappingId(
+    return await this._doctorMedicalSpecialityMappingRepository.getDoctorMedicalSpecialityMappingByMappingId(
       doctorMedicalSpecialityMappingId
     );
   }
-
-  // public async getDoctorMedicalSpecialityMappingByRank(
-  //   doctorId: string,
-  //   rank: string
-  // ): Promise<DoctorMedicalSpecialityMapping | undefined> {
-  //   return await this._doctorMedicalSpecialityMappingRepository.getDoctorMedicalSpecialityMappingByRank(
-  //     doctorId,
-  //     rank
-  //   );
-  // }
 
   public async createMedicalDoctorSpecialityMapping(
     doctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingCreationAttributes
