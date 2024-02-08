@@ -45,6 +45,8 @@ import { CreateMedicalProcedureOverlay } from "../overlays/medicalProcedureOverl
 import { DeleteMedicalProcedureOverlay } from "../overlays/medicalProcedureOverlays/DeleteMedicalProcedureOverlay";
 import { UpdateMedicalProcedureOverlay } from "../overlays/medicalProcedureOverlays/UpdateMedicalProcedureOverlay";
 import { useReactToPrint } from "react-to-print";
+import useDeviceDetection from "../../utils/useDeviceDetection";
+import { CardEntry } from "../design/card/CardEntry";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -490,7 +492,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     content: () => componentRef.current,
     onAfterPrint: () => console.log("print completed"),
   });
-  return (
+
+  const { device, orientation } = useDeviceDetection();
+  useEffect(() => {
+    console.log(`General Table Current device type: ${device} ${orientation}`);
+  }, [device, orientation]);
+
+  return device === "Desktop" ? (
     <div className="w-full bg-white h-full border p-4 rounded-xl font-roboto">
       {/* <button onClick={handlePrint}>print</button> */}
       <div className="flex items-center justify-between">
@@ -564,11 +572,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               )}
 
             {/* <AppointmentPeriodPicker
-              selectedAppointmentPeriodValue={selectedAppointmentPeriodValue}
-              setSelectedAppointmentPeriodValue={
-                setSelectedAppointmentPeriodValue
-              }
-            /> */}
+            selectedAppointmentPeriodValue={selectedAppointmentPeriodValue}
+            setSelectedAppointmentPeriodValue={
+              setSelectedAppointmentPeriodValue
+            }
+          /> */}
           </div>
         )}
         {entity === "medicalProcedure" && (
@@ -584,17 +592,17 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               />
             </div>
             {/* <div className="grow flex justify-center items-center">
-              <MedicalSpecialityPicker
-                label="select medical speciality"
-                selectedMedicalSpecialityId={selectedMedicalSpecialityId}
-                setSelectedMedicalSpecialityId={setSelectedMedicalSpecialityId}
-                selectedMedicalSpecialityName={selectedMedicalSpecialityName}
-                setSelectedMedicalSpecialityName={
-                  setSelectedMedicalSpecialityName
-                }
-              />
-            </div>
-            <div className="w-72 flex-none"></div> */}
+            <MedicalSpecialityPicker
+              label="select medical speciality"
+              selectedMedicalSpecialityId={selectedMedicalSpecialityId}
+              setSelectedMedicalSpecialityId={setSelectedMedicalSpecialityId}
+              selectedMedicalSpecialityName={selectedMedicalSpecialityName}
+              setSelectedMedicalSpecialityName={
+                setSelectedMedicalSpecialityName
+              }
+            />
+          </div>
+          <div className="w-72 flex-none"></div> */}
           </div>
           // <div className="flex ">
           //   <div className="flex-none w-14 h-14 ...">01</div>
@@ -677,14 +685,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                         />
                       )}
                       {/* {orderBy === "asc:userSurname" ? (
-                        
-                      ) : orderBy === "desc:userForename" ? (
-                        <RiArrowDownSFill
-                          onClick={() => setOrderBy("asc:userSurname")}
-                        />
-                      ) : (
-                        ""
-                      )} */}
+                      
+                    ) : orderBy === "desc:userForename" ? (
+                      <RiArrowDownSFill
+                        onClick={() => setOrderBy("asc:userSurname")}
+                      />
+                    ) : (
+                      ""
+                    )} */}
                     </div>
                   </td>
                   <td className="px-6 py-4 font-bold">userEmail</td>
@@ -784,35 +792,26 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     </td>
                     {entity === "doctor" && (
                       <td className="px-6 py-4 font-medium">
-                        {
-                          determineSpecialityOrder(
-                            tableRow.medicalSpecialities!,
-                            "P"
-                          )
-                          // ?.slice(0, -3)
-                        }
+                        {determineSpecialityOrder(
+                          tableRow.medicalSpecialities!,
+                          "P"
+                        )?.slice(0, -3)}
                       </td>
                     )}
                     {entity === "doctor" && (
                       <td className="px-6 py-4 font-medium">
-                        {
-                          determineSpecialityOrder(
-                            tableRow.medicalSpecialities!,
-                            "S"
-                          )
-                          // ?.slice(0, -3)
-                        }
+                        {determineSpecialityOrder(
+                          tableRow.medicalSpecialities!,
+                          "S"
+                        )?.slice(0, -3)}
                       </td>
                     )}
                     {entity === "doctor" && (
                       <td className="px-6 py-4 font-medium">
-                        {
-                          determineSpecialityOrder(
-                            tableRow.medicalSpecialities!,
-                            "T"
-                          )
-                          // ?.slice(0, -3)
-                        }
+                        {determineSpecialityOrder(
+                          tableRow.medicalSpecialities!,
+                          "T"
+                        )?.slice(0, -3)}
                       </td>
                     )}
                     <td className="h-14 flex items-center justify-center space-x-2">
@@ -943,17 +942,6 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           </table>
         )}
       </div>
-      {/* <CreateUserOverlay roleName={roleName} /> */}
-      {/* <div>
-        <button onClick={() => setModalOpen(true)}>Open Modal</button>
-        {modalOpen && (
-          <CreateUserOverlay
-            closeModal={() => setModalOpen(false)}
-            roleName={roleName}
-          />
-        )}
-      </div> */}
-
       <div className="w-full flex items-center justify-between mt-2">
         <StyledRippleButton
           label={`Previous Page`}
@@ -994,5 +982,165 @@ export const GeneralTable: FC<GeneralTableProps> = ({
       </div>
       {/* here notification {JSON.stringify(socketNotificationDataState)} */}
     </div>
+  ) : (
+    <>
+      {tableRows.map((tableRow: TableRow, tableRowIndex: number) =>
+        isUserRow(tableRow) ? (
+          <div className="h-auto border rounded-xl bg-white shadow-2xl shadow-black/40 text-xs mb-4">
+            <div className="w-full flex flex-col">
+              <CardEntry
+                cardEntryTitle="Forename"
+                cardEntryData={`${tableRow.userForename}`}
+              />
+              <CardEntry
+                cardEntryTitle="Surname"
+                cardEntryData={`${tableRow.userSurname}`}
+              />
+              <CardEntry
+                cardEntryTitle="Email"
+                cardEntryData={`${tableRow.userEmail}`}
+              />
+              <CardEntry
+                cardEntryTitle="Phone Number"
+                cardEntryData={`${tableRow.userPhoneNumber}`}
+              />
+              <CardEntry
+                cardEntryTitle="Gender"
+                cardEntryData={`${tableRow.userGender}`}
+              />
+              <CardEntry
+                cardEntryTitle="Date Of Birth"
+                cardEntryData={`${tableRow.userDateOfBirth
+                  .split("-")
+                  .reverse()
+                  .join("-")}`}
+              />
+              <CardEntry
+                cardEntryTitle="Address"
+                cardEntryData={`${tableRow.userAddress}`}
+              />
+
+              {entity === "doctor" && (
+                <CardEntry
+                  cardEntryTitle="Primary Speciality"
+                  cardEntryData={`${determineSpecialityOrder(
+                    tableRow.medicalSpecialities!,
+                    "P"
+                  )?.slice(0, -3)}`}
+                />
+              )}
+
+              {entity === "doctor" && (
+                <CardEntry
+                  cardEntryTitle="Secondary Speciality"
+                  cardEntryData={`${determineSpecialityOrder(
+                    tableRow.medicalSpecialities!,
+                    "S"
+                  )?.slice(0, -3)}`}
+                />
+              )}
+
+              {entity === "doctor" && (
+                <CardEntry
+                  cardEntryTitle="Tertiary Speciality"
+                  cardEntryData={`${determineSpecialityOrder(
+                    tableRow.medicalSpecialities!,
+                    "T"
+                  )?.slice(0, -3)}`}
+                />
+              )}
+
+              <div className="p-3 w-full h-10 flex items-center justify-between border-b text-xs">
+                <span className="font-semibold">Actions</span>
+                <div
+                  className={`w-56 flex items-center justify-center text-center space-x-3`}
+                >
+                  <UpdateUserOverlay user={tableRow} roleName={entity} />
+                  <DeleteUserOverlay user={tableRow} roleName={entity} />
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : isMedicalSpecialityRow(tableRow) ? (
+          <div className="h-auto border rounded-xl bg-white shadow-2xl shadow-black/40 text-xs mb-4">
+            <div className="w-full flex flex-col">
+              <CardEntry
+                cardEntryTitle="Medical Speciality Name"
+                cardEntryData={`${tableRow.medicalSpecialityName}`}
+              />
+              <div className="p-3 w-full h-10 flex items-center justify-between border-b text-xs">
+                <span className="font-semibold">Actions</span>
+                <div
+                  className={`w-56 flex items-center justify-center text-center space-x-3`}
+                >
+                  <UpdateMedicalSpeciality medicalSpeciality={tableRow} />
+                  <DeleteMedicalSpecialityOverlay
+                    medicalSpeciality={tableRow}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : isAppointmentRow(tableRow) ? (
+          <div className="h-auto border rounded-xl bg-white shadow-2xl shadow-black/40 text-xs mb-4">
+            <div className="w-full flex flex-col">
+              <CardEntry
+                cardEntryTitle="Appointment Id"
+                cardEntryData={`${tableRow.appointment.appointmentId}`}
+              />
+              <CardEntry
+                cardEntryTitle="Doctor"
+                cardEntryData={`${tableRow.doctor.doctorForename} ${tableRow.doctor.doctorSurname}`}
+              />
+              <CardEntry
+                cardEntryTitle="Patient"
+                cardEntryData={`${tableRow.patient.patientForename} ${tableRow.patient.patientForename}`}
+              />
+              <CardEntry
+                cardEntryTitle="Appointment Reason"
+                cardEntryData={`${tableRow.appointment.appointmentReason}`}
+              />
+              <CardEntry
+                cardEntryTitle="Appointment Date Time"
+                cardEntryData={`${tableRow.appointment.appointmentDateTime
+                  .split("T")[0]
+                  .split("-")
+                  .reverse()
+                  .join("-")} ${
+                  tableRow.appointment.appointmentDateTime.split("T")[1]
+                }`}
+              />
+              <CardEntry
+                cardEntryTitle="Appointment Status"
+                cardEntryData={`${tableRow.appointment.appointmentStatus}`}
+                cardEntryType="appointmentStatus"
+              />
+              <CardEntry
+                cardEntryTitle="Appointment Cancellation Reason"
+                cardEntryData={`${tableRow.appointment.appointmentCancellationReason}`}
+              />
+              <div className="p-3 w-full h-10 flex items-center justify-between border-b text-xs">
+                <span className="font-semibold">Actions</span>
+                <div
+                  className={`w-56 flex items-center justify-center text-center space-x-3`}
+                >
+                  <UpdateAppointmentOverlay
+                    appointment={tableRow.appointment}
+                    doctorData={tableRow.doctor}
+                    patientData={tableRow.patient}
+                  />
+
+                  <DeleteAppointmentOverlay
+                    appointmentId={tableRow.appointment.appointmentId}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div></div>
+        )
+      )}
+    </>
   );
 };

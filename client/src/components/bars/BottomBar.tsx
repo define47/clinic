@@ -36,7 +36,7 @@ import { IoHelpCircle, IoHelpCircleOutline } from "react-icons/io5";
 export const BottomBar: FC = () => {
   const { pathname } = useLocation();
   return (
-    <div className="fixed bottom-0 left-0 w-full h-20 bg-white border-t rounded-t-xl">
+    <div className="fixed bottom-0 left-0 w-full h-20 bg-white border-t rounded-t-3xl">
       <ul className="flex overflow-x-auto">
         <BottomBarItem
           to={adminDashboardPathname}
