@@ -156,8 +156,8 @@ export const Layout: FC = () => {
             </div>
           </div>
         ) : device === "Mobile" ? (
-          // h-dvh
-          <div className="relative h-lvh bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor">
+          // h-lvh
+          <div className="relative h-dvh bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor">
             {/* <div className="w-full bg-purple-200">hello</div> */}
             {/* <TopBarMobile /> */}
 
