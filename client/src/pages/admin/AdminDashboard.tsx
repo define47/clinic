@@ -69,6 +69,61 @@ export const AdminDashboard: FC = () => {
           label="label"
           type="create"
         />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
+        <StyledRippleButton
+          onClick={() => console.log("Button Clicked")}
+          label="label"
+          type="create"
+        />
 
         {/* <DateTimePicker
           isDateOnly={false}

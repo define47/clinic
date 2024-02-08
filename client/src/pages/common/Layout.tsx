@@ -1,13 +1,15 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
-import { Sidebar } from "../../components/sidebar/Sidebar";
-import { TopBar } from "../../components/topBar/TopBar";
+import { Sidebar } from "../../components/bars/Sidebar";
+import { TopBar } from "../../components/bars/TopBar";
 import { Socket, io } from "socket.io-client";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
 import { serverURL, verifyUserPath } from "../../utils/dotenv";
 import axios from "axios";
 import useDeviceDetection from "../../utils/useDeviceDetection";
+import { BottomBar } from "../../components/bars/BottomBar";
+import { TopBarMobile } from "../../components/bars/TopBarMobile";
 
 // const App: React.FC = () => {
 
@@ -154,7 +156,19 @@ export const Layout: FC = () => {
             </div>
           </div>
         ) : device === "Mobile" ? (
-          <div className="relative h-dvh bg-red-200">hello</div>
+          // h-dvh
+          <div className="relative h-lvh bg-gray-1000">
+            {/* <div className="w-full bg-purple-200">hello</div> */}
+            <TopBarMobile />
+
+            <div
+              // h-[calc(100dvh-70.4px)]
+              className={`p-4 h-[calc(100dvh-80px)] bg-red-200 overflow-y-auto`}
+            >
+              <Outlet />
+            </div>
+            <BottomBar />
+          </div>
         ) : (
           <div></div>
         );

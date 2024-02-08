@@ -24,6 +24,18 @@ import { IoHelpCircle, IoHelpCircleOutline } from "react-icons/io5";
 import { BiInjection, BiSolidInjection } from "react-icons/bi";
 import { CiLogout } from "react-icons/ci";
 import axios from "axios";
+import {
+  adminDashboardPathname,
+  adminGuidePathname,
+  appointmentsPathname,
+  doctorsPathname,
+  medicalProceduresPathname,
+  medicalSpecialitiesPathname,
+  nursesPathname,
+  patientsPathname,
+  receptionistsPathname,
+  settingsPathname,
+} from "../../utils/consts";
 
 export const Sidebar: FC<SidebarProps> = ({
   isSidebarExpanded,
@@ -31,16 +43,6 @@ export const Sidebar: FC<SidebarProps> = ({
 }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const appointmentsPathname = "/admins/appointments";
-  const adminDashboardPathname = "/admins/dashboard";
-  const patientsPathname = "/admins/patients";
-  const doctorsPathname = "/admins/doctors";
-  const medicalSpecialitiesPathname = "/admins/medical-specialities";
-  const medicalProceduresPathname = "/admins/medical-procedures";
-  const nursesPathname = "/admins/nurses";
-  const receptionistsPathname = "/admins/receptionists";
-  const settingsPathname = "/admins/settings";
-  const adminGuidePathname = "/admins/guide";
 
   async function onLogout() {
     try {

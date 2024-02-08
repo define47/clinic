@@ -156,14 +156,14 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
       />
 
       <Overlay
-        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
+        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
           isCreateUserOverlayVisible ? "visible backdrop-blur-sm" : "invisible"
         }`}
         // closeModal={() => setIsCreateUserOverlayVisible(false)}
         closeModal={handleOverlayClick}
       >
         <div
-          className={`w-11/12 h-3/5 overflow-y-auto lg:w-3/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
+          className={`w-11/12 h-4/5 overflow-y-auto lg:w-3/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
             isCreateUserOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"

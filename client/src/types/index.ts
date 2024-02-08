@@ -77,6 +77,13 @@ export type SidebarItemProps = {
   isSidebarExpanded: boolean;
 };
 
+export type BottomBarItemProps = {
+  to: string;
+  icon: ReactNode;
+  title: string;
+  isActive: boolean;
+};
+
 export type TopBarProps = {
   isSidebarExtended: boolean;
   setIsSidebarExtended: (isSidebarExtended: boolean) => void;
