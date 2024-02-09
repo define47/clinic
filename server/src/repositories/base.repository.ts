@@ -9,6 +9,8 @@ import {
 } from "../models/user.model";
 import { eq } from "drizzle-orm";
 import { v5 as uuidv5 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
+
 import { getUUIDv5NamespaceEnv } from "../utils/dotenv";
 import {
   RoleCreationAttributes,
@@ -448,10 +450,13 @@ export class BaseRepository<T> implements IBaseRepository<T> {
           );
           break;
         case appointmentTable:
+          let random = uuidv4();
+          creationAttributes =
+            creationAttributes as AppointmentCreationAttributes;
           id = uuidv5(
-            (
-              creationAttributes as AppointmentCreationAttributes
-            ).appointmentDateTime.toISOString(),
+            `${creationAttributes.appointmentPatientId}-${
+              creationAttributes.appointmentDoctorId
+            }-${creationAttributes.appointmentDateTime.toISOString()}-${new Date()}-${random}`,
             getUUIDv5NamespaceEnv()
           );
           break;

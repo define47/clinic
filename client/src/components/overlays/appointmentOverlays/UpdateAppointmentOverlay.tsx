@@ -143,6 +143,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
           <div className="w-full flex justify-between">
             <div className="flex flex-col space-y-6">
               <UserPicker
+                shouldDataBeFetched={false}
                 label="select doctor"
                 roleName="doctor"
                 selectedUserId={selectedDoctorId}
@@ -153,6 +154,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
                 z="z-50"
               />
               <UserPicker
+                shouldDataBeFetched={false}
                 label="select patient"
                 roleName="patient"
                 selectedUserId={selectedPatientId}

@@ -217,6 +217,7 @@ export const CreateAppointmentOverlay: FC = () => {
           <div className="w-full flex justify-between">
             <div className="flex flex-col space-y-6">
               <UserPicker
+                shouldDataBeFetched={true}
                 label="select doctor"
                 roleName="doctor"
                 selectedUserId={selectedDoctorId}
@@ -226,6 +227,7 @@ export const CreateAppointmentOverlay: FC = () => {
                 z="z-50"
               />
               <UserPicker
+                shouldDataBeFetched={true}
                 label="select patient"
                 roleName="patient"
                 selectedUserId={selectedPatientId}

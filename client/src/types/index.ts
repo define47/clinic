@@ -176,6 +176,7 @@ export type AppointmentPeriodPickerProps = {
 };
 
 export type UserPickerProps = {
+  shouldDataBeFetched: boolean;
   label: string;
   roleName: string;
   selectedUserId: string;

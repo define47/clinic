@@ -8,6 +8,7 @@ import { RiArrowUpSLine } from "react-icons/ri";
 import { VscDash } from "react-icons/vsc";
 
 export const UserPicker: FC<UserPickerProps> = ({
+  shouldDataBeFetched,
   label,
   roleName,
   selectedUserId,
@@ -55,25 +56,27 @@ export const UserPicker: FC<UserPickerProps> = ({
 
   async function fetchTableData() {
     try {
-      const response = await axios.get(usersPath, {
-        params: {
-          roleId:
-            roleName === "patient"
-              ? patientRoleId
-              : roleName === "doctor"
-              ? doctorRoleId
-              : "",
-          searchBy: "userForename",
-          searchQuery: "",
-          limit: 9999999,
-          page: 0,
-          orderBy: "asc:userForename",
-        },
+      if (shouldDataBeFetched) {
+        const response = await axios.get(usersPath, {
+          params: {
+            roleId:
+              roleName === "patient"
+                ? patientRoleId
+                : roleName === "doctor"
+                ? doctorRoleId
+                : "",
+            searchBy: "userForename",
+            searchQuery: "",
+            limit: 9999999,
+            page: 0,
+            orderBy: "asc:userForename",
+          },
 
-        withCredentials: true,
-      });
+          withCredentials: true,
+        });
 
-      if (response.data.success) setUsers(response.data.payload.tableData);
+        if (response.data.success) setUsers(response.data.payload.tableData);
+      }
     } catch (error) {
       console.log(error);
     }

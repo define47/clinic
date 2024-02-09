@@ -7,6 +7,7 @@ import { MedicalSpecialityService } from "../services/medicalSpeciality.service"
 import { MedicalProcedureService } from "../services/medicalProcedure.service";
 import { DoctorMedicalSpecialityMappingService } from "../services/doctorMedicalSpecialityMapping.service";
 import { LanguageService } from "../services/language.service";
+import { AppointmentService } from "../services/appointment.service";
 
 const userService = new UserService();
 const userRoleMappingService = new UserRoleMappingService();
@@ -16,7 +17,7 @@ const medicalProcedureService = new MedicalProcedureService();
 const doctorMedicalSpecialityMappingService =
   new DoctorMedicalSpecialityMappingService();
 const languageService = new LanguageService();
-
+const appointmentService = new AppointmentService();
 export async function createUser(
   userForename: string,
   userSurname: string,
@@ -348,4 +349,61 @@ export const createLanguages = async () => {
     languageName: "American English",
     languageCode: "en-US",
   });
+};
+
+function getRandomDate(
+  year: number,
+  month: number,
+  day: number,
+  minHour: number,
+  maxHour: number
+) {
+  const daysInMonth = new Date(year, month, 0).getDate();
+  // const randomDay = Math.floor(Math.random() * daysInMonth) + 1;
+
+  const randomHour =
+    Math.floor(Math.random() * (maxHour - minHour + 1)) + minHour;
+  const minutes = [0, 15, 30, 45];
+  // const randomMinute = Math.floor(Math.random() * 60);
+  const randomMinute = minutes[Math.floor(Math.random() * minutes.length)];
+
+  const randomDate = new Date(year, month - 1, day, randomHour, randomMinute);
+
+  return randomDate;
+}
+
+export const createAppointments = async (start: number, end: number) => {
+  const patientRole = await roleService.getRoleByName("patient");
+  const doctorRole = await roleService.getRoleByName("doctor");
+  const patients = (await userRoleMappingService.getAllUsersRelatedData(
+    patientRole?.roleId!,
+    ["userForename"],
+    "",
+    9999999,
+    0,
+    "asc:userForename"
+  ))!.tableData;
+  const doctors = (await userRoleMappingService.getAllUsersRelatedData(
+    doctorRole?.roleId!,
+    ["userForename"],
+    "",
+    9999999,
+    0,
+    "asc:userForename"
+  ))!.tableData;
+
+  // console.log(doctors);
+  const randomDoctor = doctors[Math.floor(Math.random() * doctors.length)];
+  const randomPatient = doctors[Math.floor(Math.random() * doctors.length)];
+
+  for (let start = 0; start < end; start++) {
+    let randomAppointmentDateTime = getRandomDate(2024, 2, 9, 8, 18);
+    await appointmentService.createAppointment({
+      appointmentDoctorId: randomDoctor.userId,
+      appointmentPatientId: randomPatient.userId,
+      appointmentDateTime: randomAppointmentDateTime,
+      appointmentReason: `${randomDoctor.userForename} ${randomDoctor.userSurname} - ${randomPatient.userForename} ${randomPatient.userSurname}`,
+      appointmentStatus: "scheduled",
+    });
+  }
 };

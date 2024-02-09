@@ -2,15 +2,9 @@ import { FC, useContext, useState } from "react";
 import { StyledRippleButton } from "../../components/design/StyledRippleButton";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
 
-import { UserSearchCriterionPicker } from "../../components/pickers/UserSearchCriterionPicker";
-import { MedicalSpecialityPicker } from "../../components/pickers/MedicalSpecialityPicker";
-import { TreeTable } from "../../components/TreeTable";
-import { DateTimePicker } from "../../components/pickers/DateTimePicker";
-import { UserPicker } from "../../components/pickers/UserPicker";
-import { AppointmentSearchCriterionPicker } from "../../components/pickers/AppointmentSearchCriterionPicker";
-import { LimitPicker } from "../../components/pickers/LimitPicker";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
-import { ConfirmationDialogEntry } from "../../components/design/ConfirmationDialogEntry";
+import { VirtualizedList } from "../../components/virt/VirtualizedList";
+import { VirtualizedTable } from "../../components/virt/VirtualizedTable";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -38,6 +32,30 @@ export const AdminDashboard: FC = () => {
       children: [{ name: "Node 2.1" }, { name: "Node 2.2" }],
     },
   ];
+
+  const columns = [
+    { dataKey: "id", label: "ID" },
+    { dataKey: "name", label: "Name" },
+    // Add more columns as needed
+  ];
+
+  const data = Array.from({ length: 100001 }, (_, index) => ({
+    id: index,
+    name: `Name ${index + 1}`,
+    // Add more properties as needed
+  }));
+
+  const rowHeight = 30;
+  const containerHeight = 300;
+  const columnWidth = 100;
+
+  const items = Array.from({ length: 1000 }, (_, index) => ({
+    id: index,
+    content: `Item ${index + 1}`,
+  }));
+
+  // Item height and container height
+  const itemHeight = 50;
 
   return (
     <div className="">
@@ -69,60 +87,17 @@ export const AdminDashboard: FC = () => {
           label="label"
           type="create"
         />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
+        <VirtualizedList
+          items={items}
+          itemHeight={itemHeight}
+          containerHeight={containerHeight}
         />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
-        />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
-        />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
-        />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
-        />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
-        />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
-        />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
-        />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
-        />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
-        />
-        <StyledRippleButton
-          onClick={() => console.log("Button Clicked")}
-          label="label"
-          type="create"
+        <VirtualizedTable
+          data={data}
+          columns={columns}
+          rowHeight={rowHeight}
+          containerHeight={containerHeight}
+          columnWidth={columnWidth}
         />
 
         {/* <DateTimePicker
