@@ -183,6 +183,7 @@ export class UserController {
       }
 
       let doctorSpecialityNames = [];
+      let doctorSpecialityIds = [];
       if (userRoleNames[0] === "doctor" || userRoleNames[1] === "doctor") {
         const userToLoginSpecialities =
           await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByDoctorId(
@@ -197,6 +198,14 @@ export class UserController {
               )
             )?.medicalSpecialityName
           );
+
+          doctorSpecialityIds.push(
+            (
+              await this._medicalSpecialityService.getMedicalSpecialityById(
+                userToLoginSpecialities![i].medicalSpecialityId
+              )
+            )?.medicalSpecialityId
+          );
         }
       }
 
@@ -207,7 +216,16 @@ export class UserController {
         userSurname: userToLogin?.userSurname,
         userEmail: userToLogin?.userEmail,
         roleNames: userRoleNames,
-        specialityNames: doctorSpecialityNames,
+        ...((userRoleNames[0] === "doctor" ||
+          userRoleNames[1] === "doctor") && {
+          specialityIds: doctorSpecialityIds,
+        }),
+        ...((userRoleNames[0] === "doctor" ||
+          userRoleNames[1] === "doctor") && {
+          specialityNames: doctorSpecialityNames,
+        }),
+        // specialityIds: doctorSpecialityIds,
+        // specialityNames: doctorSpecialityNames,
         languageId: language?.languageId,
         languageCode: language?.languageCode,
         isDarkModeOn: userPreferencesMapping?.isDarkModeOn,

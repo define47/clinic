@@ -500,7 +500,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
           break;
       }
 
-      console.log("generated ID", id);
+      // console.log("generated ID", id);
 
       const entityAttributes: Record<string, any> = {};
 

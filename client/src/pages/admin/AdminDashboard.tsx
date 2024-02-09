@@ -5,6 +5,7 @@ import { SocketNotificationDataContext } from "../../contexts/SocketNotification
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { VirtualizedList } from "../../components/virt/VirtualizedList";
 import { VirtualizedTable } from "../../components/virt/VirtualizedTable";
+import { DragAndDrop } from "../../components/DragAndDrop";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -39,7 +40,7 @@ export const AdminDashboard: FC = () => {
     // Add more columns as needed
   ];
 
-  const data = Array.from({ length: 100001 }, (_, index) => ({
+  const data = Array.from({ length: 100 }, (_, index) => ({
     id: index,
     name: `Name ${index + 1}`,
     // Add more properties as needed
@@ -61,8 +62,8 @@ export const AdminDashboard: FC = () => {
     <div className="">
       {/* admin dashboard <Overlay /> */}
       <div className="space-y-10">
-        {/* {JSON.stringify(authenticatedUserDataState)}
-        here notification {JSON.stringify(socketNotificationDataState)} */}
+        {JSON.stringify(authenticatedUserDataState)}
+        {/* here notification {JSON.stringify(socketNotificationDataState)} */}
         {/* <StyledInput
           label="label1"
           textColorUnfocused="text-red-500"
@@ -82,6 +83,7 @@ export const AdminDashboard: FC = () => {
           labelFocused="text-green-500"
         /> */}
         {/* <TreeTable /> */}
+        <DragAndDrop />
         <StyledRippleButton
           onClick={() => console.log("Button Clicked")}
           label="label"

@@ -42,7 +42,8 @@ export const LoginUser: FC = () => {
           label="userEmail"
           name="userEmail"
           onChangeStyledInput={handleInputChange}
-          labelBackgroundColor="bg-black"
+          labelBackgroundColorUnfocused="bg-transparent"
+          labelBackgroundColorFocused="!bg-black"
           textColor="text-white"
           labelColor="text-white"
         />
@@ -50,7 +51,8 @@ export const LoginUser: FC = () => {
           label="userPassword"
           name="userPassword"
           onChangeStyledInput={handleInputChange}
-          labelBackgroundColor="bg-black"
+          labelBackgroundColorUnfocused="bg-transparent"
+          labelBackgroundColorFocused="!bg-black"
           textColor="text-white"
           labelColor="text-white"
         />

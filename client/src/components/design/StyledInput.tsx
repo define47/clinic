@@ -15,7 +15,8 @@ type StyledInputProps = {
   labelColor?: string;
   labelUnfocused?: string;
   labelFocused?: string;
-  labelBackgroundColor?: string;
+  labelBackgroundColorUnfocused?: string;
+  labelBackgroundColorFocused?: string;
   defaultValue?: string;
   inputValue?: string;
   icon?: ReactNode;
@@ -38,7 +39,8 @@ export const StyledInput: FC<StyledInputProps> = ({
   labelColor,
   labelUnfocused,
   labelFocused,
-  labelBackgroundColor,
+  labelBackgroundColorUnfocused,
+  labelBackgroundColorFocused,
   defaultValue,
   inputValue,
   icon,
@@ -157,7 +159,12 @@ export const StyledInput: FC<StyledInputProps> = ({
           } ${labelUnfocused ? labelUnfocused : "text-black"} ${
             focused ? `!${labelFocused}` : "text-black"
           }  px-1 pointer-events-none ${
-            labelBackgroundColor ? labelBackgroundColor : "bg-gray-50"
+            labelBackgroundColorUnfocused
+              ? labelBackgroundColorUnfocused
+              : "bg-gray-50"
+          } ${
+            focused && labelBackgroundColorFocused
+            // focused && "!bg-red-700"
           } transition-all duration-200`}
         >
           {label}

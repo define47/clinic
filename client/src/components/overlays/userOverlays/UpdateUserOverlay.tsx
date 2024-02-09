@@ -297,7 +297,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 label="userForename"
                 name="userForename"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
                 inputValue={userToUpdate.userForename}
                 // inputValue=""
               />
@@ -305,14 +305,14 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 label="userSurname"
                 name="userSurname"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
                 inputValue={userToUpdate.userSurname}
               />
               <StyledInput
                 label="userEmail"
                 name="userEmail"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
                 inputValue={userToUpdate.userEmail}
               />
             </div>
@@ -321,14 +321,14 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 label="userPhoneNumber"
                 name="userPhoneNumber"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
                 inputValue={userToUpdate.userPhoneNumber}
               />
               <StyledInput
                 label="userGender"
                 name="userGender"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
                 inputValue={userToUpdate.userGender}
               />
               {/* <StyledInput
@@ -354,7 +354,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 label="userAddress"
                 name="userAddress"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
                 inputValue={userToUpdate.userAddress}
               />
               {roleName === "doctor" && (

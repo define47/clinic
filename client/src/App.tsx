@@ -25,6 +25,9 @@ import { MedicalProcedures } from "./pages/admin/MedicalProcedures";
 import { authPath, verifyUserPath } from "./utils/dotenv";
 import { AppointmentHistoryCards } from "./pages/common/AppointmentHistoryCards";
 import useDeviceDetection from "./utils/useDeviceDetection";
+import { DoctorDashboard } from "./pages/doctor/DoctorDashboard";
+import { ReceptionistDashboard } from "./pages/receptionist/ReceptionistDashboard";
+import { PatientDashboard } from "./pages/patient/PatientDashboard";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -136,42 +139,170 @@ const App: FC = () => {
     <div>
       <Routes>
         <Route path="/login" element={<Login />} />
-        {authenticatedUserDataState.roleNames[0] === "admin" && (
-          <>
-            <Route path="/" element={<Navigate to="/admins/dashboard" />} />
-            <Route
-              path="/admin"
-              element={<Navigate to="/admins/dashboard" />}
-            />
-            <Route
-              path="/dashboard"
-              element={<Navigate to="/admins/dashboard" />}
-            />
-            <Route path="/" element={<Layout />}>
-              <Route path="/admins/dashboard" element={<AdminDashboard />} />
-              <Route path="/admins/appointments" element={<Appointments />} />
-              <Route path="/admins/patients" element={<Patients />} />
-              <Route path="/admins/doctors" element={<Doctors />} />
+        {authenticatedUserDataState.roleNames.length === 2 &&
+          ((authenticatedUserDataState.roleNames[0] === "admin" &&
+            authenticatedUserDataState.roleNames[1] === "doctor") ||
+            (authenticatedUserDataState.roleNames[0] === "doctor" &&
+              authenticatedUserDataState.roleNames[1] === "admin")) && (
+            <>
+              <Route path="/" element={<Navigate to="/admins/dashboard" />} />
               <Route
-                path="/admins/medical-specialities"
-                element={<MedicalSpecialities />}
+                path="/admin"
+                element={<Navigate to="/admins/dashboard" />}
               />
               <Route
-                path="/admins/medical-procedures"
-                element={<MedicalProcedures />}
+                path="/dashboard"
+                element={<Navigate to="/admins/dashboard" />}
               />
-              <Route path="/admins/nurses" element={<Nurses />} />
-              <Route path="/admins/receptionists" element={<Receptionists />} />
-              <Route path="/admins/settings" element={<Settings />} />
-              <Route path="/admins/guide" element={<AdminGuide />} />
+              <Route path="/" element={<Layout />}>
+                <Route path="/admins/dashboard" element={<AdminDashboard />} />
+                <Route path="/admins/appointments" element={<Appointments />} />
+                <Route path="/admins/patients" element={<Patients />} />
+                <Route path="/admins/doctors" element={<Doctors />} />
+                <Route
+                  path="/admins/medical-specialities"
+                  element={<MedicalSpecialities />}
+                />
+                <Route
+                  path="/admins/medical-procedures"
+                  element={<MedicalProcedures />}
+                />
+                <Route path="/admins/nurses" element={<Nurses />} />
+                <Route
+                  path="/admins/receptionists"
+                  element={<Receptionists />}
+                />
+                <Route path="/admins/settings" element={<Settings />} />
+                <Route path="/admins/guide" element={<AdminGuide />} />
+                <Route
+                  path="/admins/appointment-history/:appointmentId"
+                  element={<AppointmentHistoryCards />}
+                />
+                <Route path="*" element={<p>Path not resolved</p>} />
+              </Route>
+            </>
+          )}
+        {authenticatedUserDataState.roleNames.length === 1 &&
+          authenticatedUserDataState.roleNames[0] === "admin" && (
+            <>
+              <Route path="/" element={<Navigate to="/admins/dashboard" />} />
               <Route
-                path="/admins/appointment-history/:appointmentId"
-                element={<AppointmentHistoryCards />}
+                path="/admin"
+                element={<Navigate to="/admins/dashboard" />}
               />
-              <Route path="*" element={<p>Path not resolved</p>} />
-            </Route>
-          </>
-        )}
+              <Route
+                path="/dashboard"
+                element={<Navigate to="/admins/dashboard" />}
+              />
+              <Route path="/" element={<Layout />}>
+                <Route path="/admins/dashboard" element={<AdminDashboard />} />
+                <Route path="/admins/appointments" element={<Appointments />} />
+                <Route path="/admins/patients" element={<Patients />} />
+                <Route path="/admins/doctors" element={<Doctors />} />
+                <Route
+                  path="/admins/medical-specialities"
+                  element={<MedicalSpecialities />}
+                />
+                <Route
+                  path="/admins/medical-procedures"
+                  element={<MedicalProcedures />}
+                />
+                <Route path="/admins/nurses" element={<Nurses />} />
+                <Route
+                  path="/admins/receptionists"
+                  element={<Receptionists />}
+                />
+                <Route path="/admins/settings" element={<Settings />} />
+                <Route path="/admins/guide" element={<AdminGuide />} />
+                <Route
+                  path="/admins/appointment-history/:appointmentId"
+                  element={<AppointmentHistoryCards />}
+                />
+                <Route path="*" element={<p>Path not resolved</p>} />
+              </Route>
+            </>
+          )}
+        {authenticatedUserDataState.roleNames.length === 1 &&
+          authenticatedUserDataState.roleNames[0] === "doctor" && (
+            <>
+              <Route path="/" element={<Navigate to="/doctors/dashboard" />} />
+              <Route
+                path="/doctor"
+                element={<Navigate to="/doctors/dashboard" />}
+              />
+              <Route
+                path="/dashboard"
+                element={<Navigate to="/doctors/dashboard" />}
+              />
+              <Route path="/" element={<Layout />}>
+                <Route
+                  path="/doctors/dashboard"
+                  element={<DoctorDashboard />}
+                />
+
+                <Route
+                  path="*"
+                  element={<Navigate to="/doctors/dashboard" />}
+                />
+                {/* element={<p>Path not resolved (Doctors)</p>} */}
+              </Route>
+            </>
+          )}
+        {authenticatedUserDataState.roleNames.length === 1 &&
+          authenticatedUserDataState.roleNames[0] === "receptionist" && (
+            <>
+              <Route
+                path="/"
+                element={<Navigate to="/receptionist/dashboard" />}
+              />
+              <Route
+                path="/doctor"
+                element={<Navigate to="/receptionist/dashboard" />}
+              />
+              <Route
+                path="/dashboard"
+                element={<Navigate to="/receptionist/dashboard" />}
+              />
+              <Route path="/" element={<Layout />}>
+                <Route
+                  path="/receptionist/dashboard"
+                  element={<ReceptionistDashboard />}
+                />
+
+                <Route
+                  path="*"
+                  element={<Navigate to="/receptionist/dashboard" />}
+                />
+                {/* element={<p>Path not resolved (Doctors)</p>} */}
+              </Route>
+            </>
+          )}
+        {authenticatedUserDataState.roleNames.length === 1 &&
+          authenticatedUserDataState.roleNames[0] === "patient" && (
+            <>
+              <Route path="/" element={<Navigate to="/patient/dashboard" />} />
+              <Route
+                path="/doctor"
+                element={<Navigate to="/patient/dashboard" />}
+              />
+              <Route
+                path="/dashboard"
+                element={<Navigate to="/patient/dashboard" />}
+              />
+              <Route path="/" element={<Layout />}>
+                <Route
+                  path="/patient/dashboard"
+                  element={<PatientDashboard />}
+                />
+
+                <Route
+                  path="*"
+                  element={<Navigate to="/patient/dashboard" />}
+                />
+                {/* element={<p>Path not resolved (Doctors)</p>} */}
+              </Route>
+            </>
+          )}
       </Routes>
     </div>
   );

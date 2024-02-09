@@ -262,10 +262,10 @@ const buildServer = async () => {
     return { counter };
   });
 
-  await migrateToDb();
-  // createRoles();
-  // createSpecialities();
-  // createLanguages();
+  // await migrateToDb();
+  // await createRoles();
+  // await createSpecialities();
+  // await createLanguages();
 
   // performAdminInteractions();
   // performDoctorInteractions(true);

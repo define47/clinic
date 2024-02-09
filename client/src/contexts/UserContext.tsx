@@ -13,6 +13,7 @@ interface AuthenticatedUserDataContextInterface {
   userSurname: string;
   userEmail: string;
   roleNames: string[];
+  specialityIds?: string[];
   specialityNames?: string[];
   languageId: string;
   languageCode: string;

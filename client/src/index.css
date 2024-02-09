@@ -156,3 +156,37 @@ button {
 ::-webkit-scrollbar-corner {
   background-color: #777777;
 }
+
+.groups {
+  display: flex;
+  margin: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+
+  .group {
+    margin: 20px;
+    padding: 20px;
+    min-height: 16rem;
+    background-color: green;
+
+    .title {
+      color: white;
+      padding: 0;
+      margin-top: 0;
+    }
+  }
+
+  .group-hover {
+    margin: 20px;
+    padding: 20px;
+    background-color: darkgreen;
+  }
+}
+
+.thing {
+  background-color: yellow;
+  color: blue;
+  margin: 5px;
+  padding: 5px;
+  border: 2px green;
+}

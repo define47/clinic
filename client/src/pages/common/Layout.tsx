@@ -123,8 +123,14 @@ export const Layout: FC = () => {
     let content = <div></div>;
 
     if (
-      authenticatedUserDataState.roleNames.length === 1 &&
-      authenticatedUserDataState.roleNames[0] === "admin"
+      (authenticatedUserDataState.roleNames.length === 1 &&
+        authenticatedUserDataState.roleNames[0] === "admin") ||
+      (authenticatedUserDataState.roleNames.length === 2 &&
+        authenticatedUserDataState.roleNames[0] === "admin" &&
+        authenticatedUserDataState.roleNames[1] === "doctor") ||
+      (authenticatedUserDataState.roleNames.length === 2 &&
+        authenticatedUserDataState.roleNames[0] === "doctor" &&
+        authenticatedUserDataState.roleNames[1] === "admin")
     )
       content =
         // select-none
@@ -169,6 +175,48 @@ export const Layout: FC = () => {
             </div>
             <BottomBar />
           </div>
+        ) : (
+          <div></div>
+        );
+    else if (
+      authenticatedUserDataState.roleNames.length === 1 &&
+      authenticatedUserDataState.roleNames[0] === "doctor"
+    )
+      content =
+        device === "Desktop" ? (
+          <div className="w-screen h-screen flex">
+            <Outlet />
+          </div>
+        ) : device === "Mobile" ? (
+          <div></div>
+        ) : (
+          <div></div>
+        );
+    else if (
+      authenticatedUserDataState.roleNames.length === 1 &&
+      authenticatedUserDataState.roleNames[0] === "receptionist"
+    )
+      content =
+        device === "Desktop" ? (
+          <div className="w-screen h-screen flex">
+            <Outlet />
+          </div>
+        ) : device === "Mobile" ? (
+          <div></div>
+        ) : (
+          <div></div>
+        );
+    else if (
+      authenticatedUserDataState.roleNames.length === 1 &&
+      authenticatedUserDataState.roleNames[0] === "patient"
+    )
+      content =
+        device === "Desktop" ? (
+          <div className="w-screen h-screen flex">
+            <Outlet />
+          </div>
+        ) : device === "Mobile" ? (
+          <div></div>
         ) : (
           <div></div>
         );

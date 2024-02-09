@@ -34,7 +34,9 @@ export const TopBar: FC<TopBarProps> = ({
             <span>{authenticatedUserDataState.userSurname}</span>
           </div>
           <div className="flex justify-center">
-            {authenticatedUserDataState.roleNames[0]}
+            {authenticatedUserDataState.roleNames[0]}&nbsp;
+            {authenticatedUserDataState.roleNames[1] &&
+              authenticatedUserDataState.roleNames[1]}
           </div>
         </div>
       </div>

@@ -47,6 +47,7 @@ import { UpdateMedicalProcedureOverlay } from "../overlays/medicalProcedureOverl
 import { useReactToPrint } from "react-to-print";
 import useDeviceDetection from "../../utils/useDeviceDetection";
 import { CardEntry } from "../design/card/CardEntry";
+import { CreateMedicalRecordPatientOverlay } from "../overlays/medicalRecordPatientOverlays/CreateMedicalRecordPatientOverlay";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -890,6 +891,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
                       <DeleteAppointmentOverlay
                         appointmentId={tableRow.appointment.appointmentId}
+                      />
+                      <CreateMedicalRecordPatientOverlay
+                        appointment={tableRow}
                       />
                       <Tooltip text="View Appointment History">
                         <RiTreasureMapLine

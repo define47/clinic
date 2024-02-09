@@ -300,3 +300,16 @@ export type BookedDoctorAppointmentSlot = {
   appointmentId: string;
   appointmentDateTime: string;
 };
+
+export type MedicalRecordPatient = {
+  medicalRecordPatientId: string;
+  appointmentId: string;
+  symptoms: string;
+  conductedTests: string;
+  diagnosis: string;
+  recommendations: string;
+};
+
+export type CreateMedicalRecordPatientOverlayProps = {
+  appointment: AppointmentTableData;
+};
