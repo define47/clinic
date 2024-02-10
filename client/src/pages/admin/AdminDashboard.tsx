@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { StyledRippleButton } from "../../components/design/StyledRippleButton";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
 
@@ -6,6 +6,8 @@ import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { VirtualizedList } from "../../components/virt/VirtualizedList";
 import { VirtualizedTable } from "../../components/virt/VirtualizedTable";
 import { DragAndDrop } from "../../components/DragAndDrop";
+import { AppointmentsTimetable } from "../../components/table/AppointmentsTimetable";
+import WeekPicker from "../../components/pickers/WeekPicker";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -57,7 +59,12 @@ export const AdminDashboard: FC = () => {
 
   // Item height and container height
   const itemHeight = 50;
+  const [dashboardWeekStart, setDashboardWeekStart] = useState<string>("");
+  const [dashboardWeekEnd, setDashboardWeekEnd] = useState<string>("");
 
+  useEffect(() => {
+    console.log("dashboard start end", dashboardWeekStart, dashboardWeekEnd);
+  }, [dashboardWeekStart, dashboardWeekEnd]);
   return (
     <div className="">
       {/* admin dashboard <Overlay /> */}
@@ -126,6 +133,13 @@ export const AdminDashboard: FC = () => {
           "abc tudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudortudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudortudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudor"
         }
       /> */}
+
+      <WeekPicker
+        setDateWeekStart={setDashboardWeekStart}
+        setDashboardWeekEnd={setDashboardWeekEnd}
+        initialDate={new Date()}
+      />
+      <AppointmentsTimetable />
     </div>
   );
 };

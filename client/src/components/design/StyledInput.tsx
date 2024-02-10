@@ -223,7 +223,8 @@ export const StyledInput: FC<StyledInputProps> = ({
           }
         }}
       >
-        <span className="absolute top-3 right-2">{icon}</span>
+        {/* absolute top-3 right-2 */}
+        <span className="">{icon}</span>
       </div>
     </div>
   );

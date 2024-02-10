@@ -8,8 +8,6 @@ import {
 import { AppointmentRepository } from "../repositories/appointment.repository";
 import { drizzleInstance } from "../utils/drizzle";
 import { IAppointmentService } from "./appointment.iservice";
-import { userTable } from "../models/user.model";
-import { alias } from "drizzle-orm/pg-core";
 
 export class AppointmentService implements IAppointmentService {
   private readonly _appointmentRepository: AppointmentRepository;
@@ -19,6 +17,12 @@ export class AppointmentService implements IAppointmentService {
       drizzleInstance,
       appointmentTable
     );
+  }
+
+  public async getAppointmentCountByPeriod(
+    period: string
+  ): Promise<number | undefined> {
+    return this._appointmentRepository.getAppointmentCountByPeriod(period);
   }
 
   public async getAppointmentJoinDoctorAndPatient(appointmentId: string) {
@@ -32,6 +36,8 @@ export class AppointmentService implements IAppointmentService {
     searchBy: string[],
     searchQuery: string,
     scheduleFilter: string,
+    customStartDate: string,
+    customEndDate: string,
     orderBy: string[],
     limit: number,
     page: number,
@@ -50,6 +56,8 @@ export class AppointmentService implements IAppointmentService {
       searchBy,
       searchQuery,
       scheduleFilter,
+      customStartDate,
+      customEndDate,
       orderBy,
       limit,
       page,

@@ -162,6 +162,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             selectedAppointmentPeriodValue === ""
               ? "today"
               : selectedAppointmentPeriodValue,
+          // scheduleFilter: "custom",
+          customStartDate: "2024-02-09",
+          customEndDate: "2024-02-09",
           orderBy: "desc:userForename, asc:userSurname",
           limit: tableLimit,
           page: currentPage,
@@ -547,27 +550,31 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               }
             />
             {selectedUserSearchCriteriaValue !== "" && (
-              <StyledInput
-                label={`${entity} search`}
-                name="name"
-                onChangeStyledInput={(event) =>
-                  setSearchQuery(event.target.value)
-                }
-                icon={<IoIosSearch />}
-              />
+              <div className="relative">
+                <StyledInput
+                  label={`${entity} search`}
+                  name="name"
+                  onChangeStyledInput={(event) =>
+                    setSearchQuery(event.target.value)
+                  }
+                  icon={<IoIosSearch />}
+                />
+              </div>
             )}
           </div>
         )}
         {entity === "medicalSpeciality" && (
           <div className="mb-3">
-            <StyledInput
-              label={`${entity} search`}
-              name="medicalSpecialitySearch"
-              onChangeStyledInput={(event) =>
-                setSearchQuery(event.target.value)
-              }
-              icon={<IoIosSearch />}
-            />
+            <div className="relative">
+              <StyledInput
+                label={`${entity} search`}
+                name="medicalSpecialitySearch"
+                onChangeStyledInput={(event) =>
+                  setSearchQuery(event.target.value)
+                }
+                icon={<IoIosSearch />}
+              />
+            </div>
           </div>
         )}
 
@@ -589,14 +596,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             />
             {selectedTable !== "" &&
               selectedAppointmentCriteriaValue !== "" && (
-                <StyledInput
-                  label={`${entity} search`}
-                  name="appointmentSearch"
-                  onChangeStyledInput={(event) =>
-                    setSearchQuery(event.target.value)
-                  }
-                  icon={<IoIosSearch />}
-                />
+                <div className="relative">
+                  <StyledInput
+                    label={`${entity} search`}
+                    name="appointmentSearch"
+                    onChangeStyledInput={(event) =>
+                      setSearchQuery(event.target.value)
+                    }
+                    icon={<IoIosSearch />}
+                  />
+                </div>
               )}
 
             {/* <AppointmentPeriodPicker
@@ -610,14 +619,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         {entity === "medicalProcedure" && (
           <div className="flex mb-3">
             <div className="flex-none">
-              <StyledInput
-                label={`medical procedure search`}
-                name="medicalProcedureSearch"
-                onChangeStyledInput={(event) =>
-                  setSearchQuery(event.target.value)
-                }
-                icon={<IoIosSearch />}
-              />
+              <div className="relative">
+                <StyledInput
+                  label={`medical procedure search`}
+                  name="medicalProcedureSearch"
+                  onChangeStyledInput={(event) =>
+                    setSearchQuery(event.target.value)
+                  }
+                  icon={<IoIosSearch />}
+                />
+              </div>
             </div>
             {/* <div className="grow flex justify-center items-center">
             <MedicalSpecialityPicker
@@ -1052,14 +1063,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         )}
         {entity === "medicalSpeciality" && (
           <div className="mb-3">
-            <StyledInput
-              label={`${entity} search`}
-              name="medicalSpecialitySearch"
-              onChangeStyledInput={(event) =>
-                setSearchQuery(event.target.value)
-              }
-              icon={<IoIosSearch />}
-            />
+            <div className="relative">
+              <StyledInput
+                label={`${entity} search`}
+                name="medicalSpecialitySearch"
+                onChangeStyledInput={(event) =>
+                  setSearchQuery(event.target.value)
+                }
+                icon={<IoIosSearch />}
+              />
+            </div>
           </div>
         )}
 
@@ -1102,14 +1115,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         {entity === "medicalProcedure" && (
           <div className="flex mb-3">
             <div className="flex-none">
-              <StyledInput
-                label={`medical procedure search`}
-                name="medicalProcedureSearch"
-                onChangeStyledInput={(event) =>
-                  setSearchQuery(event.target.value)
-                }
-                icon={<IoIosSearch />}
-              />
+              <div className="relative">
+                <StyledInput
+                  label={`medical procedure search`}
+                  name="medicalProcedureSearch"
+                  onChangeStyledInput={(event) =>
+                    setSearchQuery(event.target.value)
+                  }
+                  icon={<IoIosSearch />}
+                />
+              </div>
             </div>
             {/* <div className="grow flex justify-center items-center">
             <MedicalSpecialityPicker

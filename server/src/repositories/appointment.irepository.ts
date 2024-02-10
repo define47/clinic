@@ -12,6 +12,8 @@ export interface IAppointmentRepository extends IBaseRepository<Appointment> {
     searchBy: string[],
     searchQuery: string,
     scheduleFilter: string,
+    customStartDate: string,
+    customEndDate: string,
     orderBy: string[],
     limit: number,
     page: number,

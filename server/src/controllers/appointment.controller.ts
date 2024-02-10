@@ -44,6 +44,8 @@ export class AppointmentController {
         query.searchBy.split(","),
         query.searchQuery,
         query.scheduleFilter,
+        query.customStartDate,
+        query.customEndDate,
         query.orderBy.split(","),
         parseInt(query.limit),
         parseInt(query.page),
