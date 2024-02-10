@@ -20,6 +20,16 @@ export class MedicalSpecialityRepository
     super(drizzle, table);
   }
 
+  public async getMedicalSpecialityCount(): Promise<number | undefined> {
+    try {
+      return (
+        await this._drizzle.select({ totalCount: count() }).from(this._table)
+      )[0].totalCount;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   public async getMedicalSpecialityById(
     medicalSpecialityId: string
   ): Promise<MedicalSpeciality | undefined> {

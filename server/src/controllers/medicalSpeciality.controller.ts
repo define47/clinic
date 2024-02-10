@@ -47,6 +47,7 @@ export class MedicalSpecialityController {
           MESSAGE_CHANNEL,
           JSON.stringify({
             action: "createMedicalSpeciality",
+            entity: "medicalSpeciality",
             data: medicalSpecialityToCreate,
           })
         );

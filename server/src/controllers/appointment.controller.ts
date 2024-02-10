@@ -104,6 +104,7 @@ export class AppointmentController {
           MESSAGE_CHANNEL,
           JSON.stringify({
             action: "createAppointment",
+            entity: "appointment",
             data: appointmentData,
           })
         );

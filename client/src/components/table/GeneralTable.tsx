@@ -37,7 +37,7 @@ import { CreateAppointmentOverlay } from "../overlays/appointmentOverlays/Create
 import { UpdateAppointmentOverlay } from "../overlays/appointmentOverlays/UpdateAppointmentOverlay";
 import { DeleteAppointmentOverlay } from "../overlays/appointmentOverlays/DeleteAppointmentOverlay";
 import { MedicalSpecialityPicker } from "../pickers/MedicalSpecialityPicker";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Tooltip } from "../design/Tooltip";
 import { StyledRippleButton } from "../design/StyledRippleButton";
 import { LimitPicker } from "../pickers/LimitPicker";
@@ -48,6 +48,7 @@ import { useReactToPrint } from "react-to-print";
 import useDeviceDetection from "../../utils/useDeviceDetection";
 import { CardEntry } from "../design/card/CardEntry";
 import { CreateMedicalRecordPatientOverlay } from "../overlays/medicalRecordPatientOverlays/CreateMedicalRecordPatientOverlay";
+import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -56,13 +57,17 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   // roleName,
 }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const socketContext = useContext(SocketNotificationDataContext);
   const { socketNotificationDataState, socketNotificationDataSetState } =
     socketContext!;
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
   const [tableTotalCount, setTableTotalCount] = useState<number>(0);
   const [tableTotalPages, setTableTotalPages] = useState<number>(0);
-  const [tableLimit, setTableLimit] = useState<number>(5);
+  const [tableLimit, setTableLimit] = useState<number>(999);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [clickedTableRow, setClickedTableRow] = useState<TableRow>();
   const [orderBy, setOrderBy] = useState<string>("asc:userForename");
@@ -213,10 +218,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   useEffect(() => {
     if (socketNotificationDataState) {
       const receivedSocketData = JSON.parse(socketNotificationDataState);
-      const action = receivedSocketData.action;
-      let data = receivedSocketData.data;
+      const receivedAction = receivedSocketData.action;
+      const receivedEntity = receivedSocketData.entity;
+      let receivedData = receivedSocketData.data;
 
-      console.log("socket data", data, "socket action", action);
+      console.log("socket data", receivedData, "socket action", receivedAction);
 
       // console.log(
       //   "🚀 ~ useEffect ~ socketNotificationDataState:",
@@ -227,10 +233,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
       // console.log("receivedSocketData", data);
 
-      if (action === "createUser") {
-        const user = data.user as User;
-        const roles = data.roles as string[];
-        const medicalSpecialities = data.medicalSpecialities as string[];
+      if (
+        receivedAction === "createUser" &&
+        receivedData.roles[0] === entity &&
+        (pathname === `/admins/${entity}s` ||
+          pathname === `/receptionists/${entity}s`)
+      ) {
+        const user = receivedData.user as User;
+        const roles = receivedData.roles as string[];
+        const medicalSpecialities =
+          receivedData.medicalSpecialities as string[];
 
         setTableRows((prevUsers: TableRow[]) => [
           {
@@ -249,19 +261,20 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           } as User,
           ...prevUsers,
         ]);
-      } else if (action === "deleteUser") {
+      } else if (receivedAction === "deleteUser") {
         setTableRows((prevUsers: TableRow[]) =>
           prevUsers.filter((user: TableRow) => {
             if ("userId" in user) {
-              return user.userId !== data;
+              return user.userId !== receivedData;
             }
             return true;
           })
         );
-      } else if (action === "updateUser") {
-        const user = data.user as User;
-        const roles = data.roles as string[];
-        const medicalSpecialities = data.medicalSpecialities as string[];
+      } else if (receivedAction === "updateUser") {
+        const user = receivedData.user as User;
+        const roles = receivedData.roles as string[];
+        const medicalSpecialities =
+          receivedData.medicalSpecialities as string[];
         console.log("medicalSpecialities event", medicalSpecialities);
 
         setTableRows((prevUsers: TableRow[]) => {
@@ -290,37 +303,40 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           });
           return updatedEvents;
         });
-      } else if (action === "createMedicalSpeciality") {
-        data = data as MedicalSpeciality;
+      } else if (
+        receivedAction === "createMedicalSpeciality" &&
+        receivedEntity === entity
+      ) {
+        receivedData = receivedData as MedicalSpeciality;
         setTableRows((prevMedicalSpecialities: TableRow[]) => [
           {
-            medicalSpecialityId: data.medicalSpecialityId,
-            medicalSpecialityName: data.medicalSpecialityName,
+            medicalSpecialityId: receivedData.medicalSpecialityId,
+            medicalSpecialityName: receivedData.medicalSpecialityName,
           } as MedicalSpeciality,
           ...prevMedicalSpecialities,
         ]);
-      } else if (action === "deleteMedicalSpeciality") {
+      } else if (receivedAction === "deleteMedicalSpeciality") {
         setTableRows((prevMedicalSpecialities: TableRow[]) =>
           prevMedicalSpecialities.filter((medicalSpeciality: TableRow) => {
             if ("medicalSpecialityId" in medicalSpeciality) {
-              return medicalSpeciality.medicalSpecialityId !== data;
+              return medicalSpeciality.medicalSpecialityId !== receivedData;
             }
             return true;
           })
         );
-      } else if (action === "updateMedicalSpeciality") {
-        data = data as MedicalSpeciality;
+      } else if (receivedAction === "updateMedicalSpeciality") {
+        receivedData = receivedData as MedicalSpeciality;
         setTableRows((prevMedicalSpecialities: TableRow[]) => {
           const updatedEvents = prevMedicalSpecialities.map(
             (event: TableRow) => {
               if (
                 isMedicalSpecialityRow(event) &&
-                event.medicalSpecialityId === data.medicalSpecialityId
+                event.medicalSpecialityId === receivedData.medicalSpecialityId
               ) {
                 return {
                   ...event,
-                  medicalSpecialityId: data.medicalSpecialityId,
-                  medicalSpecialityName: data.medicalSpecialityName,
+                  medicalSpecialityId: receivedData.medicalSpecialityId,
+                  medicalSpecialityName: receivedData.medicalSpecialityName,
                 };
               } else {
                 return event;
@@ -329,9 +345,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           );
           return updatedEvents;
         });
-      } else if (action === "createMedicalProcedure") {
-        const medicalSpecialityId = data.medicalSpecialityId as string;
-        const medicalProcedure = data.medicalProcedure as MedicalProcedure;
+      } else if (
+        receivedAction === "createMedicalProcedure" &&
+        receivedEntity === entity
+      ) {
+        const medicalSpecialityId = receivedData.medicalSpecialityId as string;
+        const medicalProcedure =
+          receivedData.medicalProcedure as MedicalProcedure;
 
         if (medicalSpecialityId === selectedMedicalSpecialityId)
           setTableRows((prevMedicalProcedures: TableRow[]) => [
@@ -342,22 +362,22 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             } as MedicalProcedure,
             ...prevMedicalProcedures,
           ]);
-      } else if (action === "updateMedicalProcedure") {
-        data = data as MedicalProcedure;
+      } else if (receivedAction === "updateMedicalProcedure") {
+        receivedData = receivedData as MedicalProcedure;
 
-        console.log("data medical procedure update", data);
+        console.log("data medical procedure update", receivedData);
 
         setTableRows((prevMedicalProcedures: TableRow[]) => {
           const updatedEvents = prevMedicalProcedures.map((event: TableRow) => {
             if (
               isMedicalProcedureRow(event) &&
-              event.medicalProcedureId === data.medicalProcedureId
+              event.medicalProcedureId === receivedData.medicalProcedureId
             ) {
               return {
                 ...event,
-                medicalProcedureId: data.medicalProcedureId,
-                medicalProcedureName: data.medicalProcedureName,
-                medicalProcedurePrice: data.medicalProcedurePrice,
+                medicalProcedureId: receivedData.medicalProcedureId,
+                medicalProcedureName: receivedData.medicalProcedureName,
+                medicalProcedurePrice: receivedData.medicalProcedurePrice,
               };
             } else {
               return event;
@@ -365,18 +385,24 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           });
           return updatedEvents;
         });
-      } else if (action === "deleteMedicalProcedure") {
+      } else if (receivedAction === "deleteMedicalProcedure") {
         setTableRows((prevMedicalProcedures: TableRow[]) =>
           prevMedicalProcedures.filter((medicalProcedure: TableRow) => {
             if ("medicalProcedureId" in medicalProcedure) {
-              return medicalProcedure.medicalProcedureId !== data;
+              return medicalProcedure.medicalProcedureId !== receivedData;
             }
             return true;
           })
         );
-      } else if (action === "createAppointment") {
-        data = data as AppointmentTableData;
-        console.log("appointment data event", data.appointment.appointmentId);
+      } else if (
+        receivedAction === "createAppointment" &&
+        receivedEntity === entity
+      ) {
+        receivedData = receivedData as AppointmentTableData;
+        console.log(
+          "appointment data event",
+          receivedData.appointment.appointmentId
+        );
 
         setTableRows((prevAppointments: TableRow[]) => [
           {
@@ -401,24 +427,25 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             //   patientSurname: data.patientId.patientSurname,
             //   patientEmail: data.patientId.patientEmail,
             // },
-            ...data,
+            ...receivedData,
           } as AppointmentTableData,
           ...prevAppointments,
         ]);
-      } else if (action === "updateAppointment") {
-        data = data as AppointmentTableData;
+      } else if (receivedAction === "updateAppointment") {
+        receivedData = receivedData as AppointmentTableData;
 
-        console.log("data medical procedure update", data);
+        console.log("data medical procedure update", receivedData);
 
         setTableRows((prevAppointments: TableRow[]) => {
           const updatedEvents = prevAppointments.map((event: TableRow) => {
             if (
               isAppointmentRow(event) &&
-              event.appointment.appointmentId === data.appointment.appointmentId
+              event.appointment.appointmentId ===
+                receivedData.appointment.appointmentId
             ) {
               return {
                 ...event,
-                ...data,
+                ...receivedData,
               };
             } else {
               return event;
@@ -426,15 +453,15 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           });
           return updatedEvents;
         });
-      } else if (action === "deleteAppointment") {
-        console.log("data to delete", data);
+      } else if (receivedAction === "deleteAppointment") {
+        console.log("data to delete", receivedData);
 
         setTableRows((prevAppointments: TableRow[]) =>
           prevAppointments.filter((appointment: TableRow) => {
             // if ('appointmentId' in appointment.appointment) {
             return (
               (appointment as AppointmentTableData).appointment
-                .appointmentId !== data
+                .appointmentId !== receivedData
             );
             // }
             // return true;
@@ -476,7 +503,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     //   } as User,
     //   ...prevUsers,
     // ]);
-  }, [socketNotificationDataState, selectedMedicalSpecialityId]);
+  }, [socketNotificationDataState, selectedMedicalSpecialityId, pathname]);
 
   function determineSpecialityOrder(
     medicalSpecialities: string[],
@@ -892,9 +919,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       <DeleteAppointmentOverlay
                         appointmentId={tableRow.appointment.appointmentId}
                       />
-                      <CreateMedicalRecordPatientOverlay
-                        appointment={tableRow}
-                      />
+                      {authenticatedUserDataState.roleNames[0] === "doctor" &&
+                        authenticatedUserDataState.roleNames[1] ===
+                          "doctor" && (
+                          <CreateMedicalRecordPatientOverlay
+                            appointment={tableRow}
+                          />
+                        )}
+
                       <Tooltip text="View Appointment History">
                         <RiTreasureMapLine
                           className="text-xl hover:text-lightMode-sidebarItemIconColor hover:scale-125 cursor-pointer"

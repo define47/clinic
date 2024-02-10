@@ -18,6 +18,10 @@ export class MedicalSpecialityService implements IMedicalSpecialityService {
     );
   }
 
+  public async getMedicalSpecialityCount(): Promise<number | undefined> {
+    return this._medicalSpecialityRepository.getMedicalSpecialityCount();
+  }
+
   public async getMedicalSpecialityById(
     medicalSpecialityId: string
   ): Promise<MedicalSpeciality | undefined> {

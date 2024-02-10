@@ -48,6 +48,21 @@ export class UserRoleMappingRepository
     super(drizzle, table);
   }
 
+  public async getUserRoleMappingsCountByRoleId(
+    roleId: string
+  ): Promise<number | undefined> {
+    try {
+      return (
+        await this._drizzle
+          .select({ totalCount: count() })
+          .from(this._table)
+          .where(eq(userRoleMappingTable.roleId, roleId))
+      )[0].totalCount;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   public async getUserRoleMappingByUserIdAndRoleId(
     userId: string,
     roleId: string

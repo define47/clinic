@@ -19,6 +19,14 @@ export class UserRoleMappingService implements IUserRoleMappingService {
     );
   }
 
+  public async getUserRoleMappingsCountByRoleId(
+    roleId: string
+  ): Promise<number | undefined> {
+    return await this._userRoleMappingRepository.getUserRoleMappingsCountByRoleId(
+      roleId
+    );
+  }
+
   public async getUserRoleMappingByUserIdAndRoleId(
     userId: string,
     roleId: string

@@ -55,6 +55,10 @@ export const DragAndDrop: FC = () => {
     console.log("noDrop", noDrop);
   }, [noDrop]);
 
+  useEffect(() => {
+    console.log(items);
+  }, [items]);
+
   return (
     <>
       <div className="groups">

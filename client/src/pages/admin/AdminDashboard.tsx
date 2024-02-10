@@ -82,8 +82,9 @@ export const AdminDashboard: FC = () => {
           labelUnfocused="text-green-500"
           labelFocused="text-green-500"
         /> */}
+
         {/* <TreeTable /> */}
-        <DragAndDrop />
+        {/* <DragAndDrop />
         <StyledRippleButton
           onClick={() => console.log("Button Clicked")}
           label="label"
@@ -100,7 +101,7 @@ export const AdminDashboard: FC = () => {
           rowHeight={rowHeight}
           containerHeight={containerHeight}
           columnWidth={columnWidth}
-        />
+        /> */}
 
         {/* <DateTimePicker
           isDateOnly={false}

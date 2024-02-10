@@ -41,6 +41,7 @@ import {
   performDoctorInteractions,
   updateUser,
 } from "./utils/databaseInteractions.js";
+import { generalDataRoutes } from "./routes/generalData.routes.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -178,6 +179,10 @@ const buildServer = async () => {
 
   await fastifyServer.register(appointmentDoctorBookedSlotsRoutes, {
     prefix: "api/doctor-appointment-booked-slots",
+  });
+
+  await fastifyServer.register(generalDataRoutes, {
+    prefix: "api/general-data",
   });
 
   await fastifyServer;

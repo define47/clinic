@@ -60,6 +60,7 @@ export class MedicalProcedureController {
           MESSAGE_CHANNEL,
           JSON.stringify({
             action: "createMedicalProcedure",
+            entity: "medicalProcedure",
             data: {
               medicalSpecialityId: body.medicalSpecialityId,
               medicalProcedure: postMedicalProcedure,
