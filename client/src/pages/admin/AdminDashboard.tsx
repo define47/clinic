@@ -139,7 +139,11 @@ export const AdminDashboard: FC = () => {
         setDashboardWeekEnd={setDashboardWeekEnd}
         initialDate={new Date()}
       />
-      <AppointmentsTimetable />
+      <AppointmentsTimetable
+        startWeek={dashboardWeekStart}
+        endWeek={dashboardWeekEnd}
+        doctorId="7985f290-f148-5d3c-91c9-d0966e12ba79"
+      />
     </div>
   );
 };
