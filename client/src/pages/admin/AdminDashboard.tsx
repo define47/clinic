@@ -75,7 +75,7 @@ export const AdminDashboard: FC = () => {
           setDashboardWeekEnd={setDashboardWeekEnd}
           initialDate={new Date()}
         />
-        <div className="w-full h-4/5 overflow-y-auto">
+        <div className="w-full h-4/5 overflow-y-auto border rounded-xl">
           <AppointmentsTimetable
             startWeek={dashboardWeekStart}
             endWeek={dashboardWeekEnd}

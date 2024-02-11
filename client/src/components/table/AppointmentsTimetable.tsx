@@ -2,6 +2,9 @@ import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { appointmentsPath } from "../../utils/dotenv";
 import { AppointmentTableData } from "../../types";
+import { CardEntry } from "../design/card/CardEntry";
+import { UpdateAppointmentOverlay } from "../overlays/appointmentOverlays/UpdateAppointmentOverlay";
+import { DeleteAppointmentOverlay } from "../overlays/appointmentOverlays/DeleteAppointmentOverlay";
 
 type AppointmentTimetableProps = {
   doctorId: string;
@@ -132,7 +135,7 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
           <table className="w-full h-full">
             <thead>
               <tr className="">
-                <th className="w-10 h-10 bg-white border border-gray-200 dark:bg-darkMode-sidebarColor dark:text-darkMode-tableHeaderTextColor text-xs">
+                <th className="bg-white border border-gray-200 dark:bg-darkMode-sidebarColor dark:text-darkMode-tableHeaderTextColor text-xs">
                   Times
                 </th>
                 {days.map((_, dayIndex: number) => (
@@ -141,7 +144,7 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
                     className="h-10 bg-white border border-gray-200 dark:bg-darkMode-sidebarColor dark:text-darkMode-tableHeaderTextColor text-xs"
                   >
                     <div
-                      className={`w-full flex flex-col items-center justify-center text-gray-600`}
+                      className={`w-full flex flex-col -space-y-2 items-center justify-center text-gray-600`}
                     >
                       <span>{days[dayIndex]}</span>
                       &nbsp;
@@ -155,7 +158,7 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
               {timeSlots.map((timeSlot: string, timeSlotIndex: number) => (
                 <tr className="bg-white" key={timeSlotIndex}>
                   <td
-                    className={`w-10 h-40 border border-gray-200 ${
+                    className={`w-0 border border-gray-200 ${
                       timeSlotIndex % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
                     } text-center text-gray-600 font-bold text-xs`}
                   >
@@ -163,7 +166,7 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
                   </td>
                   {days.map((_, dayIndex: number) => (
                     // border border-gray-200
-                    <td className="w-40 h-40 border border-gray-200 odd:bg-gray-100 even:bg-gray-50">
+                    <td className="relative w-40 lg:w-1/7 h-96 border border-gray-200 odd:bg-gray-100 even:bg-gray-50">
                       {appointments.map(
                         (appointment: AppointmentTableData) =>
                           getDayIndex(
@@ -174,8 +177,62 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
                           appointment.appointment.appointmentDateTime
                             .split("T")[1]
                             .substring(0, 5) === timeSlot && (
-                            <div>
-                              {appointment.appointment.appointmentDateTime}
+                            <div className="absolute top-0 w-full h-auto border rounded-xl bg-white text-xs z-10">
+                              <div className="w-full flex flex-col">
+                                <CardEntry
+                                  cardEntryTitle="Doctor"
+                                  cardEntryData={`${appointment.doctor.doctorForename} ${appointment.doctor.doctorSurname}`}
+                                />
+                                <CardEntry
+                                  cardEntryTitle="Patient"
+                                  cardEntryData={`${appointment.patient.patientForename} ${appointment.patient.patientForename}`}
+                                />
+                                <CardEntry
+                                  cardEntryTitle="Appointment Reason"
+                                  cardEntryData={`${appointment.appointment.appointmentReason}`}
+                                />
+                                <CardEntry
+                                  cardEntryTitle="Appointment Date Time"
+                                  cardEntryData={`${appointment.appointment.appointmentDateTime
+                                    .split("T")[0]
+                                    .split("-")
+                                    .reverse()
+                                    .join(
+                                      "-"
+                                    )} ${appointment.appointment.appointmentDateTime
+                                    .split("T")[1]
+                                    .substring(0, 5)}`}
+                                />
+                                <CardEntry
+                                  cardEntryTitle="Appointment Status"
+                                  cardEntryData={`${appointment.appointment.appointmentStatus}`}
+                                  cardEntryType="appointmentStatus"
+                                />
+                                <CardEntry
+                                  cardEntryTitle="Appointment Cancellation Reason"
+                                  cardEntryData={`${appointment.appointment.appointmentCancellationReason}`}
+                                />
+                                <div className="p-3 w-full h-10 flex items-center justify-between border-b text-xs">
+                                  <span className="w-1/2 font-semibold text-center">
+                                    Actions
+                                  </span>
+                                  <div
+                                    className={`w-56 flex items-center justify-center text-center space-x-3`}
+                                  >
+                                    <UpdateAppointmentOverlay
+                                      appointment={appointment.appointment}
+                                      doctorData={appointment.doctor}
+                                      patientData={appointment.patient}
+                                    />
+
+                                    <DeleteAppointmentOverlay
+                                      appointmentId={
+                                        appointment.appointment.appointmentId
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           )
                       )}

@@ -7,9 +7,16 @@ export default {
         roboto: ["Roboto", "sans-serif"],
       },
       width: {
+        "1/7": "14.2857142",
         "1/9": "11.111111",
         "1/10": "10",
       },
+      height: {
+        "1/7": "14.2857142",
+        "1/9": "11.111111",
+        "1/10": "10",
+      },
+
       colors: {
         lightMode: {
           layoutColor: "#f9fafb",

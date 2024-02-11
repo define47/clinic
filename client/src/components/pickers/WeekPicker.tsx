@@ -53,6 +53,26 @@ const WeekPicker: React.FC<WeekPickerProps> = ({
   }, [currentWeekStart, setDateWeekStart, setDashboardWeekEnd]);
 
   return (
+    // <div className="flex items-center justify-center">
+    //   <span
+    //     className="text-2xl dark:text-darkMode-textColor cursor-pointer transform hover:!text-pink-500 hover:scale-125"
+    //     onClick={goToPreviousWeek}
+    //   >
+    //     <RiArrowLeftSLine />
+    //   </span>
+    //   <span className="w-56 flex items-center justify-center dark:text-darkMode-textColor">
+    //     {formatWeekRange(
+    //       getWeekRange(currentWeekStart)[0],
+    //       getWeekRange(currentWeekStart)[1]
+    //     )}
+    //   </span>
+    //   <span
+    //     className="text-2xl dark:text-darkMode-textColor cursor-pointer transform hover:!text-pink-500 hover:scale-125"
+    //     onClick={goToNextWeek}
+    //   >
+    //     <RiArrowRightSLine />
+    //   </span>
+    // </div>
     <div className="flex items-center justify-center">
       <span
         className="text-2xl dark:text-darkMode-textColor cursor-pointer transform hover:!text-pink-500 hover:scale-125"
@@ -60,7 +80,7 @@ const WeekPicker: React.FC<WeekPickerProps> = ({
       >
         <RiArrowLeftSLine />
       </span>
-      <span className="w-56 flex items-center justify-center dark:text-darkMode-textColor">
+      <span className="w-44 h-0 flex items-center justify-center dark:text-darkMode-textColor">
         {formatWeekRange(
           getWeekRange(currentWeekStart)[0],
           getWeekRange(currentWeekStart)[1]
