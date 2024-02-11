@@ -25,7 +25,6 @@ export const Layout: FC = () => {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-      // "http://192.168.2.14:40587"
       const socketIo = io(serverURL, {
         reconnection: false,
         upgrade: true,

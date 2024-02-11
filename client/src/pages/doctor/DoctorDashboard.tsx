@@ -3,6 +3,7 @@ import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { CiLogout } from "react-icons/ci";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { logoutUserPath } from "../../utils/dotenv";
 
 export const DoctorDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -13,7 +14,7 @@ export const DoctorDashboard: FC = () => {
   async function onLogout() {
     try {
       const response = await axios.post(
-        "http://192.168.2.16:40587/api/auth/logout",
+        logoutUserPath,
         {},
         { withCredentials: true }
       );

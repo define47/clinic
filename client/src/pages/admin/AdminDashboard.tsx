@@ -66,10 +66,22 @@ export const AdminDashboard: FC = () => {
     console.log("dashboard start end", dashboardWeekStart, dashboardWeekEnd);
   }, [dashboardWeekStart, dashboardWeekEnd]);
   return (
-    <div className="">
+    <div className="w-full h-full">
       {/* admin dashboard <Overlay /> */}
-      <div className="space-y-10">
+      <div className="w-full h-full space-y-10">
         {JSON.stringify(authenticatedUserDataState)}
+        <WeekPicker
+          setDateWeekStart={setDashboardWeekStart}
+          setDashboardWeekEnd={setDashboardWeekEnd}
+          initialDate={new Date()}
+        />
+        <div className="w-full h-4/5 overflow-y-auto">
+          <AppointmentsTimetable
+            startWeek={dashboardWeekStart}
+            endWeek={dashboardWeekEnd}
+            doctorId="7985f290-f148-5d3c-91c9-d0966e12ba79"
+          />
+        </div>
         {/* here notification {JSON.stringify(socketNotificationDataState)} */}
         {/* <StyledInput
           label="label1"
@@ -133,17 +145,6 @@ export const AdminDashboard: FC = () => {
           "abc tudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudortudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudortudor tudor mihai tudor mihai tudor tudor tudor mihai tudor mihai tudor"
         }
       /> */}
-
-      <WeekPicker
-        setDateWeekStart={setDashboardWeekStart}
-        setDashboardWeekEnd={setDashboardWeekEnd}
-        initialDate={new Date()}
-      />
-      <AppointmentsTimetable
-        startWeek={dashboardWeekStart}
-        endWeek={dashboardWeekEnd}
-        doctorId="7985f290-f148-5d3c-91c9-d0966e12ba79"
-      />
     </div>
   );
 };

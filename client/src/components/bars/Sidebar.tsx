@@ -36,6 +36,7 @@ import {
   receptionistsPathname,
   settingsPathname,
 } from "../../utils/consts";
+import { logoutUserPath } from "../../utils/dotenv";
 
 export const Sidebar: FC<SidebarProps> = ({
   isSidebarExpanded,
@@ -47,7 +48,7 @@ export const Sidebar: FC<SidebarProps> = ({
   async function onLogout() {
     try {
       const response = await axios.post(
-        "http://192.168.2.16:40587/api/auth/logout",
+        logoutUserPath,
         {},
         { withCredentials: true }
       );

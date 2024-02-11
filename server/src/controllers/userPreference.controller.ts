@@ -4,6 +4,7 @@ import { fastifyServer } from "../server";
 import clc from "cli-color";
 import { LanguageService } from "../services/language.service";
 import { v4 as uuidv4 } from "uuid";
+import { getReactClientIPAddressEnv } from "../utils/dotenv";
 
 export class UserPreferencesController {
   private readonly _userPreferencesMappingService: UserPreferencesMappingService;
@@ -81,7 +82,8 @@ export class UserPreferencesController {
 
       reply.setCookie("sessionId", sessionId, {
         signed: true,
-        domain: "192.168.2.16",
+        // domain: "192.168.2.16",
+        domain: getReactClientIPAddressEnv(),
         path: "/",
         expires: new Date(Date.now() + 80_400_000),
       });

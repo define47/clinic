@@ -5,6 +5,7 @@ import { AppointmentHistory } from "../../types";
 import { CardEntry } from "../../components/design/card/CardEntry";
 import { VscDash } from "react-icons/vsc";
 import { IoArrowUndoOutline } from "react-icons/io5";
+import { appointmentHistoryPath } from "../../utils/dotenv";
 
 export const AppointmentHistoryCards: FC = () => {
   const navigate = useNavigate();
@@ -15,15 +16,12 @@ export const AppointmentHistoryCards: FC = () => {
 
   async function getAppointmentHistory() {
     try {
-      const response = await axios.get(
-        "http://192.168.2.16:40587/api/appointments-history",
-        {
-          params: {
-            appointmentId,
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(appointmentHistoryPath, {
+        params: {
+          appointmentId,
+        },
+        withCredentials: true,
+      });
 
       // console.log(response.data);
       if (response.data.success) setAppointmentHistory(response.data.payload);

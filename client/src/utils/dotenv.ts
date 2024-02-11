@@ -11,6 +11,9 @@ export const verifyUserPath = `${import.meta.env.VITE_SERVER_SCHEME}${
 export const loginUserPath = `${import.meta.env.VITE_SERVER_SCHEME}${
   import.meta.env.VITE_SERVER_HOST_AND_PORT
 }${import.meta.env.VITE_SERVER_AUTH_PATH}/login`;
+export const logoutUserPath = `${serverURL}${
+  import.meta.env.VITE_SERVER_AUTH_PATH
+}/logout`;
 
 export const usersPath = `${import.meta.env.VITE_SERVER_SCHEME}${
   import.meta.env.VITE_SERVER_HOST_AND_PORT
@@ -27,7 +30,9 @@ export const medicalProceduresPath = `${serverURL}${
 export const appointmentsDoctorAvailabilityPath = `${serverURL}${
   import.meta.env.VITE_SERVER_APPOINTMENTS_DOCTOR_AVAILABILITY
 }`;
-
+export const appointmentHistoryPath = `${serverURL}${
+  import.meta.env.VITE_SERVER_APPOINTMENTS_HISTORY_PATH
+}`;
 export const userPreferencesPath = `${serverURL}${
   import.meta.env.VITE_SERVER_USER_PREFERENCES_PATH
 }`;

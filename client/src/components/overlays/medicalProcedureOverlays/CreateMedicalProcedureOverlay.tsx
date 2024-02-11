@@ -5,6 +5,7 @@ import Overlay from "../base/Overlay";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledInput } from "../../design/StyledInput";
 import axios from "axios";
+import { medicalProceduresPath } from "../../../utils/dotenv";
 
 type CreateMedicalProcedureOverlayProps = {
   medicalSpecialityId: string;
@@ -39,7 +40,7 @@ export const CreateMedicalProcedureOverlay: FC<
   async function onCreateMedicalProcedure() {
     try {
       const response = await axios.post(
-        "http://192.168.2.16:40587/api/medical-procedures",
+        medicalProceduresPath,
         {
           medicalSpecialityId,
           medicalProcedureName: medicalProcedureToCreate.medicalProcedureName,

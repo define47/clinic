@@ -10,6 +10,7 @@ import { PiPencil, PiPencilLineFill } from "react-icons/pi";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledInput } from "../../design/StyledInput";
+import { medicalProceduresPath } from "../../../utils/dotenv";
 
 export const UpdateMedicalProcedureOverlay: FC<
   UpdateMedicalProcedureOverlayProps
@@ -71,7 +72,7 @@ export const UpdateMedicalProcedureOverlay: FC<
   async function onUpdateMedicalProcedure() {
     try {
       const response = await axios.put(
-        "http://192.168.2.16:40587/api/medical-procedures",
+        medicalProceduresPath,
         {
           medicalProcedureId: medicalProcedure.medicalProcedureId,
           medicalProcedureName: medicalProcedureToUpdate.medicalProcedureName,

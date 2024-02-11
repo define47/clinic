@@ -27,8 +27,8 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
         searchBy: "userForename",
         searchQuery: "",
         scheduleFilter: "custom",
-        customStartDate: "2024-05-01",
-        customEndDate: "2024-11-09",
+        customStartDate: startWeek,
+        customEndDate: endWeek,
         orderBy: "asc:userForename, asc:userSurname",
         limit: 99999999,
         page: 0,
@@ -56,7 +56,7 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
   }, [doctorId, startWeek, endWeek]);
 
   useEffect(() => {
-    console.log(appointments);
+    console.log("appointments timetable", appointments);
   }, [appointments]);
 
   function generateTimeSlots() {
@@ -82,6 +82,10 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
   }
 
   useEffect(() => {
+    setTimeSlots(generateTimeSlots());
+  }, []);
+
+  useEffect(() => {
     const dates: string[] = [];
     const startWeekDate = new Date(startWeek);
     const endWeekDate = new Date(endWeek);
@@ -97,15 +101,6 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
     console.log(dates);
     setSelectedWeekDates(dates);
   }, [startWeek, endWeek]);
-
-  useEffect(() => {
-    console.log("timeslots", generateTimeSlots());
-    setTimeSlots(generateTimeSlots());
-  }, []);
-
-  useEffect(() => {
-    console.log("selectedWeekDates", selectedWeekDates);
-  }, [selectedWeekDates]);
 
   const days = [
     "Monday",
@@ -127,30 +122,65 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
     return dayIndex;
   }
 
+  // ${
+  //   dayIndex % 2 === 0 && "border-x"
+  // }
   return (
     <>
       {doctorId !== "" && (
-        <div>
-          <table>
+        <div className="w-full h-full">
+          <table className="w-full h-full">
             <thead>
-              <tr>
-                <th className="bg-gray-200 dark:bg-darkMode-sidebarColor dark:text-darkMode-tableHeaderTextColor">
+              <tr className="">
+                <th className="w-10 h-10 bg-white border border-gray-200 dark:bg-darkMode-sidebarColor dark:text-darkMode-tableHeaderTextColor text-xs">
                   Times
                 </th>
-                {days.map((_, index: number) => (
+                {days.map((_, dayIndex: number) => (
                   <th
-                    key={index}
-                    className="w-1 md:w-1/7 top-0 bg-gray-200 dark:bg-darkMode-sidebarColor dark:text-darkMode-tableHeaderTextColor text-xs"
+                    key={dayIndex}
+                    className="h-10 bg-white border border-gray-200 dark:bg-darkMode-sidebarColor dark:text-darkMode-tableHeaderTextColor text-xs"
                   >
-                    {days[index]} &nbsp; ({selectedWeekDates[index]})
+                    <div
+                      className={`w-full flex flex-col items-center justify-center text-gray-600`}
+                    >
+                      <span>{days[dayIndex]}</span>
+                      &nbsp;
+                      <span>({selectedWeekDates[dayIndex]})</span>
+                    </div>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {timeSlots.map((timeSlot: string, timeSlotIndex: number) => (
-                <tr key={timeSlotIndex}>
-                  <td>{timeSlot}</td>
+                <tr className="bg-white" key={timeSlotIndex}>
+                  <td
+                    className={`w-10 h-40 border border-gray-200 ${
+                      timeSlotIndex % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
+                    } text-center text-gray-600 font-bold text-xs`}
+                  >
+                    {timeSlot}
+                  </td>
+                  {days.map((_, dayIndex: number) => (
+                    // border border-gray-200
+                    <td className="w-40 h-40 border border-gray-200 odd:bg-gray-100 even:bg-gray-50">
+                      {appointments.map(
+                        (appointment: AppointmentTableData) =>
+                          getDayIndex(
+                            appointment.appointment.appointmentDateTime.split(
+                              "T"
+                            )[0]
+                          ) === dayIndex &&
+                          appointment.appointment.appointmentDateTime
+                            .split("T")[1]
+                            .substring(0, 5) === timeSlot && (
+                            <div>
+                              {appointment.appointment.appointmentDateTime}
+                            </div>
+                          )
+                      )}
+                    </td>
+                  ))}
                 </tr>
               ))}
             </tbody>
