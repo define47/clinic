@@ -29,6 +29,8 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   isCreateAppointmentOverlayVisible,
   setIsCreateAppointmentOverlayVisible,
   timetableDoctorId,
+  timetableDate,
+  timetableTime,
 }) => {
   const socketContext = useContext(SocketNotificationDataContext);
   const { socketNotificationDataState, socketNotificationDataSetState } =
@@ -68,16 +70,30 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
 
   useEffect(() => {
     if (timetableDoctorId) setSelectedDoctorId(timetableDoctorId);
-  }, [timetableDoctorId]);
+
+    if (timetableDate) setDefaultDate(timetableDate);
+    if (timetableTime) setDefaultTime(timetableTime);
+    console.log("selected", timetableDate, timetableTime);
+  }, [timetableDoctorId, timetableDate, timetableTime]);
 
   useEffect(() => {
     const currentDate = new Date();
-    if (isCreateAppointmentOverlayVisible) {
+    if (
+      isCreateAppointmentOverlayVisible &&
+      !timetableDoctorId &&
+      !timetableDate &&
+      !timetableTime
+    ) {
       setDefaultDate(currentDate.toISOString());
       setDefaultTime("08:00");
       // setSelectedDateTime(`${currentDate.toISOString()}T08:00:00:000Z`);
     }
-  }, [isCreateAppointmentOverlayVisible]);
+  }, [
+    isCreateAppointmentOverlayVisible,
+    timetableDoctorId,
+    timetableDate,
+    timetableTime,
+  ]);
 
   function handleStyledInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;

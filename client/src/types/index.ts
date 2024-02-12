@@ -237,7 +237,8 @@ export type CreateAppointmentOverlayProps = {
     isCreateAppointmentOverlayVisible: boolean
   ) => void;
   timetableDoctorId?: string;
-  timetableDateTimeSlot?: string;
+  timetableDate?: string;
+  timetableTime?: string;
 };
 
 export type UpdateAppointmentOverlayProps = {

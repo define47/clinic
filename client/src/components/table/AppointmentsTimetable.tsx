@@ -31,7 +31,9 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
     isCreateAppointmentOverlayVisible,
     setIsCreateAppointmentOverlayVisible,
   ] = useState<boolean>(false);
-  const [selectedTimetableDateTimeSlot, setSelectedTimetableDateTimeSlot] =
+  const [selectedTimetableDate, setSelectedTimetableDate] =
+    useState<string>("");
+  const [selectedTimetableTime, setSelectedTimetableTime] =
     useState<string>("");
 
   useEffect(() => {
@@ -201,10 +203,6 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
     console.log(hasTimetableSlotAppointment);
   }, [hasTimetableSlotAppointment]);
 
-  useEffect(() => {
-    console.log(selectedTimetableDateTimeSlot);
-  }, [selectedTimetableDateTimeSlot]);
-
   return (
     <>
       {doctorId !== "" && (
@@ -258,12 +256,13 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
                         }`}
                         onClick={() => {
                           setClickedTimetableSlot(`${dayIndex}-${timeSlot}`);
-                          setSelectedTimetableDateTimeSlot(
+                          setSelectedTimetableDate(
                             `${selectedWeekDates[dayIndex]
                               .split("-")
                               .reverse()
-                              .join("-")}T${timeSlot}:00.000Z`
+                              .join("-")}`
                           );
+                          setSelectedTimetableTime(timeSlot);
                         }}
                         onDoubleClick={() => {
                           setIsCreateAppointmentOverlayVisible(true);
@@ -464,7 +463,8 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
       )}
       <CreateAppointmentOverlay
         isCreateAppointmentOverlayVisible={isCreateAppointmentOverlayVisible}
-        timetableDateTimeSlot={selectedTimetableDateTimeSlot}
+        timetableDate={selectedTimetableDate}
+        timetableTime={selectedTimetableTime}
         setIsCreateAppointmentOverlayVisible={
           setIsCreateAppointmentOverlayVisible
         }
