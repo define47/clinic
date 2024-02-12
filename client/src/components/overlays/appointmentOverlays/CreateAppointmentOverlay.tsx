@@ -6,7 +6,11 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Appointment, BookedDoctorAppointmentSlot } from "../../../types";
+import {
+  Appointment,
+  BookedDoctorAppointmentSlot,
+  CreateAppointmentOverlayProps,
+} from "../../../types";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import Overlay from "../base/Overlay";
 import { StyledInput } from "../../design/StyledInput";
@@ -21,14 +25,18 @@ import {
 import axios from "axios";
 import { SocketNotificationDataContext } from "../../../contexts/SocketNotificationContext";
 
-export const CreateAppointmentOverlay: FC = () => {
+export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
+  isCreateAppointmentOverlayVisible,
+  setIsCreateAppointmentOverlayVisible,
+  timetableDoctorId,
+}) => {
   const socketContext = useContext(SocketNotificationDataContext);
   const { socketNotificationDataState, socketNotificationDataSetState } =
     socketContext!;
-  const [
-    isCreateAppointmentOverlayVisible,
-    setIsCreateAppointmentOverlayVisible,
-  ] = useState<boolean>(false);
+  // const [
+  //   isCreateAppointmentOverlayVisible,
+  //   setIsCreateAppointmentOverlayVisible,
+  // ] = useState<boolean>(false);
   const [
     isCreateAppointmentConfirmationDialogOverlayVisible,
     setIsCreateAppointmentConfirmationDialogOverlayVisible,
@@ -57,6 +65,10 @@ export const CreateAppointmentOverlay: FC = () => {
     useState<string>("");
   const [selectedAppointmentStatusValue, setSelectedAppointmentStatusValue] =
     useState<string>("");
+
+  useEffect(() => {
+    if (timetableDoctorId) setSelectedDoctorId(timetableDoctorId);
+  }, [timetableDoctorId]);
 
   useEffect(() => {
     const currentDate = new Date();
@@ -191,11 +203,15 @@ export const CreateAppointmentOverlay: FC = () => {
 
   return (
     <>
-      <StyledRippleButton
-        label={`Create Appointment`}
-        type="create"
-        onClick={() => setIsCreateAppointmentOverlayVisible(true)}
-      />
+      {timetableDoctorId ? (
+        ""
+      ) : (
+        <StyledRippleButton
+          label={`Create Appointment`}
+          type="create"
+          onClick={() => setIsCreateAppointmentOverlayVisible(true)}
+        />
+      )}
 
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${

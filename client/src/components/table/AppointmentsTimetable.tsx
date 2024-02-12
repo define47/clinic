@@ -5,6 +5,7 @@ import { AppointmentTableData } from "../../types";
 import { CardEntry } from "../design/card/CardEntry";
 import { UpdateAppointmentOverlay } from "../overlays/appointmentOverlays/UpdateAppointmentOverlay";
 import { DeleteAppointmentOverlay } from "../overlays/appointmentOverlays/DeleteAppointmentOverlay";
+import { CreateAppointmentOverlay } from "../overlays/appointmentOverlays/CreateAppointmentOverlay";
 
 type AppointmentTimetableProps = {
   doctorId: string;
@@ -20,42 +21,61 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
   const [appointments, setAppointments] = useState<AppointmentTableData[]>([]);
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
   const [selectedWeekDates, setSelectedWeekDates] = useState<string[]>([]);
-
-  async function getDoctorAppointments() {
-    try {
-      let queryParams = {};
-
-      queryParams = {
-        table: "doctor",
-        searchBy: "userForename",
-        searchQuery: "",
-        scheduleFilter: "custom",
-        customStartDate: startWeek,
-        customEndDate: endWeek,
-        orderBy: "asc:userForename, asc:userSurname",
-        limit: 99999999,
-        page: 0,
-        doctorId,
-        patientId: "",
-      };
-
-      const response = await axios.get(appointmentsPath, {
-        params: {
-          ...queryParams,
-        },
-        withCredentials: true,
-      });
-
-      if (response.data.success) {
-        setAppointments(response.data.payload.tableData);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const [clickedTimetableSlot, setClickedTimetableSlot] = useState<string>();
+  const [bookedAppointmentSlots, setBookedAppointmentSlots] = useState<
+    string[]
+  >([]);
+  const [hasTimetableSlotAppointment, setHasTimetableSlotAppointment] =
+    useState<boolean>();
+  const [
+    isCreateAppointmentOverlayVisible,
+    setIsCreateAppointmentOverlayVisible,
+  ] = useState<boolean>(false);
+  const [selectedTimetableDateTimeSlot, setSelectedTimetableDateTimeSlot] =
+    useState<string>("");
 
   useEffect(() => {
-    getDoctorAppointments();
+    console.log("startWeek", startWeek !== "", endWeek);
+  }, [startWeek, endWeek]);
+
+  useEffect(() => {
+    async function getDoctorAppointments() {
+      try {
+        let queryParams = {};
+
+        queryParams = {
+          searchInTable: "doctor",
+          orderInTable: "appointment",
+          searchBy: "userForename",
+          searchQuery: "",
+          scheduleFilter: "custom",
+          // customStartDate: startWeek !== "" ? startWeek : "1234-01-01",
+          // customEndDate: endWeek !== "" ? endWeek : "1234-01-01",
+          customStartDate: startWeek,
+          customEndDate: endWeek,
+          orderBy: "asc:appointmentDateTime",
+          limit: 99999999,
+          page: 0,
+          doctorId,
+          patientId: "",
+        };
+
+        const response = await axios.get(appointmentsPath, {
+          params: {
+            ...queryParams,
+          },
+          withCredentials: true,
+        });
+
+        if (response.data.success) {
+          setAppointments(response.data.payload.tableData);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (startWeek !== "" && endWeek !== "") getDoctorAppointments();
   }, [doctorId, startWeek, endWeek]);
 
   useEffect(() => {
@@ -125,9 +145,66 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
     return dayIndex;
   }
 
-  // ${
-  //   dayIndex % 2 === 0 && "border-x"
-  // }
+  function findAppointment(
+    appointments: AppointmentTableData[],
+    dayIndex: number,
+    timeSlot: string
+  ): AppointmentTableData | undefined {
+    return appointments.find((appointment) => {
+      return (
+        getDayIndex(
+          appointment.appointment.appointmentDateTime.split("T")[0]
+        ) === dayIndex &&
+        appointment.appointment.appointmentDateTime
+          .split("T")[1]
+          .substring(0, 5) === timeSlot
+      );
+    });
+  }
+
+  useEffect(() => {
+    function getBookedAppointmentSlots() {
+      return appointments.map(
+        (appointment: AppointmentTableData) =>
+          `${getDayIndex(
+            appointment.appointment.appointmentDateTime.split("T")[0]
+          )}-${appointment.appointment.appointmentDateTime
+            .split("T")[1]
+            .substring(0, 5)}`
+      );
+    }
+
+    setBookedAppointmentSlots(getBookedAppointmentSlots());
+  }, [appointments]);
+
+  useEffect(() => {
+    console.log("bookedAppointmentSlots", bookedAppointmentSlots);
+  }, [bookedAppointmentSlots]);
+
+  useEffect(() => {
+    console.log(clickedTimetableSlot);
+    const dayIndex = parseInt(clickedTimetableSlot?.split("-")[0]!);
+    const timeSlot = clickedTimetableSlot?.split("-")[1];
+
+    if (dayIndex !== undefined && timeSlot !== undefined) {
+      const foundAppointment = findAppointment(
+        appointments,
+        dayIndex,
+        timeSlot
+      );
+      console.log(foundAppointment);
+      setHasTimetableSlotAppointment(foundAppointment !== undefined);
+    }
+  }, [clickedTimetableSlot]);
+
+  useEffect(() => {
+    console.log(hasTimetableSlotAppointment);
+  }, [hasTimetableSlotAppointment]);
+
+  useEffect(() => {
+    console.log(selectedTimetableDateTimeSlot);
+  }, [selectedTimetableDateTimeSlot]);
+
   return (
     <>
       {doctorId !== "" && (
@@ -158,92 +235,241 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
               {timeSlots.map((timeSlot: string, timeSlotIndex: number) => (
                 <tr className="bg-white" key={timeSlotIndex}>
                   <td
-                    className={`w-0 border border-gray-200 ${
+                    className={`w-1 border border-gray-200 ${
                       timeSlotIndex % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
                     } text-center text-gray-600 font-bold text-xs`}
                   >
                     {timeSlot}
                   </td>
-                  {days.map((_, dayIndex: number) => (
-                    // border border-gray-200
-                    <td className="relative w-40 lg:w-1/7 h-96 border border-gray-200 odd:bg-gray-100 even:bg-gray-50">
-                      {appointments.map(
-                        (appointment: AppointmentTableData) =>
-                          getDayIndex(
-                            appointment.appointment.appointmentDateTime.split(
-                              "T"
-                            )[0]
-                          ) === dayIndex &&
-                          appointment.appointment.appointmentDateTime
-                            .split("T")[1]
-                            .substring(0, 5) === timeSlot && (
-                            <div className="absolute top-0 w-full h-auto border rounded-xl bg-white text-xs z-10">
-                              <div className="w-full flex flex-col">
+                  {days.map((_, dayIndex: number) => {
+                    const foundAppointment = findAppointment(
+                      appointments,
+                      dayIndex,
+                      timeSlot
+                    );
+                    return (
+                      <td
+                        className={`w-1/7 h-auto border border-gray-300 odd:bg-gray-100 even:bg-gray-50 transition-all ${
+                          clickedTimetableSlot === `${dayIndex}-${timeSlot}`
+                            ? hasTimetableSlotAppointment
+                              ? "!bg-pink-400 duration-500"
+                              : "!bg-emerald-300 duration-500"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          setClickedTimetableSlot(`${dayIndex}-${timeSlot}`);
+                          setSelectedTimetableDateTimeSlot(
+                            `${selectedWeekDates[dayIndex]
+                              .split("-")
+                              .reverse()
+                              .join("-")}T${timeSlot}:00.000Z`
+                          );
+                        }}
+                        onDoubleClick={() => {
+                          setIsCreateAppointmentOverlayVisible(true);
+                        }}
+                      >
+                        {/* {appointments.map((appointment: AppointmentTableData) =>
+                        getDayIndex(
+                          appointment.appointment.appointmentDateTime.split(
+                            "T"
+                          )[0]
+                        ) === dayIndex &&
+                        appointment.appointment.appointmentDateTime
+                          .split("T")[1]
+                          .substring(0, 5) === timeSlot ? (
+                          <div
+                          absolute top-0 w-full
+                          className="w-0 h-auto border rounded-xl !bg-white text-xs z-10"
+                          onClick={() => {
+                            setClickedTimetableSlot(
+                              appointment.appointment.appointmentId
+                            );
+                          }}
+                          >
+                          <div className="w-full h-full flex flex-col bg-white">
+                            <CardEntry
+                              cardEntryTitle="Doctor"
+                              cardEntryData={`${appointment.doctor.doctorForename} ${appointment.doctor.doctorSurname}`}
+                            />
+                            <CardEntry
+                              cardEntryTitle="Patient"
+                              cardEntryData={`${appointment.patient.patientForename} ${appointment.patient.patientForename}`}
+                            />
+                            <CardEntry
+                              cardEntryTitle="Appointment Reason"
+                              cardEntryData={`${appointment.appointment.appointmentReason}`}
+                            />
+                            <CardEntry
+                              cardEntryTitle="Appointment Date Time"
+                              cardEntryData={`${appointment.appointment.appointmentDateTime
+                                .split("T")[0]
+                                .split("-")
+                                .reverse()
+                                .join(
+                                  "-"
+                                )} ${appointment.appointment.appointmentDateTime
+                                .split("T")[1]
+                                .substring(0, 5)}`}
+                            />
+                            <CardEntry
+                              cardEntryTitle="Appointment Status"
+                              cardEntryData={`${appointment.appointment.appointmentStatus}`}
+                              cardEntryType="appointmentStatus"
+                            />
+                            <CardEntry
+                              cardEntryTitle="Appointment Cancellation Reason"
+                              cardEntryData={`${appointment.appointment.appointmentCancellationReason}`}
+                            />
+                            <div className="p-3 w-full h-10 flex items-center justify-between border-b text-xs">
+                              <span className="w-1/2 font-semibold text-center">
+                                Actions
+                              </span>
+                              <div
+                                className={`w-56 flex items-center justify-center text-center space-x-3`}
+                              >
+                                <UpdateAppointmentOverlay
+                                  appointment={appointment.appointment}
+                                  doctorData={appointment.doctor}
+                                  patientData={appointment.patient}
+                                />
+
+                                <DeleteAppointmentOverlay
+                                  appointmentId={
+                                    appointment.appointment.appointmentId
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          // </div>
+                          <div
+                            className="w-full"
+                            className="absolute top-0 w-full h-full border rounded-xl bg-white text-xs z-10"
+                            onClick={() => {
+                              setClickedTimetableSlot(
+                                `${dayIndex}-${timeSlotIndex}`
+                              );
+                            }}
+                          >
+                            N/A
+                          </div>
+                        )
+                      )} */}
+                        <div>
+                          {/* {days[dayIndex]}-{timeSlot} */}
+                          {/* {findAppointment(appointments, dayIndex, timeSlot) !==
+                        undefined
+                          ? "a"
+                          : "N/A"} */}
+                          {/* {(() => {
+                          const foundAppointment = findAppointment(
+                            appointments,
+                            dayIndex,
+                            timeSlot
+                          );
+                          return foundAppointment !== undefined ? (
+                            <>
+                              <span>a</span>
+                              <span>
+                                {
+                                  foundAppointment.appointment
+                                    .appointmentDateTime
+                                }
+                              </span>
+                            </>
+                          ) : (
+                            "N/A"
+                          );
+                        })()} */}
+                          {foundAppointment !== undefined ? (
+                            <div className="w-full h-96">
+                              <div className="w-full h-full flex flex-col bg-white">
                                 <CardEntry
                                   cardEntryTitle="Doctor"
-                                  cardEntryData={`${appointment.doctor.doctorForename} ${appointment.doctor.doctorSurname}`}
+                                  cardEntryData={`${foundAppointment.doctor.doctorForename} ${foundAppointment.doctor.doctorSurname}`}
                                 />
                                 <CardEntry
                                   cardEntryTitle="Patient"
-                                  cardEntryData={`${appointment.patient.patientForename} ${appointment.patient.patientForename}`}
+                                  cardEntryData={`${foundAppointment.patient.patientForename} ${foundAppointment.patient.patientForename}`}
                                 />
                                 <CardEntry
-                                  cardEntryTitle="Appointment Reason"
-                                  cardEntryData={`${appointment.appointment.appointmentReason}`}
+                                  cardEntryTitle="Reason"
+                                  cardEntryData={`${foundAppointment.appointment.appointmentReason}`}
                                 />
                                 <CardEntry
-                                  cardEntryTitle="Appointment Date Time"
-                                  cardEntryData={`${appointment.appointment.appointmentDateTime
+                                  cardEntryTitle="Date Time"
+                                  cardEntryData={`${foundAppointment.appointment.appointmentDateTime
                                     .split("T")[0]
                                     .split("-")
                                     .reverse()
                                     .join(
                                       "-"
-                                    )} ${appointment.appointment.appointmentDateTime
+                                    )} ${foundAppointment.appointment.appointmentDateTime
                                     .split("T")[1]
                                     .substring(0, 5)}`}
                                 />
                                 <CardEntry
-                                  cardEntryTitle="Appointment Status"
-                                  cardEntryData={`${appointment.appointment.appointmentStatus}`}
+                                  cardEntryTitle="Status"
+                                  cardEntryData={`${foundAppointment.appointment.appointmentStatus}`}
                                   cardEntryType="appointmentStatus"
                                 />
                                 <CardEntry
-                                  cardEntryTitle="Appointment Cancellation Reason"
-                                  cardEntryData={`${appointment.appointment.appointmentCancellationReason}`}
+                                  cardEntryTitle="Cancellation Reason"
+                                  cardEntryData={`${foundAppointment.appointment.appointmentCancellationReason}`}
                                 />
                                 <div className="p-3 w-full h-10 flex items-center justify-between border-b text-xs">
-                                  <span className="w-1/2 font-semibold text-center">
+                                  <span className="w-1/3 font-semibold text-center">
                                     Actions
                                   </span>
                                   <div
-                                    className={`w-56 flex items-center justify-center text-center space-x-3`}
+                                    className={`w-2/3 flex items-center justify-center text-center space-x-3`}
                                   >
                                     <UpdateAppointmentOverlay
-                                      appointment={appointment.appointment}
-                                      doctorData={appointment.doctor}
-                                      patientData={appointment.patient}
+                                      appointment={foundAppointment.appointment}
+                                      doctorData={foundAppointment.doctor}
+                                      patientData={foundAppointment.patient}
                                     />
 
                                     <DeleteAppointmentOverlay
                                       appointmentId={
-                                        appointment.appointment.appointmentId
+                                        foundAppointment.appointment
+                                          .appointmentId
                                       }
                                     />
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          )
-                      )}
-                    </td>
-                  ))}
+                          ) : (
+                            <div className="h-96 invisible">
+                              N/A Lorem ipsum, dolor sit amet consectetur
+                              adipisicing elit. Amet, maxime corporis!
+                              Provident, mollitia sit. Cumque dolorem culpa
+                              quasi, iure officia qui porro recusandae ducimus.
+                              Libero exercitationem repellendus impedit maxime
+                              quia!
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
+      <CreateAppointmentOverlay
+        isCreateAppointmentOverlayVisible={isCreateAppointmentOverlayVisible}
+        timetableDateTimeSlot={selectedTimetableDateTimeSlot}
+        setIsCreateAppointmentOverlayVisible={
+          setIsCreateAppointmentOverlayVisible
+        }
+        timetableDoctorId={doctorId}
+      />
     </>
   );
 };

@@ -8,12 +8,12 @@ export const CardEntry: FC<CardEntryProps> = ({
 }) => {
   return (
     <div className="p-3 w-full h-14 flex items-center justify-between border-b text-xs">
-      <span className="w-1/2 font-semibold text-center">{cardEntryTitle}</span>
-      <div className={`w-56 flex items-center justify-center text-center`}>
+      <span className="w-1/3 font-semibold text-center">{cardEntryTitle}</span>
+      <div className={`w-2/3 flex items-center justify-center text-center`}>
         <span
           className={`${
             cardEntryType === "appointmentStatus" &&
-            "w-24 rounded-full py-1 px-3"
+            "w-20 rounded-full py-1 px-3"
           } ${
             cardEntryData === "completed"
               ? "bg-green-200 text-green-600 dark:bg-green-600 dark:text-gray-950"

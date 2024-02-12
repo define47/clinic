@@ -7,13 +7,14 @@ import {
 
 export interface IAppointmentService {
   getAllAppointments(
-    table: string,
+    searchInTable: string,
+    orderInTable: string,
     searchBy: string[],
     searchQuery: string,
     scheduleFilter: string,
     customStartDate: string,
     customEndDate: string,
-    orderBy: string[],
+    orderBy: string,
     limit: number,
     page: number,
     doctorId?: string,

@@ -32,13 +32,14 @@ export class AppointmentService implements IAppointmentService {
   }
 
   public async getAllAppointments(
-    table: string,
+    searchInTable: string,
+    orderInTable: string,
     searchBy: string[],
     searchQuery: string,
     scheduleFilter: string,
     customStartDate: string,
     customEndDate: string,
-    orderBy: string[],
+    orderBy: string,
     limit: number,
     page: number,
     doctorId?: string,
@@ -52,7 +53,8 @@ export class AppointmentService implements IAppointmentService {
     | undefined
   > {
     return await this._appointmentRepository.getAllAppointments(
-      table,
+      searchInTable,
+      orderInTable,
       searchBy,
       searchQuery,
       scheduleFilter,

@@ -37,16 +37,20 @@ export class AppointmentController {
     try {
       const query: any = request.query;
 
-      console.log("query app", query.searchBy);
+      console.log("query app", query.customStartDate);
 
-      const payload = await this._appointmentService.getAllAppointments(
-        query.table,
+      let payload;
+
+      payload = await this._appointmentService.getAllAppointments(
+        query.searchInTable,
+        query.orderInTable,
         query.searchBy.split(","),
         query.searchQuery,
         query.scheduleFilter,
         query.customStartDate,
         query.customEndDate,
-        query.orderBy.split(","),
+        // query.orderBy.split(","),
+        query.orderBy,
         parseInt(query.limit),
         parseInt(query.page),
         query.doctorId,

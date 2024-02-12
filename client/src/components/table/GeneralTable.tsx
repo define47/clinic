@@ -95,6 +95,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   const [selectedMedicalSpecialityName, setSelectedMedicalSpecialityName] =
     useState<string>("");
 
+  const [
+    isCreateAppointmentOverlayVisible,
+    setIsCreateAppointmentOverlayVisible,
+  ] = useState<boolean>(false);
+
   useEffect(() => {
     if (entity === "patient") {
       setRoleId(patientRoleId);
@@ -152,7 +157,8 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         };
       else if (entity === "appointment")
         queryParams = {
-          table: selectedTable !== "" ? selectedTable : "doctor",
+          searchInTable: selectedTable !== "" ? selectedTable : "doctor",
+          orderInTable: "appointment",
           searchBy:
             selectedAppointmentCriteriaValue !== ""
               ? selectedAppointmentCriteriaValue
@@ -165,7 +171,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           // scheduleFilter: "custom",
           customStartDate: "2024-02-09",
           customEndDate: "2024-02-09",
-          orderBy: "desc:userForename, asc:userSurname",
+          orderBy: "desc:appointmentDateTime",
           limit: tableLimit,
           page: currentPage,
           doctorId: "",
@@ -1017,7 +1023,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           <CreateUserOverlay roleId={roleId} roleName={entity} />
         )}
         {entity === "medicalSpeciality" && <CreateMedicalSpecialityOverlay />}
-        {entity === "appointment" && <CreateAppointmentOverlay />}
+        {entity === "appointment" && (
+          <CreateAppointmentOverlay
+            isCreateAppointmentOverlayVisible={
+              isCreateAppointmentOverlayVisible
+            }
+            setIsCreateAppointmentOverlayVisible={
+              setIsCreateAppointmentOverlayVisible
+            }
+          />
+        )}
         {entity === "medicalProcedure" && (
           <CreateMedicalProcedureOverlay
             medicalSpecialityId={selectedMedicalSpecialityId}
@@ -1179,7 +1194,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           <CreateUserOverlay roleId={roleId} roleName={entity} />
         )}
         {entity === "medicalSpeciality" && <CreateMedicalSpecialityOverlay />}
-        {entity === "appointment" && <CreateAppointmentOverlay />}
+        {entity === "appointment" && (
+          <CreateAppointmentOverlay
+            isCreateAppointmentOverlayVisible={
+              isCreateAppointmentOverlayVisible
+            }
+            setIsCreateAppointmentOverlayVisible={
+              setIsCreateAppointmentOverlayVisible
+            }
+          />
+        )}
         {entity === "medicalProcedure" && (
           <CreateMedicalProcedureOverlay
             medicalSpecialityId={selectedMedicalSpecialityId}

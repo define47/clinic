@@ -231,6 +231,15 @@ export type UpdateAppointmentOverlayPatientData = {
   patientEmail: string;
 };
 
+export type CreateAppointmentOverlayProps = {
+  isCreateAppointmentOverlayVisible: boolean;
+  setIsCreateAppointmentOverlayVisible: (
+    isCreateAppointmentOverlayVisible: boolean
+  ) => void;
+  timetableDoctorId?: string;
+  timetableDateTimeSlot?: string;
+};
+
 export type UpdateAppointmentOverlayProps = {
   appointment: Appointment;
   doctorData: UpdateAppointmentOverlayDoctorData;

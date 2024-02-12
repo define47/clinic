@@ -206,13 +206,14 @@ export class AppointmentRepository
   }
 
   public async getAllAppointments(
-    table: string,
+    searchInTable: string,
+    orderInTable: string,
     searchBy: string[],
     searchQuery: string,
     scheduleFilter: string,
     customStartDate: string,
     customEndDate: string,
-    orderBy: string[],
+    orderBy: string,
     limit: number,
     page: number,
     doctorId?: string,
@@ -226,21 +227,23 @@ export class AppointmentRepository
     | undefined
   > {
     try {
-      let filterBasedOnTable;
+      // let filterBasedOnTable;
       const doctor = alias(userTable, "doctor");
       const patient = alias(userTable, "patient");
       const currentDate = new Date();
       let startDate, endDate;
 
-      switch (table) {
-        case "doctor":
-          filterBasedOnTable = doctor;
-          break;
-        case "patient":
-          filterBasedOnTable = patient;
-        default:
-          break;
-      }
+      // switch (table) {
+      //   case "doctor":
+      //     filterBasedOnTable = doctor;
+      //     break;
+      //   case "patient":
+      //     filterBasedOnTable = patient;
+      //   case "appointment":
+      //     filterBasedOnTable = appointmentTable;
+      //   default:
+      //     break;
+      // }
 
       switch (scheduleFilter) {
         case "today":
@@ -332,11 +335,15 @@ export class AppointmentRepository
 
           startDate = startOfNextWeek;
           endDate = endOfNextWeek;
+          break;
         case "custom":
+          console.log("customStartDate", customStartDate);
+
           startDate = new Date(customStartDate);
           startDate.setUTCHours(0, 0, 0);
           endDate = new Date(customEndDate);
           endDate.setUTCHours(23, 59, 59);
+          break;
         default:
           break;
       }
@@ -349,12 +356,12 @@ export class AppointmentRepository
       columnToSearchBy2 = userTable.userForename;
       columnToOrderBy1 = userTable.userForename;
 
-      if (searchBy.length === 1 && table === "doctor") {
+      if (searchBy.length === 1 && searchInTable === "doctor") {
         if (searchBy[0] === "userForename")
           columnToSearchBy1 = doctor.userForename;
         else if (searchBy[0] === "userSurname")
           columnToSearchBy1 = doctor.userSurname;
-      } else if (searchBy.length === 2 && table === "doctor") {
+      } else if (searchBy.length === 2 && searchInTable === "doctor") {
         if (searchBy[0] === "userForename" && searchBy[1] === "userSurname") {
           columnToSearchBy1 = doctor.userForename;
           columnToSearchBy2 = doctor.userSurname;
@@ -367,12 +374,12 @@ export class AppointmentRepository
         }
       }
 
-      if (searchBy.length === 1 && table === "patient") {
+      if (searchBy.length === 1 && searchInTable === "patient") {
         if (searchBy[0] === "userForename")
           columnToSearchBy1 = patient.userForename;
         else if (searchBy[0] === "userSurname")
           columnToSearchBy1 = patient.userSurname;
-      } else if (searchBy.length === 2 && table === "patient") {
+      } else if (searchBy.length === 2 && searchInTable === "patient") {
         if (searchBy[0] === "userForename" && searchBy[1] === "userSurname") {
           columnToSearchBy1 = patient.userForename;
           columnToSearchBy2 = patient.userSurname;
@@ -385,40 +392,72 @@ export class AppointmentRepository
         }
       }
 
-      let orderByFinal0;
-      let orderByFinal1;
-      const orderByColumns: SQL<unknown>[] = [];
-      if (orderBy.length === 1 && table === "doctor") {
-        const element0 = orderBy[0].split(":");
+      // let orderByFinal0;
+      // let orderByFinal1;
+      // const orderByColumns: SQL<unknown>[] = [];
+      // if (orderBy.length === 1 && table === "doctor") {
+      //   const element0 = orderBy[0].split(":");
 
-        if (element0[0] === "asc") {
-          orderByFinal0 = asc(doctor[element0[1] as keyof User]);
+      //   if (element0[0] === "asc") {
+      //     orderByFinal0 = asc(doctor[element0[1] as keyof User]);
 
-          orderByColumns.push(orderByFinal0);
-        } else {
-          orderByFinal0 = desc(doctor[element0[1] as keyof User]);
-          orderByColumns.push(orderByFinal0!);
-        }
-      } else if (orderBy.length === 2 && table === "doctor") {
-        const element0 = orderBy[0].split(":");
-        const element1 = orderBy[1].split(":");
-        if (element0[0] === "asc") {
-          orderByFinal0 = asc(doctor[element0[1] as keyof User]);
-          orderByColumns.push(orderByFinal0!);
-        } else {
-          orderByFinal0 = desc(doctor[element0[1] as keyof User]);
-          orderByColumns.push(orderByFinal0!);
-        }
+      //     orderByColumns.push(orderByFinal0);
+      //   } else {
+      //     orderByFinal0 = desc(doctor[element0[1] as keyof User]);
+      //     orderByColumns.push(orderByFinal0!);
+      //   }
+      // } else if (orderBy.length === 2 && table === "doctor") {
+      //   const element0 = orderBy[0].split(":");
+      //   const element1 = orderBy[1].split(":");
+      //   if (element0[0] === "asc") {
+      //     orderByFinal0 = asc(doctor[element0[1] as keyof User]);
+      //     orderByColumns.push(orderByFinal0!);
+      //   } else {
+      //     orderByFinal0 = desc(doctor[element0[1] as keyof User]);
+      //     orderByColumns.push(orderByFinal0!);
+      //   }
 
-        if (element1[0] === "asc") {
-          orderByFinal1 = asc(doctor[element1[1] as keyof User]);
-          orderByColumns.push(orderByFinal1!);
-        } else {
-          orderByFinal1 = desc(doctor[element1[1] as keyof User]);
-          orderByColumns.push(orderByFinal1!);
-        }
+      //   if (element1[0] === "asc") {
+      //     orderByFinal1 = asc(doctor[element1[1] as keyof User]);
+      //     orderByColumns.push(orderByFinal1!);
+      //   } else {
+      //     orderByFinal1 = desc(doctor[element1[1] as keyof User]);
+      //     orderByColumns.push(orderByFinal1!);
+      //   }
+      // }
+
+      // if (orderBy.length === 1) {
+      //   const element0 = orderBy[0].split(":");
+
+      //   if (element0[0] === "asc") {
+      //     orderByFinal0 = asc(
+      //       appointmentTable[element0[1] as keyof Appointment]
+      //     );
+
+      //     orderByColumns.push(orderByFinal0);
+      //   }
+      // }
+
+      let orderByColumn = asc(doctor.userForename);
+      let sortOrder = orderBy.split(":")[0];
+      let order = orderBy.split(":")[1];
+
+      if (orderInTable === "doctor") {
+        if (sortOrder === "asc")
+          orderByColumn = asc(doctor[order as keyof User]);
+        else if (sortOrder === "desc")
+          orderByColumn = desc(doctor[order as keyof User]);
+      } else if (orderInTable === "patient") {
+        if (sortOrder === "asc")
+          orderByColumn = asc(patient[order as keyof User]);
+        else if (sortOrder === "desc")
+          orderByColumn = desc(patient[order as keyof User]);
+      } else if (orderInTable === "appointment") {
+        if (sortOrder === "asc")
+          orderByColumn = asc(appointmentTable[order as keyof Appointment]);
+        else if (sortOrder === "desc")
+          orderByColumn = desc(appointmentTable[order as keyof Appointment]);
       }
-
       const appointmentSearchQuery = {
         condition: and(
           gte(appointmentTable.appointmentDateTime, startDate!),
@@ -485,7 +524,8 @@ export class AppointmentRepository
           eq(appointmentTable.appointmentPatientId, patient.userId)
         )
         .where(appointmentSearchQuery.condition)
-        .orderBy(...orderByColumns)
+        // .orderBy(...orderByColumns)
+        .orderBy(orderByColumn)
         .limit(limit)
         .offset(offset);
 

@@ -147,7 +147,7 @@ const buildServer = async () => {
     },
   });
 
-  // fastifyServer.addHook("onRequest", authenticationMiddleware);
+  fastifyServer.addHook("onRequest", authenticationMiddleware);
 
   await fastifyServer.register(authRoutes, { prefix: "api/auth" });
 
@@ -301,28 +301,28 @@ async function main() {
   }
 }
 
-// main();
+main();
 
-const numClusterWorkers = 8;
-if (cluster.isPrimary) {
-  console.log(`Primary ${process.pid} is running`);
-  for (let i = 0; i < numClusterWorkers; i++) {
-    cluster.fork();
-  }
+// const numClusterWorkers = 8;
+// if (cluster.isPrimary) {
+//   console.log(`Primary ${process.pid} is running`);
+//   for (let i = 0; i < numClusterWorkers; i++) {
+//     cluster.fork();
+//   }
 
-  cluster.on("exit", (worker, code, signal) =>
-    console.log(`worker ${worker.process.pid} died`)
-  );
+//   cluster.on("exit", (worker, code, signal) =>
+//     console.log(`worker ${worker.process.pid} died`)
+//   );
 
-  cluster.on("online", (worker) => {
-    console.log(
-      `Yay, the worker ${worker.process.pid} responded after it was forked`
-    );
-  });
-} else {
-  try {
-    main();
-  } catch (error) {
-    console.log(error);
-  }
-}
+//   cluster.on("online", (worker) => {
+//     console.log(
+//       `Yay, the worker ${worker.process.pid} responded after it was forked`
+//     );
+//   });
+// } else {
+//   try {
+//     main();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }

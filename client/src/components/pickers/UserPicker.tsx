@@ -181,6 +181,22 @@ export const UserPicker: FC<UserPickerProps> = ({
     }
   }, [filteredUsers, selectedUserName]);
 
+  const foundUser = users.find((user) => user.userId === selectedUserId);
+
+  useEffect(() => {
+    if (foundUser) {
+      if (roleName === "doctor") {
+        setSelectedUserName(
+          `${foundUser.userForename} ${foundUser.userSurname}`
+        );
+      } else if (roleName === "patient") {
+        setSelectedUserName(
+          `${foundUser.userForename} ${foundUser.userSurname}`
+        );
+      }
+    }
+  }, [foundUser, roleName, selectedUserId]);
+
   return (
     <div className="flex">
       <div className={`relative ${z}`} ref={userSearchPickerRef}>
