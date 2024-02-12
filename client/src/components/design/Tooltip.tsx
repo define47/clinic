@@ -18,11 +18,11 @@ export const Tooltip: FC<TooltipProps> = ({ text, children }) => {
       </div>
 
       <div
-        className={`w-40 absolute z-50 top-6 right-0 transition-opacity duration-300 bg-black text-white rounded-xl text-xs ${
-          isCursorOn ? "opacity-100" : "opacity-0"
-        } p-2`}
+        className={`w-40 absolute z-50 top-6 right-0 flex items-center justify-center transition-all bg-black text-white rounded-xl text-xs ${
+          isCursorOn ? "opacity-100 p-2 duration-300" : "opacity-0 duration-300"
+        } `}
       >
-        <span className="w-full">{text}</span>
+        <span className="">{text}</span>
       </div>
     </div>
   );

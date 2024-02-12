@@ -242,7 +242,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
           className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
             isCreateAppointmentOverlayVisible
               ? "scale-100 opacity-100 duration-500"
-              : "scale-125 opacity-0 duration-500"
+              : "scale-125 opacity-0 duration-300"
           }`}
         >
           <span className="flex justify-center mb-8">Create Appointment</span>
@@ -257,6 +257,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
                 selectedUserName={selectedDoctorName}
                 setSelectedUserName={setSelectedDoctorName}
                 z="z-50"
+                disabled={timetableDoctorId ? true : false}
               />
               <UserPicker
                 shouldDataBeFetched={true}

@@ -936,9 +936,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       <DeleteAppointmentOverlay
                         appointmentId={tableRow.appointment.appointmentId}
                       />
-                      {authenticatedUserDataState.roleNames[0] === "doctor" &&
-                        authenticatedUserDataState.roleNames[1] ===
-                          "doctor" && (
+                      {(authenticatedUserDataState.roleNames[0] === "doctor" ||
+                        authenticatedUserDataState.roleNames[1] === "doctor") &&
+                        tableRow.appointment.appointmentDoctorId ===
+                          authenticatedUserDataState.userId && (
                           <CreateMedicalRecordPatientOverlay
                             appointment={tableRow}
                           />

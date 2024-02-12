@@ -265,6 +265,7 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
                           setSelectedTimetableTime(timeSlot);
                         }}
                         onDoubleClick={() => {
+                          setClickedTimetableSlot(`${dayIndex}-${timeSlot}`);
                           setIsCreateAppointmentOverlayVisible(true);
                         }}
                       >
@@ -461,15 +462,17 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
           </table>
         </div>
       )}
-      <CreateAppointmentOverlay
-        isCreateAppointmentOverlayVisible={isCreateAppointmentOverlayVisible}
-        timetableDate={selectedTimetableDate}
-        timetableTime={selectedTimetableTime}
-        setIsCreateAppointmentOverlayVisible={
-          setIsCreateAppointmentOverlayVisible
-        }
-        timetableDoctorId={doctorId}
-      />
+      {!hasTimetableSlotAppointment && (
+        <CreateAppointmentOverlay
+          isCreateAppointmentOverlayVisible={isCreateAppointmentOverlayVisible}
+          timetableDate={selectedTimetableDate}
+          timetableTime={selectedTimetableTime}
+          setIsCreateAppointmentOverlayVisible={
+            setIsCreateAppointmentOverlayVisible
+          }
+          timetableDoctorId={doctorId}
+        />
+      )}
     </>
   );
 };

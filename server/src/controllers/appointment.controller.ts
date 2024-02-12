@@ -2,14 +2,26 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { AppointmentService } from "../services/appointment.service";
 import { AppointmentHistoryService } from "../services/appointmentHistory.service";
 import { MESSAGE_CHANNEL, fastifyServer } from "../server";
+import { UserNotificationMappingService } from "../services/userNotificationMapping.service";
+import { NotificationService } from "../services/notification.service";
+import { RoleService } from "../services/role.service";
+import { UserRoleMappingService } from "../services/userRoleMapping.service";
 
 export class AppointmentController {
   private readonly _appointmentService: AppointmentService;
   private readonly _appointmentHistoryService: AppointmentHistoryService;
+  private readonly _notificationService;
+  private readonly _userNotificationMappingService;
+  private readonly _roleService;
+  private readonly _userRoleMappingService;
 
   public constructor() {
     this._appointmentService = new AppointmentService();
     this._appointmentHistoryService = new AppointmentHistoryService();
+    this._notificationService = new NotificationService();
+    this._userNotificationMappingService = new UserNotificationMappingService();
+    this._roleService = new RoleService();
+    this._userRoleMappingService = new UserRoleMappingService();
   }
   // doctor-appointment-booked-slots
   public getDoctorAppointmentBookedSlots = async (
@@ -84,13 +96,13 @@ export class AppointmentController {
         await this._appointmentService.getAppointmentJoinDoctorAndPatient(
           appointmentToCreate?.appointmentId!
         );
-      console.log("data", appointmentData);
 
       const userSessionData = JSON.parse(
         (await redis.sessionRedis.get(`sessionId:${request.cookieData.value}`))!
       );
 
-      if (appointmentToCreate)
+      let notification;
+      if (appointmentToCreate) {
         await this._appointmentHistoryService.createAppointmentHistory({
           appointmentId: appointmentToCreate?.appointmentId,
           appointmentHistoryDoctorId: appointmentToCreate.appointmentDoctorId,
@@ -104,6 +116,62 @@ export class AppointmentController {
           appointmentHistoryCreatedBy: userSessionData.userId,
           appointmentHistoryUpdatedBy: userSessionData.userId,
         });
+
+        notification = await this._notificationService.createNotification({
+          notificationSenderId: userSessionData.userId,
+          notificationAction: "create",
+          notificationEntity: "appointment",
+          notificationBody: "this is the body",
+          notificationDateTime: new Date(),
+        });
+      }
+
+      console.log(notification);
+
+      const receptionistRole = await this._roleService.getRoleByName(
+        "receptionist"
+      );
+      const adminRole = await this._roleService.getRoleByName("admin");
+      const receptionists =
+        (await this._userRoleMappingService.getAllUsersRelatedData(
+          receptionistRole?.roleId!,
+          ["userForename"],
+          "",
+          9999999,
+          0,
+          "asc:userForename"
+        ))!.tableData;
+      const admins = (await this._userRoleMappingService.getAllUsersRelatedData(
+        adminRole?.roleId!,
+        ["userForename"],
+        "",
+        9999999,
+        0,
+        "asc:userForename"
+      ))!.tableData;
+
+      console.log(receptionists);
+      console.log(admins);
+
+      for (let i = 0; i < receptionists.length; i++) {
+        await this._userNotificationMappingService.createUserNotificationMapping(
+          {
+            userId: receptionists[i].userId,
+            notificationId: (notification as Notification).notificationId,
+            isNotificationRead: false,
+          }
+        );
+      }
+
+      for (let i = 0; i < admins.length; i++) {
+        await this._userNotificationMappingService.createUserNotificationMapping(
+          {
+            userId: admins[i].userId,
+            notificationId: (notification as Notification).notificationId,
+            isNotificationRead: false,
+          }
+        );
+      }
 
       if (appointmentData)
         await redis.publisher.publish(

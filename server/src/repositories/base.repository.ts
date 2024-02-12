@@ -70,7 +70,10 @@ import {
   NotificationCreationAttributes,
   notificationTable,
 } from "../models/notification.model";
-import { userNotificationMappingTable } from "../models/userNotificationMapping.model";
+import {
+  UserNotificationMappingCreationAttributes,
+  userNotificationMappingTable,
+} from "../models/userNotificationMapping.model";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
@@ -396,6 +399,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | MedicalSpecialityMedicalProcedureMappingCreationAttributes
       | DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
       | NotificationCreationAttributes
+      | UserNotificationMappingCreationAttributes
   ): Promise<T | undefined> {
     try {
       let id;
@@ -463,10 +467,6 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         case appointmentHistoryTable:
           creationAttributes =
             creationAttributes as AppointmentHistoryCreationAttributes;
-          console.log(
-            "creationAttributes",
-            creationAttributes.appointmentHistoryCreatedAt!.toISOString()
-          );
 
           id = uuidv5(
             `${creationAttributes.appointmentId}-${new Date()}`,
