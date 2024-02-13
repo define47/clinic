@@ -8,12 +8,15 @@ import { MedicalProcedureService } from "../services/medicalProcedure.service";
 import { DoctorMedicalSpecialityMappingService } from "../services/doctorMedicalSpecialityMapping.service";
 import { LanguageService } from "../services/language.service";
 import { AppointmentService } from "../services/appointment.service";
+import { MedicalSpecialityMedicalProcedureMappingService } from "../services/medicalSpecialityMedicalProcedureMapping.service";
 
 const userService = new UserService();
 const userRoleMappingService = new UserRoleMappingService();
 const roleService = new RoleService();
 const medicalSpecialityService = new MedicalSpecialityService();
 const medicalProcedureService = new MedicalProcedureService();
+const medicalSpecialityMedicalProcedureMapping =
+  new MedicalSpecialityMedicalProcedureMappingService();
 const doctorMedicalSpecialityMappingService =
   new DoctorMedicalSpecialityMappingService();
 const languageService = new LanguageService();
@@ -407,3 +410,28 @@ export const createAppointments = async (start: number, end: number) => {
     });
   }
 };
+
+export async function createMedicalProcedures(
+  medicalSpecialityName: string,
+  amount: number
+) {
+  const medicalSpeciality =
+    await medicalSpecialityService.getMedicalSpecialityByName(
+      medicalSpecialityName
+    );
+
+  for (let i = 0; i < amount; i++) {
+    let currentMedicalProcedure =
+      await medicalProcedureService.createMedicalProcedure({
+        medicalProcedureName: `${medicalSpeciality?.medicalSpecialityName!} procedure ${i}`,
+        medicalProcedurePrice: i * 100,
+      });
+
+    await medicalSpecialityMedicalProcedureMapping.createMedicalSpecialityMedicalProcedureMapping(
+      {
+        medicalSpecialityId: medicalSpeciality?.medicalSpecialityId!,
+        medicalProcedureId: currentMedicalProcedure?.medicalProcedureId!,
+      }
+    );
+  }
+}

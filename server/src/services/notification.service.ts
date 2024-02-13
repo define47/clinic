@@ -1,4 +1,5 @@
 import {
+  Notification,
   NotificationCreationAttributes,
   notificationTable,
 } from "../models/notification.model";
@@ -17,7 +18,7 @@ export class NotificationService {
 
   public async createNotification(
     notificationCreationAttributes: NotificationCreationAttributes
-  ) {
+  ): Promise<Notification | undefined> {
     return this._notificationRepository.createNotification(
       notificationCreationAttributes
     );

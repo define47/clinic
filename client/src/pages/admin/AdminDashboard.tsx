@@ -8,6 +8,7 @@ import { VirtualizedTable } from "../../components/virt/VirtualizedTable";
 import { DragAndDrop } from "../../components/DragAndDrop";
 import { AppointmentsTimetable } from "../../components/table/AppointmentsTimetable";
 import WeekPicker from "../../components/pickers/WeekPicker";
+import { MedicalProcedurePicker } from "../../components/pickers/MedicalProcedurePicker";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -68,6 +69,8 @@ export const AdminDashboard: FC = () => {
   return (
     <div className="w-full h-full">
       {/* admin dashboard <Overlay /> */}
+      <MedicalProcedurePicker />
+      {/* <DragAndDrop /> */}
       <div className="w-full h-full space-y-10">
         {JSON.stringify(authenticatedUserDataState)}
         <WeekPicker
@@ -103,7 +106,7 @@ export const AdminDashboard: FC = () => {
         /> */}
 
         {/* <TreeTable /> */}
-        {/* <DragAndDrop />
+        {/* 
         <StyledRippleButton
           onClick={() => console.log("Button Clicked")}
           label="label"

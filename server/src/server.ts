@@ -32,6 +32,7 @@ import { appointmentDoctorBookedSlotsRoutes } from "./routes/appointmentDoctorAv
 import {
   createAppointments,
   createLanguages,
+  createMedicalProcedures,
   createPatients,
   createRoles,
   createSpecialities,
@@ -277,6 +278,10 @@ const buildServer = async () => {
   // createPatients(0, 100);
 
   // await createAppointments(0, 150);
+
+  // await createMedicalProcedures("Internal Medicine", 8);
+  // await createMedicalProcedures("Neurology", 3);
+  // await createMedicalProcedures("Dermatology", 5);
 
   return fastifyServer;
 };

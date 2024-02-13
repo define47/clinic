@@ -6,6 +6,7 @@ import { UserNotificationMappingService } from "../services/userNotificationMapp
 import { NotificationService } from "../services/notification.service";
 import { RoleService } from "../services/role.service";
 import { UserRoleMappingService } from "../services/userRoleMapping.service";
+import { Notification } from "../models/notification.model";
 
 export class AppointmentController {
   private readonly _appointmentService: AppointmentService;
@@ -24,6 +25,78 @@ export class AppointmentController {
     this._userRoleMappingService = new UserRoleMappingService();
   }
   // doctor-appointment-booked-slots
+
+  private async sendAppointmentNotification(
+    request: FastifyRequest,
+    notificationAction: string,
+    notificationBody: string
+  ) {
+    const { redis } = fastifyServer;
+
+    const userSessionData = JSON.parse(
+      (await redis.sessionRedis.get(`sessionId:${request.cookieData.value}`))!
+    );
+
+    const notification = await this._notificationService.createNotification({
+      notificationSenderId: userSessionData.userId,
+      notificationAction,
+      notificationEntity: "appointment",
+      notificationBody: JSON.stringify(notificationBody),
+      notificationDateTime: new Date(),
+    });
+
+    console.log(notification);
+
+    const receptionistRole = await this._roleService.getRoleByName(
+      "receptionist"
+    );
+    const adminRole = await this._roleService.getRoleByName("admin");
+    const receptionists =
+      (await this._userRoleMappingService.getAllUsersRelatedData(
+        receptionistRole?.roleId!,
+        ["userForename"],
+        "",
+        999999999,
+        0,
+        "asc:userForename"
+      ))!.tableData;
+    const admins = (await this._userRoleMappingService.getAllUsersRelatedData(
+      adminRole?.roleId!,
+      ["userForename"],
+      "",
+      999999999,
+      0,
+      "asc:userForename"
+    ))!.tableData;
+
+    console.log(receptionists);
+    console.log(admins);
+
+    for (let i = 0; i < receptionists.length; i++) {
+      if (receptionists[i].userId !== userSessionData.userId)
+        await this._userNotificationMappingService.createUserNotificationMapping(
+          {
+            userId: receptionists[i].userId,
+            notificationId: notification?.notificationId!,
+            isNotificationRead: false,
+          }
+        );
+    }
+
+    for (let i = 0; i < admins.length; i++) {
+      if (admins[i].userId !== userSessionData.userId)
+        await this._userNotificationMappingService.createUserNotificationMapping(
+          {
+            userId: admins[i].userId,
+            notificationId: notification?.notificationId!,
+            isNotificationRead: false,
+          }
+        );
+    }
+
+    console.log("Notification Sent");
+  }
+
   public getDoctorAppointmentBookedSlots = async (
     request: FastifyRequest,
     reply: FastifyReply
@@ -101,77 +174,28 @@ export class AppointmentController {
         (await redis.sessionRedis.get(`sessionId:${request.cookieData.value}`))!
       );
 
-      let notification;
-      if (appointmentToCreate) {
-        await this._appointmentHistoryService.createAppointmentHistory({
-          appointmentId: appointmentToCreate?.appointmentId,
-          appointmentHistoryDoctorId: appointmentToCreate.appointmentDoctorId,
-          appointmentHistoryPatientId: appointmentToCreate.appointmentPatientId,
-          appointmentHistoryDateTime: appointmentToCreate.appointmentDateTime,
-          appointmentHistoryReason: appointmentToCreate.appointmentReason,
-          appointmentHistoryCancellationReason: "",
-          appointmentHistoryStatus: appointmentToCreate.appointmentStatus,
-          appointmentHistoryCreatedAt: new Date(),
-          appointmentHistoryUpdatedAt: new Date(),
-          appointmentHistoryCreatedBy: userSessionData.userId,
-          appointmentHistoryUpdatedBy: userSessionData.userId,
-        });
+      if (!appointmentToCreate)
+        reply.code(200).send({ message: "not created" });
 
-        notification = await this._notificationService.createNotification({
-          notificationSenderId: userSessionData.userId,
-          notificationAction: "create",
-          notificationEntity: "appointment",
-          notificationBody: "this is the body",
-          notificationDateTime: new Date(),
-        });
-      }
+      await this._appointmentHistoryService.createAppointmentHistory({
+        appointmentId: appointmentToCreate?.appointmentId!,
+        appointmentHistoryDoctorId: appointmentToCreate?.appointmentDoctorId!,
+        appointmentHistoryPatientId: appointmentToCreate?.appointmentPatientId!,
+        appointmentHistoryDateTime: appointmentToCreate?.appointmentDateTime!,
+        appointmentHistoryReason: appointmentToCreate?.appointmentReason!,
+        appointmentHistoryCancellationReason: "",
+        appointmentHistoryStatus: appointmentToCreate?.appointmentStatus!,
+        appointmentHistoryCreatedAt: new Date(),
+        appointmentHistoryUpdatedAt: new Date(),
+        appointmentHistoryCreatedBy: userSessionData.userId,
+        appointmentHistoryUpdatedBy: userSessionData.userId,
+      });
 
-      console.log(notification);
-
-      const receptionistRole = await this._roleService.getRoleByName(
-        "receptionist"
+      await this.sendAppointmentNotification(
+        request,
+        "create",
+        JSON.stringify(appointmentToCreate)
       );
-      const adminRole = await this._roleService.getRoleByName("admin");
-      const receptionists =
-        (await this._userRoleMappingService.getAllUsersRelatedData(
-          receptionistRole?.roleId!,
-          ["userForename"],
-          "",
-          9999999,
-          0,
-          "asc:userForename"
-        ))!.tableData;
-      const admins = (await this._userRoleMappingService.getAllUsersRelatedData(
-        adminRole?.roleId!,
-        ["userForename"],
-        "",
-        9999999,
-        0,
-        "asc:userForename"
-      ))!.tableData;
-
-      console.log(receptionists);
-      console.log(admins);
-
-      for (let i = 0; i < receptionists.length; i++) {
-        await this._userNotificationMappingService.createUserNotificationMapping(
-          {
-            userId: receptionists[i].userId,
-            notificationId: (notification as Notification).notificationId,
-            isNotificationRead: false,
-          }
-        );
-      }
-
-      for (let i = 0; i < admins.length; i++) {
-        await this._userNotificationMappingService.createUserNotificationMapping(
-          {
-            userId: admins[i].userId,
-            notificationId: (notification as Notification).notificationId,
-            isNotificationRead: false,
-          }
-        );
-      }
 
       if (appointmentData)
         await redis.publisher.publish(
@@ -213,31 +237,40 @@ export class AppointmentController {
 
       console.log(userSessionData.userId);
 
-      if (appointmentToUpdate) {
-        const appointmentHistory =
-          await this._appointmentHistoryService.getAppointmentHistoryByAppointmentId(
-            appointmentToUpdate.appointmentId
-          );
+      if (!appointmentToUpdate)
+        reply.code(200).send({ message: "didn't work update" });
 
-        await this._appointmentHistoryService.createAppointmentHistory({
-          appointmentId: appointmentToUpdate?.appointmentId,
-          appointmentHistoryDoctorId: appointmentToUpdate.appointmentDoctorId,
-          appointmentHistoryPatientId: appointmentToUpdate.appointmentPatientId,
-          appointmentHistoryDateTime: new Date(
-            appointmentToUpdate.appointmentDateTime
-          ),
-          appointmentHistoryReason: appointmentToUpdate.appointmentReason,
-          appointmentHistoryCancellationReason:
-            appointmentToUpdate.appointmentCancellationReason,
-          appointmentHistoryStatus: appointmentToUpdate.appointmentStatus,
-          appointmentHistoryCreatedAt:
-            appointmentHistory?.[0].appointmentHistoryCreatedAt!,
-          appointmentHistoryUpdatedAt: new Date(),
-          appointmentHistoryCreatedBy:
-            appointmentHistory?.[0].appointmentHistoryCreatedBy!,
-          appointmentHistoryUpdatedBy: userSessionData.userId,
-        });
-      }
+      // if (appointmentToUpdate) {
+      const appointmentHistory =
+        await this._appointmentHistoryService.getAppointmentHistoryByAppointmentId(
+          appointmentToUpdate?.appointmentId!
+        );
+
+      await this._appointmentHistoryService.createAppointmentHistory({
+        appointmentId: appointmentToUpdate?.appointmentId!,
+        appointmentHistoryDoctorId: appointmentToUpdate?.appointmentDoctorId!,
+        appointmentHistoryPatientId: appointmentToUpdate?.appointmentPatientId!,
+        appointmentHistoryDateTime: new Date(
+          appointmentToUpdate?.appointmentDateTime!
+        ),
+        appointmentHistoryReason: appointmentToUpdate?.appointmentReason!,
+        appointmentHistoryCancellationReason:
+          appointmentToUpdate?.appointmentCancellationReason!,
+        appointmentHistoryStatus: appointmentToUpdate?.appointmentStatus!,
+        appointmentHistoryCreatedAt:
+          appointmentHistory?.[0].appointmentHistoryCreatedAt!,
+        appointmentHistoryUpdatedAt: new Date(),
+        appointmentHistoryCreatedBy:
+          appointmentHistory?.[0].appointmentHistoryCreatedBy!,
+        appointmentHistoryUpdatedBy: userSessionData.userId,
+      });
+      // }
+
+      await this.sendAppointmentNotification(
+        request,
+        "update",
+        JSON.stringify(appointmentToUpdate)
+      );
 
       const appointmentData =
         await this._appointmentService.getAppointmentJoinDoctorAndPatient(
@@ -273,6 +306,12 @@ export class AppointmentController {
 
       const appointmentToDelete =
         await this._appointmentService.deleteAppointment(body.appointmentId);
+
+      await this.sendAppointmentNotification(
+        request,
+        "delete",
+        JSON.stringify(appointmentToDelete)
+      );
 
       await redis.publisher.publish(
         MESSAGE_CHANNEL,

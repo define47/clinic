@@ -184,6 +184,7 @@ export class UserController {
         );
       }
 
+      let doctorSpecialities = [];
       let doctorSpecialityNames = [];
       let doctorSpecialityIds = [];
       if (userRoleNames[0] === "doctor" || userRoleNames[1] === "doctor") {
@@ -193,6 +194,10 @@ export class UserController {
           );
 
         for (let i = 0; i < userToLoginSpecialities!.length; i++) {
+          let currentSpeciality =
+            await this._medicalSpecialityService.getMedicalSpecialityById(
+              userToLoginSpecialities![i].medicalSpecialityId
+            );
           doctorSpecialityNames.push(
             (
               await this._medicalSpecialityService.getMedicalSpecialityById(
@@ -208,10 +213,35 @@ export class UserController {
               )
             )?.medicalSpecialityId
           );
+
+          doctorSpecialities.push({
+            medicalSpecialityId: currentSpeciality?.medicalSpecialityId,
+            medicalSpecialityName: currentSpeciality?.medicalSpecialityName,
+          });
         }
       }
 
       const sessionId = uuidv4();
+      // const sessionValue = {
+      //   userId: userToLogin?.userId,
+      //   userForename: userToLogin?.userForename,
+      //   userSurname: userToLogin?.userSurname,
+      //   userEmail: userToLogin?.userEmail,
+      //   roleNames: userRoleNames,
+      //   ...((userRoleNames[0] === "doctor" ||
+      //     userRoleNames[1] === "doctor") && {
+      //     specialityIds: doctorSpecialityIds,
+      //   }),
+      //   ...((userRoleNames[0] === "doctor" ||
+      //     userRoleNames[1] === "doctor") && {
+      //     specialityNames: doctorSpecialityNames,
+      //   }),
+      //   // specialityIds: doctorSpecialityIds,
+      //   // specialityNames: doctorSpecialityNames,
+      //   languageId: language?.languageId,
+      //   languageCode: language?.languageCode,
+      //   isDarkModeOn: userPreferencesMapping?.isDarkModeOn,
+      // };
       const sessionValue = {
         userId: userToLogin?.userId,
         userForename: userToLogin?.userForename,
@@ -220,14 +250,8 @@ export class UserController {
         roleNames: userRoleNames,
         ...((userRoleNames[0] === "doctor" ||
           userRoleNames[1] === "doctor") && {
-          specialityIds: doctorSpecialityIds,
+          medicalSpecialities: doctorSpecialities,
         }),
-        ...((userRoleNames[0] === "doctor" ||
-          userRoleNames[1] === "doctor") && {
-          specialityNames: doctorSpecialityNames,
-        }),
-        // specialityIds: doctorSpecialityIds,
-        // specialityNames: doctorSpecialityNames,
         languageId: language?.languageId,
         languageCode: language?.languageCode,
         isDarkModeOn: userPreferencesMapping?.isDarkModeOn,

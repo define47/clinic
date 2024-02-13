@@ -53,6 +53,7 @@ export const Sidebar: FC<SidebarProps> = ({
         { withCredentials: true }
       );
       navigate("/login");
+      navigate(0);
     } catch (error) {
       console.log(error);
     }

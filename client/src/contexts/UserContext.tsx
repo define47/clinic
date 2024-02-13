@@ -6,6 +6,7 @@ import {
   createContext,
   useState,
 } from "react";
+import { MedicalSpeciality } from "../types";
 
 interface AuthenticatedUserDataContextInterface {
   userId: string;
@@ -13,8 +14,9 @@ interface AuthenticatedUserDataContextInterface {
   userSurname: string;
   userEmail: string;
   roleNames: string[];
-  specialityIds?: string[];
-  specialityNames?: string[];
+  // specialityIds?: string[];
+  // specialityNames?: string[];
+  medicalSpecialities?: MedicalSpeciality[];
   languageId: string;
   languageCode: string;
   isDarkModeOn: boolean;

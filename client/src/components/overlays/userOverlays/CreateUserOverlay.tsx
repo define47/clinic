@@ -177,21 +177,24 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 label="userForename"
                 name="userForename"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
+                labelBackgroundColorFocused="bg-white"
                 defaultValue={`${roleName}FN`}
               />
               <StyledInput
                 label="userSurname"
                 name="userSurname"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
+                labelBackgroundColorFocused="bg-white"
                 defaultValue={`${roleName}LN`}
               />
               <StyledInput
                 label="userEmail"
                 name="userEmail"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
+                labelBackgroundColorFocused="bg-white"
                 defaultValue={`${roleName}EM`}
               />
             </div>
@@ -200,14 +203,16 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 label="userPhoneNumber"
                 name="userPhoneNumber"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
+                labelBackgroundColorFocused="bg-white"
                 defaultValue={`${roleName}PH`}
               />
               <StyledInput
                 label="userGender"
                 name="userGender"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
+                labelBackgroundColorFocused="bg-white"
                 defaultValue="male"
               />
               {/* <StyledInput
@@ -233,7 +238,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 label="userAddress"
                 name="userAddress"
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
+                labelBackgroundColorUnfocused="bg-white"
+                labelBackgroundColorFocused="bg-white"
                 defaultValue={`${roleName}Addr`}
               />
 

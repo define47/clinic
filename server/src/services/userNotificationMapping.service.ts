@@ -1,5 +1,6 @@
 import { NotificationCreationAttributes } from "../models/notification.model";
 import {
+  UserNotificationMapping,
   UserNotificationMappingCreationAttributes,
   userNotificationMappingTable,
 } from "../models/userNotificationMapping.model";
@@ -20,7 +21,7 @@ export class UserNotificationMappingService {
 
   public async createUserNotificationMapping(
     userNotificationMappingCreationAttributes: UserNotificationMappingCreationAttributes
-  ) {
+  ): Promise<UserNotificationMapping | undefined> {
     return this._userNotificationMappingRepository.createUserNotificationMapping(
       userNotificationMappingCreationAttributes
     );

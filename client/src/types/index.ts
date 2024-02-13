@@ -323,3 +323,8 @@ export type MedicalRecordPatient = {
 export type CreateMedicalRecordPatientOverlayProps = {
   appointment: AppointmentTableData;
 };
+
+export type Group = {
+  groupId?: string;
+  groupName: string;
+};
