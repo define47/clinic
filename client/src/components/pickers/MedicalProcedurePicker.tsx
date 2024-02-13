@@ -3,6 +3,7 @@ import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import axios from "axios";
 import { Group, MedicalProcedure, MedicalSpeciality } from "../../types";
 import { medicalProceduresPath } from "../../utils/dotenv";
+import { VscDash } from "react-icons/vsc";
 
 export const MedicalProcedurePicker: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -334,19 +335,24 @@ export const MedicalProcedurePicker: FC = () => {
         {groups.length > 0 &&
           groups.map((group: Group) => (
             <div
-              className="w-72 h-96 border"
+              // //  && isDragging && "bg-red-200"
+              className={`w-1/4 h-96  ${
+                group.groupId !== "123456" ? "border" : "border-dotted border-8"
+              } m-4`}
               onDragEnter={(e) => handleDragEnter(e, group)}
               onDragLeave={handleDragLeave}
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, group.groupId!)}
             >
-              <div className="font-bold">{group.groupName}</div>
+              <div className="flex font-bold justify-center items-center">
+                {group.groupName}
+              </div>
               {medicalProcedures.length > 0 &&
                 medicalProcedures.map(
                   (medicalProcedure: any) =>
                     group.groupId === medicalProcedure.groupId && (
                       <div
-                        className={`border m-1 transition-all  ${
+                        className={`flex items-center border m-1 transition-all  ${
                           isDragging &&
                           dragData.medicalProcedureId ===
                             medicalProcedure.medicalProcedureId
@@ -370,13 +376,20 @@ export const MedicalProcedurePicker: FC = () => {
                             originalGroupId: medicalProcedure.groupId,
                             ...medicalProcedure,
                           });
-                          changeGroup(
-                            dragData.medicalProcedureId,
-                            dragData.originalGroupId,
-                            "123456"
-                          );
+                          medicalProcedure.groupId === "123456"
+                            ? changeGroup(
+                                dragData.medicalProcedureId,
+                                dragData.originalGroupId,
+                                dragData.originalGroupId
+                              )
+                            : changeGroup(
+                                dragData.medicalProcedureId,
+                                dragData.originalGroupId,
+                                "123456"
+                              );
                         }}
                       >
+                        <VscDash />
                         {medicalProcedure.medicalProcedureName}&nbsp;
                         {group.groupId === "123456" && (
                           <span>

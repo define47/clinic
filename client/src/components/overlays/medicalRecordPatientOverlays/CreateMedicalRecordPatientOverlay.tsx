@@ -8,6 +8,8 @@ import { Tooltip } from "../../design/Tooltip";
 import Overlay from "../base/Overlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
+import { MedicalProcedurePicker } from "../../pickers/MedicalProcedurePicker";
+import { StyledTextArea } from "../../design/StyledTextArea";
 
 export const CreateMedicalRecordPatientOverlay: FC<
   CreateMedicalRecordPatientOverlayProps
@@ -66,6 +68,14 @@ export const CreateMedicalRecordPatientOverlay: FC<
           }`}
           // onClick={(e) => e.stopPropagation()}
         >
+          <div>
+            {/* <MedicalProcedurePicker /> */}
+            <StyledTextArea
+              label="testLabel"
+              name="test"
+              onChangeStyledInput={() => {}}
+            />
+          </div>
           <div className="w-full mt-14 flex justify-between">
             <StyledRippleButton
               label="Continue"

@@ -19,6 +19,12 @@ export class UserNotificationMappingService {
       );
   }
 
+  public async getNotificationsByUser(userId: string) {
+    return await this._userNotificationMappingRepository.getNotificationsByUser(
+      userId
+    );
+  }
+
   public async createUserNotificationMapping(
     userNotificationMappingCreationAttributes: UserNotificationMappingCreationAttributes
   ): Promise<UserNotificationMapping | undefined> {
