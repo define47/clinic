@@ -279,9 +279,9 @@ const buildServer = async () => {
 
   // await createAppointments(0, 150);
 
-  // await createMedicalProcedures("Internal Medicine", 8);
-  // await createMedicalProcedures("Neurology", 3);
-  // await createMedicalProcedures("Dermatology", 5);
+  // await createMedicalProcedures("Internal Medicine", 2);
+  // await createMedicalProcedures("Neurology", 2);
+  // await createMedicalProcedures("Dermatology", 2);
 
   return fastifyServer;
 };

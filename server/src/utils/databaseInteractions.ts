@@ -424,7 +424,7 @@ export async function createMedicalProcedures(
     let currentMedicalProcedure =
       await medicalProcedureService.createMedicalProcedure({
         medicalProcedureName: `${medicalSpeciality?.medicalSpecialityName!} procedure ${i}`,
-        medicalProcedurePrice: i * 100,
+        medicalProcedurePrice: (i + 1) * 100,
       });
 
     await medicalSpecialityMedicalProcedureMapping.createMedicalSpecialityMedicalProcedureMapping(

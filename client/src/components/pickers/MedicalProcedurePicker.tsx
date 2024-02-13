@@ -12,6 +12,7 @@ export const MedicalProcedurePicker: FC = () => {
   const [medicalProcedures, setMedicalProcedures] = useState<any>([]);
   const [dragData, setDragData] = useState<any>({
     groupId: "",
+    originalGroupId: "",
     medicalProcedureId: "",
     medicalProcedureName: "",
     medicalProcedurePrice: -1,
@@ -143,6 +144,9 @@ export const MedicalProcedurePicker: FC = () => {
               groupId:
                 authenticatedUserDataState?.medicalSpecialities![0]
                   .medicalSpecialityId,
+              originalGroupId:
+                authenticatedUserDataState?.medicalSpecialities![0]
+                  .medicalSpecialityId,
               medicalProcedureId: tableData[i].medicalProcedureId,
               medicalProcedureName: tableData[i].medicalProcedureName,
               medicalProcedurePrice: tableData[i].medicalProcedurePrice,
@@ -156,6 +160,9 @@ export const MedicalProcedurePicker: FC = () => {
       const response1 = await axios.get(medicalProceduresPath, {
         params: {
           medicalSpecialityId:
+            authenticatedUserDataState?.medicalSpecialities![1]
+              .medicalSpecialityId,
+          originalGroupId:
             authenticatedUserDataState?.medicalSpecialities![1]
               .medicalSpecialityId,
           searchQuery: "",
@@ -173,6 +180,9 @@ export const MedicalProcedurePicker: FC = () => {
             ...current,
             {
               groupId:
+                authenticatedUserDataState?.medicalSpecialities![1]
+                  .medicalSpecialityId,
+              originalGroupId:
                 authenticatedUserDataState?.medicalSpecialities![1]
                   .medicalSpecialityId,
               medicalProcedureId: tableData[i].medicalProcedureId,
@@ -205,6 +215,9 @@ export const MedicalProcedurePicker: FC = () => {
               groupId:
                 authenticatedUserDataState?.medicalSpecialities![2]
                   .medicalSpecialityId,
+              originalGroupId:
+                authenticatedUserDataState?.medicalSpecialities![2]
+                  .medicalSpecialityId,
               medicalProcedureId: tableData[i].medicalProcedureId,
               medicalProcedureName: tableData[i].medicalProcedureName,
               medicalProcedurePrice: tableData[i].medicalProcedurePrice,
@@ -234,7 +247,11 @@ export const MedicalProcedurePicker: FC = () => {
     medicalProcedure: MedicalProcedure,
     group: Group
   ) {
-    setDragData({ groupId: group.groupId, ...medicalProcedure });
+    setDragData({
+      groupId: group.groupId,
+      originalGroupId: medicalProcedure.groupId,
+      ...medicalProcedure,
+    });
     setIsDragging(true);
   }
 
@@ -246,31 +263,64 @@ export const MedicalProcedurePicker: FC = () => {
     e.preventDefault();
   };
 
-  function changeGroup(medicalProcedureId: string, groupId: string) {
-    if (groupId === "123456")
+  function changeGroup(
+    medicalProcedureId: string,
+    originalGroupId: string,
+    groupId: string
+  ) {
+    if (groupId === "123456") {
       setMedicalProcedures((prevMedicalProcedures: any) => {
         const updatedMedicalProcedures = prevMedicalProcedures.map(
-          (medicalProcedure: any) => {
-            if (medicalProcedure.medicalProcedureId === medicalProcedureId) {
+          (prevMedicalProcedure: any) => {
+            if (
+              prevMedicalProcedure.medicalProcedureId === medicalProcedureId
+            ) {
               return {
-                ...medicalProcedure,
+                // ...medicalProcedure,
                 groupId,
-                medicalProcedureId: medicalProcedure.medicalProcedureId,
-                medicalProcedureName: medicalProcedure.medicalProcedureName,
-                medicalProcedurePrice: medicalProcedure.medicalProcedurePrice,
+                originalGroupId,
+                medicalProcedureId: prevMedicalProcedure.medicalProcedureId,
+                medicalProcedureName: prevMedicalProcedure.medicalProcedureName,
+                medicalProcedurePrice:
+                  prevMedicalProcedure.medicalProcedurePrice,
               };
             } else {
-              return medicalProcedure;
+              return prevMedicalProcedure;
             }
           }
         );
         return updatedMedicalProcedures;
       });
+    } else if (originalGroupId === dragData.originalGroupId) {
+      // Move the item back to its original group
+      setMedicalProcedures((prevMedicalProcedures: any) => {
+        const updatedMedicalProcedures = prevMedicalProcedures.map(
+          (prevMedicalProcedure: any) => {
+            if (
+              prevMedicalProcedure.medicalProcedureId === medicalProcedureId
+            ) {
+              return {
+                // ...medicalProcedure,
+                groupId: dragData.originalGroupId,
+                originalGroupId: dragData.originalGroupId,
+                medicalProcedureId: prevMedicalProcedure.medicalProcedureId,
+                medicalProcedureName: prevMedicalProcedure.medicalProcedureName,
+                medicalProcedurePrice:
+                  prevMedicalProcedure.medicalProcedurePrice,
+              };
+            } else {
+              return prevMedicalProcedure;
+            }
+          }
+        );
+        return updatedMedicalProcedures;
+      });
+    }
   }
 
   const handleDrop = (e, groupId: string) => {
     const selected = dragData.medicalProcedureId;
-    changeGroup(selected, groupId);
+    changeGroup(dragData.medicalProcedureId, dragData.originalGroupId, groupId);
     setIsDragging(false);
   };
 
@@ -307,8 +357,32 @@ export const MedicalProcedurePicker: FC = () => {
                         onDragStart={(e) =>
                           handleDragStart(e, medicalProcedure, group)
                         }
+                        onClick={() => {
+                          setDragData({
+                            groupId: group.groupId,
+                            originalGroupId: medicalProcedure.groupId,
+                            ...medicalProcedure,
+                          });
+                        }}
+                        onDoubleClick={() => {
+                          setDragData({
+                            groupId: group.groupId,
+                            originalGroupId: medicalProcedure.groupId,
+                            ...medicalProcedure,
+                          });
+                          changeGroup(
+                            dragData.medicalProcedureId,
+                            dragData.originalGroupId,
+                            "123456"
+                          );
+                        }}
                       >
-                        {medicalProcedure.medicalProcedureName}
+                        {medicalProcedure.medicalProcedureName}&nbsp;
+                        {group.groupId === "123456" && (
+                          <span>
+                            {medicalProcedure.medicalProcedurePrice} RON
+                          </span>
+                        )}
                       </div>
                     )
                 )}

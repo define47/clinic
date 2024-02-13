@@ -40,16 +40,17 @@ export const TopBar: FC<TopBarProps> = ({
             {authenticatedUserDataState?.roleNames[1]}
           </div>
           <div>
-            {
+            {/* {
               authenticatedUserDataState?.medicalSpecialities![0]
                 .medicalSpecialityName
             }
-            {authenticatedUserDataState?.medicalSpecialities?.length >= 4 &&
+            {authenticatedUserDataState?.medicalSpecialities?.length >= 2 &&
               authenticatedUserDataState?.medicalSpecialities[1]
                 ?.medicalSpecialityName}
-            {authenticatedUserDataState?.medicalSpecialities[2] &&
+            {authenticatedUserDataState?.medicalSpecialities?.length >= 3 &&
+              authenticatedUserDataState?.medicalSpecialities[2] &&
               authenticatedUserDataState?.medicalSpecialities[2]
-                ?.medicalSpecialityName}
+                ?.medicalSpecialityName} */}
           </div>
         </div>
       </div>
