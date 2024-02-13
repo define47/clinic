@@ -15,11 +15,13 @@ export class NotificationController {
     request: FastifyRequest,
     reply: FastifyReply
   ) {
+    const query: any = request.query;
+
     const payload =
       await this._userNotificationMappingService.getNotificationsByUser(
-        "7985f290-f148-5d3c-91c9-d0966e12ba79"
+        query.userId
       );
 
-    reply.code(200).send({ success: true, payload });
+    reply.code(200).send({ success: payload.length > 0, payload });
   }
 }

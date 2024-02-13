@@ -20,11 +20,24 @@ export class UserNotificationMappingRepository extends BaseRepository<UserNotifi
   public async getNotificationsByUser(userId: string) {
     const currentDate = new Date();
 
+    var dNow = new Date();
+    var s =
+      dNow.getMonth() +
+      1 +
+      "/" +
+      dNow.getDate() +
+      "/" +
+      dNow.getFullYear() +
+      " " +
+      dNow.getHours() +
+      ":" +
+      dNow.getMinutes();
+
     const currentDayStartInUTC = new Date(
       Date.UTC(
-        currentDate.getUTCFullYear(),
-        currentDate.getUTCMonth(),
-        currentDate.getUTCDate(),
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate(),
         0,
         0,
         0
@@ -32,15 +45,23 @@ export class UserNotificationMappingRepository extends BaseRepository<UserNotifi
     );
     const currentDayEndInUTC = new Date(
       Date.UTC(
-        currentDate.getUTCFullYear(),
-        currentDate.getUTCMonth(),
-        currentDate.getUTCDate(),
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate(),
         23,
         59,
         59,
         999
       )
     );
+
+    console.log(currentDate.toLocaleTimeString());
+
+    console.log(currentDayStartInUTC);
+
+    console.log(currentDayEndInUTC);
+
+    console.log(s);
 
     return await this._drizzle
       .select()

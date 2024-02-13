@@ -266,7 +266,8 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
                         }}
                         onDoubleClick={() => {
                           setClickedTimetableSlot(`${dayIndex}-${timeSlot}`);
-                          setIsCreateAppointmentOverlayVisible(true);
+                          if (!hasTimetableSlotAppointment)
+                            setIsCreateAppointmentOverlayVisible(true);
                         }}
                       >
                         {/* {appointments.map((appointment: AppointmentTableData) =>

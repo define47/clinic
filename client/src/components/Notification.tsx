@@ -1,9 +1,32 @@
-import { FC, useState } from "react";
+import axios from "axios";
+import { FC, useContext, useEffect, useState } from "react";
 import { IoNotificationsOutline, IoNotificationsSharp } from "react-icons/io5";
+import { notificationsPath } from "../utils/dotenv";
+import { AuthenticatedUserDataContext } from "../contexts/UserContext";
 
 export const Notification: FC = () => {
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
   const [areNotificationsVisible, setAreNotificationsVisible] =
     useState<boolean>(false);
+
+  useEffect(() => {
+    async function fetchUserNotifications() {
+      const response = await axios.get(notificationsPath, {
+        params: {
+          userId: authenticatedUserDataState.userId,
+        },
+        withCredentials: true,
+      });
+
+      console.log("notifications", response.data);
+    }
+
+    fetchUserNotifications();
+  }, []);
+
+  // useEffect(() => {}, [])
 
   return (
     <>

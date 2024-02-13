@@ -40,10 +40,9 @@ export const TopBar: FC<TopBarProps> = ({
             {authenticatedUserDataState?.roleNames[1]}
           </div>
           <div>
-            {
+            {authenticatedUserDataState?.medicalSpecialities?.length >= 1 &&
               authenticatedUserDataState?.medicalSpecialities![0]
-                .medicalSpecialityName
-            }
+                .medicalSpecialityName}
             {authenticatedUserDataState?.medicalSpecialities?.length > 1 &&
               authenticatedUserDataState?.medicalSpecialities[1]
                 ?.medicalSpecialityName}

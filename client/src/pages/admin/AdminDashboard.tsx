@@ -69,7 +69,7 @@ export const AdminDashboard: FC = () => {
   return (
     <div className="w-full h-full">
       {/* admin dashboard <Overlay /> */}
-      <MedicalProcedurePicker />
+      {/* <MedicalProcedurePicker /> */}
       {/* <DragAndDrop /> */}
       <div className="w-full h-full space-y-10">
         {JSON.stringify(authenticatedUserDataState)}
