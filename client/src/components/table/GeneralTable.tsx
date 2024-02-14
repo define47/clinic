@@ -539,7 +539,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   return device === "Desktop" ? (
     <div className="w-full bg-white h-full border p-4 rounded-xl font-roboto">
       {/* <button onClick={handlePrint}>print</button> */}
-      {/* <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between">
         {(entity === "doctor" ||
           entity === "patient" ||
           entity === "receptionist" ||
@@ -656,7 +656,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           selectedLimit={tableLimit}
           setSelectedLimit={setTableLimit}
         />
-      </div> */}
+      </div>
       <div
         ref={componentRef}
         className="w-full border rounded-xl h-4/5 overflow-auto hidden lg:block"

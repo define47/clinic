@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useState } from "react";
+import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
 import {
   CreateMedicalRecordPatientOverlayProps,
   MedicalRecordPatient,
@@ -38,6 +38,22 @@ export const CreateMedicalRecordPatientOverlay: FC<
       setIsCreateMedicalRecordPatientOverlayVisible(false);
     }
   };
+
+  function handleStyledTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    const { name, value } = event.target;
+    setMedicalRecordPatientToCreate((prevMedicalRecordToCreate) => ({
+      ...prevMedicalRecordToCreate,
+      [name]: value,
+    }));
+  }
+
+  useEffect(() => {
+    console.log(
+      "🚀 ~ useEffect ~ medicalRecordPatientToCreate:",
+      medicalRecordPatientToCreate
+    );
+  }, [medicalRecordPatientToCreate]);
+
   return (
     <>
       {isCreateMedicalRecordPatientOverlayVisible ? (
@@ -61,20 +77,41 @@ export const CreateMedicalRecordPatientOverlay: FC<
         closeModal={handleOverlayClick}
       >
         <div
-          className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
+          className={`bg-white border border-gray-500 w-5/6 h-5/6 rounded-xl shadow p-6 transition-all ${
             isCreateMedicalRecordPatientOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
           }`}
           // onClick={(e) => e.stopPropagation()}
         >
-          <div>
-            {/* <MedicalProcedurePicker /> */}
-            <StyledTextArea
-              label="testLabel"
-              name="test"
-              onChangeStyledInput={() => {}}
-            />
+          <span className="flex justify-center mb-8">
+            Create Medical Record Patient
+          </span>
+          <div className="w-full lg:flex lg:justify-between">
+            <div className="w-full flex flex-col">
+              <StyledTextArea
+                styledInputWidth="w-11/12"
+                label="Symptoms"
+                name="symptoms"
+                onChangeStyledInput={handleStyledTextAreaChange}
+              />
+
+              <StyledTextArea
+                styledInputWidth="w-11/12"
+                label="Recommendations"
+                name="recommendations"
+                onChangeStyledInput={handleStyledTextAreaChange}
+              />
+            </div>
+            <div className="w-full flex flex-col">
+              <StyledTextArea
+                styledInputWidth="w-11/12"
+                label="Diagnosis"
+                name="diagnosis"
+                onChangeStyledInput={handleStyledTextAreaChange}
+              />
+              <MedicalProcedurePicker />
+            </div>
           </div>
           <div className="w-full mt-14 flex justify-between">
             <StyledRippleButton

@@ -323,6 +323,7 @@ const buildServer = async () => {
   // await createMedicalProcedures("Internal Medicine", 2);
   // await createMedicalProcedures("Neurology", 2);
   // await createMedicalProcedures("Dermatology", 2);
+  // await createMedicalProcedures("Anesthesiology", 4);
 
   // performAdminInteractions();
   // performDoctorInteractions(true);

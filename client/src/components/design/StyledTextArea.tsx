@@ -110,18 +110,20 @@ export const StyledTextArea: FC<StyledInputProps> = ({
   //   console.log(ref?.current);
   // }, [ref]);
   return (
-    <div className="flex">
+    <div className="w-full flex">
       {/* <div className="input-group">
         <input type="text" required />
         <label htmlFor="">username</label>
       </div> */}
 
-      <div className="relative cursor-pointer">
+      <div className="w-full relative cursor-pointer">
         <textarea
           rows={25}
           cols={5}
           ref={styledTextAreaRef}
-          className={`${styledInputWidth ? styledInputWidth : "w-72"} h-72 ${
+          className={`resize-none ${
+            styledInputWidth ? styledInputWidth : "w-72"
+          } h-72 ${
             textColor ? textColor : "text-black"
           } text-base cursor-pointer ${
             textColorUnfocused ? textColorUnfocused : "text-black"
