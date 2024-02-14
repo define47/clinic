@@ -4,12 +4,10 @@ import fastifyRedis from "@fastify/redis";
 import cluster from "node:cluster";
 import cookie, { FastifyCookieOptions } from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
+import fs from "fs";
+import path from "path";
 
 import {
-  getAdminRoleIdEnv,
-  getDatabaseSchemaEnv,
-  getDoctorRoleIdEnv,
-  getPatientRoleIdEnv,
   getServerIPAddressEnv,
   getServerPortEnv,
   options,
@@ -29,21 +27,13 @@ import { medicalSpecialityRoutes } from "./routes/medicalSpeciality.routes.js";
 import { medicalProcedureRoutes } from "./routes/medicalProcedure.routes.js";
 import { appointmentHistoryRoutes } from "./routes/appointmentHistory.routes.js";
 import { appointmentDoctorBookedSlotsRoutes } from "./routes/appointmentDoctorAvailability.routes.js";
-import {
-  createAppointments,
-  createLanguages,
-  createMedicalProcedures,
-  createPatients,
-  createRoles,
-  createSpecialities,
-  createUser,
-  deleteUser,
-  performAdminInteractions,
-  performDoctorInteractions,
-  updateUser,
-} from "./utils/databaseInteractions.js";
 import { generalDataRoutes } from "./routes/generalData.routes.js";
 import { notificationRoutes } from "./routes/notification.routes.js";
+import {
+  createLanguages,
+  createRoles,
+  createSpecialities,
+} from "./utils/databaseInteractions.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -94,6 +84,53 @@ fastifyServer.post("/broadcast-message", async (request, reply) => {
   await redis.publisher.publish(MESSAGE_CHANNEL, body.message);
 
   return { status: "Message sent successfully" };
+});
+
+// fastifyServer.get("/api/user-profile-picture", async (request, reply) => {
+//   const userProfilePictureDirectory =
+//     "/home/define/projects/clinic/server/src/assets/userProfilePictures";
+
+//   if (!fs.existsSync(userProfilePictureDirectory)) {
+//     // fs.mkdirSync(folderName);
+//     console.log("Error loading the directory");
+//     reply.code(200).send({ success: false });
+//   }
+
+//   reply.code(200).send({ success: true });
+// });
+
+fastifyServer.get("/api/user-profile-picture", (request, reply) => {
+  const directoryPath =
+    "/home/define/projects/clinic/server/src/assets/userProfilePictures";
+
+  fs.readdir(directoryPath, (err, files) => {
+    if (err) {
+      console.error("Error reading directory:", err);
+      reply.code(500).send("Error reading directory");
+      return;
+    }
+
+    const foundFile = files.find((file) =>
+      file.startsWith(request.query.userId)
+    );
+
+    if (foundFile) {
+      const fileExtension = path.extname(foundFile);
+      console.log("Found file:", foundFile);
+      console.log("File extension:", fileExtension);
+      fs.readFile(path.join(directoryPath, foundFile), (err, data) => {
+        if (err) {
+          console.error("Error reading the image:", err);
+          reply.code(500).send("Error reading the image");
+        } else {
+          reply.code(200).header("Content-Type", "image/jpeg").send(data);
+        }
+      });
+    } else {
+      console.log("File not found.");
+      reply.code(404).send("File not found");
+    }
+  });
 });
 
 const buildServer = async () => {

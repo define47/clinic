@@ -102,15 +102,13 @@ export class AppointmentController {
     reply: FastifyReply
   ) => {
     const query: any = request.query;
-    console.log(query.doctorId);
-
+    // console.log(query.doctorId);
+    // console.log(payload);
     const payload =
       await this._appointmentService.getDoctorAppointmentBookedSlots(
         query.doctorId,
         query.date
       );
-
-    console.log(payload);
 
     reply.code(200).send({ success: true, payload });
   };
