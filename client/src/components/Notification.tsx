@@ -52,15 +52,6 @@ export const Notification: FC = () => {
     fetchUserNotifications();
   }, []);
 
-  useEffect(() => {
-    if (userNotifications.length > 0) {
-      const obj = JSON.parse(
-        userNotifications[0].notification.notificationBody
-      );
-      console.log("userNotifications", JSON.parse(obj).appointmentId);
-    }
-  }, [userNotifications]);
-
   return (
     <>
       <div className="relative">
@@ -83,11 +74,11 @@ export const Notification: FC = () => {
         </div>
         <div
           ref={notificationRef}
-          className={`w-96 h-64 p-2 absolute top-3.5 z-50 right-1.5 bg-white border rounded-xl transition-all ${
+          className={`w-96 h-64 p-3 absolute top-3.5 right-1.5 bg-white border rounded-xl transition-all ${
             areNotificationsVisible
-              ? "opacity-100 duration-500"
-              : "opacity-0 duration-500"
-          }`}
+              ? "opacity-100 duration-500 z-10"
+              : "opacity-0 duration-500 z-0"
+          } overflow-y-auto`}
         >
           {userNotifications.length > 0 &&
             userNotifications !== undefined &&
@@ -98,57 +89,117 @@ export const Notification: FC = () => {
               const parsedNotificationBodyData = JSON.parse(
                 parsedNotificationBody
               );
-              const appointment = parsedNotificationBodyData.appointment;
-              const doctor = parsedNotificationBodyData.doctor;
-              const patient = parsedNotificationBodyData.patient;
+              const appointment = parsedNotificationBodyData?.appointment;
+              const doctor = parsedNotificationBodyData?.doctor;
+              const patient = parsedNotificationBodyData?.patient;
+              const appointmentDateTime =
+                appointment?.appointmentDateTime.split("T");
+              let appointmentDate, appointmentTime;
+              if (appointmentDateTime) {
+                appointmentDate = appointmentDateTime[0]
+                  .split("-")
+                  .reverse()
+                  .join("-");
+                appointmentTime = appointmentDateTime[1].substring(0, 5);
+              }
+
               // const parsedAppointment = JSON.parse(parsedNotificationBody);
 
               // const parsedPatient = JSON.parse(parsedNotificationBody);
               return (
-                <div className="border-b">
-                  {/* <span className="bg-red-200">
-                    {userNotification.notification.notificationId}
-                  </span>
-                  &nbsp;
-                  <span>{parsedAppointment.appointmentId}</span> */}
-                  <div>
+                // <div className="w-full border-b">
+                //   <div className="w-full h-full flex items-center">
+                //     <span>
+                //       <UserProfilePicture
+                //         userId={userNotification.sender.senderId}
+                //       />
+                //     </span>
+                //     &nbsp;
+                //     <span>{userNotification.sender.senderForename}</span>
+                //     &nbsp;
+                //     <span>{userNotification.sender.senderSurname}</span>
+                //   </div>
+                //   <div className="flex flex-col">
+                //     <div className="flex">
+                //       <span>
+                //         {userNotification.notification.notificationAction}
+                //       </span>
+                //       &nbsp;
+                //       <span>
+                //         {userNotification.notification.notificationEntity}&nbsp;
+                //       </span>
+                //       FOR:
+                //     </div>
+                //     <div>
+                //       <div>
+                //         <span>{doctor.userForename}</span>
+                //         <span>{doctor.userSurname}</span>
+                //       </div>
+                //       <div>
+                //         <span>{patient.userForename}</span>
+                //         <span>{patient.userSurname}</span>
+                //       </div>
+                //       <div>
+                //         <span>{appointment.appointmentStatus}</span>&nbsp;
+                //         <span>{appointmentDate}</span>&nbsp;
+                //         <span>{appointmentTime}</span>&nbsp;
+                //       </div>
+                //     </div>
+                //     <span>
+                //       {userNotification.notification.notificationDateTime
+                //         .split("T")[1]
+                //         .substring(0, 5)}
+                //     </span>
+                //   </div>
+                // </div>
+                <div className="w-full border-b text-xs">
+                  <div className="w-full flex items-center justify-end">
                     <span>
-                      Sent by{" "}
-                      <UserProfilePicture
-                        userId={userNotification.sender.senderId}
-                      />{" "}
-                      &nbsp;
+                      {userNotification.notification?.notificationDateTime
+                        ?.split("T")[1]
+                        ?.substring(0, 5)}
                     </span>
-                    <span>{userNotification.sender.senderForename}</span>&nbsp;
-                    <span>{userNotification.sender.senderSurname}</span>
                   </div>
-                  <div>
+                  <div className="w-full h-full flex items-center">
                     <span>
-                      {userNotification.notification.notificationAction}
+                      <UserProfilePicture
+                        userProfilePictureWidth="w-8"
+                        userProfilePictureHeight="w-8"
+                        userId={userNotification.sender.senderId}
+                      />
                     </span>
                     &nbsp;
-                    <span>
-                      {userNotification.notification.notificationEntity}
-                    </span>
-                    {/* <div>{JSON.stringify(parsedAppointment)}</div> */}
+                    <span>{userNotification?.sender?.senderForename}</span>
+                    &nbsp;
+                    <span>{userNotification?.sender?.senderSurname}</span>&nbsp;
+                    <div className="flex">
+                      <span>
+                        {userNotification?.notification?.notificationAction}
+                      </span>
+                      &nbsp;
+                      <span>
+                        {userNotification?.notification?.notificationEntity}
+                        &nbsp;
+                      </span>
+                      FOR:
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
                     <div>
                       <div>
-                        <span>{doctor.userForename}</span>
-                        <span>{doctor.userSurname}</span>
+                        <span>{doctor?.userForename}</span>
+                        <span>{doctor?.userSurname}</span>
                       </div>
                       <div>
-                        <span>{patient.userForename}</span>
-                        <span>{patient.userSurname}</span>
+                        <span>{patient?.userForename}</span>
+                        <span>{patient?.userSurname}</span>
                       </div>
                       <div>
-                        <span>{appointment.appointmentStatus}</span>
-                        <span>{appointment.appointmentDateTime}</span>
+                        <span>{appointment?.appointmentStatus}</span>&nbsp;
+                        <span>{appointmentDate}</span>&nbsp;
+                        <span>{appointmentTime}</span>&nbsp;
                       </div>
                     </div>
-                    &nbsp;
-                    <span>
-                      {userNotification.notification.notificationDateTime}
-                    </span>
                   </div>
                 </div>
               );

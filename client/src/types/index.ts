@@ -346,5 +346,17 @@ export type UserNotification = {
 };
 
 export type UserProfilePictureProps = {
+  userProfilePictureWidth: string;
+  userProfilePictureHeight: string;
   userId: string;
+};
+
+export type Email = {
+  recipientEmail: string;
+  subject: string;
+  html: string;
+};
+
+export type SendEmailOverlayProps = {
+  patientEmail: string;
 };

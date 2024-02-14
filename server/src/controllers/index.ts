@@ -1,5 +1,6 @@
 import { AppointmentController } from "./appointment.controller";
 import { AppointmentHistoryController } from "./appointmentHistory.controller";
+import { CommunicationsController } from "./communications.controller";
 import { GeneralDataController } from "./generalData.controller";
 import { MedicalProcedureController } from "./medicalProcedure.controller";
 import { MedicalRecordPatientController } from "./medicalRecordPatient.controller";
@@ -18,3 +19,4 @@ export const medicalProcedureController = new MedicalProcedureController();
 export const appointmentHistoryController = new AppointmentHistoryController();
 export const generalDataController = new GeneralDataController();
 export const notificationController = new NotificationController();
+export const communicationsController = new CommunicationsController();

@@ -157,7 +157,7 @@ button {
   background-color: #777777;
 }
 
-.groups {
+/* .groups {
   display: flex;
   margin: 5px;
   padding: 5px;
@@ -184,4 +184,4 @@ button {
   padding: 5px;
   border: 2px green;
   cursor: grab;
-}
+} */

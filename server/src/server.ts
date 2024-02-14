@@ -35,6 +35,7 @@ import {
   createRoles,
   createSpecialities,
 } from "./utils/databaseInteractions.js";
+import { communicationsRoutes } from "./routes/communications.routes.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -227,6 +228,10 @@ const buildServer = async () => {
 
   await fastifyServer.register(notificationRoutes, {
     prefix: "api/notifications",
+  });
+
+  await fastifyServer.register(communicationsRoutes, {
+    prefix: "api/communications",
   });
 
   await fastifyServer;

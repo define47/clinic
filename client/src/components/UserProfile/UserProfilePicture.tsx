@@ -4,7 +4,11 @@ import axios from "axios";
 import { Buffer } from "buffer";
 import { UserProfilePictureProps } from "../../types";
 
-export const UserProfilePicture: FC<UserProfilePictureProps> = ({ userId }) => {
+export const UserProfilePicture: FC<UserProfilePictureProps> = ({
+  userProfilePictureWidth,
+  userProfilePictureHeight,
+  userId,
+}) => {
   const [imageUrl, setImageUrl] = useState<any>();
   // const authContext = useContext(AuthenticatedUserDataContext);
   // const { authenticatedUserDataState, authenticatedUserDataSetState } =
@@ -40,7 +44,7 @@ export const UserProfilePicture: FC<UserProfilePictureProps> = ({ userId }) => {
     <div>
       {imageUrl ? (
         <img
-          className="w-10 h-10 rounded-full"
+          className={`${userProfilePictureWidth} ${userProfilePictureHeight} rounded-full`}
           src={imageUrl}
           alt="User Profile"
         />

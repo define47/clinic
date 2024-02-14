@@ -49,6 +49,7 @@ import useDeviceDetection from "../../utils/useDeviceDetection";
 import { CardEntry } from "../design/card/CardEntry";
 import { CreateMedicalRecordPatientOverlay } from "../overlays/medicalRecordPatientOverlays/CreateMedicalRecordPatientOverlay";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
+import { SendEmailOverlay } from "../overlays/emailOverlays/SendEmailOverlay";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -538,7 +539,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   return device === "Desktop" ? (
     <div className="w-full bg-white h-full border p-4 rounded-xl font-roboto">
       {/* <button onClick={handlePrint}>print</button> */}
-      <div className="flex items-center justify-between">
+      {/* <div className="flex items-center justify-between">
         {(entity === "doctor" ||
           entity === "patient" ||
           entity === "receptionist" ||
@@ -613,13 +614,6 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   />
                 </div>
               )}
-
-            {/* <AppointmentPeriodPicker
-            selectedAppointmentPeriodValue={selectedAppointmentPeriodValue}
-            setSelectedAppointmentPeriodValue={
-              setSelectedAppointmentPeriodValue
-            }
-          /> */}
           </div>
         )}
         {entity === "medicalProcedure" && (
@@ -636,26 +630,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                 />
               </div>
             </div>
-            {/* <div className="grow flex justify-center items-center">
-            <MedicalSpecialityPicker
-              label="select medical speciality"
-              selectedMedicalSpecialityId={selectedMedicalSpecialityId}
-              setSelectedMedicalSpecialityId={setSelectedMedicalSpecialityId}
-              selectedMedicalSpecialityName={selectedMedicalSpecialityName}
-              setSelectedMedicalSpecialityName={
-                setSelectedMedicalSpecialityName
-              }
-            />
           </div>
-          <div className="w-72 flex-none"></div> */}
-          </div>
-          // <div className="flex ">
-          //   <div className="flex-none w-14 h-14 ...">01</div>
-          //   <div className="flex justify-center items-center grow bg-red-200 h-14 ...">
-          //     02
-          //   </div>
-          //   <div className="flex-none w-14 h-14 ...">03</div>
-          // </div>
         )}
 
         {entity === "medicalProcedure" && (
@@ -681,7 +656,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           selectedLimit={tableLimit}
           setSelectedLimit={setTableLimit}
         />
-      </div>
+      </div> */}
       <div
         ref={componentRef}
         className="w-full border rounded-xl h-4/5 overflow-auto hidden lg:block"
@@ -808,35 +783,31 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     onClick={() => setClickedTableRow(tableRow)}
                   >
                     <td>{tableRowIndex + 1 + currentPage * 5}</td>
-                    <td className="px-6 py-4 font-medium text-gray-700">
+                    <td className="px-6 py-4 text-xs text-gray-700">
                       {tableRow.userId}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.userForename}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.userSurname}
                     </td>
-                    <td className="px-6 py-4 font-medium">
-                      {tableRow.userEmail}
-                    </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">{tableRow.userEmail}</td>
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.userPhoneNumber}
                     </td>
-                    <td className="px-6 py-4 font-medium">
-                      {tableRow.userGender}
-                    </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">{tableRow.userGender}</td>
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.userDateOfBirth.split("-").reverse().join("-")}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.userAddress}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.userRoleName}
                     </td>
                     {entity === "doctor" && (
-                      <td className="px-6 py-4 font-medium">
+                      <td className="px-6 py-4 text-xs">
                         {determineSpecialityOrder(
                           tableRow.medicalSpecialities!,
                           "P"
@@ -844,7 +815,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       </td>
                     )}
                     {entity === "doctor" && (
-                      <td className="px-6 py-4 font-medium">
+                      <td className="px-6 py-4 text-xs">
                         {determineSpecialityOrder(
                           tableRow.medicalSpecialities!,
                           "S"
@@ -852,7 +823,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       </td>
                     )}
                     {entity === "doctor" && (
-                      <td className="px-6 py-4 font-medium">
+                      <td className="px-6 py-4 text-xs">
                         {determineSpecialityOrder(
                           tableRow.medicalSpecialities!,
                           "T"
@@ -875,8 +846,12 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     onClick={() => setClickedTableRow(tableRow)}
                   >
                     <td>{tableRowIndex}</td>
-                    <td className="">{tableRow.medicalSpecialityId}</td>
-                    <td className="">{tableRow.medicalSpecialityName}</td>
+                    <td className="px-6 py-4 text-xs">
+                      {tableRow.medicalSpecialityId}
+                    </td>
+                    <td className="px-6 py-4 text-xs">
+                      {tableRow.medicalSpecialityName}
+                    </td>
                     <td className="h-14 flex items-center justify-center space-x-2">
                       <UpdateMedicalSpeciality medicalSpeciality={tableRow} />
                       <DeleteMedicalSpecialityOverlay
@@ -895,21 +870,21 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     onClick={() => setClickedTableRow(tableRow)}
                   >
                     <td>{tableRowIndex}</td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.appointment.appointmentId}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.doctor.doctorForename}&nbsp;
                       {tableRow.doctor.doctorSurname}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.patient.patientForename}&nbsp;
                       {tableRow.patient.patientSurname}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.appointment.appointmentReason}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.appointment.appointmentDateTime
                         .split("T")[0]
                         .split("-")
@@ -920,22 +895,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                         .split("T")[1]
                         .substring(0, 5)}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.appointment.appointmentStatus}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.appointment.appointmentCancellationReason}
                     </td>
                     <td className="h-14 flex items-center justify-center space-x-2">
-                      <UpdateAppointmentOverlay
-                        appointment={tableRow.appointment}
-                        doctorData={tableRow.doctor}
-                        patientData={tableRow.patient}
-                      />
-
-                      <DeleteAppointmentOverlay
-                        appointmentId={tableRow.appointment.appointmentId}
-                      />
                       {(authenticatedUserDataState.roleNames[0] === "doctor" ||
                         authenticatedUserDataState.roleNames[1] === "doctor") &&
                         tableRow.appointment.appointmentDoctorId ===
@@ -944,6 +910,20 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                             appointment={tableRow}
                           />
                         )}
+
+                      {tableRow.appointment.appointmentDoctorId !==
+                        authenticatedUserDataState.userId && (
+                        <div className="w-5 h-14"></div>
+                      )}
+
+                      <UpdateAppointmentOverlay
+                        appointment={tableRow.appointment}
+                        doctorData={tableRow.doctor}
+                        patientData={tableRow.patient}
+                      />
+                      <DeleteAppointmentOverlay
+                        appointmentId={tableRow.appointment.appointmentId}
+                      />
 
                       <Tooltip text="View Appointment History">
                         <RiTreasureMapLine
@@ -956,6 +936,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                           }}
                         />
                       </Tooltip>
+                      <SendEmailOverlay
+                        patientEmail={tableRow.patient.patientEmail}
+                      />
                     </td>
                   </tr>
                 ) : isMedicalProcedureRow(tableRow) ? (
@@ -969,16 +952,16 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     onClick={() => setClickedTableRow(tableRow)}
                   >
                     <td>{tableRowIndex}</td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.medicalProcedureId}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.medicalProcedureName}
                     </td>
-                    <td className="px-6 py-4 font-medium">
+                    <td className="px-6 py-4 text-xs">
                       {tableRow.medicalProcedurePrice}
                     </td>
-                    <td className="h-14 flex items-center justify-center space-x-2 px-6 py-4 font-medium">
+                    <td className="h-14 flex items-center justify-center space-x-2 px-6 py-4 text-xs">
                       <UpdateMedicalProcedureOverlay
                         medicalProcedure={tableRow}
                       />

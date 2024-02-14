@@ -11,6 +11,7 @@ import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import axios from "axios";
 import { appointmentsPath } from "../../../utils/dotenv";
 import { Tooltip } from "../../design/Tooltip";
+import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
 
 export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
   appointment,
@@ -118,7 +119,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
         <Tooltip text="Update Appointment">
           <PiPencil
             onClick={() => setIsUpdateAppointmentOverlayVisible(true)}
-            className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
+            className="z-50 text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
           />
         </Tooltip>
       )}

@@ -9,7 +9,11 @@ export const UserProfile: FC = () => {
     authContext!;
   return (
     <div className="flex items-center space-x-2">
-      <UserProfilePicture userId={authenticatedUserDataState.userId} />
+      <UserProfilePicture
+        userProfilePictureWidth="w-10"
+        userProfilePictureHeight="w-10"
+        userId={authenticatedUserDataState.userId}
+      />
       <UserProfileInfo />
     </div>
   );

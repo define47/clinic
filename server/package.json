@@ -15,6 +15,7 @@
     "@fastify/cors": "^8.5.0",
     "@fastify/env": "^4.3.0",
     "@fastify/redis": "^6.1.1",
+    "@sendgrid/mail": "^8.1.1",
     "@types/cli-color": "^2.0.6",
     "@types/node": "^20.10.6",
     "@types/pg": "^8.10.9",
