@@ -45,32 +45,36 @@ export class UserPreferencesController {
         }
       );
 
-      console.log(
-        clc.red(`current Session Id: ${JSON.stringify(currentCookie)}`)
-      );
-
-      console.log(
-        "currentUserPreferencesMapping",
-        currentUserPreferencesMapping
-      );
-
-      console.log(currentSessionValue.userId);
-
       const sessionId = uuidv4();
+      // const sessionValue = {
+      //   userId: currentSessionValue?.userId,
+      //   userForename: currentSessionValue?.userForename,
+      //   userSurname: currentSessionValue?.userSurname,
+      //   userEmail: currentSessionValue?.userEmail,
+      //   roleNames: currentSessionValue.roleNames,
+      //   specialityNames: currentSessionValue.specialityNames,
+      //   languageId: currentSessionValue.languageId,
+      //   languageCode: newLanguage?.languageCode,
+      //   languageName: newLanguage?.languageName,
+      //   isDarkModeOn: body.isDarkModeOn,
+      // };
       const sessionValue = {
         userId: currentSessionValue?.userId,
         userForename: currentSessionValue?.userForename,
         userSurname: currentSessionValue?.userSurname,
         userEmail: currentSessionValue?.userEmail,
         roleNames: currentSessionValue.roleNames,
-        specialityNames: currentSessionValue.specialityNames,
+        ...((currentSessionValue.roleNames[0] === "doctor" ||
+          currentSessionValue.roleNames[1] === "doctor") && {
+          medicalSpecialities: currentSessionValue.medicalSpecialities,
+        }),
         languageId: currentSessionValue.languageId,
         languageCode: newLanguage?.languageCode,
         languageName: newLanguage?.languageName,
         isDarkModeOn: body.isDarkModeOn,
       };
 
-      console.log(sessionValue);
+      console.log("updated sessionValue", sessionValue);
 
       console.log(`${clc.cyan("created session:")} get sessionId:${sessionId}`);
 

@@ -7,6 +7,7 @@ import { NotificationService } from "../services/notification.service";
 import { RoleService } from "../services/role.service";
 import { UserRoleMappingService } from "../services/userRoleMapping.service";
 import { Notification } from "../models/notification.model";
+import { UserService } from "../services/user.service";
 
 export class AppointmentController {
   private readonly _appointmentService: AppointmentService;
@@ -15,6 +16,7 @@ export class AppointmentController {
   private readonly _userNotificationMappingService;
   private readonly _roleService;
   private readonly _userRoleMappingService;
+  private readonly _userService;
 
   public constructor() {
     this._appointmentService = new AppointmentService();
@@ -23,6 +25,7 @@ export class AppointmentController {
     this._userNotificationMappingService = new UserNotificationMappingService();
     this._roleService = new RoleService();
     this._userRoleMappingService = new UserRoleMappingService();
+    this._userService = new UserService();
   }
   // doctor-appointment-booked-slots
 
@@ -76,7 +79,7 @@ export class AppointmentController {
       if (receptionists[i].userId !== userSessionData.userId)
         await this._userNotificationMappingService.createUserNotificationMapping(
           {
-            userId: receptionists[i].userId,
+            receiverId: receptionists[i].userId,
             notificationId: notification?.notificationId!,
             isNotificationRead: false,
           }
@@ -87,7 +90,7 @@ export class AppointmentController {
       if (admins[i].userId !== userSessionData.userId)
         await this._userNotificationMappingService.createUserNotificationMapping(
           {
-            userId: admins[i].userId,
+            receiverId: admins[i].userId,
             notificationId: notification?.notificationId!,
             isNotificationRead: false,
           }
@@ -192,7 +195,19 @@ export class AppointmentController {
       await this.sendAppointmentNotification(
         request,
         "create",
-        JSON.stringify(appointmentToCreate)
+        // JSON.stringify(appointmentToCreate)
+        JSON.stringify({
+          appointment: {
+            appointmentDateTime: appointmentToCreate?.appointmentDateTime,
+            appointmentStatus: appointmentToCreate?.appointmentStatus,
+          },
+          patient: await this._userService.getUserById(
+            appointmentToCreate?.appointmentPatientId!
+          ),
+          doctor: await this._userService.getUserById(
+            appointmentToCreate?.appointmentDoctorId!
+          ),
+        })
       );
 
       if (appointmentData)

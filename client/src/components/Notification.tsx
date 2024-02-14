@@ -3,12 +3,20 @@ import { FC, useContext, useEffect, useState } from "react";
 import { IoNotificationsOutline, IoNotificationsSharp } from "react-icons/io5";
 import { notificationsPath } from "../utils/dotenv";
 import { AuthenticatedUserDataContext } from "../contexts/UserContext";
+import { UserNotification } from "../types";
+import { UserProfilePicture } from "./UserProfile/UserProfilePicture";
 
 export const Notification: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState, authenticatedUserDataSetState } =
     authContext!;
   const [areNotificationsVisible, setAreNotificationsVisible] =
+    useState<boolean>(false);
+  const [userNotifications, setUserNotifications] = useState<
+    UserNotification[]
+  >([]);
+  const [isCursorOnBell, setIsCursorOnBell] = useState<boolean>(false);
+  const [isCursorOnFilledBell, setIsCursorOnFilledBell] =
     useState<boolean>(false);
 
   useEffect(() => {
@@ -20,33 +28,108 @@ export const Notification: FC = () => {
         withCredentials: true,
       });
 
-      console.log("notifications", response.data);
+      if (response.data.success === true)
+        setUserNotifications(response.data.payload);
     }
 
     fetchUserNotifications();
   }, []);
 
-  // useEffect(() => {}, [])
+  useEffect(() => {
+    if (userNotifications.length > 0) {
+      const obj = JSON.parse(
+        userNotifications[0].notification.notificationBody
+      );
+      console.log("userNotifications", JSON.parse(obj).appointmentId);
+    }
+  }, [userNotifications]);
 
   return (
     <>
       <div className="relative">
         {areNotificationsVisible ? (
           <IoNotificationsSharp
+            className="text-lg text-pink-500 hover:scale-125 cursor-pointer"
             onClick={() => setAreNotificationsVisible(false)}
           />
         ) : (
           <IoNotificationsOutline
+            className="text-lg text-pink-500 hover:scale-125 cursor-pointer"
             onClick={() => setAreNotificationsVisible(true)}
           />
         )}
         <div
-          className={`w-96 h-64 absolute top-3.5 z-50 right-1.5 bg-white border rounded-xl transition-all ${
+          className={`w-96 h-64 p-2 absolute top-3.5 z-50 right-1.5 bg-white border rounded-xl transition-all ${
             areNotificationsVisible
               ? "opacity-100 duration-500"
               : "opacity-0 duration-500"
           }`}
-        ></div>
+        >
+          {userNotifications.length > 0 &&
+            userNotifications !== undefined &&
+            userNotifications.map((userNotification: UserNotification) => {
+              const parsedNotificationBody = JSON.parse(
+                userNotification.notification.notificationBody
+              );
+              const parsedNotificationBodyData = JSON.parse(
+                parsedNotificationBody
+              );
+              const appointment = parsedNotificationBodyData.appointment;
+              const doctor = parsedNotificationBodyData.doctor;
+              const patient = parsedNotificationBodyData.patient;
+              // const parsedAppointment = JSON.parse(parsedNotificationBody);
+
+              // const parsedPatient = JSON.parse(parsedNotificationBody);
+              return (
+                <div className="border-b">
+                  {/* <span className="bg-red-200">
+                    {userNotification.notification.notificationId}
+                  </span>
+                  &nbsp;
+                  <span>{parsedAppointment.appointmentId}</span> */}
+                  <div>
+                    <span>
+                      Sent by{" "}
+                      <UserProfilePicture
+                        userId={userNotification.sender.senderId}
+                      />{" "}
+                      &nbsp;
+                    </span>
+                    <span>{userNotification.sender.senderForename}</span>&nbsp;
+                    <span>{userNotification.sender.senderSurname}</span>
+                  </div>
+                  <div>
+                    <span>
+                      {userNotification.notification.notificationAction}
+                    </span>
+                    &nbsp;
+                    <span>
+                      {userNotification.notification.notificationEntity}
+                    </span>
+                    {/* <div>{JSON.stringify(parsedAppointment)}</div> */}
+                    <div>
+                      <div>
+                        <span>{doctor.userForename}</span>
+                        <span>{doctor.userSurname}</span>
+                      </div>
+                      <div>
+                        <span>{patient.userForename}</span>
+                        <span>{patient.userSurname}</span>
+                      </div>
+                      <div>
+                        <span>{appointment.appointmentStatus}</span>
+                        <span>{appointment.appointmentDateTime}</span>
+                      </div>
+                    </div>
+                    &nbsp;
+                    <span>
+                      {userNotification.notification.notificationDateTime}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
       </div>
     </>
   );

@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Notification" (
 	"notificationSenderId" varchar(100) NOT NULL,
 	"notificationAction" "notificationAction" NOT NULL,
 	"notificationEntity" "notificationEntity" NOT NULL,
-	"notificationBody" varchar(999) NOT NULL,
+	"notificationBody" varchar(99999) NOT NULL,
 	"notificationDateTime" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
@@ -132,10 +132,10 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."User" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."UserNotificationMapping" (
-	"userId" varchar NOT NULL,
+	"receiverId" varchar NOT NULL,
 	"notificationId" varchar NOT NULL,
 	"isNotificationRead" boolean DEFAULT false NOT NULL,
-	CONSTRAINT "UserNotificationMapping_userId_notificationId_pk" PRIMARY KEY("userId","notificationId")
+	CONSTRAINT "UserNotificationMapping_receiverId_notificationId_pk" PRIMARY KEY("receiverId","notificationId")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."UserPreferencesMapping" (
@@ -230,7 +230,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "iatropolis"."UserNotificationMapping" ADD CONSTRAINT "UserNotificationMapping_userId_User_userId_fk" FOREIGN KEY ("userId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "iatropolis"."UserNotificationMapping" ADD CONSTRAINT "UserNotificationMapping_receiverId_User_userId_fk" FOREIGN KEY ("receiverId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

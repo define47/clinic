@@ -31,6 +31,7 @@ import { generalDataRoutes } from "./routes/generalData.routes.js";
 import { notificationRoutes } from "./routes/notification.routes.js";
 import {
   createLanguages,
+  createMedicalProcedures,
   createRoles,
   createSpecialities,
 } from "./utils/databaseInteractions.js";
@@ -314,16 +315,15 @@ const buildServer = async () => {
   // await createRoles();
   // await createSpecialities();
   // await createLanguages();
+  // await createMedicalProcedures("Internal Medicine", 2);
+  // await createMedicalProcedures("Neurology", 2);
+  // await createMedicalProcedures("Dermatology", 2);
 
   // performAdminInteractions();
   // performDoctorInteractions(true);
   // createPatients(0, 100);
 
   // await createAppointments(0, 150);
-
-  // await createMedicalProcedures("Internal Medicine", 2);
-  // await createMedicalProcedures("Neurology", 2);
-  // await createMedicalProcedures("Dermatology", 2);
 
   return fastifyServer;
 };

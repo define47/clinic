@@ -2,12 +2,13 @@ import { FC, useContext, useEffect, useState } from "react";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import axios from "axios";
 import { Buffer } from "buffer";
+import { UserProfilePictureProps } from "../../types";
 
-export const UserProfilePicture: FC = () => {
+export const UserProfilePicture: FC<UserProfilePictureProps> = ({ userId }) => {
   const [imageUrl, setImageUrl] = useState<any>();
-  const authContext = useContext(AuthenticatedUserDataContext);
-  const { authenticatedUserDataState, authenticatedUserDataSetState } =
-    authContext!;
+  // const authContext = useContext(AuthenticatedUserDataContext);
+  // const { authenticatedUserDataState, authenticatedUserDataSetState } =
+  //   authContext!;
 
   useEffect(() => {
     async function fetchProfilePicture() {
@@ -16,20 +17,16 @@ export const UserProfilePicture: FC = () => {
           "http://192.168.2.16:40587/api/user-profile-picture",
           {
             responseType: "arraybuffer",
-            params: { userId: authenticatedUserDataState.userId },
+            params: { userId },
             withCredentials: true,
           }
         );
 
-        console.log("herer,", response.data);
-
         const base64String = Buffer.from(response.data, "binary").toString(
           "base64"
         );
-        console.log("🚀 ~ fetchProfilePicture ~ base64String:", base64String);
-        const imageUrl = `data:image/jpeg;base64,${base64String}`;
 
-        console.log("🚀 ~ fetchProfilePicture ~ imageUrl:", imageUrl);
+        const imageUrl = `data:image/jpeg;base64,${base64String}`;
 
         setImageUrl(imageUrl);
       } catch (error) {
@@ -37,11 +34,7 @@ export const UserProfilePicture: FC = () => {
       }
     }
     fetchProfilePicture();
-  }, [authenticatedUserDataState]);
-
-  useEffect(() => {
-    console.log("imageUrl", imageUrl);
-  }, [imageUrl]);
+  }, [userId]);
 
   return (
     <div>

@@ -8,6 +8,7 @@ import { BaseRepository } from "./base.repository";
 import { Table, and, eq, gte, lte } from "drizzle-orm";
 import { notificationTable } from "../models/notification.model";
 import { userTable } from "../models/user.model";
+import { alias } from "drizzle-orm/pg-core";
 
 export class UserNotificationMappingRepository extends BaseRepository<UserNotificationMapping> {
   public constructor(
@@ -63,8 +64,25 @@ export class UserNotificationMappingRepository extends BaseRepository<UserNotifi
 
     console.log(s);
 
+    const sender = alias(userTable, "sender");
+    const receiver = alias(userTable, "receiver");
+
     return await this._drizzle
-      .select()
+      .select({
+        notification: {
+          notificationId: notificationTable.notificationId,
+          notificationAction: notificationTable.notificationAction,
+          notificationEntity: notificationTable.notificationEntity,
+          notificationBody: notificationTable.notificationBody,
+          notificationDateTime: notificationTable.notificationDateTime,
+          isNotificationRead: userNotificationMappingTable.isNotificationRead,
+        },
+        sender: {
+          senderId: sender.userId,
+          senderForename: sender.userForename,
+          senderSurname: sender.userSurname,
+        },
+      })
       .from(userNotificationMappingTable)
       .innerJoin(
         notificationTable,
@@ -74,16 +92,42 @@ export class UserNotificationMappingRepository extends BaseRepository<UserNotifi
         )
       )
       .innerJoin(
-        userTable,
-        eq(userNotificationMappingTable.userId, userTable.userId)
+        sender,
+        eq(notificationTable.notificationSenderId, sender.userId)
       )
+      // .innerJoin(
+      //   receiver,
+      //   eq(userNotificationMappingTable.receiverId, receiver.userId)
+      // )
       .where(
         and(
-          eq(userNotificationMappingTable.userId, userId),
+          eq(userNotificationMappingTable.receiverId, userId),
           gte(notificationTable.notificationDateTime, currentDayStartInUTC),
           lte(notificationTable.notificationDateTime, currentDayEndInUTC)
         )
       );
+
+    // return await this._drizzle
+    //   .select()
+    //   .from(userNotificationMappingTable)
+    //   .innerJoin(
+    //     notificationTable,
+    //     eq(
+    //       userNotificationMappingTable.notificationId,
+    //       notificationTable.notificationId
+    //     )
+    //   )
+    //   .innerJoin(
+    //     userTable,
+    //     eq(userNotificationMappingTable.userId, userTable.userId)
+    //   )
+    //   .where(
+    //     and(
+    //       eq(userNotificationMappingTable.userId, userId),
+    //       gte(notificationTable.notificationDateTime, currentDayStartInUTC),
+    //       lte(notificationTable.notificationDateTime, currentDayEndInUTC)
+    //     )
+    //   );
   }
 
   public async createUserNotificationMapping(

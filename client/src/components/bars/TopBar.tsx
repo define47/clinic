@@ -5,7 +5,6 @@ import { ThemeSwitcher } from "../ThemeSwitcher";
 import { useLocation } from "react-router-dom";
 import { Notification } from "../Notification";
 import { UserProfile } from "../UserProfile/UserProfile";
-import { UserProfilePicture } from "../UserProfile/UserProfilePicture";
 
 export const TopBar: FC<TopBarProps> = ({
   isSidebarExtended,
@@ -30,11 +29,9 @@ export const TopBar: FC<TopBarProps> = ({
       <div className="w-full bg-red-200 pl-20">{pathname}</div>
       <div className="w-full flex justify-center">b</div>
       <div className="w-full flex items-center justify-end text-sm">
-        {authenticatedUserDataState.userId}
         <Notification />
         <ThemeSwitcher />
         <UserProfile />
-        <UserProfilePicture />
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ export const notificationTable = clinicSchema.table("Notification", {
   notificationAction: notificationActionEnum("notificationAction").notNull(),
   notificationEntity: notificationEntityEnum("notificationEntity").notNull(),
   notificationBody: varchar("notificationBody", {
-    length: 999,
+    length: 99999,
   }).notNull(),
   notificationDateTime: timestamp("notificationDateTime").default(
     sql`CURRENT_TIMESTAMP`

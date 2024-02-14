@@ -22,6 +22,6 @@ export class NotificationController {
         query.userId
       );
 
-    reply.code(200).send({ success: payload.length > 0, payload });
+    reply.code(200).send({ success: true, payload });
   }
 }

@@ -328,3 +328,23 @@ export type Group = {
   groupId?: string;
   groupName: string;
 };
+
+export type UserNotification = {
+  notification: {
+    notificationId: string;
+    notificationAction: string;
+    notificationEntity: string;
+    notificationBody: string;
+    notificationDateTime: string;
+    isNotificationRead: boolean;
+  };
+  sender: {
+    senderId: string;
+    senderForename: string;
+    senderSurname: string;
+  };
+};
+
+export type UserProfilePictureProps = {
+  userId: string;
+};

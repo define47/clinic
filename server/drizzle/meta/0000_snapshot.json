@@ -1,5 +1,5 @@
 {
-  "id": "33f9541b-6d83-42ce-a978-3eb5088aa5fd",
+  "id": "e25b71eb-1a3c-40aa-b7d7-6853e8b76e64",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -575,7 +575,7 @@
         },
         "notificationBody": {
           "name": "notificationBody",
-          "type": "varchar(999)",
+          "type": "varchar(99999)",
           "primaryKey": false,
           "notNull": true
         },
@@ -748,8 +748,8 @@
       "name": "UserNotificationMapping",
       "schema": "iatropolis",
       "columns": {
-        "userId": {
-          "name": "userId",
+        "receiverId": {
+          "name": "receiverId",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
@@ -770,13 +770,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "UserNotificationMapping_userId_User_userId_fk": {
-          "name": "UserNotificationMapping_userId_User_userId_fk",
+        "UserNotificationMapping_receiverId_User_userId_fk": {
+          "name": "UserNotificationMapping_receiverId_User_userId_fk",
           "tableFrom": "UserNotificationMapping",
           "tableTo": "User",
           "schemaTo": "iatropolis",
           "columnsFrom": [
-            "userId"
+            "receiverId"
           ],
           "columnsTo": [
             "userId"
@@ -800,10 +800,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "UserNotificationMapping_userId_notificationId_pk": {
-          "name": "UserNotificationMapping_userId_notificationId_pk",
+        "UserNotificationMapping_receiverId_notificationId_pk": {
+          "name": "UserNotificationMapping_receiverId_notificationId_pk",
           "columns": [
-            "userId",
+            "receiverId",
             "notificationId"
           ]
         }

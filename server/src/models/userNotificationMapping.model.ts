@@ -4,13 +4,13 @@ import { userTable } from "./user.model";
 import { notificationTable } from "./notification.model";
 
 export type UserNotificationMapping = {
-  userId: string;
+  receiverId: string;
   notificationId: string;
   isNotificationRead: boolean;
 };
 
 export type UserNotificationMappingCreationAttributes = {
-  userId: string;
+  receiverId: string;
   notificationId: string;
   isNotificationRead: boolean;
 };
@@ -18,7 +18,10 @@ export type UserNotificationMappingCreationAttributes = {
 export const userNotificationMappingTable = clinicSchema.table(
   "UserNotificationMapping",
   {
-    userId: varchar("userId")
+    // userId: varchar("userId")
+    //   .notNull()
+    //   .references(() => userTable.userId),
+    receiverId: varchar("receiverId")
       .notNull()
       .references(() => userTable.userId),
     notificationId: varchar("notificationId")
@@ -28,7 +31,7 @@ export const userNotificationMappingTable = clinicSchema.table(
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.userId, table.notificationId] }),
+      pk: primaryKey({ columns: [table.receiverId, table.notificationId] }),
     };
   }
 );

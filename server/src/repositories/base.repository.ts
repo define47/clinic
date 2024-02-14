@@ -173,7 +173,11 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "notificationDateTime",
       ];
     else if (table === userNotificationMappingTable)
-      this._tableColumns = ["userId", "notificationId", "isNotificationRead"];
+      this._tableColumns = [
+        "receiverId",
+        "notificationId",
+        "isNotificationRead",
+      ];
     else this._tableColumns = [];
 
     // type MyKeys = keyof typeof this._table.$inferSelect;
