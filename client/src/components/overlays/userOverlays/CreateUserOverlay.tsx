@@ -200,6 +200,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
             </div>
             <div className="flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
               <StyledInput
+                styledInputWidth="w-40"
                 label="userPhoneNumber"
                 name="userPhoneNumber"
                 onChangeStyledInput={handleStyledInputChange}

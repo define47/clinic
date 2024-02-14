@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import { IoNotificationsOutline, IoNotificationsSharp } from "react-icons/io5";
 import { notificationsPath } from "../utils/dotenv";
 import { AuthenticatedUserDataContext } from "../contexts/UserContext";
@@ -12,12 +12,29 @@ export const Notification: FC = () => {
     authContext!;
   const [areNotificationsVisible, setAreNotificationsVisible] =
     useState<boolean>(false);
+  const notificationRef = useRef<HTMLDivElement>(null);
   const [userNotifications, setUserNotifications] = useState<
     UserNotification[]
   >([]);
   const [isCursorOnBell, setIsCursorOnBell] = useState<boolean>(false);
   const [isCursorOnFilledBell, setIsCursorOnFilledBell] =
     useState<boolean>(false);
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target as Node)
+      ) {
+        setAreNotificationsVisible(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
 
   useEffect(() => {
     async function fetchUserNotifications() {
@@ -49,16 +66,23 @@ export const Notification: FC = () => {
       <div className="relative">
         {areNotificationsVisible ? (
           <IoNotificationsSharp
-            className="text-lg text-pink-500 hover:scale-125 cursor-pointer"
+            className="text-xl text-pink-500 hover:scale-125 cursor-pointer"
             onClick={() => setAreNotificationsVisible(false)}
           />
         ) : (
           <IoNotificationsOutline
-            className="text-lg text-pink-500 hover:scale-125 cursor-pointer"
-            onClick={() => setAreNotificationsVisible(true)}
+            className="text-xl text-pink-500 hover:scale-125 cursor-pointer"
+            onClick={(e) => {
+              setAreNotificationsVisible(true);
+              e.stopPropagation();
+            }}
           />
         )}
+        <div className="w-4 h-4 absolute -top-2 left-3 flex items-center justify-center text-pink-800 bg-pink-400 rounded-full text-xs">
+          {userNotifications.length}
+        </div>
         <div
+          ref={notificationRef}
           className={`w-96 h-64 p-2 absolute top-3.5 z-50 right-1.5 bg-white border rounded-xl transition-all ${
             areNotificationsVisible
               ? "opacity-100 duration-500"
