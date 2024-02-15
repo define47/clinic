@@ -1,6 +1,7 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { StyledRippleButton } from "../../components/design/StyledRippleButton";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
+import { phone } from "phone";
 
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { VirtualizedList } from "../../components/virt/VirtualizedList";
@@ -10,6 +11,7 @@ import { AppointmentsTimetable } from "../../components/table/AppointmentsTimeta
 import WeekPicker from "../../components/pickers/WeekPicker";
 import { MedicalProcedurePicker } from "../../components/pickers/MedicalProcedurePicker";
 import { PhoneExtensionPicker } from "../../components/pickers/PhoneExtensionPicker";
+import { GeneralDataCard } from "../../components/design/card/GeneralDataCard";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -67,14 +69,19 @@ export const AdminDashboard: FC = () => {
   useEffect(() => {
     console.log("dashboard start end", dashboardWeekStart, dashboardWeekEnd);
   }, [dashboardWeekStart, dashboardWeekEnd]);
+
+  useEffect(() => {
+    console.log("phone", phone("+40751958454"));
+  }, []);
   return (
     <div className="w-full h-full">
       {/* admin dashboard <Overlay /> */}
       {/* <MedicalProcedurePicker /> */}
       {/* <DragAndDrop /> */}
-      <PhoneExtensionPicker />
+      <GeneralDataCard entity="admin" />
+      {/* <PhoneExtensionPicker defaultPhoneExtension="+591" /> */}
       <div className="w-full h-full space-y-10">
-        {JSON.stringify(authenticatedUserDataState)}
+        {/* {JSON.stringify(authenticatedUserDataState)} */}
         <WeekPicker
           setDateWeekStart={setDashboardWeekStart}
           setDashboardWeekEnd={setDashboardWeekEnd}

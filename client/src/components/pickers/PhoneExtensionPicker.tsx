@@ -1,12 +1,14 @@
 import { FC, useEffect, useRef, useState } from "react";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 import { countryData } from "../../utils/countryData";
-import { Country } from "../../types";
+import { Country, PhoneExtensionPickerProps } from "../../types";
 import { StyledInput } from "../design/StyledInput";
 import { RiArrowUpSLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
 
-export const PhoneExtensionPicker: FC = () => {
+export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
+  defaultPhoneExtension,
+}) => {
   const [countries, setCountries] = useState<Country[]>([]);
   const [isPhoneExtensionPickerVisible, setIsPhoneExtensionPickerVisible] =
     useState<boolean>(false);
@@ -54,7 +56,7 @@ export const PhoneExtensionPicker: FC = () => {
   }, [isPhoneExtensionPickerVisible]);
 
   function handleCountryClick(country: Country) {
-    setSearchTerm(`${country.countryName} ${country.phoneExtension}`);
+    setSearchTerm(`${country.countryName} (${country.phoneExtension})`);
     setSelectedPhoneExtension(country.phoneExtension);
     setSelectedCountryCode(country.countryCode);
     setIsPhoneExtensionPickerVisible(false);
@@ -72,7 +74,7 @@ export const PhoneExtensionPicker: FC = () => {
         .toLowerCase()
         .startsWith(searchTerm.toLowerCase());
       const countryNameAndPhoneExtensionMatch =
-        `${filteredCountry.countryName.toLowerCase()} ${filteredCountry.phoneExtension.toLowerCase()}`.startsWith(
+        `${filteredCountry.countryName.toLowerCase()} (${filteredCountry.phoneExtension.toLowerCase()})`.startsWith(
           searchTerm.toLowerCase()
         );
 
@@ -95,38 +97,66 @@ export const PhoneExtensionPicker: FC = () => {
     for (let i = 0; i < filteredCountries.length; i++) {
       if (
         searchTerm.toLowerCase() !==
-        filteredCountries[i].countryName.toLowerCase()
-        //   ||
-        // searchTerm.toLowerCase() !==
-        //   `${filteredCountries[i].countryName} ${filteredCountries[i].phoneExtension}`
+          filteredCountries[i].countryName.toLowerCase() &&
+        searchTerm.toLowerCase() !==
+          filteredCountries[i].phoneExtension.toLowerCase() &&
+        searchTerm.toLowerCase() !==
+          filteredCountries[i].countryCode.toLowerCase() &&
+        searchTerm.toLowerCase() !==
+          `${filteredCountries[i].countryName.toLowerCase()} (${
+            filteredCountries[i].phoneExtension
+          })`
       ) {
         setSelectedCountryCode("");
         setSelectedPhoneExtension("");
+        break;
       } else if (
         searchTerm.toLowerCase() ===
-        filteredCountries[i].countryName.toLowerCase()
-        //    ||
-        // searchTerm.toLowerCase() ===
-        //   `${filteredCountries[i].countryName} ${filteredCountries[i].phoneExtension}`
+          filteredCountries[i].countryName.toLowerCase() ||
+        searchTerm.toLowerCase() ===
+          filteredCountries[i].phoneExtension.toLowerCase() ||
+        searchTerm.toLowerCase() ===
+          filteredCountries[i].countryCode.toLowerCase() ||
+        searchTerm.toLowerCase() ===
+          `${filteredCountries[i].countryName.toLowerCase()} (${
+            filteredCountries[i].phoneExtension
+          })`
       ) {
         setSelectedCountryCode(filteredCountries[i].countryCode);
         setSelectedPhoneExtension(filteredCountries[i].phoneExtension);
-        setSearchTerm(
-          `${filteredCountries[i].countryName} ${filteredCountries[i].phoneExtension}`
-        );
+        break;
+        // setSearchTerm(
+        //   `${filteredCountries[i].countryName} ${filteredCountries[i].phoneExtension}`
+        // );
       }
     }
 
     console.log(filteredCountries);
   }, [filteredCountries, searchTerm]);
 
+  const foundCountry = countries.find(
+    (country: Country) => country.phoneExtension === defaultPhoneExtension
+  );
+
+  useEffect(() => {
+    if (foundCountry) {
+      setSelectedPhoneExtension(foundCountry.phoneExtension);
+      setSelectedCountryCode(foundCountry.phoneExtension);
+      setSearchTerm(
+        `${foundCountry.countryName} (${foundCountry.phoneExtension})`
+      );
+    }
+  }, [foundCountry, defaultPhoneExtension]);
+
   useEffect(() => {
     console.log(
+      "searchTerm",
+      searchTerm,
       "selected country",
       selectedCountryCode,
       selectedPhoneExtension
     );
-  }, [selectedCountryCode, selectedPhoneExtension]);
+  }, [searchTerm, selectedCountryCode, selectedPhoneExtension]);
 
   return (
     <div className="flex">
@@ -194,16 +224,27 @@ export const PhoneExtensionPicker: FC = () => {
                   key={filteredCountry.countryCode}
                   onClick={() => handleCountryClick(filteredCountry)}
                 >
-                  <div className="flex items-center space-x-1">
-                    <span
-                      className={`fi fi-${filteredCountry.countryCode.toLowerCase()}`}
-                    ></span>
-                    <span>{filteredCountry.countryName}</span>
-                    <span>({filteredCountry.phoneExtension})</span>
-                    {searchTerm.toLowerCase() ===
-                      filteredCountry.countryName.toLowerCase() +
-                        " " +
-                        filteredCountry.phoneExtension && <TiTick />}
+                  <div className="flex items-center justify-between space-x-1">
+                    <div>
+                      <span
+                        className={`fi fi-${filteredCountry.countryCode.toLowerCase()}`}
+                      ></span>
+                      &nbsp;
+                      <span>{filteredCountry.countryName}</span>&nbsp;
+                      <span>({filteredCountry.phoneExtension})</span>
+                    </div>
+                    <div>
+                      {(searchTerm.toLowerCase() ===
+                        filteredCountry.countryName.toLowerCase() ||
+                        searchTerm.toLowerCase() ===
+                          filteredCountry.phoneExtension.toLowerCase() ||
+                        searchTerm.toLowerCase() ===
+                          filteredCountry.countryCode.toLowerCase() ||
+                        searchTerm.toLowerCase() ===
+                          `${filteredCountry.countryName.toLowerCase()} (${
+                            filteredCountry.phoneExtension
+                          })`) && <TiTick />}
+                    </div>
                   </div>
                 </li>
               ))}

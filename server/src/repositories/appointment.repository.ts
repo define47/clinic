@@ -77,7 +77,8 @@ export class AppointmentRepository
   // }
 
   public async getAppointmentCountByPeriod(
-    period: string
+    period: string,
+    doctorId: string
   ): Promise<number | undefined> {
     try {
       const currentDate = new Date();
@@ -178,16 +179,21 @@ export class AppointmentRepository
           break;
       }
 
+      const generalDataAppointmentCondition = {
+        condition: and(
+          gte(appointmentTable.appointmentDateTime, startDate!),
+          lte(appointmentTable.appointmentDateTime, endDate!),
+          ...(doctorId
+            ? [eq(appointmentTable.appointmentDoctorId, doctorId)]
+            : [])
+        ),
+      };
+
       return (
         await this._drizzle
           .select({ totalCount: count() })
           .from(appointmentTable)
-          .where(
-            and(
-              gte(appointmentTable.appointmentDateTime, startDate!),
-              lte(appointmentTable.appointmentDateTime, endDate!)
-            )
-          )
+          .where(generalDataAppointmentCondition.condition)
       )[0].totalCount;
     } catch (error) {}
   }

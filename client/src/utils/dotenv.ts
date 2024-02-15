@@ -41,6 +41,14 @@ export const notificationsPath = `${serverURL}${
   import.meta.env.VITE_SERVER_NOTIFICATIONS_PATH
 }`;
 
+export const userProfilePicturePath = `${serverURL}${
+  import.meta.env.VITE_SERVER_USER_PROFILE_PICTURE_PATH
+}`;
+
+export const generalDataPath = `${serverURL}${
+  import.meta.env.VITE_SERVER_GENERAL_DATA_PATH
+}`;
+
 export const patientRoleId = import.meta.env.VITE_PATIENT_ROLE_ID;
 export const patientRoleName = import.meta.env.VITE_PATIENT_ROLE_NAME;
 

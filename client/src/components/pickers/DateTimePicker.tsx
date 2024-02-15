@@ -562,16 +562,17 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
                       : "hover:bg-pink-300 hover:rounded-full cursor-pointer"
                   } `}
                   onClick={() => {
-                    // if (
-                    //   !isDateOnly &&
-                    //   day >= currentDate.getDate() &&
-                    //   currentDate.getUTCMonth() === selectedMonth &&
-                    //   currentDate.getUTCFullYear() === selectedYear
-                    // )
-                    //   setSelectedDay(day);
+                    if (
+                      !isDateOnly &&
+                      day >= currentDate.getDate() &&
+                      currentDate.getUTCMonth() === selectedMonth &&
+                      currentDate.getUTCFullYear() === selectedYear
+                    )
+                      setSelectedDay(day);
 
-                    // if (isDateOnly)
-                    setSelectedDay(day);
+                    if (isDateOnly) setSelectedDay(day);
+                    // if (!isDateOnly )
+                    // setSelectedDay(day);
                   }}
                 >
                   {day}

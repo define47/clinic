@@ -3,6 +3,7 @@ import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import axios from "axios";
 import { Buffer } from "buffer";
 import { UserProfilePictureProps } from "../../types";
+import { userProfilePicturePath } from "../../utils/dotenv";
 
 export const UserProfilePicture: FC<UserProfilePictureProps> = ({
   userProfilePictureWidth,
@@ -17,14 +18,11 @@ export const UserProfilePicture: FC<UserProfilePictureProps> = ({
   useEffect(() => {
     async function fetchProfilePicture() {
       try {
-        const response = await axios(
-          "http://192.168.2.16:40587/api/user-profile-picture",
-          {
-            responseType: "arraybuffer",
-            params: { userId },
-            withCredentials: true,
-          }
-        );
+        const response = await axios(userProfilePicturePath, {
+          responseType: "arraybuffer",
+          params: { userId },
+          withCredentials: true,
+        });
 
         const base64String = Buffer.from(response.data, "binary").toString(
           "base64"

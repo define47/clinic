@@ -366,3 +366,12 @@ export type Country = {
   phoneExtension: string;
   countryCode: string;
 };
+
+export type PhoneExtensionPickerProps = {
+  defaultPhoneExtension?: string;
+};
+
+export type GeneralDataCardProps = {
+  entity?: string;
+  period?: string;
+};
