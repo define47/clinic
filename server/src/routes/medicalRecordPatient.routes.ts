@@ -4,6 +4,16 @@ import { medicalRecordPatientController } from "../controllers";
 export async function medicalRecordPatientRoutes(
   fastifyServer: FastifyInstance
 ) {
+  fastifyServer.get(
+    "/",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      await medicalRecordPatientController.getMedicalRecordPatient(
+        request,
+        reply
+      );
+    }
+  );
+
   fastifyServer.post(
     "/",
     async (request: FastifyRequest, reply: FastifyReply) => {

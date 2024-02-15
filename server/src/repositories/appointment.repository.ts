@@ -3,6 +3,7 @@ import {
   Appointment,
   AppointmentCreationAttributes,
   AppointmentJoinDoctorAndPatient,
+  AppointmentStatusEnum,
   AppointmentUpdateAttributes,
   appointmentTable,
 } from "../models/appointment.model";
@@ -157,7 +158,11 @@ export class AppointmentRepository
   //   } catch (error) {}
   // }
 
-  public async getAppointmentInfoByPeriod(period: string): Promise<any> {
+  public async getAppointmentInfoByPeriod(
+    period: string,
+    doctorId: string,
+    appointmentStatus: string
+  ): Promise<any> {
     try {
       const currentDate = new Date();
       let startDate, endDate;
@@ -257,12 +262,37 @@ export class AppointmentRepository
           break;
       }
 
+      const appointmentStatuses = AppointmentStatusEnum.enumValues;
+      let appointmentStatusIndex: number;
+      switch (appointmentStatus) {
+        case "scheduled":
+          appointmentStatusIndex = 0;
+          break;
+        case "rescheduled":
+          appointmentStatusIndex = 1;
+        default:
+          appointmentStatusIndex = -1;
+          break;
+      }
+
       const generalDataAppointmentCondition = {
         condition: and(
           gte(appointmentTable.appointmentDateTime, startDate!),
-          lte(appointmentTable.appointmentDateTime, endDate!)
+          lte(appointmentTable.appointmentDateTime, endDate!),
+          eq(
+            appointmentTable.appointmentStatus,
+            AppointmentStatusEnum.enumValues[appointmentStatusIndex]
+          ),
+          eq(appointmentTable.appointmentDoctorId, doctorId)
         ),
       };
+      console.log(
+        period,
+        appointmentStatus,
+        appointmentStatusIndex,
+        "enumValue",
+        AppointmentStatusEnum.enumValues[0]
+      );
 
       const doctor = alias(userTable, "doctor");
 
@@ -281,12 +311,35 @@ export class AppointmentRepository
       //   .where(generalDataAppointmentCondition.condition)
       //   .groupBy(doctor.userId);
 
+      // const data = await this._drizzle
+      //   .select({
+      //     doctorId: doctor.userId,
+      //     doctorForename: doctor.userForename,
+      //     doctorSurname: doctor.userSurname,
+      //     appointmentDateTime: sql`DATE(${appointmentTable.appointmentDateTime})`,
+      //     appointmentStatus: appointmentTable.appointmentStatus,
+      //     appointmentCount: sql<number>`COUNT(${appointmentTable.appointmentDoctorId})`,
+      //   })
+      //   .from(appointmentTable)
+      //   .innerJoin(
+      //     doctor,
+      //     eq(appointmentTable.appointmentDoctorId, doctor.userId)
+      //   )
+      //   .where(generalDataAppointmentCondition.condition)
+      //   .groupBy(
+      //     doctor.userId,
+      //     sql`DATE(${appointmentTable.appointmentDateTime})`,
+      //     appointmentTable.appointmentStatus
+      //   );
+
       const data = await this._drizzle
         .select({
           doctorId: doctor.userId,
           doctorForename: doctor.userForename,
           doctorSurname: doctor.userSurname,
-          appointmentCount: sql<number>`COUNT(${appointmentTable.appointmentDoctorId})`,
+          appointmentDateTime: sql`DATE(${appointmentTable.appointmentDateTime})`,
+          // appointmentStatus: appointmentTable.appointmentStatus,
+          appointmentCount: sql<number>`COUNT(${sql`DATE(${appointmentTable.appointmentDateTime})`})`,
         })
         .from(appointmentTable)
         .innerJoin(
@@ -294,10 +347,32 @@ export class AppointmentRepository
           eq(appointmentTable.appointmentDoctorId, doctor.userId)
         )
         .where(generalDataAppointmentCondition.condition)
-        .groupBy(doctor.userId);
-
+        .groupBy(
+          doctor.userId,
+          // appointmentTable.appointmentStatus,
+          sql`DATE(${appointmentTable.appointmentDateTime})`
+        );
       return data;
     } catch (error) {}
+  }
+
+  public async getAppointmentById(appointmentId: string): Promise<any> {
+    return (
+      await this._drizzle
+        .select({
+          appointmentId: appointmentTable.appointmentId,
+          appointmentDoctorId: appointmentTable.appointmentDoctorId,
+          appointmentPatientId: appointmentTable.appointmentPatientId,
+          appointmentReason: appointmentTable.appointmentReason,
+          appointmentDateTime: appointmentTable.appointmentDateTime,
+          appointmentStatus: appointmentTable.appointmentStatus,
+          appointmentCancellationReason:
+            appointmentTable.appointmentCancellationReason,
+        })
+        .from(this._table)
+
+        .where(eq(appointmentTable.appointmentId, appointmentId))
+    )[0];
   }
 
   public async getAppointmentByIdJoinDoctorAndPatient(

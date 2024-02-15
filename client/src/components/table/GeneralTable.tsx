@@ -50,6 +50,7 @@ import { CardEntry } from "../design/card/CardEntry";
 import { CreateMedicalRecordPatientOverlay } from "../overlays/medicalRecordPatientOverlays/CreateMedicalRecordPatientOverlay";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { SendEmailOverlay } from "../overlays/emailOverlays/SendEmailOverlay";
+import { ViewMedicalRecordPatientOverlay } from "../overlays/medicalRecordPatientOverlays/ViewMedicalRecordPatientOverlay";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -909,6 +910,17 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                           authenticatedUserDataState.userId && (
                           <CreateMedicalRecordPatientOverlay
                             appointment={tableRow}
+                          />
+                        )}
+
+                      {(authenticatedUserDataState.roleNames[0] === "doctor" ||
+                        authenticatedUserDataState.roleNames[1] === "doctor") &&
+                        tableRow.appointment.appointmentDoctorId ===
+                          authenticatedUserDataState.userId &&
+                        tableRow.appointment.appointmentStatus ===
+                          "completed" && (
+                          <ViewMedicalRecordPatientOverlay
+                            appointmentId={tableRow.appointment.appointmentId}
                           />
                         )}
 

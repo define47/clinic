@@ -207,7 +207,7 @@ const buildServer = async () => {
   });
 
   await fastifyServer.register(medicalRecordPatientRoutes, {
-    prefix: "api/medicalRecordsPatients",
+    prefix: "api/medical-record-patients",
   });
 
   await fastifyServer.register(userPreferencesRoutes, {

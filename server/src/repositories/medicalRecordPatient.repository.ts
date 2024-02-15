@@ -24,7 +24,12 @@ export class MedicalRecordPatientRepository
   public async getMedicalRecordPatientByAppointmentId(
     appointmentId: string
   ): Promise<MedicalRecordPatient | undefined> {
-    return await this.getMedicalRecordPatientByAppointmentId(appointmentId);
+    return (
+      await this._drizzle
+        .select()
+        .from(medicalRecordPatientTable)
+        .where(eq(medicalRecordPatientTable.appointmentId, appointmentId))
+    )[0];
   }
 
   public async getMedicalRecordsByPatientId(

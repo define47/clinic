@@ -28,6 +28,7 @@ import useDeviceDetection from "./utils/useDeviceDetection";
 import { DoctorDashboard } from "./pages/doctor/DoctorDashboard";
 import { ReceptionistDashboard } from "./pages/receptionist/ReceptionistDashboard";
 import { PatientDashboard } from "./pages/patient/PatientDashboard";
+import { MedicalRecordPatientView } from "./pages/doctor/MedicalRecordPatientView";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -177,6 +178,10 @@ const App: FC = () => {
                 <Route
                   path="/admins/appointment-history/:appointmentId"
                   element={<AppointmentHistoryCards />}
+                />
+                <Route
+                  path="/admins/medical-record-patient/:appointmentId"
+                  element={<MedicalRecordPatientView />}
                 />
                 <Route path="*" element={<p>Path not resolved</p>} />
               </Route>

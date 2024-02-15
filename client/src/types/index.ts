@@ -312,7 +312,7 @@ export type BookedDoctorAppointmentSlot = {
 };
 
 export type MedicalRecordPatient = {
-  medicalRecordPatientId: string;
+  medicalRecordPatientId?: string;
   appointmentId: string;
   symptoms: string;
   conductedTests: string;
@@ -374,4 +374,8 @@ export type PhoneExtensionPickerProps = {
 export type GeneralDataCardProps = {
   entity?: string;
   period?: string;
+};
+
+export type ViewMedicalRecordPatientOverlayProps = {
+  appointmentId: string;
 };

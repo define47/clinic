@@ -19,8 +19,20 @@ export class AppointmentService implements IAppointmentService {
     );
   }
 
-  public async getAppointmentInfoByPeriod(period: string): Promise<any> {
-    return this._appointmentRepository.getAppointmentInfoByPeriod(period);
+  public async getAppointmentInfoByPeriod(
+    period: string,
+    doctorId: string,
+    appointmentStatus: string
+  ): Promise<any> {
+    return this._appointmentRepository.getAppointmentInfoByPeriod(
+      period,
+      doctorId,
+      appointmentStatus
+    );
+  }
+
+  public async getAppointmentById(appointmentId: string) {
+    return await this._appointmentRepository.getAppointmentById(appointmentId);
   }
 
   public async getAppointmentByIdJoinDoctorAndPatient(appointmentId: string) {

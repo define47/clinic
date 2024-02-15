@@ -10,6 +10,8 @@ import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { MedicalProcedurePicker } from "../../pickers/MedicalProcedurePicker";
 import { StyledTextArea } from "../../design/StyledTextArea";
+import axios from "axios";
+import { medicalRecordPatientsPath } from "../../../utils/dotenv";
 
 export const CreateMedicalRecordPatientOverlay: FC<
   CreateMedicalRecordPatientOverlayProps
@@ -24,7 +26,6 @@ export const CreateMedicalRecordPatientOverlay: FC<
   ] = useState<boolean>(false);
   const [medicalRecordPatientToCreate, setMedicalRecordPatientToCreate] =
     useState<MedicalRecordPatient>({
-      medicalRecordPatientId: "",
       appointmentId: "",
       symptoms: "",
       conductedTests: "",
@@ -53,6 +54,24 @@ export const CreateMedicalRecordPatientOverlay: FC<
       medicalRecordPatientToCreate
     );
   }, [medicalRecordPatientToCreate]);
+
+  async function onCreateMedicalRecordPatient() {
+    try {
+      const response = await axios.post(
+        medicalRecordPatientsPath,
+        {
+          appointmentId: appointment.appointment.appointmentId,
+          symptoms: medicalRecordPatientToCreate.symptoms,
+          diagnosis: medicalRecordPatientToCreate.diagnosis,
+          conductedTests: "medicalRecordPatientToCreate.conductedTests",
+          recommendations: medicalRecordPatientToCreate.recommendations,
+        },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -153,9 +172,9 @@ export const CreateMedicalRecordPatientOverlay: FC<
                 onClick={(e) => e.stopPropagation()}
               >
                 <StyledRippleButton
-                  label="Update"
+                  label="Yes"
                   type="yes"
-                  onClick={() => {}}
+                  onClick={onCreateMedicalRecordPatient}
                 />
                 <StyledRippleButton
                   label="Cancel"

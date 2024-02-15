@@ -49,6 +49,10 @@ export const generalDataPath = `${serverURL}${
   import.meta.env.VITE_SERVER_GENERAL_DATA_PATH
 }`;
 
+export const medicalRecordPatientsPath = `${serverURL}${
+  import.meta.env.VITE_SERVER_MEDICAL_RECORD_PATIENTS_PATH
+}`;
+
 export const patientRoleId = import.meta.env.VITE_PATIENT_ROLE_ID;
 export const patientRoleName = import.meta.env.VITE_PATIENT_ROLE_NAME;
 

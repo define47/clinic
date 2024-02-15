@@ -71,7 +71,9 @@ export class GeneralDataController {
       else if (query.entity === "medicalProcedure") {
       } else if (query.entity === "appointment") {
         payload = await this._appointmentService.getAppointmentInfoByPeriod(
-          query.period
+          query.period,
+          query.doctorId,
+          query.appointmentStatus
         );
       }
 
