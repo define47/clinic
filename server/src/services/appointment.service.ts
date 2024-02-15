@@ -25,8 +25,8 @@ export class AppointmentService implements IAppointmentService {
     return this._appointmentRepository.getAppointmentCountByPeriod(period);
   }
 
-  public async getAppointmentJoinDoctorAndPatient(appointmentId: string) {
-    return await this._appointmentRepository.getAppointmentJoinDoctorAndPatient(
+  public async getAppointmentByIdJoinDoctorAndPatient(appointmentId: string) {
+    return await this._appointmentRepository.getAppointmentByIdJoinDoctorAndPatient(
       appointmentId
     );
   }

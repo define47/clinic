@@ -1,10 +1,6 @@
-type Country = {
-  countryName: string;
-  phoneExtension: string;
-  countryCode: string;
-};
+import { Country } from "../types";
 
-export const countries: Country[] = [
+export const countryData: Country[] = [
   {
     countryName: "Afghanistan",
     phoneExtension: "+93",

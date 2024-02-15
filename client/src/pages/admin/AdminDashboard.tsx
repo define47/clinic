@@ -9,6 +9,7 @@ import { DragAndDrop } from "../../components/DragAndDrop";
 import { AppointmentsTimetable } from "../../components/table/AppointmentsTimetable";
 import WeekPicker from "../../components/pickers/WeekPicker";
 import { MedicalProcedurePicker } from "../../components/pickers/MedicalProcedurePicker";
+import { PhoneExtensionPicker } from "../../components/pickers/PhoneExtensionPicker";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -71,6 +72,7 @@ export const AdminDashboard: FC = () => {
       {/* admin dashboard <Overlay /> */}
       {/* <MedicalProcedurePicker /> */}
       {/* <DragAndDrop /> */}
+      <PhoneExtensionPicker />
       <div className="w-full h-full space-y-10">
         {JSON.stringify(authenticatedUserDataState)}
         <WeekPicker

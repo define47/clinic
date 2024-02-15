@@ -8,6 +8,7 @@ import { RoleService } from "../services/role.service";
 import { UserRoleMappingService } from "../services/userRoleMapping.service";
 import { Notification } from "../models/notification.model";
 import { UserService } from "../services/user.service";
+import { AppointmentJoinDoctorAndPatient } from "../models/appointment.model";
 
 export class AppointmentController {
   private readonly _appointmentService: AppointmentService;
@@ -76,25 +77,21 @@ export class AppointmentController {
     console.log(admins);
 
     for (let i = 0; i < receptionists.length; i++) {
-      if (receptionists[i].userId !== userSessionData.userId)
-        await this._userNotificationMappingService.createUserNotificationMapping(
-          {
-            receiverId: receptionists[i].userId,
-            notificationId: notification?.notificationId!,
-            isNotificationRead: false,
-          }
-        );
+      // if (receptionists[i].userId !== userSessionData.userId)
+      await this._userNotificationMappingService.createUserNotificationMapping({
+        receiverId: receptionists[i].userId,
+        notificationId: notification?.notificationId!,
+        isNotificationRead: false,
+      });
     }
 
     for (let i = 0; i < admins.length; i++) {
-      if (admins[i].userId !== userSessionData.userId)
-        await this._userNotificationMappingService.createUserNotificationMapping(
-          {
-            receiverId: admins[i].userId,
-            notificationId: notification?.notificationId!,
-            isNotificationRead: false,
-          }
-        );
+      // if (admins[i].userId !== userSessionData.userId)
+      await this._userNotificationMappingService.createUserNotificationMapping({
+        receiverId: admins[i].userId,
+        notificationId: notification?.notificationId!,
+        isNotificationRead: false,
+      });
     }
 
     console.log("Notification Sent");
@@ -167,7 +164,7 @@ export class AppointmentController {
         });
 
       const appointmentData =
-        await this._appointmentService.getAppointmentJoinDoctorAndPatient(
+        await this._appointmentService.getAppointmentByIdJoinDoctorAndPatient(
           appointmentToCreate?.appointmentId!
         );
 
@@ -282,11 +279,29 @@ export class AppointmentController {
       await this.sendAppointmentNotification(
         request,
         "update",
-        JSON.stringify(appointmentToUpdate)
+        // JSON.stringify(appointmentToCreate)
+        JSON.stringify({
+          appointment: {
+            appointmentDateTime: appointmentToUpdate?.appointmentDateTime,
+            appointmentStatus: appointmentToUpdate?.appointmentStatus,
+          },
+          patient: await this._userService.getUserById(
+            appointmentToUpdate?.appointmentPatientId!
+          ),
+          doctor: await this._userService.getUserById(
+            appointmentToUpdate?.appointmentDoctorId!
+          ),
+        })
       );
 
+      // await this.sendAppointmentNotification(
+      //   request,
+      //   "update",
+      //   JSON.stringify(appointmentToUpdate)
+      // );
+
       const appointmentData =
-        await this._appointmentService.getAppointmentJoinDoctorAndPatient(
+        await this._appointmentService.getAppointmentByIdJoinDoctorAndPatient(
           appointmentToUpdate?.appointmentId!
         );
 
@@ -317,14 +332,38 @@ export class AppointmentController {
         body.appointmentId
       );
 
+      const appointment =
+        await this._appointmentService.getAppointmentByIdJoinDoctorAndPatient(
+          body.appointmentId
+        );
+      console.log("deleting this", appointment);
+
       const appointmentToDelete =
         await this._appointmentService.deleteAppointment(body.appointmentId);
 
       await this.sendAppointmentNotification(
         request,
         "delete",
-        JSON.stringify(appointmentToDelete)
+        // JSON.stringify(appointmentToCreate)
+        JSON.stringify({
+          appointment: {
+            appointmentDateTime: appointment?.appointment.appointmentDateTime,
+            appointmentStatus: appointment?.appointment.appointmentStatus,
+          },
+          patient: await this._userService.getUserById(
+            appointment?.patient.patientId!
+          ),
+          doctor: await this._userService.getUserById(
+            appointment?.doctor.doctorId!
+          ),
+        })
       );
+
+      // await this.sendAppointmentNotification(
+      //   request,
+      //   "delete",
+      //   JSON.stringify(appointmentToDelete)
+      // );
 
       await redis.publisher.publish(
         MESSAGE_CHANNEL,

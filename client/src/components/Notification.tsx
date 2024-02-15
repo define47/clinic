@@ -93,13 +93,13 @@ export const Notification: FC = () => {
               const doctor = parsedNotificationBodyData?.doctor;
               const patient = parsedNotificationBodyData?.patient;
               const appointmentDateTime =
-                appointment?.appointmentDateTime.split("T");
+                appointment?.appointmentDateTime?.split("T");
               let appointmentDate, appointmentTime;
               if (appointmentDateTime) {
                 appointmentDate = appointmentDateTime[0]
-                  .split("-")
-                  .reverse()
-                  .join("-");
+                  ?.split("-")
+                  ?.reverse()
+                  ?.join("-");
                 appointmentTime = appointmentDateTime[1].substring(0, 5);
               }
 

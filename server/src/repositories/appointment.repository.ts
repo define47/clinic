@@ -35,6 +35,47 @@ export class AppointmentRepository
     super(drizzle, table);
   }
 
+  // public async getAppointmentByIdJoinDoctorAndPatient(appointmentId: string) {
+  //   const doctor = alias(userTable, "doctor");
+  //   const patient = alias(userTable, "patient");
+  //   return (
+  //     await this._drizzle
+  //       .select({
+  //         appointment: {
+  //           appointmentId: appointmentTable.appointmentId,
+  //           appointmentDoctorId: appointmentTable.appointmentDoctorId,
+  //           appointmentPatientId: appointmentTable.appointmentPatientId,
+  //           appointmentReason: appointmentTable.appointmentReason,
+  //           appointmentDateTime: appointmentTable.appointmentDateTime,
+  //           appointmentStatus: appointmentTable.appointmentStatus,
+  //           appointmentCancellationReason:
+  //             appointmentTable.appointmentCancellationReason,
+  //         },
+  //         doctor: {
+  //           doctorId: doctor.userId,
+  //           doctorForename: doctor.userForename,
+  //           doctorSurname: doctor.userSurname,
+  //         },
+  //         patient: {
+  //           patientId: patient.userId,
+  //           patientForename: patient.userForename,
+  //           patientSurname: patient.userSurname,
+  //           patientEmail: patient.userEmail,
+  //         },
+  //       })
+  //       .from(appointmentTable)
+  //       .innerJoin(
+  //         doctor,
+  //         eq(appointmentTable.appointmentDoctorId, doctor.userId)
+  //       )
+  //       .innerJoin(
+  //         patient,
+  //         eq(appointmentTable.appointmentPatientId, patient.userId)
+  //       )
+  //       .where(eq(appointmentTable.appointmentId, appointmentId))
+  //   )[0];
+  // }
+
   public async getAppointmentCountByPeriod(
     period: string
   ): Promise<number | undefined> {
@@ -151,7 +192,7 @@ export class AppointmentRepository
     } catch (error) {}
   }
 
-  public async getAppointmentJoinDoctorAndPatient(
+  public async getAppointmentByIdJoinDoctorAndPatient(
     appointmentId: string
   ): Promise<AppointmentJoinDoctorAndPatient | undefined> {
     const doctor = alias(userTable, "doctor");

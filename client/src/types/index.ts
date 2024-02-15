@@ -360,3 +360,9 @@ export type Email = {
 export type SendEmailOverlayProps = {
   patientEmail: string;
 };
+
+export type Country = {
+  countryName: string;
+  phoneExtension: string;
+  countryCode: string;
+};

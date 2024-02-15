@@ -5,7 +5,7 @@ import {
   userNotificationMappingTable,
 } from "../models/userNotificationMapping.model";
 import { BaseRepository } from "./base.repository";
-import { Table, and, eq, gte, lte } from "drizzle-orm";
+import { Table, and, desc, eq, gte, lte } from "drizzle-orm";
 import { notificationTable } from "../models/notification.model";
 import { userTable } from "../models/user.model";
 import { alias } from "drizzle-orm/pg-core";
@@ -105,7 +105,8 @@ export class UserNotificationMappingRepository extends BaseRepository<UserNotifi
           gte(notificationTable.notificationDateTime, currentDayStartInUTC),
           lte(notificationTable.notificationDateTime, currentDayEndInUTC)
         )
-      );
+      )
+      .orderBy(desc(notificationTable.notificationDateTime));
 
     // return await this._drizzle
     //   .select()
