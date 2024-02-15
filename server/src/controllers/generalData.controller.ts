@@ -70,9 +70,8 @@ export class GeneralDataController {
           await this._medicalSpecialityService.getMedicalSpecialityCount();
       else if (query.entity === "medicalProcedure") {
       } else if (query.entity === "appointment") {
-        payload = await this._appointmentService.getAppointmentCountByPeriod(
-          query.period,
-          query.doctorId
+        payload = await this._appointmentService.getAppointmentInfoByPeriod(
+          query.period
         );
       }
 

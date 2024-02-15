@@ -146,40 +146,40 @@ export const UserPicker: FC<UserPickerProps> = ({
     setIsUserPickerVisible(false);
   }
 
-  useEffect(() => {
-    for (let i = 0; i < filteredUsers.length; i++) {
-      const leftParenthesesIndex = selectedUserName.indexOf("(") - 1;
+  // useEffect(() => {
+  //   for (let i = 0; i < filteredUsers.length; i++) {
+  //     const leftParenthesesIndex = selectedUserName.indexOf("(") - 1;
 
-      console.log(
-        leftParenthesesIndex,
-        selectedUserName.toLowerCase().substring(0, leftParenthesesIndex)
-      );
+  //     console.log(
+  //       leftParenthesesIndex,
+  //       selectedUserName.toLowerCase().substring(0, leftParenthesesIndex)
+  //     );
 
-      // let test =
-      //   leftParenthesesIndex !== -1 && roleName === "doctor"
-      //     ? selectedUserName.toLowerCase().substring(0, leftParenthesesIndex)
-      //     : selectedUserName.toLowerCase();
+  //     // let test =
+  //     //   leftParenthesesIndex !== -1 && roleName === "doctor"
+  //     //     ? selectedUserName.toLowerCase().substring(0, leftParenthesesIndex)
+  //     //     : selectedUserName.toLowerCase();
 
-      let test = selectedUserName.toLowerCase();
+  //     let test = selectedUserName.toLowerCase();
 
-      if (
-        test !==
-        `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
-          i
-        ].userSurname.toLowerCase()}`
-      ) {
-        setSelectedUserId("");
-      } else if (
-        test ===
-        `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
-          i
-        ].userSurname.toLowerCase()}`
-      ) {
-        setSelectedUserId(filteredUsers[i].userId);
-        break;
-      }
-    }
-  }, [filteredUsers, selectedUserName]);
+  //     if (
+  //       test !==
+  //       `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
+  //         i
+  //       ].userSurname.toLowerCase()}`
+  //     ) {
+  //       setSelectedUserId("");
+  //     } else if (
+  //       test ===
+  //       `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
+  //         i
+  //       ].userSurname.toLowerCase()}`
+  //     ) {
+  //       setSelectedUserId(filteredUsers[i].userId);
+  //       break;
+  //     }
+  //   }
+  // }, [filteredUsers, selectedUserName]);
 
   const foundUser = users.find((user) => user.userId === selectedUserId);
 
@@ -281,6 +281,7 @@ export const UserPicker: FC<UserPickerProps> = ({
                       <VscDash />
                       <span>{filteredUser.userForename}</span>&nbsp;
                       <span>{filteredUser.userSurname}</span>&nbsp;
+                      <span>{filteredUser.userId}</span>&nbsp;
                       {roleName === "doctor" &&
                         "(" + filteredUser.medicalSpecialities + ")"}
                     </div>

@@ -35,51 +35,129 @@ export class AppointmentRepository
     super(drizzle, table);
   }
 
-  // public async getAppointmentByIdJoinDoctorAndPatient(appointmentId: string) {
-  //   const doctor = alias(userTable, "doctor");
-  //   const patient = alias(userTable, "patient");
-  //   return (
-  //     await this._drizzle
-  //       .select({
-  //         appointment: {
-  //           appointmentId: appointmentTable.appointmentId,
-  //           appointmentDoctorId: appointmentTable.appointmentDoctorId,
-  //           appointmentPatientId: appointmentTable.appointmentPatientId,
-  //           appointmentReason: appointmentTable.appointmentReason,
-  //           appointmentDateTime: appointmentTable.appointmentDateTime,
-  //           appointmentStatus: appointmentTable.appointmentStatus,
-  //           appointmentCancellationReason:
-  //             appointmentTable.appointmentCancellationReason,
-  //         },
-  //         doctor: {
-  //           doctorId: doctor.userId,
-  //           doctorForename: doctor.userForename,
-  //           doctorSurname: doctor.userSurname,
-  //         },
-  //         patient: {
-  //           patientId: patient.userId,
-  //           patientForename: patient.userForename,
-  //           patientSurname: patient.userSurname,
-  //           patientEmail: patient.userEmail,
-  //         },
-  //       })
-  //       .from(appointmentTable)
-  //       .innerJoin(
-  //         doctor,
-  //         eq(appointmentTable.appointmentDoctorId, doctor.userId)
-  //       )
-  //       .innerJoin(
-  //         patient,
-  //         eq(appointmentTable.appointmentPatientId, patient.userId)
-  //       )
-  //       .where(eq(appointmentTable.appointmentId, appointmentId))
-  //   )[0];
+  // public async getAppointmentCountByPeriodAndDoctorId(
+  //   period: string,
+  //   doctorId: string
+  // ): Promise<number | undefined> {
+  //   try {
+  //     const currentDate = new Date();
+  //     let startDate, endDate;
+
+  //     switch (period) {
+  //       case "today":
+  //         const currentDayStartInUTC = new Date(
+  //           Date.UTC(
+  //             currentDate.getUTCFullYear(),
+  //             currentDate.getUTCMonth(),
+  //             currentDate.getUTCDate(),
+  //             0,
+  //             0,
+  //             0
+  //           )
+  //         );
+  //         const currentDayEndInUTC = new Date(
+  //           Date.UTC(
+  //             currentDate.getUTCFullYear(),
+  //             currentDate.getUTCMonth(),
+  //             currentDate.getUTCDate(),
+  //             23,
+  //             59,
+  //             59,
+  //             999
+  //           )
+  //         );
+
+  //         console.log("current day start:", currentDayStartInUTC);
+  //         console.log("current day end:", currentDayEndInUTC);
+
+  //         startDate = currentDayStartInUTC;
+  //         endDate = currentDayEndInUTC;
+  //         break;
+  //       case "week":
+  //         const firstDayOfCurrentWeek = this.getFirstDayOfWeek(new Date());
+  //         firstDayOfCurrentWeek.setUTCHours(0, 0, 0, 0);
+  //         const lastDayOfCurrentWeek = new Date(firstDayOfCurrentWeek);
+  //         lastDayOfCurrentWeek.setUTCHours(23, 59, 59, 999);
+  //         lastDayOfCurrentWeek.setDate(lastDayOfCurrentWeek.getDate() + 6);
+
+  //         console.log("first day of current week:", firstDayOfCurrentWeek);
+  //         console.log("last day of current week:", lastDayOfCurrentWeek);
+
+  //         startDate = firstDayOfCurrentWeek;
+  //         endDate = lastDayOfCurrentWeek;
+  //         break;
+  //       case "month":
+  //         const currentMonthStart = new Date(
+  //           Date.UTC(
+  //             currentDate.getUTCFullYear(),
+  //             currentDate.getUTCMonth(),
+  //             1,
+  //             0,
+  //             0,
+  //             0,
+  //             0
+  //           )
+  //         );
+  //         const currentMonthEnd = new Date(
+  //           Date.UTC(
+  //             currentDate.getUTCFullYear(),
+  //             currentDate.getUTCMonth() + 1,
+  //             0,
+  //             23,
+  //             59,
+  //             59,
+  //             999
+  //           )
+  //         );
+
+  //         console.log("current month start:", currentMonthStart);
+  //         console.log("current month end:", currentMonthEnd);
+
+  //         startDate = currentMonthStart;
+  //         endDate = currentMonthEnd;
+  //         break;
+  //       case "nextWeek":
+  //         let startOfNextWeek = new Date(currentDate);
+  //         let daysUntilNextMonday = 8 - currentDate.getUTCDay();
+  //         startOfNextWeek.setUTCDate(
+  //           currentDate.getUTCDate() + daysUntilNextMonday
+  //         );
+  //         startOfNextWeek.setUTCHours(0, 0, 0, 0);
+
+  //         let endOfNextWeek = new Date(startOfNextWeek);
+  //         endOfNextWeek.setUTCDate(startOfNextWeek.getUTCDate() + 6);
+  //         endOfNextWeek.setUTCHours(23, 59, 59, 999);
+
+  //         console.log("Start of next week (UTC):", startOfNextWeek);
+  //         console.log("End of next week (UTC):", endOfNextWeek);
+
+  //         startDate = startOfNextWeek;
+  //         endDate = endOfNextWeek;
+  //         break;
+  //       default:
+  //         break;
+  //     }
+
+  //     const generalDataAppointmentCondition = {
+  //       condition: and(
+  //         gte(appointmentTable.appointmentDateTime, startDate!),
+  //         lte(appointmentTable.appointmentDateTime, endDate!),
+  //         ...(doctorId
+  //           ? [eq(appointmentTable.appointmentDoctorId, doctorId)]
+  //           : [])
+  //       ),
+  //     };
+
+  //     return (
+  //       await this._drizzle
+  //         .select({ totalCount: count() })
+  //         .from(appointmentTable)
+  //         .where(generalDataAppointmentCondition.condition)
+  //     )[0].totalCount;
+  //   } catch (error) {}
   // }
 
-  public async getAppointmentCountByPeriod(
-    period: string,
-    doctorId: string
-  ): Promise<number | undefined> {
+  public async getAppointmentInfoByPeriod(period: string): Promise<any> {
     try {
       const currentDate = new Date();
       let startDate, endDate;
@@ -182,19 +260,43 @@ export class AppointmentRepository
       const generalDataAppointmentCondition = {
         condition: and(
           gte(appointmentTable.appointmentDateTime, startDate!),
-          lte(appointmentTable.appointmentDateTime, endDate!),
-          ...(doctorId
-            ? [eq(appointmentTable.appointmentDoctorId, doctorId)]
-            : [])
+          lte(appointmentTable.appointmentDateTime, endDate!)
         ),
       };
 
-      return (
-        await this._drizzle
-          .select({ totalCount: count() })
-          .from(appointmentTable)
-          .where(generalDataAppointmentCondition.condition)
-      )[0].totalCount;
+      const doctor = alias(userTable, "doctor");
+
+      // const data = await this._drizzle
+      //   .select({
+      //     doctorId: doctor.userId,
+      //     doctorForename: doctor.userForename,
+      //     doctorSurname: doctor.userSurname,
+      //     appointmentCount: sql<number>`COUNT(${appointmentTable.appointmentDoctorId})`,
+      //   })
+      //   .from(appointmentTable)
+      //   .innerJoin(
+      //     doctor,
+      //     eq(appointmentTable.appointmentDoctorId, doctor.userId)
+      //   )
+      //   .where(generalDataAppointmentCondition.condition)
+      //   .groupBy(doctor.userId);
+
+      const data = await this._drizzle
+        .select({
+          doctorId: doctor.userId,
+          doctorForename: doctor.userForename,
+          doctorSurname: doctor.userSurname,
+          appointmentCount: sql<number>`COUNT(${appointmentTable.appointmentDoctorId})`,
+        })
+        .from(appointmentTable)
+        .innerJoin(
+          doctor,
+          eq(appointmentTable.appointmentDoctorId, doctor.userId)
+        )
+        .where(generalDataAppointmentCondition.condition)
+        .groupBy(doctor.userId);
+
+      return data;
     } catch (error) {}
   }
 

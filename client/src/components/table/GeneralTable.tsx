@@ -875,7 +875,8 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     </td>
                     <td className="px-6 py-4 text-xs">
                       {tableRow.doctor.doctorForename}&nbsp;
-                      {tableRow.doctor.doctorSurname}
+                      {tableRow.doctor.doctorSurname}&nbsp;&nbsp;&nbsp;
+                      {tableRow.doctor.doctorId}
                     </td>
                     <td className="px-6 py-4 text-xs">
                       {tableRow.patient.patientForename}&nbsp;
