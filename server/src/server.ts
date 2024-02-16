@@ -69,6 +69,7 @@ declare module "fastify" {
       DOCTOR_ROLE_ID: string;
       RECEPTIONIST_ROLE_ID: string;
       PATIENT_ROLE_ID: string;
+      NURSE_ROLE_ID: string;
     };
     io: any;
   }
@@ -138,7 +139,7 @@ fastifyServer.get("/api/user-profile-picture", (request, reply) => {
 const buildServer = async () => {
   const corsOptions = {
     // origin: "*",
-    origin: `http://192.168.2.22:3000`,
+    origin: `http://192.168.2.16:3000`,
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   };

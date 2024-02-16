@@ -18,6 +18,7 @@ export const schema = {
     "DOCTOR_ROLE_ID",
     "RECEPTIONIST_ROLE_ID",
     "PATIENT_ROLE_ID",
+    "NURSE_ROLE_ID",
   ],
   properties: {
     SERVER_PORT: {
@@ -63,6 +64,9 @@ export const schema = {
       type: "string",
     },
     PATIENT_ROLE_ID: {
+      type: "string",
+    },
+    NURSE_ROLE_ID: {
       type: "string",
     },
   },
@@ -133,4 +137,8 @@ export const getReceptionistRoleIdEnv = (): string => {
 
 export const getPatientRoleIdEnv = (): string => {
   return fastifyServer.config.PATIENT_ROLE_ID;
+};
+
+export const getNurseRoleIdEnv = (): string => {
+  return fastifyServer.config.NURSE_ROLE_ID;
 };

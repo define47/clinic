@@ -185,3 +185,51 @@ button {
   border: 2px green;
   cursor: grab;
 } */
+
+/* @page {
+  size: A4;
+  margin: 20mm 15mm 26mm 15mm;
+}
+
+h2 {
+  break-before: page;
+} */
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 10mm;
+  margin: 10mm auto;
+  border: 1px #d3d3d3 solid;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.subpage {
+  /* padding: 1cm;
+  border: 5px red solid;
+  height: 257mm;
+  outline: 2cm #ffeaea solid; */
+}
+@page {
+  size: A4;
+  margin: 0;
+}
+@media print {
+  html,
+  body {
+    width: 210mm;
+    height: 297mm;
+  }
+  .page {
+    margin: 0;
+    padding: 10mm;
+    border: initial;
+    border-radius: initial;
+    width: initial;
+    min-height: initial;
+    box-shadow: initial;
+    background: initial;
+    page-break-after: always;
+  }
+}
