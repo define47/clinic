@@ -18,8 +18,6 @@ export class MedicalRecordPatientController {
     try {
       const query: any = request.query;
 
-      console.log(query);
-
       const medicalRecordPatient =
         await this._medicalRecordPatientService.getMedicalRecordPatientByAppointmentId(
           query.appointmentId
@@ -28,9 +26,6 @@ export class MedicalRecordPatientController {
       reply.code(200).send({
         success: medicalRecordPatient !== undefined,
         payload: medicalRecordPatient,
-        // success: true,
-        // message: "sent",
-        // a: body.appointmentId,
       });
     } catch (error) {
       console.log(error);

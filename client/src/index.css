@@ -195,7 +195,7 @@ h2 {
   break-before: page;
 } */
 
-.page {
+/* .page {
   width: 210mm;
   min-height: 297mm;
   padding: 10mm;
@@ -205,17 +205,14 @@ h2 {
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   counter-increment: page;
+  @bottom-right {
+    content: counter(page) " of " counter(pages);
+  }
 }
-.subpage {
-  /* padding: 1cm;
-  border: 5px red solid;
-  height: 257mm;
-  outline: 2cm #ffeaea solid; */
-}
+
 @page {
-  size: A4;
+  size: A4 landscape;
   margin: 0;
-  /* counter-increment: page; */
 }
 @media print {
   html,
@@ -235,6 +232,69 @@ h2 {
     page-break-after: always;
   }
   footer::after {
-    content: counter(page); /* Display the page number */
+    content: counter(page);
   }
+} */
+
+/* @page {
+  size: A4;
+  margin: 1;
+} */
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  /* padding: 5mm; */
+  /* margin: 0 auto; */
+  border: 1px #d3d3d3 solid;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+@media print {
+  html,
+  body {
+    width: 210mm;
+    height: 297mm;
+  }
+  .page {
+    margin: 0;
+    padding: 10mm;
+    border: initial;
+    border-radius: initial;
+    width: initial;
+    min-height: initial;
+    box-shadow: initial;
+    background: initial;
+    page-break-after: always;
+  }
+  footer::after {
+    content: counter(page);
+  }
+}
+
+:root {
+  --font-size: 15px;
+  --line-height: calc((var(--font-size)) * 2 - 4px);
+  --viewport-height: 100vh;
+  --text-max-width: 60vw;
+}
+
+.custom_underline {
+  /* max-width: var(--text-max-width); */
+  margin: 0;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  word-break: break-word;
+  background-image: linear-gradient(
+    transparent calc((var(--line-height)) - 3px),
+    #000000 200%
+  );
+  background-size: 100% var(--line-height);
+  background-repeat: repeat-y;
+}
+
+.styled_line_height {
+  line-height: var(--line-height);
 }

@@ -49,8 +49,6 @@ export class AppointmentController {
       notificationDateTime: new Date(),
     });
 
-    console.log(notification);
-
     const receptionistRole = await this._roleService.getRoleByName(
       "receptionist"
     );
@@ -102,8 +100,6 @@ export class AppointmentController {
     reply: FastifyReply
   ) => {
     const query: any = request.query;
-    // console.log(query.doctorId);
-    // console.log(payload);
     const payload =
       await this._appointmentService.getDoctorAppointmentBookedSlots(
         query.doctorId,
@@ -113,14 +109,26 @@ export class AppointmentController {
     reply.code(200).send({ success: true, payload });
   };
 
-  public retrieveAllUsersRelatedData = async (
+  public getAppointmentById = async (
     request: FastifyRequest,
     reply: FastifyReply
   ) => {
     try {
       const query: any = request.query;
+      const payload =
+        await this._appointmentService.getAppointmentByIdJoinDoctorAndPatient(
+          query.appointmentId
+        );
+      reply.code(200).send({ success: payload !== undefined, payload });
+    } catch (error) {}
+  };
 
-      console.log("query app", query.customStartDate);
+  public getAllAppointments = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const query: any = request.query;
 
       let payload;
 
@@ -228,7 +236,6 @@ export class AppointmentController {
     try {
       const body: any = request.body;
       let appointmentToUpdate;
-      console.log("body update appointment", body);
 
       appointmentToUpdate = await this._appointmentService.updateAppointment(
         body.appointmentId,
@@ -244,8 +251,6 @@ export class AppointmentController {
       const userSessionData = JSON.parse(
         (await redis.sessionRedis.get(`sessionId:${request.cookieData.value}`))!
       );
-
-      console.log(userSessionData.userId);
 
       if (!appointmentToUpdate)
         reply.code(200).send({ message: "didn't work update" });
@@ -336,7 +341,6 @@ export class AppointmentController {
         await this._appointmentService.getAppointmentByIdJoinDoctorAndPatient(
           body.appointmentId
         );
-      console.log("deleting this", appointment);
 
       const appointmentToDelete =
         await this._appointmentService.deleteAppointment(body.appointmentId);

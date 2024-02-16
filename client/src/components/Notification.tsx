@@ -49,8 +49,8 @@ export const Notification: FC = () => {
         setUserNotifications(response.data.payload);
     }
 
-    if (areNotificationsVisible) fetchUserNotifications();
-  }, [areNotificationsVisible]);
+    fetchUserNotifications();
+  }, []);
 
   return (
     <>

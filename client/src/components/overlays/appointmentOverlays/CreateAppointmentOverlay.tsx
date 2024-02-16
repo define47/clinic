@@ -219,7 +219,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
 
   return (
     <>
-      {timetableDoctorId ? (
+      {timetableDoctorId !== "" ? (
         ""
       ) : (
         <StyledRippleButton

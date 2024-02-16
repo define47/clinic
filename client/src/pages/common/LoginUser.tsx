@@ -44,7 +44,8 @@ export const LoginUser: FC = () => {
           onChangeStyledInput={handleInputChange}
           labelBackgroundColorUnfocused="bg-transparent"
           labelBackgroundColorFocused="!bg-black"
-          textColor="text-white"
+          textColorUnfocused="text-emerald-600"
+          textColorFocused="focus:text-green-500"
           labelColor="text-white"
         />
         <StyledInput
@@ -53,7 +54,8 @@ export const LoginUser: FC = () => {
           onChangeStyledInput={handleInputChange}
           labelBackgroundColorUnfocused="bg-transparent"
           labelBackgroundColorFocused="!bg-black"
-          textColor="text-white"
+          textColorUnfocused="text-emerald-600"
+          textColorFocused="focus:text-green-500"
           labelColor="text-white"
         />
         <button onClick={onLogin}>Submit</button>

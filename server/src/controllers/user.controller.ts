@@ -64,11 +64,16 @@ export class UserController {
       const payload = await this._userRoleMappingService.getAllUsersRelatedData(
         query.roleId,
         query.searchBy.split(","),
-        // ["userForename"],
         query.searchQuery,
         parseInt(query.limit),
         parseInt(query.page),
         query.orderBy
+
+        // "0f6c88ca-a4b3-55d3-814b-4cd4daf3cac8",
+        // ["userForename"],
+        // "",
+        // 100,
+        // 0,
         // "asc:userForename"
       );
 

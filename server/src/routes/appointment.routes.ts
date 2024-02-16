@@ -4,10 +4,19 @@ import { appointmentController } from "../controllers";
 export const appointmentRoutes: (
   fastifyServer: FastifyInstance
 ) => Promise<void> = async (fastifyServer) => {
+  // fastifyServer.get(
+  //   "/",
+  //   async (request: FastifyRequest, reply: FastifyReply) => {
+  //     await appointmentController.getAppointment(request, reply);
+  //   }
+  // );
+
   fastifyServer.get(
     "/",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      await appointmentController.retrieveAllUsersRelatedData(request, reply);
+      if (request.query.appointmentId)
+        await appointmentController.getAppointmentById(request, reply);
+      else await appointmentController.getAllAppointments(request, reply);
     }
   );
 

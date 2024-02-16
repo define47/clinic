@@ -12,6 +12,7 @@ import WeekPicker from "../../components/pickers/WeekPicker";
 import { MedicalProcedurePicker } from "../../components/pickers/MedicalProcedurePicker";
 import { PhoneExtensionPicker } from "../../components/pickers/PhoneExtensionPicker";
 import { GeneralDataCard } from "../../components/design/card/GeneralDataCard";
+import { UserPicker } from "../../components/pickers/UserPicker";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -65,6 +66,8 @@ export const AdminDashboard: FC = () => {
   const itemHeight = 50;
   const [dashboardWeekStart, setDashboardWeekStart] = useState<string>("");
   const [dashboardWeekEnd, setDashboardWeekEnd] = useState<string>("");
+  const [selectedDoctorName, setSelectedDoctorName] = useState<string>("");
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string>("");
 
   useEffect(() => {
     console.log("dashboard start end", dashboardWeekStart, dashboardWeekEnd);
@@ -82,18 +85,32 @@ export const AdminDashboard: FC = () => {
       {/* <PhoneExtensionPicker defaultPhoneExtension="+591" /> */}
       <div className="w-full h-full space-y-10">
         {/* {JSON.stringify(authenticatedUserDataState)} */}
-        <WeekPicker
-          setDateWeekStart={setDashboardWeekStart}
-          setDashboardWeekEnd={setDashboardWeekEnd}
-          initialDate={new Date()}
-        />
-        <div className="w-full h-4/5 overflow-y-auto border rounded-xl">
-          <AppointmentsTimetable
-            startWeek={dashboardWeekStart}
-            endWeek={dashboardWeekEnd}
-            doctorId="7985f290-f148-5d3c-91c9-d0966e12ba79"
+        <div className="w-full flex flex-col items-center justify-center">
+          <WeekPicker
+            setDateWeekStart={setDashboardWeekStart}
+            setDashboardWeekEnd={setDashboardWeekEnd}
+            initialDate={new Date()}
+          />
+          <UserPicker
+            shouldDataBeFetched={true}
+            label="select doctor"
+            roleName="doctor"
+            selectedUserId={selectedDoctorId}
+            setSelectedUserId={setSelectedDoctorId}
+            selectedUserName={selectedDoctorName}
+            setSelectedUserName={setSelectedDoctorName}
+            z="z-50"
           />
         </div>
+        {selectedDoctorId !== "" && (
+          <div className="w-full h-4/5 overflow-y-auto border rounded-xl">
+            <AppointmentsTimetable
+              startWeek={dashboardWeekStart}
+              endWeek={dashboardWeekEnd}
+              doctorId={selectedDoctorId}
+            />
+          </div>
+        )}
         {/* here notification {JSON.stringify(socketNotificationDataState)} */}
         {/* <StyledInput
           label="label1"

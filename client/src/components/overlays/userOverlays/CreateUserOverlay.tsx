@@ -8,7 +8,7 @@ import axios from "axios";
 import { usersPath } from "../../../utils/dotenv";
 import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
-import { ConfirmationDialogEntry } from "../../design/ConfirmationDialogEntry";
+import { StyledEntry } from "../../design/StyledEntry";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -180,6 +180,12 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 labelBackgroundColorUnfocused="bg-white"
                 labelBackgroundColorFocused="bg-white"
                 defaultValue={`${roleName}FN`}
+                textColorUnfocused="text-emerald-600"
+                textColorFocused="focus:text-green-500"
+                borderColorUnfocused="border-green-500"
+                borderColorFocused="focus:border-green500"
+                labelUnfocused="text-green-500"
+                labelFocused="text-green-500"
               />
               <StyledInput
                 label="userSurname"
@@ -364,19 +370,19 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 </span>
                 <div className="w=full flex justify-between mt-4">
                   <div className="">
-                    <ConfirmationDialogEntry
+                    <StyledEntry
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userForename"
                       confirmationDialogEntryBodyWidth="w-72"
                       confirmationDialogEntryBody={userToCreate.userForename}
                     />
-                    <ConfirmationDialogEntry
+                    <StyledEntry
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userSurname"
                       confirmationDialogEntryBodyWidth="w-72"
                       confirmationDialogEntryBody={userToCreate.userSurname}
                     />
-                    <ConfirmationDialogEntry
+                    <StyledEntry
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userEmail"
                       confirmationDialogEntryBodyWidth="w-72"
@@ -384,19 +390,19 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                     />
                   </div>
                   <div className="">
-                    <ConfirmationDialogEntry
+                    <StyledEntry
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="Phone Number"
                       confirmationDialogEntryBodyWidth="w-72"
                       confirmationDialogEntryBody={userToCreate.userPhoneNumber}
                     />
-                    <ConfirmationDialogEntry
+                    <StyledEntry
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userGender"
                       confirmationDialogEntryBodyWidth="w-72"
                       confirmationDialogEntryBody={userToCreate.userGender}
                     />
-                    <ConfirmationDialogEntry
+                    <StyledEntry
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userEmail"
                       confirmationDialogEntryBodyWidth="w-72"
@@ -407,7 +413,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                     />
                   </div>
                   <div className="">
-                    <ConfirmationDialogEntry
+                    <StyledEntry
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userAddress"
                       confirmationDialogEntryBodyWidth="w-72"
