@@ -369,40 +369,52 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                   Are You Sure You Want To Create The {roleName}?
                 </span>
                 <div className="w=full flex justify-between mt-4">
-                  <div className="">
+                  <div className="w-full flex flex-col">
                     <StyledEntry
+                      entryHeight="h-8"
+                      entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userForename"
                       confirmationDialogEntryBodyWidth="w-72"
                       confirmationDialogEntryBody={userToCreate.userForename}
                     />
                     <StyledEntry
+                      entryHeight="h-8"
+                      entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userSurname"
                       confirmationDialogEntryBodyWidth="w-72"
                       confirmationDialogEntryBody={userToCreate.userSurname}
                     />
                     <StyledEntry
+                      entryHeight="h-8"
+                      entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userEmail"
                       confirmationDialogEntryBodyWidth="w-72"
                       confirmationDialogEntryBody={userToCreate.userEmail}
                     />
                   </div>
-                  <div className="">
+                  <div className="w-full flex flex-col">
                     <StyledEntry
+                      entryHeight="h-8"
+                      entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="Phone Number"
                       confirmationDialogEntryBodyWidth="w-72"
                       confirmationDialogEntryBody={userToCreate.userPhoneNumber}
                     />
                     <StyledEntry
+                      entryHeight="h-8"
+                      entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userGender"
                       confirmationDialogEntryBodyWidth="w-72"
                       confirmationDialogEntryBody={userToCreate.userGender}
                     />
                     <StyledEntry
+                      entryHeight="h-8"
+                      entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userEmail"
                       confirmationDialogEntryBodyWidth="w-72"
@@ -412,8 +424,10 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                         .join("-")}
                     />
                   </div>
-                  <div className="">
+                  <div className="w-full flex flex-col">
                     <StyledEntry
+                      entryHeight="h-8"
+                      entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userAddress"
                       confirmationDialogEntryBodyWidth="w-72"
