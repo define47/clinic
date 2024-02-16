@@ -204,6 +204,7 @@ h2 {
   border-radius: 5px;
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  counter-increment: page;
 }
 .subpage {
   /* padding: 1cm;
@@ -214,6 +215,7 @@ h2 {
 @page {
   size: A4;
   margin: 0;
+  /* counter-increment: page; */
 }
 @media print {
   html,
@@ -231,5 +233,8 @@ h2 {
     box-shadow: initial;
     background: initial;
     page-break-after: always;
+  }
+  footer::after {
+    content: counter(page); /* Display the page number */
   }
 }

@@ -64,69 +64,16 @@ export const MedicalRecordPatientView: FC = () => {
   });
 
   return (
-    // <div className="mt-20" ref={componentRef}>
-    // {appointmentId}
-    // {medicalRecordPatientToView?.symptoms}
-    // {medicalRecordPatientToView?.diagnosis}
-    // {medicalRecordPatientToView?.conductedTests}
-    // {medicalRecordPatientToView?.recommendations}
-
-    //   {medicalRecordPatientToView?.symptoms}
-    //   {medicalRecordPatientToView?.diagnosis}
-    //   {medicalRecordPatientToView?.conductedTests}
-    //   {medicalRecordPatientToView?.recommendations}
-
-    //   {medicalRecordPatientToView?.symptoms}
-    //   {medicalRecordPatientToView?.diagnosis}
-    //   {medicalRecordPatientToView?.conductedTests}
-    //   {medicalRecordPatientToView?.recommendations}
-    //   {medicalRecordPatientToView?.symptoms}
-    //   {medicalRecordPatientToView?.diagnosis}
-    //   {medicalRecordPatientToView?.conductedTests}
-    //   {medicalRecordPatientToView?.recommendations}
-    //   {medicalRecordPatientToView?.symptoms}
-    //   {medicalRecordPatientToView?.diagnosis}
-    //   {medicalRecordPatientToView?.conductedTests}
-    //   {medicalRecordPatientToView?.recommendations}
-    //   {medicalRecordPatientToView?.symptoms}
-    //   {medicalRecordPatientToView?.diagnosis}
-    //   {medicalRecordPatientToView?.conductedTests}
-    //   {medicalRecordPatientToView?.recommendations}
-    //   {medicalRecordPatientToView?.symptoms}
-    //   {medicalRecordPatientToView?.diagnosis}
-    //   {medicalRecordPatientToView?.conductedTests}
-    //   {medicalRecordPatientToView?.recommendations}
-    //   {medicalRecordPatientToView?.symptoms}
-    //   {medicalRecordPatientToView?.diagnosis}
-    //   {medicalRecordPatientToView?.conductedTests}
-    //   {medicalRecordPatientToView?.recommendations}
-    //   {medicalRecordPatientToView?.symptoms}
-    //   {medicalRecordPatientToView?.diagnosis}
-    //   {medicalRecordPatientToView?.conductedTests}
-    //   {medicalRecordPatientToView?.recommendations}
-
-    //   <div className="page-counter"></div>
-
-    // <button className="text-green-500" onClick={handlePrint}>
-    //   Click here to print
-    // </button>
-    // </div>
     <>
       <button className="text-green-500" onClick={handlePrint}>
         Click here to print
       </button>
       <div className="book" ref={componentRef}>
         <div className="page">
-          <div className="subpage">
-            Page 1/2 {appointmentId}
-            {medicalRecordPatientToView?.symptoms}
-            {medicalRecordPatientToView?.diagnosis}
-            {medicalRecordPatientToView?.conductedTests}
-            {medicalRecordPatientToView?.recommendations}
-          </div>
+          <footer></footer>
         </div>
         <div className="page">
-          <div className="subpage">Page 2/2</div>
+          <footer></footer>
         </div>
       </div>
     </>
