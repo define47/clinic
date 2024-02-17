@@ -708,7 +708,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           setSelectedLimit={setTableLimit}
         />
       </div> */}
-      <div className="flex mb-2">
+      <div className="w-full flex justify-between items-center mb-2">
         {(entity === "doctor" ||
           entity === "patient" ||
           entity === "receptionist" ||

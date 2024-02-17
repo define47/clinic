@@ -6,6 +6,7 @@ import { StyledInput } from "../design/StyledInput";
 import { TiTick } from "react-icons/ti";
 import { RiArrowUpSLine } from "react-icons/ri";
 import { VscDash } from "react-icons/vsc";
+import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const UserPicker: FC<UserPickerProps> = ({
   shouldDataBeFetched,
@@ -146,40 +147,40 @@ export const UserPicker: FC<UserPickerProps> = ({
     setIsUserPickerVisible(false);
   }
 
-  // useEffect(() => {
-  //   for (let i = 0; i < filteredUsers.length; i++) {
-  //     const leftParenthesesIndex = selectedUserName.indexOf("(") - 1;
+  useEffect(() => {
+    for (let i = 0; i < filteredUsers.length; i++) {
+      const leftParenthesesIndex = selectedUserName.indexOf("(") - 1;
 
-  //     console.log(
-  //       leftParenthesesIndex,
-  //       selectedUserName.toLowerCase().substring(0, leftParenthesesIndex)
-  //     );
+      console.log(
+        leftParenthesesIndex,
+        selectedUserName.toLowerCase().substring(0, leftParenthesesIndex)
+      );
 
-  //     // let test =
-  //     //   leftParenthesesIndex !== -1 && roleName === "doctor"
-  //     //     ? selectedUserName.toLowerCase().substring(0, leftParenthesesIndex)
-  //     //     : selectedUserName.toLowerCase();
+      // let test =
+      //   leftParenthesesIndex !== -1 && roleName === "doctor"
+      //     ? selectedUserName.toLowerCase().substring(0, leftParenthesesIndex)
+      //     : selectedUserName.toLowerCase();
 
-  //     let test = selectedUserName.toLowerCase();
+      let test = selectedUserName.toLowerCase();
 
-  //     if (
-  //       test !==
-  //       `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
-  //         i
-  //       ].userSurname.toLowerCase()}`
-  //     ) {
-  //       setSelectedUserId("");
-  //     } else if (
-  //       test ===
-  //       `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
-  //         i
-  //       ].userSurname.toLowerCase()}`
-  //     ) {
-  //       setSelectedUserId(filteredUsers[i].userId);
-  //       break;
-  //     }
-  //   }
-  // }, [filteredUsers, selectedUserName]);
+      if (
+        test !==
+        `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
+          i
+        ].userSurname.toLowerCase()}`
+      ) {
+        setSelectedUserId("");
+      } else if (
+        test ===
+        `${filteredUsers[i].userForename.toLowerCase()} ${filteredUsers[
+          i
+        ].userSurname.toLowerCase()}`
+      ) {
+        setSelectedUserId(filteredUsers[i].userId);
+        break;
+      }
+    }
+  }, [filteredUsers, selectedUserName]);
 
   const foundUser = users.find((user) => user.userId === selectedUserId);
 
@@ -198,9 +199,9 @@ export const UserPicker: FC<UserPickerProps> = ({
   }, [foundUser, roleName, selectedUserId]);
 
   return (
-    <div className="flex">
-      <div className={`relative ${z}`} ref={userSearchPickerRef}>
-        <StyledInput
+    <div className="w-full flex">
+      <div className={`w-full relative ${z}`} ref={userSearchPickerRef}>
+        {/* <StyledInput
           label={label}
           inputValue={selectedUserName}
           name="userCriteria"
@@ -227,6 +228,40 @@ export const UserPicker: FC<UserPickerProps> = ({
           isPicker={true}
           isPickerVisible={isUserPickerVisible}
           disabled={disabled}
+        /> */}
+        <StyledInputV2
+          unfocusedTextColor="text-pink-600"
+          unfocusedBorderColor="border-pink-600"
+          focusedTextColor="focus:text-pink-600"
+          focusedBorderColor="focus:border-pink-600"
+          unfocusedLabelColor="text-pink-600"
+          unfocusedLabelBackgroundColor="bg-white"
+          focusedLabelColor="text-pink-600"
+          focusedLabelBackgroundColor="bg-white"
+          icon={
+            <div
+              className={`transition-transform transform ${
+                !isUserPickerVisible ? "rotate-0" : "rotate-180"
+              }`}
+            >
+              <RiArrowUpSLine />
+            </div>
+          }
+          onClickIcon={() => {
+            setIsUserPickerVisible(!isUserPickerVisible);
+          }}
+          isDisabled={disabled ? true : false}
+          label={label}
+          name={label}
+          onChangeStyledInput={(event) => {
+            setSelectedUserName(event.target.value);
+            setIsUserPickerVisible(true);
+          }}
+          onClickInput={() => {
+            setIsUserPickerVisible(!isUserPickerVisible);
+          }}
+          styledInputValue={selectedUserName}
+          styledInputWidth="w-full"
         />
         <ul
           className={`absolute w-full bg-white overflow-y-auto h-40 ${

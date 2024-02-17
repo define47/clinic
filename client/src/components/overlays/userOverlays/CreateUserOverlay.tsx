@@ -12,6 +12,7 @@ import { StyledEntry } from "../../design/StyledEntry";
 import validator from "validator";
 import { StyledInputV2 } from "../../design/StyledInputV2";
 import phone from "phone";
+import { GenderPicker } from "../../pickers/GenderPicker";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -74,6 +75,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
     selectedTertiaryMedicalSpecialityName,
     setSelectedTertiaryMedicalSpecialityName,
   ] = useState<string>("");
+  const [selectedGenderValue, setSelectedGenderValue] = useState<string>("");
+  const [selectedGenderName, setSelectedGenderName] = useState<string>("");
 
   const [isUserForenameValid, setIsUserForenameValid] =
     useState<boolean>(false);
@@ -212,19 +215,19 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
         >
           <span className="flex justify-center mb-8">Create {roleName}</span>
           <div className="w-full lg:flex lg:justify-between lg:space-x-24">
-            <div className="w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+            <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
               <StyledInputV2
                 styledInputWidth="w-full"
                 unfocusedTextColor={
                   userToCreate.userForename.length === 0
-                    ? "text-pink-700"
+                    ? "text-black"
                     : isUserForenameValid
                     ? "text-green-700"
                     : "text-red-700"
                 }
                 unfocusedBorderColor={
                   userToCreate.userForename.length === 0
-                    ? "border-pink-700"
+                    ? "border-black"
                     : isUserForenameValid
                     ? "border-green-700"
                     : "border-red-700"
@@ -245,7 +248,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 }
                 unfocusedLabelColor={
                   userToCreate.userForename.length === 0
-                    ? "text-pink-700"
+                    ? "text-black"
                     : isUserForenameValid
                     ? "text-green-700"
                     : "text-red-700"
@@ -269,14 +272,14 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 styledInputWidth="w-full"
                 unfocusedTextColor={
                   userToCreate.userSurname.length === 0
-                    ? "text-pink-700"
+                    ? "text-black"
                     : isUserSurnameValid
                     ? "text-green-700"
                     : "text-red-700"
                 }
                 unfocusedBorderColor={
                   userToCreate.userSurname.length === 0
-                    ? "border-pink-700"
+                    ? "border-black"
                     : isUserSurnameValid
                     ? "border-green-700"
                     : "border-red-700"
@@ -297,7 +300,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 }
                 unfocusedLabelColor={
                   userToCreate.userSurname.length === 0
-                    ? "text-pink-700"
+                    ? "text-black"
                     : isUserSurnameValid
                     ? "text-green-700"
                     : "text-red-700"
@@ -321,14 +324,14 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 styledInputWidth="w-full"
                 unfocusedTextColor={
                   userToCreate.userEmail.length === 0
-                    ? "text-pink-700"
+                    ? "text-black"
                     : isUserEmailValid
                     ? "text-green-700"
                     : "text-red-700"
                 }
                 unfocusedBorderColor={
                   userToCreate.userEmail.length === 0
-                    ? "border-pink-700"
+                    ? "border-black"
                     : isUserEmailValid
                     ? "border-green-700"
                     : "border-red-700"
@@ -349,7 +352,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 }
                 unfocusedLabelColor={
                   userToCreate.userEmail.length === 0
-                    ? "text-pink-700"
+                    ? "text-black"
                     : isUserEmailValid
                     ? "text-green-700"
                     : "text-red-700"
@@ -370,19 +373,19 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 label="Email"
               />
             </div>
-            <div className="w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+            <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
               <StyledInputV2
                 styledInputWidth="w-full"
                 unfocusedTextColor={
                   userToCreate.userPhoneNumber.length === 0
-                    ? "text-pink-700"
+                    ? "text-black"
                     : isUserPhoneNumberValid
                     ? "text-green-700"
                     : "text-red-700"
                 }
                 unfocusedBorderColor={
                   userToCreate.userPhoneNumber.length === 0
-                    ? "border-pink-700"
+                    ? "border-black"
                     : isUserPhoneNumberValid
                     ? "border-green-700"
                     : "border-red-700"
@@ -403,7 +406,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 }
                 unfocusedLabelColor={
                   userToCreate.userPhoneNumber.length === 0
-                    ? "text-pink-700"
+                    ? "text-black"
                     : isUserPhoneNumberValid
                     ? "text-green-700"
                     : "text-red-700"
@@ -423,18 +426,18 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 onChangeStyledInput={handleStyledInputChange}
                 label="Phone Number"
               />
-              <StyledInputV2
+              {/* <StyledInputV2
                 styledInputWidth="w-full"
                 unfocusedTextColor={
                   userToCreate.userGender.length === 0
-                    ? "text-pink-700"
+                    ? "text-black"
                     : isUserGenderValid
                     ? "text-green-700"
                     : "text-red-700"
                 }
                 unfocusedBorderColor={
                   userToCreate.userGender.length === 0
-                    ? "border-pink-700"
+                    ? "border-black"
                     : isUserGenderValid
                     ? "border-green-700"
                     : "border-red-700"
@@ -455,7 +458,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 }
                 unfocusedLabelColor={
                   userToCreate.userGender.length === 0
-                    ? "text-pink-700"
+                    ? "text-black"
                     : isUserGenderValid
                     ? "text-green-700"
                     : "text-red-700"
@@ -474,6 +477,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 styledInputValue={userToCreate.userGender}
                 onChangeStyledInput={handleStyledInputChange}
                 label="Gender"
+              /> */}
+              <GenderPicker
+                setSelectedGenderValue={setSelectedGenderValue}
+                selectedGenderValue={selectedGenderValue}
+                selectedGenderName={selectedGenderName}
+                setSelectedGenderName={setSelectedGenderName}
+                z="z-50"
               />
               {/* <StyledInput
                 label="userDateOfBirth"
@@ -490,21 +500,21 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 setSelectedEntity={setUserDateOfBirth}
                 defaultDate={defaultDate}
                 isOverlayVisible={isCreateUserOverlayVisible}
-                z="z-50"
+                z="z-40"
               />
             </div>
-            <div className="w-1/3 flex flex-col items-center lg:items-baseline space-y-6">
+            <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6">
               <StyledInputV2
                 styledInputWidth="w-full"
                 unfocusedTextColor={
                   userToCreate.userAddress.length > 0
                     ? "text-green-600"
-                    : "text-pink-600"
+                    : "text-black"
                 }
                 unfocusedBorderColor={
                   userToCreate.userAddress.length > 0
                     ? "border-green-700"
-                    : "border-pink-700"
+                    : "border-black"
                 }
                 focusedTextColor={
                   userToCreate.userAddress.length > 0
@@ -519,7 +529,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 unfocusedLabelColor={
                   userToCreate.userAddress.length > 0
                     ? "text-green-700"
-                    : "text-pink-700"
+                    : "text-black"
                 }
                 unfocusedLabelBackgroundColor="bg-white"
                 focusedLabelColor={

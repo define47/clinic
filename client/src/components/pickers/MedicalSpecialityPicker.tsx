@@ -193,11 +193,11 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
       <div
         className={`w-full relative ${
           label.includes("primary")
-            ? "z-50"
-            : label.includes("secondary")
             ? "z-40"
-            : label.includes("tertiary")
+            : label.includes("secondary")
             ? "z-30"
+            : label.includes("tertiary")
+            ? "z-20"
             : ""
         }`}
         ref={medicalSpecialityPickerRef}

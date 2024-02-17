@@ -11,6 +11,7 @@ import Overlay from "../base/Overlay";
 import axios from "axios";
 import { StyledInput } from "../../design/StyledInput";
 import { Tooltip } from "../../design/Tooltip";
+import { StyledInputV2 } from "../../design/StyledInputV2";
 
 export const UpdateMedicalSpeciality: FC<
   UpdateMedicalSpecialityOverlayProps
@@ -26,6 +27,9 @@ export const UpdateMedicalSpeciality: FC<
 
   const [medicalSpecialityToUpdate, setMedicalSpecialityToUpdate] =
     useState<MedicalSpeciality>({ medicalSpecialityName: "" });
+
+  const [isMedicalSpecialityNameValid, setIsMedicalSpecialityNameValid] =
+    useState<boolean>(false);
 
   useEffect(() => {
     function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
@@ -78,11 +82,17 @@ export const UpdateMedicalSpeciality: FC<
 
   function handleStyledInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
+    const regex = /^[a-zA-Z \-]*$/;
+    setIsMedicalSpecialityNameValid(regex.test(value));
     setMedicalSpecialityToUpdate((prevMedicalSpecialityToUpdate) => ({
       ...prevMedicalSpecialityToUpdate,
       [name]: value,
     }));
   }
+
+  useEffect(() => {
+    setIsMedicalSpecialityNameValid(medicalSpeciality.medicalSpecialityName);
+  }, [medicalSpeciality]);
 
   return (
     <>
@@ -97,7 +107,7 @@ export const UpdateMedicalSpeciality: FC<
         </Tooltip>
       )}
       <Overlay
-        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
+        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
           isUpdateMedicalSpecialityOverlayVisible
             ? "visible backdrop-blur-sm"
             : "invisible"
@@ -105,7 +115,7 @@ export const UpdateMedicalSpeciality: FC<
         closeModal={() => setIsUpdateMedicalSpecialityOverlayVisible(false)}
       >
         <div
-          className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
+          className={`w-11/12 h-4/5 overflow-y-auto lg:w-1/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
             isUpdateMedicalSpecialityOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
@@ -115,20 +125,65 @@ export const UpdateMedicalSpeciality: FC<
           <span className="flex justify-center mb-8">
             Update Medical Speciality
           </span>
-          <div className="w-full flex justify-between">
-            <div className="flex flex-col space-y-6">
-              <StyledInput
-                label="medicalSpecialityName"
+          <div className="w-full lg:flex lg:justify-between lg:space-x-24">
+            <div className="w-full flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  medicalSpecialityToUpdate.medicalSpecialityName.length === 0
+                    ? "text-black"
+                    : isMedicalSpecialityNameValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedBorderColor={
+                  medicalSpecialityToUpdate.medicalSpecialityName.length === 0
+                    ? "border-black"
+                    : isMedicalSpecialityNameValid
+                    ? "border-green-700"
+                    : "border-red-700"
+                }
+                focusedTextColor={
+                  medicalSpecialityToUpdate.medicalSpecialityName.length === 0
+                    ? "focus:text-pink-500"
+                    : isMedicalSpecialityNameValid
+                    ? "focus:text-green-500"
+                    : "focus:text-red-500"
+                }
+                focusedBorderColor={
+                  medicalSpecialityToUpdate.medicalSpecialityName.length === 0
+                    ? "focus:border-pink-500"
+                    : isMedicalSpecialityNameValid
+                    ? "focus:border-green-500"
+                    : "focus:border-red-500"
+                }
+                unfocusedLabelColor={
+                  medicalSpecialityToUpdate.medicalSpecialityName.length === 0
+                    ? "text-black"
+                    : isMedicalSpecialityNameValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  medicalSpecialityToUpdate.medicalSpecialityName.length === 0
+                    ? "text-pink-500"
+                    : isMedicalSpecialityNameValid
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
                 name="medicalSpecialityName"
+                styledInputValue={
+                  medicalSpecialityToUpdate.medicalSpecialityName
+                }
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
-                inputValue={medicalSpecialityToUpdate.medicalSpecialityName}
-                // inputValue=""
+                label="Medical Speciality Name"
               />
             </div>
-            <div className="flex flex-col space-y-6"></div>
-            <div className="flex flex-col space-y-6"></div>
           </div>
+
           <div className="w-full mt-14 flex justify-between">
             <StyledRippleButton
               label="Continue"

@@ -4,6 +4,7 @@ import { VscDash } from "react-icons/vsc";
 import { StyledInput } from "../design/StyledInput";
 import { RiArrowUpSLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
+import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const AppointmentStatusPicker: FC<AppointmentStatusPickerProps> = ({
   selectedAppointmentStatusName,
@@ -128,7 +129,7 @@ export const AppointmentStatusPicker: FC<AppointmentStatusPickerProps> = ({
   return (
     <div className="flex">
       <div className={`relative ${z}`} ref={appointmentStatusPickerRef}>
-        <StyledInput
+        {/* <StyledInput
           label="Appointment Status Picker"
           inputValue={selectedAppointmentStatusName}
           name="appointmentStatusPicker"
@@ -154,6 +155,44 @@ export const AppointmentStatusPicker: FC<AppointmentStatusPickerProps> = ({
           }
           isPicker={true}
           isPickerVisible={isAppointmentStatusVisible}
+        /> */}
+        <StyledInputV2
+          unfocusedTextColor="text-pink-600"
+          unfocusedBorderColor="border-pink-600"
+          focusedTextColor="focus:text-pink-600"
+          focusedBorderColor="focus:border-pink-600"
+          unfocusedLabelColor="text-pink-600"
+          unfocusedLabelBackgroundColor="bg-white"
+          focusedLabelColor="text-pink-600"
+          focusedLabelBackgroundColor="bg-white"
+          icon={
+            <div
+              className={`transition-transform transform ${
+                !isAppointmentStatusVisible ? "rotate-0" : "rotate-180"
+              }`}
+            >
+              <RiArrowUpSLine
+                onClick={() => {
+                  setIsAppointmentStatusVisible(!isAppointmentStatusVisible);
+                }}
+              />
+            </div>
+          }
+          onClickIcon={() =>
+            setIsAppointmentStatusVisible(!isAppointmentStatusVisible)
+          }
+          isDisabled={false}
+          label={`Appointment Criteria`}
+          name={`appointmentCriteria`}
+          onChangeStyledInput={(event) => {
+            setSelectedAppointmentStatusName(event.target.value);
+            setIsAppointmentStatusVisible(true);
+          }}
+          onClickInput={() => {
+            setIsAppointmentStatusVisible(!isAppointmentStatusVisible);
+          }}
+          styledInputValue={selectedAppointmentStatusName}
+          styledInputWidth="w-full"
         />
         <ul
           className={`absolute w-full bg-white overflow-y-auto h-40 ${

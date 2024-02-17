@@ -6,6 +6,7 @@ import { StyledInput } from "../../design/StyledInput";
 import { medicalSpecialitiesPath } from "../../../utils/dotenv";
 import axios from "axios";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
+import { StyledInputV2 } from "../../design/StyledInputV2";
 
 export const CreateMedicalSpecialityOverlay: FC = () => {
   const [medicalSpecialityToCreate, setMedicalSpecialityToCreate] =
@@ -18,6 +19,9 @@ export const CreateMedicalSpecialityOverlay: FC = () => {
     isCreateMedicalSpecialityConfirmationDialogOverlayVisible,
     setIsCreateMedicalSpecialityConfirmationDialogOverlayVisible,
   ] = useState<boolean>(false);
+
+  const [isMedicalSpecialityValid, setIsMedicalSpecialityValid] =
+    useState<boolean>(false);
 
   useEffect(() => {
     function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
@@ -47,6 +51,8 @@ export const CreateMedicalSpecialityOverlay: FC = () => {
 
   function handleStyledInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
+    const regex = /^[a-zA-Z \-]*$/;
+    setIsMedicalSpecialityValid(regex.test(value));
     setMedicalSpecialityToCreate((prevMedicalSpecialityToCreate) => ({
       ...prevMedicalSpecialityToCreate,
       [name]: value,
@@ -78,7 +84,7 @@ export const CreateMedicalSpecialityOverlay: FC = () => {
         onClick={() => setIsCreateMedicalSpecialityOverlayVisible(true)}
       />
       <Overlay
-        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
+        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
           isCreateMedicalSpecialityOverlayVisible
             ? "visible backdrop-blur-sm"
             : "invisible"
@@ -86,7 +92,7 @@ export const CreateMedicalSpecialityOverlay: FC = () => {
         closeModal={() => setIsCreateMedicalSpecialityOverlayVisible(false)}
       >
         <div
-          className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
+          className={`w-11/12 h-4/5 overflow-y-auto lg:w-1/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
             isCreateMedicalSpecialityOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
@@ -94,14 +100,65 @@ export const CreateMedicalSpecialityOverlay: FC = () => {
           onClick={(e) => e.stopPropagation()}
         >
           <span className="flex justify-center mb-8">Create Speciality</span>
-          <div>
-            <StyledInput
-              label="medicalSpecialityName"
-              name="medicalSpecialityName"
-              onChangeStyledInput={handleStyledInputChange}
-              labelBackgroundColor="bg-white"
-            />
+          <div className="w-full lg:flex lg:justify-between lg:space-x-24">
+            <div className="w-full flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  medicalSpecialityToCreate.medicalSpecialityName.length === 0
+                    ? "text-black"
+                    : isMedicalSpecialityValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedBorderColor={
+                  medicalSpecialityToCreate.medicalSpecialityName.length === 0
+                    ? "border-black"
+                    : isMedicalSpecialityValid
+                    ? "border-green-700"
+                    : "border-red-700"
+                }
+                focusedTextColor={
+                  medicalSpecialityToCreate.medicalSpecialityName.length === 0
+                    ? "focus:text-pink-500"
+                    : isMedicalSpecialityValid
+                    ? "focus:text-green-500"
+                    : "focus:text-red-500"
+                }
+                focusedBorderColor={
+                  medicalSpecialityToCreate.medicalSpecialityName.length === 0
+                    ? "focus:border-pink-500"
+                    : isMedicalSpecialityValid
+                    ? "focus:border-green-500"
+                    : "focus:border-red-500"
+                }
+                unfocusedLabelColor={
+                  medicalSpecialityToCreate.medicalSpecialityName.length === 0
+                    ? "text-black"
+                    : isMedicalSpecialityValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  medicalSpecialityToCreate.medicalSpecialityName.length === 0
+                    ? "text-pink-500"
+                    : isMedicalSpecialityValid
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
+                name="medicalSpecialityName"
+                styledInputValue={
+                  medicalSpecialityToCreate.medicalSpecialityName
+                }
+                onChangeStyledInput={handleStyledInputChange}
+                label="Medical Speciality Name"
+              />
+            </div>
           </div>
+
           <div className="w-full mt-14 flex justify-between">
             <StyledRippleButton
               label="Continue"

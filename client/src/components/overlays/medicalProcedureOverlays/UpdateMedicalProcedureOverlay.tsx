@@ -11,6 +11,7 @@ import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledInput } from "../../design/StyledInput";
 import { medicalProceduresPath } from "../../../utils/dotenv";
+import { StyledInputV2 } from "../../design/StyledInputV2";
 
 export const UpdateMedicalProcedureOverlay: FC<
   UpdateMedicalProcedureOverlayProps
@@ -29,6 +30,11 @@ export const UpdateMedicalProcedureOverlay: FC<
       medicalProcedureName: "",
       medicalProcedurePrice: -1,
     });
+
+  const [isMedicalProcedureNameValid, setIsMedicalProcedureNameValid] =
+    useState<boolean>(false);
+  const [isMedicalProcedurePriceValid, setIsMedicalProcedurePriceValid] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (isUpdateMedicalProcedureOverlayVisible)
@@ -61,13 +67,28 @@ export const UpdateMedicalProcedureOverlay: FC<
     isUpdateMedicalProcedureConfirmationDialogOverlayVisible,
   ]);
 
+  const regex = /^[a-zA-Z \-]*$/;
   function handleStyledInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
+
+    if (name === "medicalProcedureName") {
+      setIsMedicalProcedureNameValid(regex.test(value));
+    } else if (name === "medicalProcedurePrice") {
+      setIsMedicalProcedurePriceValid(parseInt(value) > 0);
+    }
+
     setMedicalProcedureToUpdate((prevMedicalProcedureToUpdate) => ({
       ...prevMedicalProcedureToUpdate,
       [name]: value,
     }));
   }
+
+  useEffect(() => {
+    setIsMedicalProcedureNameValid(
+      regex.test(medicalProcedure.medicalProcedureName)
+    );
+    setIsMedicalProcedurePriceValid(medicalProcedure.medicalProcedurePrice > 0);
+  }, [medicalProcedure]);
 
   async function onUpdateMedicalProcedure() {
     try {
@@ -107,7 +128,7 @@ export const UpdateMedicalProcedureOverlay: FC<
         </Tooltip>
       )}
       <Overlay
-        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
+        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
           isUpdateMedicalProcedureOverlayVisible
             ? "visible backdrop-blur-sm"
             : "invisible"
@@ -115,7 +136,7 @@ export const UpdateMedicalProcedureOverlay: FC<
         closeModal={() => setIsUpdateMedicalProcedureOverlayVisible(false)}
       >
         <div
-          className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
+          className={`w-11/12 h-4/5 overflow-y-auto lg:w-1/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
             isUpdateMedicalProcedureOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
@@ -123,9 +144,117 @@ export const UpdateMedicalProcedureOverlay: FC<
           onClick={(e) => e.stopPropagation()}
         >
           <span className="flex justify-center mb-8">
-            Update Medical Speciality
+            Update Medical Procedure
           </span>
-          <div className="w-full flex justify-between">
+          <div className="w-full lg:flex lg:justify-between lg:space-x-24">
+            <div className="w-full flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  medicalProcedureToUpdate.medicalProcedureName.length === 0
+                    ? "text-black"
+                    : isMedicalProcedureNameValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedBorderColor={
+                  medicalProcedureToUpdate.medicalProcedureName.length === 0
+                    ? "border-black"
+                    : isMedicalProcedureNameValid
+                    ? "border-green-700"
+                    : "border-red-700"
+                }
+                focusedTextColor={
+                  medicalProcedureToUpdate.medicalProcedureName.length === 0
+                    ? "focus:text-pink-500"
+                    : isMedicalProcedureNameValid
+                    ? "focus:text-green-500"
+                    : "focus:text-red-500"
+                }
+                focusedBorderColor={
+                  medicalProcedureToUpdate.medicalProcedureName.length === 0
+                    ? "focus:border-pink-500"
+                    : isMedicalProcedureNameValid
+                    ? "focus:border-green-500"
+                    : "focus:border-red-500"
+                }
+                unfocusedLabelColor={
+                  medicalProcedureToUpdate.medicalProcedureName.length === 0
+                    ? "text-black"
+                    : isMedicalProcedureNameValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  medicalProcedureToUpdate.medicalProcedureName.length === 0
+                    ? "text-pink-500"
+                    : isMedicalProcedureNameValid
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
+                name="medicalProcedureName"
+                styledInputValue={medicalProcedureToUpdate.medicalProcedureName}
+                onChangeStyledInput={handleStyledInputChange}
+                label="Medical Procedure Name"
+              />
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  medicalProcedureToUpdate.medicalProcedurePrice === -1
+                    ? "text-black"
+                    : isMedicalProcedurePriceValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedBorderColor={
+                  medicalProcedureToUpdate.medicalProcedurePrice === -1
+                    ? "border-black"
+                    : isMedicalProcedurePriceValid
+                    ? "border-green-700"
+                    : "border-red-700"
+                }
+                focusedTextColor={
+                  medicalProcedureToUpdate.medicalProcedurePrice === -1
+                    ? "focus:text-pink-500"
+                    : isMedicalProcedurePriceValid
+                    ? "focus:text-green-500"
+                    : "focus:text-red-500"
+                }
+                focusedBorderColor={
+                  medicalProcedureToUpdate.medicalProcedurePrice === -1
+                    ? "focus:border-pink-500"
+                    : isMedicalProcedurePriceValid
+                    ? "focus:border-green-500"
+                    : "focus:border-red-500"
+                }
+                unfocusedLabelColor={
+                  medicalProcedureToUpdate.medicalProcedurePrice === -1
+                    ? "text-black"
+                    : isMedicalProcedurePriceValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  medicalProcedureToUpdate.medicalProcedurePrice === -1
+                    ? "text-pink-500"
+                    : isMedicalProcedurePriceValid
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
+                name="medicalProcedurePrice"
+                styledInputValue={medicalProcedureToUpdate.medicalProcedurePrice.toString()}
+                onChangeStyledInput={handleStyledInputChange}
+                label="Medical Procedure Price"
+              />
+            </div>
+          </div>
+          {/* <div className="w-full flex justify-between">
             <div className="flex flex-col space-y-6">
               <StyledInput
                 label="medicalProcedureName"
@@ -142,7 +271,7 @@ export const UpdateMedicalProcedureOverlay: FC<
                 inputValue={medicalProcedureToUpdate.medicalProcedurePrice.toString()}
               />
             </div>
-          </div>
+          </div> */}
           <div className="w-full mt-14 flex justify-between">
             <StyledRippleButton
               label="Continue"

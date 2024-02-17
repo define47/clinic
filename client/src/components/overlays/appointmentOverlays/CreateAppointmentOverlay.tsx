@@ -60,6 +60,11 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   const [selectedAppointmentDateTime, setSelectedAppointmentDateTime] =
     useState<string>("");
 
+  const [isSelectedDoctorIdValid, setIsSelectedDoctorIdValid] =
+    useState<boolean>(false);
+  const [isSelectedPatientIdValid, setIsSelectedPatientIdValid] =
+    useState<boolean>(false);
+
   const [defaultDate, setDefaultDate] = useState<string>("");
   const [defaultTime, setDefaultTime] = useState<string>("");
 
@@ -235,7 +240,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
       />
 
       <Overlay
-        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
+        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
           isCreateAppointmentOverlayVisible
             ? "visible backdrop-blur-sm"
             : "invisible"
@@ -244,66 +249,50 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
         closeModal={handleOverlayClick}
       >
         <div
-          className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
+          className={`w-11/12 h-4/5 overflow-y-auto lg:w-3/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
             isCreateAppointmentOverlayVisible
               ? "scale-100 opacity-100 duration-500"
-              : "scale-125 opacity-0 duration-300"
+              : "scale-125 opacity-0 duration-500"
           }`}
         >
           <span className="flex justify-center mb-8">Create Appointment</span>
           <div className="w-full flex justify-between">
-            <div className="flex flex-col space-y-6">
-              <UserPicker
-                shouldDataBeFetched={true}
-                label="select doctor"
-                roleName="doctor"
-                selectedUserId={selectedDoctorId}
-                setSelectedUserId={setSelectedDoctorId}
-                selectedUserName={selectedDoctorName}
-                setSelectedUserName={setSelectedDoctorName}
-                z="z-50"
-                disabled={timetableDoctorId ? true : false}
-              />
-              <UserPicker
-                shouldDataBeFetched={true}
-                label="select patient"
-                roleName="patient"
-                selectedUserId={selectedPatientId}
-                setSelectedUserId={setSelectedPatientId}
-                selectedUserName={selectedPatientName}
-                setSelectedUserName={setSelectedPatientName}
-                z="z-40"
-              />
-            </div>
-            <div className="flex flex-col space-y-6">
-              <StyledInput
-                label="appointment reason"
-                name="appointmentReason"
-                onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
-                defaultValue={`appointmentReason`}
-              />
-              <DateTimePicker
-                label="Appointment Date Time"
-                isDateOnly={false}
-                selectedEntity={selectedAppointmentDateTime}
-                setSelectedEntity={setSelectedAppointmentDateTime}
-                defaultDate={defaultDate}
-                defaultTime={defaultTime}
-                isOverlayVisible={isCreateAppointmentOverlayVisible}
-                z="z-50"
-              />
-              {/* <AppointmentStatusPicker
-                selectedAppointmentStatusName={selectedAppointmentStatusName}
-                setSelectedAppointmentStatusName={
-                  setSelectedAppointmentStatusName
-                }
-                selectedAppointmentStatusValue={selectedAppointmentStatusValue}
-                setSelectedAppointmentStatusValue={
-                  setSelectedAppointmentStatusValue
-                }
-                z="z-50"
-              /> */}
+            <div className="w-full lg:flex lg:justify-between lg:space-x-24">
+              <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+                <UserPicker
+                  shouldDataBeFetched={true}
+                  label="select doctor"
+                  roleName="doctor"
+                  selectedUserId={selectedDoctorId}
+                  setSelectedUserId={setSelectedDoctorId}
+                  selectedUserName={selectedDoctorName}
+                  setSelectedUserName={setSelectedDoctorName}
+                  z="z-50"
+                  disabled={timetableDoctorId ? true : false}
+                />
+                <UserPicker
+                  shouldDataBeFetched={true}
+                  label="select patient"
+                  roleName="patient"
+                  selectedUserId={selectedPatientId}
+                  setSelectedUserId={setSelectedPatientId}
+                  selectedUserName={selectedPatientName}
+                  setSelectedUserName={setSelectedPatientName}
+                  z="z-40"
+                />
+              </div>
+              <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+                <DateTimePicker
+                  label="Appointment Date Time"
+                  isDateOnly={false}
+                  selectedEntity={selectedAppointmentDateTime}
+                  setSelectedEntity={setSelectedAppointmentDateTime}
+                  defaultDate={defaultDate}
+                  defaultTime={defaultTime}
+                  isOverlayVisible={isCreateAppointmentOverlayVisible}
+                  z="z-50"
+                />
+              </div>
             </div>
           </div>
 

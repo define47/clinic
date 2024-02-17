@@ -379,3 +379,16 @@ export type GeneralDataCardProps = {
 export type ViewMedicalRecordPatientOverlayProps = {
   appointmentId: string;
 };
+
+export type Gender = {
+  genderValue: string;
+  genderName: string;
+};
+
+export type GenderPickerProps = {
+  selectedGenderName: string;
+  setSelectedGenderName: (selectedGenderName: string) => void;
+  selectedGenderValue: string;
+  setSelectedGenderValue: (selectedGenderValue: string) => void;
+  z: string;
+};

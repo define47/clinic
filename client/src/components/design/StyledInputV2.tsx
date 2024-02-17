@@ -81,10 +81,12 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
       />
       <label
         onClick={() => {
-          styledInputRef.current?.focus();
-          if (typeof onClickInput === "function") onClickInput();
+          if (!isDisabled) {
+            styledInputRef.current?.focus();
+            if (typeof onClickInput === "function") onClickInput();
+          }
         }}
-        className={`absolute  top-2 left-2  transition-all duration-500 ${
+        className={`absolute top-2 left-2  transition-all duration-500 ${
           isInputFocused || doesInputHaveText || styledInputValue
             ? `-translate-y-4 translate-x-1.5 ${focusedLabelBackgroundColor} text-xs`
             : `translate-y-0 translate-x-0 ${unfocusedLabelBackgroundColor}`
@@ -101,16 +103,19 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
             : `${unfocusedBorderColor}`
         }`}
         onClick={() => {
-          if (!isInputFocused) {
-            setIsInputFocused(true);
-            styledInputRef.current?.focus();
+          if (!isDisabled) {
+            if (!isInputFocused) {
+              setIsInputFocused(true);
+              styledInputRef.current?.focus();
+            }
+            if (typeof onClickIcon === "function") onClickIcon();
           }
         }}
       >
         <span
-          onClick={() => {
-            if (typeof onClickIcon === "function") onClickIcon();
-          }}
+        // onClick={() => {
+        //   if (typeof onClickIcon === "function") onClickIcon();
+        // }}
         >
           {icon}
         </span>

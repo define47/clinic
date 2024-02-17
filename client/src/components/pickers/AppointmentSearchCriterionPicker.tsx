@@ -233,7 +233,11 @@ export const AppointmentSearchCriterionPicker: FC<
               />
             </div>
           }
-          onClickIcon={() => console.log("hello icon")}
+          onClickIcon={() =>
+            setIsAppointmentSearchCriterionPickerVisible(
+              !isAppointmentSearchCriterionPickerVisible
+            )
+          }
           isDisabled={false}
           label={`Appointment Criteria`}
           name={`appointmentCriteria`}

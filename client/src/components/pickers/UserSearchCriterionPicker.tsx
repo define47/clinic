@@ -193,7 +193,11 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
               />
             </div>
           }
-          onClickIcon={() => console.log("hello icon")}
+          onClickIcon={() =>
+            setIsUserSearchCriterionPickerVisible(
+              !isUserSearchCriterionPickerVisible
+            )
+          }
           isDisabled={false}
           label={`${entity} Criteria`}
           name={`${entity}Criteria`}

@@ -381,7 +381,27 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           unfocusedLabelBackgroundColor="bg-white"
           focusedLabelColor="text-pink-300"
           focusedLabelBackgroundColor="bg-gray-100"
-          icon={isDateTimePickerShown ? <RiCalendarLine /> : <RiCalendarLine />}
+          icon={
+            isDateTimePickerShown ? (
+              <RiCalendarFill
+                onClick={() => {
+                  setIsDateTimePickerShown(!isDateTimePickerShown);
+                  setAreMonthsShown(false);
+                  setAreYearsShown(false);
+                  setAreTimeSlotsShown(false);
+                }}
+              />
+            ) : (
+              <RiCalendarFill
+                onClick={() => {
+                  setIsDateTimePickerShown(!isDateTimePickerShown);
+                  setAreMonthsShown(false);
+                  setAreYearsShown(false);
+                  setAreTimeSlotsShown(false);
+                }}
+              />
+            )
+          }
           onClickIcon={() => {
             if (isDateTimePickerShown) {
               setIsDateTimePickerShown(false);

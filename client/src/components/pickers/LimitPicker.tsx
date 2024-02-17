@@ -104,7 +104,7 @@ export const LimitPicker: FC<LimitPickerProps> = ({
               />
             </div>
           }
-          onClickIcon={() => console.log("hello icon")}
+          onClickIcon={() => {}}
           isDisabled={true}
           label={`Limit`}
           name={`limit`}

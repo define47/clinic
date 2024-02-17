@@ -13,6 +13,8 @@ import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { Tooltip } from "../../design/Tooltip";
 import { StyledInputV2 } from "../../design/StyledInputV2";
 import validator from "validator";
+import phone from "phone";
+import { GenderPicker } from "../../pickers/GenderPicker";
 
 export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   user,
@@ -69,10 +71,15 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
     setSelectedTertiaryMedicalSpecialityName,
   ] = useState<string>("");
 
+  const [selectedGenderValue, setSelectedGenderValue] = useState<string>("");
+  const [selectedGenderName, setSelectedGenderName] = useState<string>("");
+
   const [isUserForenameValid, setIsUserForenameValid] =
     useState<boolean>(false);
   const [isUserSurnameValid, setIsUserSurnameValid] = useState<boolean>(false);
   const [isUserEmailValid, setIsUserEmailValid] = useState<boolean>(false);
+  const [isUserPhoneNumberValid, setIsUserPhoneNumberValid] =
+    useState<boolean>(false);
 
   const [userDateOfBirth, setUserDateOfBirth] = useState<string>("");
   const [defaultDate, setDefaultDate] = useState<string>("");
@@ -85,6 +92,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   useEffect(() => {
     if (isUpdateUserOverlayVisible) {
       setUserToUpdate(user);
+      setSelectedGenderName(user.userGender);
 
       if (user.medicalSpecialities) {
         setSelectedPrimaryMedicalSpecialityName(
@@ -148,6 +156,8 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
       setIsUserSurnameValid(regex.test(value));
     } else if (name === "userEmail") {
       setIsUserEmailValid(validator.isEmail(value));
+    } else if (name === "userPhoneNumber") {
+      setIsUserPhoneNumberValid(phone(value).isValid);
     }
     setUserToUpdate((prevUserToUpdate) => ({
       ...prevUserToUpdate,
@@ -238,7 +248,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
           userSurname: userToUpdate.userSurname,
           userEmail: userToUpdate.userEmail,
           userPhoneNumber: userToUpdate.userPhoneNumber,
-          userGender: userToUpdate.userGender,
+          userGender: selectedGenderValue,
           userDateOfBirth: userDateOfBirth,
           userAddress: userToUpdate.userAddress,
           userEncryptedPassword: "",
@@ -293,14 +303,14 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
       )}
 
       <Overlay
-        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
+        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
           isUpdateUserOverlayVisible ? "visible backdrop-blur-sm" : "invisible"
         }`}
         // closeModal={() => setIsUpdateUserOverlayVisible(false)}
         closeModal={handleOverlayClick}
       >
         <div
-          className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
+          className={`w-11/12 h-4/5 overflow-y-auto lg:w-3/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
             isUpdateUserOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
@@ -314,7 +324,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
           )} */}
           <span className="flex justify-center mb-8">Update {roleName}</span>
           <div className="w-full lg:flex lg:justify-between lg:space-x-24">
-            <div className="w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+            <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
               {/* <StyledInput
                 label="userForename"
                 name="userForename"
@@ -480,20 +490,73 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 label="Email"
               />
             </div>
-            <div className="flex flex-col space-y-6">
-              <StyledInput
-                label="userPhoneNumber"
+            <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  userToUpdate.userPhoneNumber.length === 0
+                    ? "text-pink-700"
+                    : isUserPhoneNumberValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedBorderColor={
+                  userToUpdate.userPhoneNumber.length === 0
+                    ? "border-pink-700"
+                    : isUserPhoneNumberValid
+                    ? "border-green-700"
+                    : "border-red-700"
+                }
+                focusedTextColor={
+                  userToUpdate.userPhoneNumber.length === 0
+                    ? "focus:text-pink-500"
+                    : isUserPhoneNumberValid
+                    ? "focus:text-green-500"
+                    : "focus:text-red-500"
+                }
+                focusedBorderColor={
+                  userToUpdate.userPhoneNumber.length === 0
+                    ? "focus:border-pink-500"
+                    : isUserPhoneNumberValid
+                    ? "focus:border-green-500"
+                    : "focus:border-red-500"
+                }
+                unfocusedLabelColor={
+                  userToUpdate.userPhoneNumber.length === 0
+                    ? "text-pink-700"
+                    : isUserPhoneNumberValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  userToUpdate.userPhoneNumber.length === 0
+                    ? "text-pink-500"
+                    : isUserPhoneNumberValid
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
                 name="userPhoneNumber"
+                styledInputValue={userToUpdate.userPhoneNumber}
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColorUnfocused="bg-white"
-                inputValue={userToUpdate.userPhoneNumber}
+                label="Phone Number"
               />
-              <StyledInput
+
+              {/* <StyledInput
                 label="userGender"
                 name="userGender"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColorUnfocused="bg-white"
                 inputValue={userToUpdate.userGender}
+              /> */}
+              <GenderPicker
+                setSelectedGenderValue={setSelectedGenderValue}
+                selectedGenderValue={selectedGenderValue}
+                selectedGenderName={selectedGenderName}
+                setSelectedGenderName={setSelectedGenderName}
+                z="z-50"
               />
               {/* <StyledInput
                 label="userDateOfBirth"
@@ -510,16 +573,56 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 setSelectedEntity={setUserDateOfBirth}
                 defaultDate={defaultDate}
                 isOverlayVisible={isUpdateUserOverlayVisible}
-                z="z-50"
+                z="z-40"
               />
             </div>
-            <div className="flex flex-col space-y-6">
-              <StyledInput
+            <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+              {/* <StyledInput
                 label="userAddress"
                 name="userAddress"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColorUnfocused="bg-white"
                 inputValue={userToUpdate.userAddress}
+              /> */}
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  userToUpdate.userAddress.length > 0
+                    ? "text-green-600"
+                    : "text-black"
+                }
+                unfocusedBorderColor={
+                  userToUpdate.userAddress.length > 0
+                    ? "border-green-700"
+                    : "border-black"
+                }
+                focusedTextColor={
+                  userToUpdate.userAddress.length > 0
+                    ? "focus:text-green-500"
+                    : "focus:text-pink-500"
+                }
+                focusedBorderColor={
+                  userToUpdate.userAddress.length > 0
+                    ? "focus:border-green-500"
+                    : "focus:border-pink-500"
+                }
+                unfocusedLabelColor={
+                  userToUpdate.userAddress.length > 0
+                    ? "text-green-700"
+                    : "text-black"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  userToUpdate.userAddress.length > 0
+                    ? "text-green-500"
+                    : "text-pink-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
+                name="userAddress"
+                styledInputValue={userToUpdate.userAddress}
+                onChangeStyledInput={handleStyledInputChange}
+                label="Address"
               />
               {roleName === "doctor" && (
                 <>

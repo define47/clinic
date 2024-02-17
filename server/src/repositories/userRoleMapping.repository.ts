@@ -179,7 +179,7 @@ export class UserRoleMappingRepository
       ),
       doctorSearchQuery:
         searchBy.length === 1
-          ? ilike(columnToSearchBy1, `%${searchQuery}%`)
+          ? ilike(columnToSearchBy1, `${searchQuery}%`)
           : searchBy.length === 2
           ? sql`CONCAT(${columnToSearchBy1}, ' ', ${columnToSearchBy2}) ILIKE ${`${searchQuery}%`}`
           : sql`TRUE`,
