@@ -10,6 +10,7 @@ import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { StyledEntry } from "../../design/StyledEntry";
 import validator from "validator";
+import { StyledInputV2 } from "../../design/StyledInputV2";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -201,6 +202,21 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
           <span className="flex justify-center mb-8">Create {roleName}</span>
           <div className="w-full lg:flex lg:justify-between">
             <div className="flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+              <StyledInputV2
+                unfocusedTextColor="text-red-600"
+                unfocusedBorderColor="border-red-600"
+                focusedTextColor="focus:text-blue-300"
+                focusedBorderColor="focus:border-blue-300"
+                unfocusedLabelColor="text-red-600"
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor="text-blue-300"
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
+                name="userForename"
+                styledInputValue={userToCreate.userForename}
+                onChangeStyledInput={handleStyledInputChange}
+                label="User Forename"
+              />
               <StyledInput
                 styledInputWidth="w-80"
                 label="userForename"

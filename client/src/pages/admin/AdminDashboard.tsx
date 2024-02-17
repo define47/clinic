@@ -83,7 +83,19 @@ export const AdminDashboard: FC = () => {
       {/* admin dashboard <Overlay /> */}
       {/* <MedicalProcedurePicker /> */}
       {/* <DragAndDrop /> */}
-      <StyledInputV2 icon={<RiCalendarFill />} />
+      <StyledInputV2
+        unfocusedTextColor="text-red-600"
+        unfocusedBorderColor="border-red-600"
+        focusedTextColor="focus:text-blue-300"
+        focusedBorderColor="focus:border-blue-300"
+        unfocusedLabelColor="text-red-600"
+        unfocusedLabelBackgroundColor="bg-white"
+        focusedLabelColor="text-blue-300"
+        focusedLabelBackgroundColor="bg-gray-100"
+        icon={<RiCalendarFill />}
+        onClickIcon={() => console.log("hello icon")}
+        isDisabled={false}
+      />
       {/* <GeneralDataCard entity="admin" /> */}
       {/* <PhoneExtensionPicker defaultPhoneExtension="+591" /> */}
       <div className="w-full h-full space-y-10">
