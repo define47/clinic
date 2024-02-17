@@ -24,6 +24,7 @@ import {
 } from "../../../utils/dotenv";
 import axios from "axios";
 import { SocketNotificationDataContext } from "../../../contexts/SocketNotificationContext";
+import { StyledInputV2 } from "../../design/StyledInputV2";
 
 export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   isCreateAppointmentOverlayVisible,
@@ -267,7 +268,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
                   setSelectedUserId={setSelectedDoctorId}
                   selectedUserName={selectedDoctorName}
                   setSelectedUserName={setSelectedDoctorName}
-                  z="z-50"
+                  z="z-40"
                   disabled={timetableDoctorId ? true : false}
                 />
                 <UserPicker
@@ -278,7 +279,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
                   setSelectedUserId={setSelectedPatientId}
                   selectedUserName={selectedPatientName}
                   setSelectedUserName={setSelectedPatientName}
-                  z="z-40"
+                  z="z-30"
                 />
               </div>
               <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
@@ -290,7 +291,47 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
                   defaultDate={defaultDate}
                   defaultTime={defaultTime}
                   isOverlayVisible={isCreateAppointmentOverlayVisible}
-                  z="z-50"
+                  z="z-20"
+                />
+                <StyledInputV2
+                  styledInputWidth="w-full"
+                  unfocusedTextColor={
+                    appointmentToCreate.appointmentReason.length > 0
+                      ? "text-green-600"
+                      : "text-black"
+                  }
+                  unfocusedBorderColor={
+                    appointmentToCreate.appointmentReason.length > 0
+                      ? "border-green-700"
+                      : "border-black"
+                  }
+                  focusedTextColor={
+                    appointmentToCreate.appointmentReason.length > 0
+                      ? "focus:text-green-500"
+                      : "focus:text-pink-500"
+                  }
+                  focusedBorderColor={
+                    appointmentToCreate.appointmentReason.length > 0
+                      ? "focus:border-green-500"
+                      : "focus:border-pink-500"
+                  }
+                  unfocusedLabelColor={
+                    appointmentToCreate.appointmentReason.length > 0
+                      ? "text-green-700"
+                      : "text-black"
+                  }
+                  unfocusedLabelBackgroundColor="bg-white"
+                  focusedLabelColor={
+                    appointmentToCreate.appointmentReason.length > 0
+                      ? "text-green-500"
+                      : "text-pink-500"
+                  }
+                  focusedLabelBackgroundColor="bg-white"
+                  isDisabled={false}
+                  name="appointmentReason"
+                  styledInputValue={appointmentToCreate.appointmentReason}
+                  onChangeStyledInput={handleStyledInputChange}
+                  label="Reason"
                 />
               </div>
             </div>

@@ -37,6 +37,7 @@ import {
   settingsPathname,
 } from "../../utils/consts";
 import { logoutUserPath } from "../../utils/dotenv";
+import IatropolisLogo from "../../assets/logo-iatropolis.png";
 
 export const Sidebar: FC<SidebarProps> = ({
   isSidebarExpanded,
@@ -92,12 +93,18 @@ export const Sidebar: FC<SidebarProps> = ({
             }`}
             alt=""
           /> */}
+            {/* ${
+                isSidebarExpanded ? "w-full text-2xl" : "w-full h-full"
+              } */}
             <span
-              className={`overflow-hidden transition-all flex items-center justify-center  ${
-                isSidebarExpanded ? "w-full text-2xl" : "w-full text-sm"
-              }`}
+              className={`overflow-hidden transition-all flex items-center justify-center`}
             >
-              Iatropolis
+              {/* Iatropolis */}
+              <img
+                src={IatropolisLogo}
+                alt="Iatropolis, Botosani"
+                className="object-contain h-full w-full"
+              />
             </span>
 
             {/* fixed ${

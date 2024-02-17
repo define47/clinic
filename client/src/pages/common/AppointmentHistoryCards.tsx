@@ -59,7 +59,7 @@ export const AppointmentHistoryCards: FC = () => {
                 appointmentHistoryCard.appointmentHistory.appointmentHistoryId
               }
             >
-              <div className="h-80 border rounded-xl bg-white shadow-2xl shadow-black/40 text-xs">
+              <div className="h-auto border rounded-xl bg-white shadow-2xl shadow-black/40 text-xs">
                 <div className="w-full flex flex-col">
                   {appointmentHistoryCardIndex === 0 && (
                     <>

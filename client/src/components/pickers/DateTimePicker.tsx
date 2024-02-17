@@ -434,7 +434,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           styledInputWidth="w-full"
         />
         <span
-          className="absolute top-0 h-10 w-80 bg-transparent cursor-pointer"
+          className="absolute top-0 h-10 w-full bg-transparent cursor-pointer"
           onClick={() => setIsDateTimePickerShown(!isDateTimePickerShown)}
         ></span>
       </div>

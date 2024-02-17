@@ -127,7 +127,7 @@ export const MedicalRecordPatientView: FC = () => {
           <img
             src={IatropolisLogo}
             alt="Iatropolis, Botosani"
-            className="object-fit h-8 w-44"
+            className="object-contain h-8 w-44"
           />
           <span className="w-full flex justify-center text-xl mb-6">
             Medical Record Patient

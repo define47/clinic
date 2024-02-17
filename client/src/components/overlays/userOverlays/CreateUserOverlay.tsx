@@ -663,69 +663,69 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 <span className="w-full flex items-center justify-center text-xl font-bold">
                   Are You Sure You Want To Create The {roleName}?
                 </span>
-                <div className="w=full flex justify-between mt-4">
-                  <div className="w-full flex flex-col">
+                <div className="w-full lg:flex lg:justify-between lg:space-x-24">
+                  <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline">
                     <StyledEntry
                       entryHeight="h-8"
                       entryWidth="w-11/12"
-                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userForename"
-                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBodyWidth="w-9/12"
                       confirmationDialogEntryBody={userToCreate.userForename}
                     />
                     <StyledEntry
                       entryHeight="h-8"
                       entryWidth="w-11/12"
-                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userSurname"
-                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBodyWidth="w-9/12"
                       confirmationDialogEntryBody={userToCreate.userSurname}
                     />
                     <StyledEntry
                       entryHeight="h-8"
                       entryWidth="w-11/12"
-                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userEmail"
-                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBodyWidth="w-9/12"
                       confirmationDialogEntryBody={userToCreate.userEmail}
                     />
                   </div>
-                  <div className="w-full flex flex-col">
+                  <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline  ">
                     <StyledEntry
                       entryHeight="h-8"
                       entryWidth="w-11/12"
-                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="Phone Number"
-                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBodyWidth="w-9/12"
                       confirmationDialogEntryBody={userToCreate.userPhoneNumber}
                     />
                     <StyledEntry
                       entryHeight="h-8"
                       entryWidth="w-11/12"
-                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userGender"
-                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBodyWidth="w-9/12"
                       confirmationDialogEntryBody={userToCreate.userGender}
                     />
                     <StyledEntry
                       entryHeight="h-8"
                       entryWidth="w-11/12"
-                      confirmationDialogEntryTitleWidth="w-24"
+                      confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userEmail"
-                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBodyWidth="w-9/12"
                       confirmationDialogEntryBody={userToCreate.userDateOfBirth
                         .split("-")
                         .reverse()
                         .join("-")}
                     />
                   </div>
-                  <div className="w-full flex flex-col">
+                  <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline  ">
                     <StyledEntry
                       entryHeight="h-8"
                       entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-24"
                       confirmationDialogEntryTitle="userAddress"
-                      confirmationDialogEntryBodyWidth="w-72"
+                      confirmationDialogEntryBodyWidth="w-9/12"
                       confirmationDialogEntryBody={userToCreate.userAddress}
                     />
                   </div>
