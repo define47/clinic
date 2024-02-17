@@ -219,7 +219,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
 
   return (
     <>
-      {timetableDoctorId !== "" ? (
+      {/* {timetableDoctorId !== "" ? (
         ""
       ) : (
         <StyledRippleButton
@@ -227,7 +227,12 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
           type="create"
           onClick={() => setIsCreateAppointmentOverlayVisible(true)}
         />
-      )}
+      )} */}
+      <StyledRippleButton
+        label={`Create Appointment`}
+        type="create"
+        onClick={() => setIsCreateAppointmentOverlayVisible(true)}
+      />
 
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${

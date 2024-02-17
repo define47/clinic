@@ -83,7 +83,7 @@ export const AdminDashboard: FC = () => {
       {/* admin dashboard <Overlay /> */}
       {/* <MedicalProcedurePicker /> */}
       {/* <DragAndDrop /> */}
-      <StyledInputV2
+      {/* <StyledInputV2
         unfocusedTextColor="text-red-600"
         unfocusedBorderColor="border-red-600"
         focusedTextColor="focus:text-blue-300"
@@ -95,6 +95,24 @@ export const AdminDashboard: FC = () => {
         icon={<RiCalendarFill />}
         onClickIcon={() => console.log("hello icon")}
         isDisabled={false}
+
+      /> */}
+      <StyledInputV2
+        unfocusedTextColor="text-red-600"
+        unfocusedBorderColor="border-red-600"
+        focusedTextColor="focus:text-blue-300"
+        focusedBorderColor="focus:border-blue-300"
+        unfocusedLabelColor="text-red-600"
+        unfocusedLabelBackgroundColor="bg-white"
+        focusedLabelColor="text-blue-300"
+        focusedLabelBackgroundColor="bg-gray-100"
+        onClickIcon={() => console.log("hello icon")}
+        isDisabled={false}
+        label={`Criteria`}
+        name={`Criteria`}
+        onChangeStyledInput={(event) => {}}
+        styledInputValue={""}
+        styledInputWidth="w-full"
       />
       {/* <GeneralDataCard entity="admin" /> */}
       {/* <PhoneExtensionPicker defaultPhoneExtension="+591" /> */}

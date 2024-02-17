@@ -51,6 +51,7 @@ import { CreateMedicalRecordPatientOverlay } from "../overlays/medicalRecordPati
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { SendEmailOverlay } from "../overlays/emailOverlays/SendEmailOverlay";
 import { ViewMedicalRecordPatientOverlay } from "../overlays/medicalRecordPatientOverlays/ViewMedicalRecordPatientOverlay";
+import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -539,98 +540,147 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
   return device === "Desktop" ? (
     <div className="w-full bg-white h-full border p-4 rounded-xl font-roboto">
-      {/* <button onClick={handlePrint}>print</button> */}
-      <div className="flex items-center justify-between">
+      {/* <div className="flex items-center justify-between">
         {(entity === "doctor" ||
           entity === "patient" ||
           entity === "receptionist" ||
           entity === "nurse") && (
-          <div className="flex items-center space-x-3 mb-3">
-            <UserSearchCriterionPicker
-              entity={entity}
-              selectedUserSearchCriteriaName={selectedUserSearchCriteriaName}
-              setSelectedUserSearchCriteriaName={
-                setSelectedUserSearchCriteriaName
-              }
-              selectedUserSearchCriteriaValue={selectedUserSearchCriteriaValue}
-              setSelectedUserSearchCriteriaValue={
-                setSelectedUserSearchCriteriaValue
-              }
-            />
+          <div className="w-full flex items-center space-x-3 mb-3">
+            <div className="w-1/5">
+              <UserSearchCriterionPicker
+                entity={entity}
+                selectedUserSearchCriteriaName={selectedUserSearchCriteriaName}
+                setSelectedUserSearchCriteriaName={
+                  setSelectedUserSearchCriteriaName
+                }
+                selectedUserSearchCriteriaValue={
+                  selectedUserSearchCriteriaValue
+                }
+                setSelectedUserSearchCriteriaValue={
+                  setSelectedUserSearchCriteriaValue
+                }
+              />
+            </div>
             {selectedUserSearchCriteriaValue !== "" && (
-              <div className="relative">
-                <StyledInput
+              <div className="w-full">
+                <StyledInputV2
+                  unfocusedTextColor="text-pink-600"
+                  unfocusedBorderColor="border-pink-600"
+                  focusedTextColor="focus:text-pink-600"
+                  focusedBorderColor="focus:border-pink-600"
+                  unfocusedLabelColor="text-pink-600"
+                  unfocusedLabelBackgroundColor="bg-white"
+                  focusedLabelColor="text-pink-600"
+                  focusedLabelBackgroundColor="bg-white"
+                  onClickIcon={() => {}}
+                  isDisabled={false}
                   label={`${entity} search`}
-                  name="name"
+                  name={`userSearch`}
+                  icon={<IoIosSearch />}
                   onChangeStyledInput={(event) =>
                     setSearchQuery(event.target.value)
                   }
-                  icon={<IoIosSearch />}
+                  styledInputValue={searchQuery}
+                  styledInputWidth="w-full"
                 />
               </div>
             )}
           </div>
         )}
         {entity === "medicalSpeciality" && (
-          <div className="mb-3">
-            <div className="relative">
-              <StyledInput
-                label={`${entity} search`}
-                name="medicalSpecialitySearch"
-                onChangeStyledInput={(event) =>
-                  setSearchQuery(event.target.value)
-                }
-                icon={<IoIosSearch />}
-              />
-            </div>
+          <div className="w-1/5 mb-3">
+            <StyledInputV2
+              unfocusedTextColor="text-pink-600"
+              unfocusedBorderColor="border-pink-600"
+              focusedTextColor="focus:text-pink-600"
+              focusedBorderColor="focus:border-pink-600"
+              unfocusedLabelColor="text-pink-600"
+              unfocusedLabelBackgroundColor="bg-white"
+              focusedLabelColor="text-pink-600"
+              focusedLabelBackgroundColor="bg-white"
+              onClickIcon={() => {}}
+              isDisabled={false}
+              label={`${entity} search`}
+              name={`medicalSpecialitySearch`}
+              icon={<IoIosSearch />}
+              onChangeStyledInput={(event) =>
+                setSearchQuery(event.target.value)
+              }
+              styledInputValue={searchQuery}
+              styledInputWidth="w-full"
+            />
           </div>
         )}
 
         {entity === "appointment" && (
-          <div className="flex space-x-3 mb-3">
-            <AppointmentSearchCriterionPicker
-              selectedTable={selectedTable}
-              setSelectedTable={setSelectedTable}
-              selectedAppointmentCriteriaName={selectedAppointmentCriteriaName}
-              setSelectedAppointmentCriteriaName={
-                setSelectedAppointmentCriteriaName
-              }
-              selectedAppointmentCriteriaValue={
-                selectedAppointmentCriteriaValue
-              }
-              setSelectedAppointmentCriteriaValue={
-                setSelectedAppointmentCriteriaValue
-              }
-            />
+          <div className="w-full flex space-x-3 mb-3">
+            <div className="w-1/2">
+              <AppointmentSearchCriterionPicker
+                selectedTable={selectedTable}
+                setSelectedTable={setSelectedTable}
+                selectedAppointmentCriteriaName={
+                  selectedAppointmentCriteriaName
+                }
+                setSelectedAppointmentCriteriaName={
+                  setSelectedAppointmentCriteriaName
+                }
+                selectedAppointmentCriteriaValue={
+                  selectedAppointmentCriteriaValue
+                }
+                setSelectedAppointmentCriteriaValue={
+                  setSelectedAppointmentCriteriaValue
+                }
+              />{" "}
+            </div>
             {selectedTable !== "" &&
               selectedAppointmentCriteriaValue !== "" && (
-                <div className="relative">
-                  <StyledInput
+                <div className="w-1/2">
+                  <StyledInputV2
+                    unfocusedTextColor="text-pink-600"
+                    unfocusedBorderColor="border-pink-600"
+                    focusedTextColor="focus:text-pink-600"
+                    focusedBorderColor="focus:border-pink-600"
+                    unfocusedLabelColor="text-pink-600"
+                    unfocusedLabelBackgroundColor="bg-white"
+                    focusedLabelColor="text-pink-600"
+                    focusedLabelBackgroundColor="bg-white"
+                    onClickIcon={() => {}}
+                    isDisabled={false}
                     label={`${entity} search`}
-                    name="appointmentSearch"
+                    name={`appointmentSearch`}
+                    icon={<IoIosSearch />}
                     onChangeStyledInput={(event) =>
                       setSearchQuery(event.target.value)
                     }
-                    icon={<IoIosSearch />}
+                    styledInputValue={searchQuery}
+                    styledInputWidth="w-full"
                   />
                 </div>
               )}
           </div>
         )}
         {entity === "medicalProcedure" && (
-          <div className="flex mb-3">
-            <div className="flex-none">
-              <div className="relative">
-                <StyledInput
-                  label={`medical procedure search`}
-                  name="medicalProcedureSearch"
-                  onChangeStyledInput={(event) =>
-                    setSearchQuery(event.target.value)
-                  }
-                  icon={<IoIosSearch />}
-                />
-              </div>
-            </div>
+          <div className="w-1/6">
+            <StyledInputV2
+              unfocusedTextColor="text-pink-600"
+              unfocusedBorderColor="border-pink-600"
+              focusedTextColor="focus:text-pink-600"
+              focusedBorderColor="focus:border-pink-600"
+              unfocusedLabelColor="text-pink-600"
+              unfocusedLabelBackgroundColor="bg-white"
+              focusedLabelColor="text-pink-600"
+              focusedLabelBackgroundColor="bg-white"
+              onClickIcon={() => {}}
+              isDisabled={false}
+              label={`${entity} search`}
+              name={`medicalProcedureSearch`}
+              icon={<IoIosSearch />}
+              onChangeStyledInput={(event) =>
+                setSearchQuery(event.target.value)
+              }
+              styledInputValue={searchQuery}
+              styledInputWidth="w-full"
+            />
           </div>
         )}
 
@@ -657,6 +707,103 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           selectedLimit={tableLimit}
           setSelectedLimit={setTableLimit}
         />
+      </div> */}
+      <div className="flex mb-2">
+        {(entity === "doctor" ||
+          entity === "patient" ||
+          entity === "receptionist" ||
+          entity === "nurse") && (
+          <div className="w-96 mr-3">
+            <UserSearchCriterionPicker
+              entity={entity}
+              selectedUserSearchCriteriaName={selectedUserSearchCriteriaName}
+              setSelectedUserSearchCriteriaName={
+                setSelectedUserSearchCriteriaName
+              }
+              selectedUserSearchCriteriaValue={selectedUserSearchCriteriaValue}
+              setSelectedUserSearchCriteriaValue={
+                setSelectedUserSearchCriteriaValue
+              }
+            />
+          </div>
+        )}
+        {entity === "appointment" && (
+          <div className="w-96 mr-3">
+            <AppointmentSearchCriterionPicker
+              selectedTable={selectedTable}
+              setSelectedTable={setSelectedTable}
+              selectedAppointmentCriteriaName={selectedAppointmentCriteriaName}
+              setSelectedAppointmentCriteriaName={
+                setSelectedAppointmentCriteriaName
+              }
+              selectedAppointmentCriteriaValue={
+                selectedAppointmentCriteriaValue
+              }
+              setSelectedAppointmentCriteriaValue={
+                setSelectedAppointmentCriteriaValue
+              }
+            />
+          </div>
+        )}
+        {(selectedUserSearchCriteriaValue !== "" ||
+          entity === "medicalSpeciality" ||
+          selectedAppointmentCriteriaValue !== "" ||
+          selectedMedicalSpecialityId !== "") && (
+          <div className="w-96 mr-3">
+            <StyledInputV2
+              unfocusedTextColor="text-pink-600"
+              unfocusedBorderColor="border-pink-600"
+              focusedTextColor="focus:text-pink-600"
+              focusedBorderColor="focus:border-pink-600"
+              unfocusedLabelColor="text-pink-600"
+              unfocusedLabelBackgroundColor="bg-white"
+              focusedLabelColor="text-pink-600"
+              focusedLabelBackgroundColor="bg-white"
+              onClickIcon={() => {}}
+              isDisabled={false}
+              label={`${entity} search`}
+              name={`userSearch`}
+              icon={<IoIosSearch />}
+              onChangeStyledInput={(event) =>
+                setSearchQuery(event.target.value)
+              }
+              styledInputValue={searchQuery}
+              styledInputWidth="w-full"
+            />
+          </div>
+        )}
+        {entity === "appointment" && (
+          <div className="w-96">
+            <AppointmentPeriodPicker
+              selectedAppointmentPeriodValue={selectedAppointmentPeriodValue}
+              setSelectedAppointmentPeriodValue={
+                setSelectedAppointmentPeriodValue
+              }
+            />
+          </div>
+        )}
+        {entity === "medicalProcedure" && (
+          <div className="w-full flex items-center justify-center">
+            <div className="w-96 mr-3">
+              <MedicalSpecialityPicker
+                label="select medical speciality"
+                selectedMedicalSpecialityId={selectedMedicalSpecialityId}
+                setSelectedMedicalSpecialityId={setSelectedMedicalSpecialityId}
+                selectedMedicalSpecialityName={selectedMedicalSpecialityName}
+                setSelectedMedicalSpecialityName={
+                  setSelectedMedicalSpecialityName
+                }
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="w-96">
+          <LimitPicker
+            selectedLimit={tableLimit}
+            setSelectedLimit={setTableLimit}
+          />
+        </div>
       </div>
       <div
         ref={componentRef}

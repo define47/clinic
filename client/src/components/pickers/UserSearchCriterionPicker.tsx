@@ -7,6 +7,7 @@ import { StyledInput } from "../design/StyledInput";
 import { RiArrowDownSLine, RiArrowUpSLine, RiFilterLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
 import { VscDash } from "react-icons/vsc";
+import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   entity,
@@ -117,9 +118,9 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   }, [selectedUserSearchCriteriaName]);
 
   return (
-    <div className="flex">
-      <div className="relative z-50" ref={userSearchCriterionPickerRef}>
-        <StyledInput
+    <div className="w-full flex">
+      <div className="w-full relative z-50" ref={userSearchCriterionPickerRef}>
+        {/* <StyledInput
           label={`${entity} Criteria`}
           inputValue={selectedUserSearchCriteriaName}
           name="userCriteria"
@@ -167,6 +168,46 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
           // <RiFilterLine />
           isPicker={true}
           isPickerVisible={isUserSearchCriterionPickerVisible}
+        /> */}
+        <StyledInputV2
+          unfocusedTextColor="text-pink-600"
+          unfocusedBorderColor="border-pink-600"
+          focusedTextColor="focus:text-pink-600"
+          focusedBorderColor="focus:border-pink-600"
+          unfocusedLabelColor="text-pink-600"
+          unfocusedLabelBackgroundColor="bg-white"
+          focusedLabelColor="text-pink-600"
+          focusedLabelBackgroundColor="bg-white"
+          icon={
+            <div
+              className={`transition-transform transform ${
+                !isUserSearchCriterionPickerVisible ? "rotate-0" : "rotate-180"
+              }`}
+            >
+              <RiArrowUpSLine
+                onClick={() => {
+                  setIsUserSearchCriterionPickerVisible(
+                    !isUserSearchCriterionPickerVisible
+                  );
+                }}
+              />
+            </div>
+          }
+          onClickIcon={() => console.log("hello icon")}
+          isDisabled={false}
+          label={`${entity} Criteria`}
+          name={`${entity}Criteria`}
+          onChangeStyledInput={(event) => {
+            setSelectedUserSearchCriteriaName(event.target.value);
+            setIsUserSearchCriterionPickerVisible(true);
+          }}
+          onClickInput={() => {
+            setIsUserSearchCriterionPickerVisible(
+              !isUserSearchCriterionPickerVisible
+            );
+          }}
+          styledInputValue={selectedUserSearchCriteriaName}
+          styledInputWidth="w-full"
         />
         <ul
           className={`absolute w-full bg-white overflow-y-auto h-40 ${

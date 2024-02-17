@@ -8,6 +8,7 @@ import {
 } from "react-icons/ri";
 import { AiFillClockCircle, AiOutlineClockCircle } from "react-icons/ai";
 import { IoCalendarClearSharp } from "react-icons/io5";
+import { StyledInputV2 } from "../design/StyledInputV2";
 
 const getStartOfMonth = (year: number, month: number) => {
   return new Date(Date.UTC(year, month, 1));
@@ -325,9 +326,9 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   }, [selectedYear, selectedMonth, selectedDay, selectedTimeSlot, isDateOnly]);
 
   return (
-    <div className={`relative ${z}`} ref={dateTimePickerRef}>
-      <div className="">
-        <StyledInput
+    <div className={`w-full relative ${z}`} ref={dateTimePickerRef}>
+      <div className="w-full">
+        {/* <StyledInput
           label={label}
           inputValue={
             isDateOnly
@@ -343,19 +344,8 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           }
           name="name"
           onChangeStyledInput={() => {}}
-          // onClickInput={() => {
-          //   setIsDateTimePickerShown(true);
-          // }}
           disabled={true}
           icon={
-            // <RiCalendarLine
-            //   onClick={() => {
-            //     setIsDateTimePickerShown(!isDateTimePickerShown);
-            //     setAreMonthsShown(false);
-            //     setAreYearsShown(false);
-            //     setAreTimeSlotsShown(false);
-            //   }}
-            // />
             <div className="">
               {isDateTimePickerShown ? (
                 <RiCalendarFill
@@ -380,28 +370,48 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
                 />
               )}
             </div>
-            // <div>
-            //   {isDateTimePickerShown ? (
-            //     <RiCalendarFill
-            //       onClick={() => {
-            //         setIsDateTimePickerShown(false);
-            //         setAreMonthsShown(false);
-            //         setAreYearsShown(false);
-            //         setAreTimeSlotsShown(false);
-            //       }}
-            //     />
-            //   ) : (
-            //     <RiCalendarLine
-            //       onClick={() => {
-            //         setIsDateTimePickerShown(true);
-            //         setAreMonthsShown(false);
-            //         setAreYearsShown(false);
-            //         setAreTimeSlotsShown(false);
-            //       }}
-            //     />
-            //   )}
-            // </div>
           }
+        /> */}
+        <StyledInputV2
+          unfocusedTextColor="text-pink-600"
+          unfocusedBorderColor="border-pink-600"
+          focusedTextColor="focus:text-pink-300"
+          focusedBorderColor="focus:border-pink-600"
+          unfocusedLabelColor="text-pink-600"
+          unfocusedLabelBackgroundColor="bg-white"
+          focusedLabelColor="text-pink-300"
+          focusedLabelBackgroundColor="bg-gray-100"
+          icon={isDateTimePickerShown ? <RiCalendarLine /> : <RiCalendarLine />}
+          onClickIcon={() => {
+            if (isDateTimePickerShown) {
+              setIsDateTimePickerShown(false);
+              setAreMonthsShown(false);
+              setAreYearsShown(false);
+              setAreTimeSlotsShown(false);
+            } else {
+              setIsDateTimePickerShown(true);
+              setAreMonthsShown(false);
+              setAreYearsShown(false);
+              setAreTimeSlotsShown(false);
+            }
+          }}
+          isDisabled={true}
+          label={label}
+          name="dateTime"
+          onChangeStyledInput={() => {}}
+          styledInputValue={
+            isDateOnly
+              ? `${selectedEntity.split("-").reverse().join("-")}`
+              : `${selectedEntity
+                  .split("T")[0]
+                  .split("-")
+                  .reverse()
+                  .join("-")} ${
+                  selectedEntity.split("T")[1] &&
+                  selectedEntity.split("T")[1].substring(0, 5)
+                }`
+          }
+          styledInputWidth="w-full"
         />
         <span
           className="absolute top-0 h-10 w-80 bg-transparent cursor-pointer"
@@ -410,7 +420,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
       </div>
       {/* {isDateTimePickerShown && ( */}
       <div
-        className={`h-52 flex flex-col absolute top-10 bg-white rounded-xl w-80 ${
+        className={`w-full h-52 flex flex-col absolute top-10 bg-white rounded-xl ${
           isDateTimePickerShown
             ? "opacity-100 duration-700 shadow-2xl shadow-black/40"
             : "opacity-0 duration-700 pointer-events-none"
@@ -513,7 +523,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           {/* <span>{selectedTimeSlot}</span> */}
         </div>
         <div
-          className={`transition-opacity ease-linear w-80 grid grid-cols-7 gap-1 text-xs items-center justify-center p-1 ${
+          className={`transition-opacity ease-linear w-full grid grid-cols-7 gap-1 text-xs items-center justify-center p-1 ${
             !areMonthsShown && !areYearsShown && !areTimeSlotsShown
               ? "h-full opacity-100 duration-700"
               : "h-0 opacity-0 duration-700 pointer-events-none"
@@ -597,7 +607,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           }`}
         >
           {areMonthsShown && (
-            <div className="w-80 h-full grid grid-cols-4 text-xs">
+            <div className="w-full h-full grid grid-cols-4 text-xs">
               {monthData.months.map((month: string, monthIndex: number) => (
                 <span
                   key={monthIndex}
@@ -626,7 +636,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           }`}
         >
           {areYearsShown && (
-            <div className="w-80 h-full grid grid-cols-3 text-xs">
+            <div className="w-full h-full grid grid-cols-3 text-xs">
               {years.map((year: number) => (
                 <span
                   key={year}
@@ -652,7 +662,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           }`}
         >
           {areTimeSlotsShown && (
-            <div className="w-80 h-full grid grid-cols-3 gap-1 p-1 text-xs">
+            <div className="w-full h-full grid grid-cols-3 gap-1 p-1 text-xs">
               {timeSlots.map((timeSlot: string) => (
                 <span
                   key={timeSlot}

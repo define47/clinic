@@ -8,6 +8,7 @@ import {
 } from "react";
 
 type StyledInputV2Props = {
+  styledInputWidth: string;
   unfocusedTextColor: string;
   unfocusedBorderColor: string;
   focusedTextColor: string;
@@ -20,12 +21,14 @@ type StyledInputV2Props = {
   onClickIcon?: () => void;
   isDisabled: boolean;
   styledInputValue: string;
+  onClickInput?: () => void;
   onChangeStyledInput: ChangeEventHandler<HTMLInputElement>;
   name: string;
   label: string;
 };
 
 export const StyledInputV2: FC<StyledInputV2Props> = ({
+  styledInputWidth,
   unfocusedTextColor,
   unfocusedBorderColor,
   focusedTextColor,
@@ -37,6 +40,7 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
   icon,
   onClickIcon,
   isDisabled,
+  onClickInput,
   styledInputValue,
   onChangeStyledInput,
   name,
@@ -51,20 +55,21 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
   }, [isInputFocused]);
 
   return (
-    <div className="relative flex items-center">
+    <div className={`${styledInputWidth} relative flex items-center`}>
       <input
         //   border-red-600
         // text-red-600
         // focus:border-blue-300
         // focus:text-blue-300
         ref={styledInputRef}
-        className={`w-72 h-10 pl-1 bg-white border-y border-l outline-none rounded-tl-lg rounded-bl-lg transition-all duration-500 ${unfocusedBorderColor} ${focusedBorderColor} ${unfocusedTextColor} ${focusedTextColor} cursor-pointer`}
+        className={`w-full h-10 pl-1 bg-white border-y border-l outline-none rounded-tl-lg rounded-bl-lg transition-all duration-500 ${unfocusedBorderColor} ${focusedBorderColor} ${unfocusedTextColor} ${focusedTextColor} cursor-pointer`}
         value={styledInputValue}
         name={name}
         onChange={(event) => {
           setDoesInputHaveText(event.target.value.trim() !== "");
           onChangeStyledInput(event);
         }}
+        onClick={onClickInput}
         onFocus={() => {
           setIsInputFocused(true);
         }}
@@ -72,13 +77,15 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
           setIsInputFocused(false);
         }}
         disabled={isDisabled}
+        autoComplete="off"
       />
       <label
         onClick={() => {
           styledInputRef.current?.focus();
+          if (typeof onClickInput === "function") onClickInput();
         }}
         className={`absolute  top-2 left-2  transition-all duration-500 ${
-          isInputFocused || doesInputHaveText
+          isInputFocused || doesInputHaveText || styledInputValue
             ? `-translate-y-4 translate-x-1.5 ${focusedLabelBackgroundColor} text-xs`
             : `translate-y-0 translate-x-0 ${unfocusedLabelBackgroundColor}`
         } ${

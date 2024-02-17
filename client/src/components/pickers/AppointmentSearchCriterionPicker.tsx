@@ -7,6 +7,7 @@ import { RiArrowUpSLine } from "react-icons/ri";
 import { StyledInput } from "../design/StyledInput";
 import { TiTick } from "react-icons/ti";
 import { VscDash } from "react-icons/vsc";
+import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const AppointmentSearchCriterionPicker: FC<
   AppointmentSearchCriterionPickerProps
@@ -168,9 +169,12 @@ export const AppointmentSearchCriterionPicker: FC<
   }, [filteredAppointmentSearchCriterion, selectedAppointmentCriteriaName]);
 
   return (
-    <div className="flex">
-      <div className="relative z-50" ref={appointmentSearchCriterionPickerRef}>
-        <StyledInput
+    <div className="w-full flex">
+      <div
+        className="w-full relative z-50"
+        ref={appointmentSearchCriterionPickerRef}
+      >
+        {/* <StyledInput
           label={`Appointment Criteria`}
           inputValue={selectedAppointmentCriteriaName}
           name="userCriteria"
@@ -202,6 +206,48 @@ export const AppointmentSearchCriterionPicker: FC<
           }
           isPicker={true}
           isPickerVisible={isAppointmentSearchCriterionPickerVisible}
+        /> */}
+        <StyledInputV2
+          unfocusedTextColor="text-pink-600"
+          unfocusedBorderColor="border-pink-600"
+          focusedTextColor="focus:text-pink-600"
+          focusedBorderColor="focus:border-pink-600"
+          unfocusedLabelColor="text-pink-600"
+          unfocusedLabelBackgroundColor="bg-white"
+          focusedLabelColor="text-pink-600"
+          focusedLabelBackgroundColor="bg-white"
+          icon={
+            <div
+              className={`transition-transform transform ${
+                !isAppointmentSearchCriterionPickerVisible
+                  ? "rotate-0"
+                  : "rotate-180"
+              }`}
+            >
+              <RiArrowUpSLine
+                onClick={() => {
+                  setIsAppointmentSearchCriterionPickerVisible(
+                    !isAppointmentSearchCriterionPickerVisible
+                  );
+                }}
+              />
+            </div>
+          }
+          onClickIcon={() => console.log("hello icon")}
+          isDisabled={false}
+          label={`Appointment Criteria`}
+          name={`appointmentCriteria`}
+          onChangeStyledInput={(event) => {
+            setSelectedAppointmentCriteriaName(event.target.value);
+            setIsAppointmentSearchCriterionPickerVisible(true);
+          }}
+          onClickInput={() => {
+            setIsAppointmentSearchCriterionPickerVisible(
+              !isAppointmentSearchCriterionPickerVisible
+            );
+          }}
+          styledInputValue={selectedAppointmentCriteriaName}
+          styledInputWidth="w-full"
         />
         <ul
           className={`absolute w-full bg-white overflow-y-auto h-40 ${

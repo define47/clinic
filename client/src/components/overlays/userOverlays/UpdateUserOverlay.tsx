@@ -11,6 +11,8 @@ import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
 import { determineSpecialityOrder } from "../../../utils/utils";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { Tooltip } from "../../design/Tooltip";
+import { StyledInputV2 } from "../../design/StyledInputV2";
+import validator from "validator";
 
 export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   user,
@@ -66,6 +68,11 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
     selectedTertiaryMedicalSpecialityName,
     setSelectedTertiaryMedicalSpecialityName,
   ] = useState<string>("");
+
+  const [isUserForenameValid, setIsUserForenameValid] =
+    useState<boolean>(false);
+  const [isUserSurnameValid, setIsUserSurnameValid] = useState<boolean>(false);
+  const [isUserEmailValid, setIsUserEmailValid] = useState<boolean>(false);
 
   const [userDateOfBirth, setUserDateOfBirth] = useState<string>("");
   const [defaultDate, setDefaultDate] = useState<string>("");
@@ -131,13 +138,28 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
     isUpdateUserConfirmationDialogOverlayVisible,
   ]);
 
+  const regex = /^[a-zA-Z \-]*$/;
   function handleStyledInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
+
+    if (name === "userForename") {
+      setIsUserForenameValid(regex.test(value));
+    } else if (name === "userSurname") {
+      setIsUserSurnameValid(regex.test(value));
+    } else if (name === "userEmail") {
+      setIsUserEmailValid(validator.isEmail(value));
+    }
     setUserToUpdate((prevUserToUpdate) => ({
       ...prevUserToUpdate,
       [name]: value,
     }));
   }
+
+  useEffect(() => {
+    setIsUserForenameValid(regex.test(user.userForename));
+    setIsUserSurnameValid(regex.test(user.userSurname));
+    setIsUserEmailValid(validator.isEmail(user.userEmail));
+  }, [user]);
 
   async function onUpdateUser() {
     try {
@@ -291,29 +313,171 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
             -3
           )} */}
           <span className="flex justify-center mb-8">Update {roleName}</span>
-          <div className="w-full flex justify-between">
-            <div className="flex flex-col space-y-6">
-              <StyledInput
+          <div className="w-full lg:flex lg:justify-between lg:space-x-24">
+            <div className="w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+              {/* <StyledInput
                 label="userForename"
                 name="userForename"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColorUnfocused="bg-white"
                 inputValue={userToUpdate.userForename}
                 // inputValue=""
+              /> */}
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  userToUpdate.userForename.length === 0
+                    ? "text-pink-700"
+                    : isUserForenameValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedBorderColor={
+                  userToUpdate.userForename.length === 0
+                    ? "border-pink-700"
+                    : isUserForenameValid
+                    ? "border-green-700"
+                    : "border-red-700"
+                }
+                focusedTextColor={
+                  userToUpdate.userForename.length === 0
+                    ? "focus:text-pink-500"
+                    : isUserForenameValid
+                    ? "focus:text-green-500"
+                    : "focus:text-red-500"
+                }
+                focusedBorderColor={
+                  userToUpdate.userForename.length === 0
+                    ? "focus:border-pink-500"
+                    : isUserForenameValid
+                    ? "focus:border-green-500"
+                    : "focus:border-red-500"
+                }
+                unfocusedLabelColor={
+                  userToUpdate.userForename.length === 0
+                    ? "text-pink-700"
+                    : isUserForenameValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  userToUpdate.userForename.length === 0
+                    ? "text-pink-500"
+                    : isUserForenameValid
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
+                name="userForename"
+                styledInputValue={userToUpdate.userForename}
+                onChangeStyledInput={handleStyledInputChange}
+                label="Forename"
               />
-              <StyledInput
-                label="userSurname"
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  userToUpdate.userSurname.length === 0
+                    ? "text-pink-700"
+                    : isUserSurnameValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedBorderColor={
+                  userToUpdate.userSurname.length === 0
+                    ? "border-pink-700"
+                    : isUserSurnameValid
+                    ? "border-green-700"
+                    : "border-red-700"
+                }
+                focusedTextColor={
+                  userToUpdate.userSurname.length === 0
+                    ? "focus:text-pink-500"
+                    : isUserSurnameValid
+                    ? "focus:text-green-500"
+                    : "focus:text-red-500"
+                }
+                focusedBorderColor={
+                  userToUpdate.userSurname.length === 0
+                    ? "focus:border-pink-500"
+                    : isUserSurnameValid
+                    ? "focus:border-green-500"
+                    : "focus:border-red-500"
+                }
+                unfocusedLabelColor={
+                  userToUpdate.userSurname.length === 0
+                    ? "text-pink-700"
+                    : isUserSurnameValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  userToUpdate.userSurname.length === 0
+                    ? "text-pink-500"
+                    : isUserSurnameValid
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
                 name="userSurname"
+                styledInputValue={userToUpdate.userSurname}
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColorUnfocused="bg-white"
-                inputValue={userToUpdate.userSurname}
+                label="Surname"
               />
-              <StyledInput
-                label="userEmail"
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  userToUpdate.userEmail.length === 0
+                    ? "text-pink-700"
+                    : isUserEmailValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedBorderColor={
+                  userToUpdate.userEmail.length === 0
+                    ? "border-pink-700"
+                    : isUserEmailValid
+                    ? "border-green-700"
+                    : "border-red-700"
+                }
+                focusedTextColor={
+                  userToUpdate.userEmail.length === 0
+                    ? "focus:text-pink-500"
+                    : isUserEmailValid
+                    ? "focus:text-green-500"
+                    : "focus:text-red-500"
+                }
+                focusedBorderColor={
+                  userToUpdate.userEmail.length === 0
+                    ? "focus:border-pink-500"
+                    : isUserEmailValid
+                    ? "focus:border-green-500"
+                    : "focus:border-red-500"
+                }
+                unfocusedLabelColor={
+                  userToUpdate.userEmail.length === 0
+                    ? "text-pink-700"
+                    : isUserEmailValid
+                    ? "text-green-700"
+                    : "text-red-700"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  userToUpdate.userEmail.length === 0
+                    ? "text-pink-500"
+                    : isUserEmailValid
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
                 name="userEmail"
+                styledInputValue={userToUpdate.userEmail}
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColorUnfocused="bg-white"
-                inputValue={userToUpdate.userEmail}
+                label="Email"
               />
             </div>
             <div className="flex flex-col space-y-6">

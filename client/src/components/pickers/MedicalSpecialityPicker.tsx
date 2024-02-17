@@ -6,6 +6,7 @@ import { StyledInput } from "../design/StyledInput";
 import { RiArrowUpSLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
 import { VscDash } from "react-icons/vsc";
+import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
   label,
@@ -188,9 +189,9 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
   // }, []);
 
   return (
-    <div className="flex">
+    <div className="w-full flex">
       <div
-        className={`relative ${
+        className={`w-full relative ${
           label.includes("primary")
             ? "z-50"
             : label.includes("secondary")
@@ -201,7 +202,7 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
         }`}
         ref={medicalSpecialityPickerRef}
       >
-        <StyledInput
+        {/* <StyledInput
           label={label}
           inputValue={selectedMedicalSpecialityName}
           name="medicalSpeciality"
@@ -233,6 +234,47 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
           isPicker={true}
           isPickerVisible={isMedicalSpecialityPickerVisible}
           labelBackgroundColor="bg-white"
+        /> */}
+
+        <StyledInputV2
+          unfocusedTextColor="text-pink-600"
+          unfocusedBorderColor="border-pink-600"
+          focusedTextColor="focus:text-pink-600"
+          focusedBorderColor="focus:border-pink-600"
+          unfocusedLabelColor="text-pink-600"
+          unfocusedLabelBackgroundColor="bg-white"
+          focusedLabelColor="text-pink-600"
+          focusedLabelBackgroundColor="bg-white"
+          icon={
+            <div
+              className={`transition-transform transform ${
+                !isMedicalSpecialityPickerVisible ? "rotate-0" : "rotate-180"
+              }`}
+            >
+              <RiArrowUpSLine
+                onClick={() => {
+                  setIsMedicalSpecialityPickerVisible(
+                    !isMedicalSpecialityPickerVisible
+                  );
+                }}
+              />
+            </div>
+          }
+          onClickIcon={() => {}}
+          isDisabled={false}
+          label={`Medical Procedure Criteria`}
+          name={`medicalProcedureCriteria`}
+          onChangeStyledInput={(event) => {
+            setSelectedMedicalSpecialityName(event.target.value);
+            setIsMedicalSpecialityPickerVisible(true);
+          }}
+          onClickInput={() => {
+            setIsMedicalSpecialityPickerVisible(
+              !isMedicalSpecialityPickerVisible
+            );
+          }}
+          styledInputValue={selectedMedicalSpecialityName}
+          styledInputWidth="w-full"
         />
         <ul
           className={`absolute w-full bg-white overflow-y-auto h-40 ${
