@@ -115,7 +115,6 @@ export const StyledInput: FC<StyledInputProps> = ({
         <input type="text" required />
         <label htmlFor="">username</label>
       </div> */}
-
       <div className="relative cursor-pointer">
         <input
           ref={styledInputRef}
@@ -126,7 +125,7 @@ export const StyledInput: FC<StyledInputProps> = ({
             textColorUnfocused ? textColorUnfocused : "text-black"
           }  ${
             textColorFocused ? textColorFocused : "text-black"
-          }  p-2 bg-transparent border-y border-l ${
+          }  p-2 bg-transparent  border-y border-l ${
             borderColorUnfocused ? borderColorUnfocused : "border-black"
           } ${
             borderColorFocused ? borderColorFocused : "focus:border-gray-300"
@@ -192,18 +191,17 @@ export const StyledInput: FC<StyledInputProps> = ({
           {icon}
         </span> */}
       </div>
-
+      {/* ${
+          focused && `${borderColorFocused?.split(":")[1]}`
+        } */}
       <div
         className={`flex items-center cursor-pointer ${
           textColorUnfocused ? textColorUnfocused : "text-black"
-        }  ${
-          textColorFocused ? textColorFocused : "text-black"
-        }  p-2 bg-transparent border-y border-r ${
+        }  ${textColorFocused ? textColorFocused : "text-black"} ${
           borderColorUnfocused ? borderColorUnfocused : "border-black"
-        } ${
-          borderColorFocused ? borderColorFocused : "focus:border-gray-300"
-        }  outline-none rounded-tr-lg rounded-br-lg transition-all duration-200 ${
-          focused || hasText || inputValue ? "border-gray-300" : ""
+        }  p-2 bg-transparent border-y border-r    outline-none rounded-tr-lg rounded-br-lg transition-all duration-200 ${
+          (focused || hasText || inputValue) &&
+          `${borderColorFocused?.split(":")[1]}`
         }`}
         onClick={() => {
           if (!disabled) {

@@ -9,6 +9,7 @@ import { usersPath } from "../../../utils/dotenv";
 import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { StyledEntry } from "../../design/StyledEntry";
+import validator from "validator";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -72,6 +73,11 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
     setSelectedTertiaryMedicalSpecialityName,
   ] = useState<string>("");
 
+  const [isUserForenameValid, setIsUserForenameValid] =
+    useState<boolean>(false);
+  const [isUserSurnameValid, setIsUserSurnameValid] = useState<boolean>(false);
+  const [isUserEmailValid, setIsUserEmailValid] = useState<boolean>(false);
+
   useEffect(() => {
     function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -100,11 +106,33 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
 
   function handleStyledInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
+
+    let regex;
+    if (name === "userForename") {
+      regex = /^[a-zA-Z \-]*$/;
+      setIsUserForenameValid(regex.test(value));
+      // if (regex.test(value))
+      //   setUserToCreate((prevUserToCreate) => ({
+      //     ...prevUserToCreate,
+      //     userForename: value,
+      //   }));
+    } else if (name === "userSurname") {
+      regex = /^[a-zA-Z \-]*$/;
+      setIsUserSurnameValid(regex.test(value));
+    } else if (name === "userEmail") {
+      setIsUserEmailValid(validator.isEmail(value));
+    }
+
     setUserToCreate((prevUserToCreate) => ({
       ...prevUserToCreate,
       [name]: value,
     }));
   }
+
+  useEffect(() => {
+    console.log("isUserForenameValid", isUserForenameValid);
+    console.log("isUserEmailValid", isUserEmailValid);
+  }, [isUserEmailValid, isUserForenameValid]);
 
   async function onCreateUser() {
     try {
@@ -174,28 +202,115 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
           <div className="w-full lg:flex lg:justify-between">
             <div className="flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
               <StyledInput
+                styledInputWidth="w-80"
                 label="userForename"
                 name="userForename"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColorUnfocused="bg-white"
                 labelBackgroundColorFocused="bg-white"
                 defaultValue={`${roleName}FN`}
-                textColorUnfocused="text-emerald-600"
-                textColorFocused="focus:text-green-500"
-                borderColorUnfocused="border-green-500"
-                borderColorFocused="focus:border-green500"
-                labelUnfocused="text-green-500"
-                labelFocused="text-green-500"
+                textColorUnfocused={
+                  userToCreate.userForename.length === 0
+                    ? "text-pink-600"
+                    : isUserForenameValid
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+                textColorFocused={
+                  userToCreate.userForename.length === 0
+                    ? "focus:text-pink-600"
+                    : isUserForenameValid
+                    ? "focus:text-green-600"
+                    : "focus:text-red-600"
+                }
+                borderColorUnfocused={
+                  userToCreate.userForename.length === 0
+                    ? "border-pink-600"
+                    : isUserForenameValid
+                    ? "border-green-600"
+                    : "border-red-600"
+                }
+                borderColorFocused={
+                  userToCreate.userForename.length === 0
+                    ? "focus:border-pink-600"
+                    : isUserForenameValid
+                    ? "focus:border-green-600"
+                    : "focus:border-red-600"
+                }
+                labelUnfocused={
+                  userToCreate.userForename.length === 0
+                    ? "text-pink-600"
+                    : isUserForenameValid
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+                labelFocused={
+                  userToCreate.userForename.length === 0
+                    ? "text-pink-600"
+                    : isUserForenameValid
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
               />
               <StyledInput
+                styledInputWidth="w-80"
                 label="userSurname"
                 name="userSurname"
                 onChangeStyledInput={handleStyledInputChange}
                 labelBackgroundColorUnfocused="bg-white"
                 labelBackgroundColorFocused="bg-white"
                 defaultValue={`${roleName}LN`}
+                // textColorUnfocused="text-green-600"
+                // textColorFocused="focus:text-green-600"
+                // borderColorUnfocused="border-green-600"
+                // borderColorFocused="focus:border-green-600"
+                // labelUnfocused="text-green-600"
+                // labelFocused="text-green-600"
+                textColorUnfocused={
+                  userToCreate.userSurname.length === 0
+                    ? "text-pink-600"
+                    : isUserSurnameValid
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+                textColorFocused={
+                  userToCreate.userSurname.length === 0
+                    ? "focus:text-pink-600"
+                    : isUserSurnameValid
+                    ? "focus:text-green-600"
+                    : "focus:text-red-600"
+                }
+                borderColorUnfocused={
+                  userToCreate.userSurname.length === 0
+                    ? "border-pink-600"
+                    : isUserSurnameValid
+                    ? "border-green-600"
+                    : "border-red-600"
+                }
+                borderColorFocused={
+                  userToCreate.userSurname.length === 0
+                    ? "focus:border-pink-300"
+                    : isUserSurnameValid
+                    ? "focus:border-green-300"
+                    : "focus:border-red-300"
+                }
+                labelUnfocused={
+                  userToCreate.userSurname.length === 0
+                    ? "text-pink-600"
+                    : isUserSurnameValid
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+                labelFocused={
+                  userToCreate.userSurname.length === 0
+                    ? "text-pink-600"
+                    : isUserSurnameValid
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
               />
               <StyledInput
+                styledInputWidth="w-80"
                 label="userEmail"
                 name="userEmail"
                 onChangeStyledInput={handleStyledInputChange}

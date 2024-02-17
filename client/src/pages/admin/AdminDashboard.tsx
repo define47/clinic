@@ -13,6 +13,8 @@ import { MedicalProcedurePicker } from "../../components/pickers/MedicalProcedur
 import { PhoneExtensionPicker } from "../../components/pickers/PhoneExtensionPicker";
 import { GeneralDataCard } from "../../components/design/card/GeneralDataCard";
 import { UserPicker } from "../../components/pickers/UserPicker";
+import { StyledInputV2 } from "../../components/design/StyledInputV2";
+import { RiCalendarFill } from "react-icons/ri";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -81,7 +83,8 @@ export const AdminDashboard: FC = () => {
       {/* admin dashboard <Overlay /> */}
       {/* <MedicalProcedurePicker /> */}
       {/* <DragAndDrop /> */}
-      <GeneralDataCard entity="admin" />
+      <StyledInputV2 icon={<RiCalendarFill />} />
+      {/* <GeneralDataCard entity="admin" /> */}
       {/* <PhoneExtensionPicker defaultPhoneExtension="+591" /> */}
       <div className="w-full h-full space-y-10">
         {/* {JSON.stringify(authenticatedUserDataState)} */}
