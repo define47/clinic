@@ -660,7 +660,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col">
-                <span className="w-full flex items-center justify-center text-xl font-bold">
+                <span className="w-full flex text-center items-center justify-center text-xl font-bold mb-5">
                   Are You Sure You Want To Create The {roleName}?
                 </span>
                 <div className="w-full lg:flex lg:justify-between lg:space-x-24">
@@ -670,7 +670,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                       entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userForename"
-                      confirmationDialogEntryBodyWidth="w-9/12"
+                      confirmationDialogEntryBodyWidth="w-8/12"
                       confirmationDialogEntryBody={userToCreate.userForename}
                     />
                     <StyledEntry
@@ -678,7 +678,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                       entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userSurname"
-                      confirmationDialogEntryBodyWidth="w-9/12"
+                      confirmationDialogEntryBodyWidth="w-8/12"
                       confirmationDialogEntryBody={userToCreate.userSurname}
                     />
                     <StyledEntry
@@ -686,7 +686,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                       entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userEmail"
-                      confirmationDialogEntryBodyWidth="w-9/12"
+                      confirmationDialogEntryBodyWidth="w-8/12"
                       confirmationDialogEntryBody={userToCreate.userEmail}
                     />
                   </div>
@@ -696,7 +696,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                       entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="Phone Number"
-                      confirmationDialogEntryBodyWidth="w-9/12"
+                      confirmationDialogEntryBodyWidth="w-8/12"
                       confirmationDialogEntryBody={userToCreate.userPhoneNumber}
                     />
                     <StyledEntry
@@ -704,7 +704,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                       entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userGender"
-                      confirmationDialogEntryBodyWidth="w-9/12"
+                      confirmationDialogEntryBodyWidth="w-8/12"
                       confirmationDialogEntryBody={userToCreate.userGender}
                     />
                     <StyledEntry
@@ -712,7 +712,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                       entryWidth="w-11/12"
                       confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userEmail"
-                      confirmationDialogEntryBodyWidth="w-9/12"
+                      confirmationDialogEntryBodyWidth="w-8/12"
                       confirmationDialogEntryBody={userToCreate.userDateOfBirth
                         .split("-")
                         .reverse()
@@ -731,7 +731,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                   </div>
                 </div>
               </div>
-              <div className="w-full flex justify-between mt-10">
+              <div className="w-full flex justify-between mt-5">
                 <StyledRippleButton
                   label="Create"
                   type="yes"

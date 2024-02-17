@@ -55,6 +55,7 @@ export const GenderPicker: FC<GenderPickerProps> = ({
   function handleGenderClick(gender: Gender) {
     setSelectedGenderValue(gender.genderValue);
     setSelectedGenderName(gender.genderName);
+    setIsGenderPickerVisible(false);
   }
 
   const foundGender = genders.find(

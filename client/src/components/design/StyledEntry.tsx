@@ -18,7 +18,7 @@ export const StyledEntry: FC<ConfirmationDialogEntryProps> = ({
 }) => {
   return (
     <div
-      className={`${entryHeight} ${entryWidth} flex border dark:border-darkMode-borderColor text-xs`}
+      className={`${entryHeight} ${entryWidth} mb-3 flex border dark:border-darkMode-borderColor text-xs`}
     >
       <div
         className={`${confirmationDialogEntryTitleWidth} h-full border bg-gray-300 dark:bg-darkMode-oddRowTable dark:text-gray-500 dark:border-darkMode-borderColor font-bold p-2 text-xs`}
