@@ -17,6 +17,7 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
   selectedPrimaryMedicalSpecialityId,
   selectedSecondaryMedicalSpecialityId,
   selectedTertiaryMedicalSpecialityId,
+  z,
 }) => {
   const [medicalSpecialities, setMedicalSpecialities] = useState<
     MedicalSpeciality[]
@@ -190,18 +191,7 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
 
   return (
     <div className="w-full flex">
-      <div
-        className={`w-full relative ${
-          label.includes("primary")
-            ? "z-40"
-            : label.includes("secondary")
-            ? "z-30"
-            : label.includes("tertiary")
-            ? "z-20"
-            : ""
-        }`}
-        ref={medicalSpecialityPickerRef}
-      >
+      <div className={`w-full relative ${z}`} ref={medicalSpecialityPickerRef}>
         {/* <StyledInput
           label={label}
           inputValue={selectedMedicalSpecialityName}
@@ -241,6 +231,7 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
           unfocusedBorderColor="border-pink-600"
           focusedTextColor="focus:text-pink-600"
           focusedBorderColor="focus:border-pink-600"
+          focusedBorderColorIconArea="border-pink-600"
           unfocusedLabelColor="text-pink-600"
           unfocusedLabelBackgroundColor="bg-white"
           focusedLabelColor="text-pink-600"

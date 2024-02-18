@@ -81,32 +81,56 @@ export const AppointmentSearchCriterionPicker: FC<
     setAppointmentSearchCriterion([
       {
         table: "doctor",
-        appointmentSearchCriteriaName: "doctor forename",
+        appointmentSearchCriteriaName: getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionAppointment",
+          0
+        ),
         appointmentSearchCriteriaValue: "userForename",
       },
       {
         table: "doctor",
-        appointmentSearchCriteriaName: "doctor surname",
+        appointmentSearchCriteriaName: getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionAppointment",
+          1
+        ),
         appointmentSearchCriteriaValue: "userSurname",
       },
       {
         table: "doctor",
-        appointmentSearchCriteriaName: "doctor forename surname",
+        appointmentSearchCriteriaName: getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionAppointment",
+          2
+        ),
         appointmentSearchCriteriaValue: "userForename,userSurname",
       },
       {
         table: "patient",
-        appointmentSearchCriteriaName: "patient forename",
+        appointmentSearchCriteriaName: getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionAppointment",
+          3
+        ),
         appointmentSearchCriteriaValue: "userForename",
       },
       {
         table: "patient",
-        appointmentSearchCriteriaName: "patient surname",
+        appointmentSearchCriteriaName: getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionAppointment",
+          4
+        ),
         appointmentSearchCriteriaValue: "userSurname",
       },
       {
         table: "patient",
-        appointmentSearchCriteriaName: "patient forename surname",
+        appointmentSearchCriteriaName: getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionAppointment",
+          5
+        ),
         appointmentSearchCriteriaValue: "userForename,userSurname",
       },
     ]);
@@ -217,6 +241,7 @@ export const AppointmentSearchCriterionPicker: FC<
           unfocusedBorderColor="border-pink-600"
           focusedTextColor="focus:text-pink-600"
           focusedBorderColor="focus:border-pink-600"
+          focusedBorderColorIconArea="border-pink-600"
           unfocusedLabelColor="text-pink-600"
           unfocusedLabelBackgroundColor="bg-white"
           focusedLabelColor="text-pink-600"

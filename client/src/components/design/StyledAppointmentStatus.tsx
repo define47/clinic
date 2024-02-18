@@ -1,5 +1,5 @@
 import { FC } from "react";
 
-export const UserDropdown: FC = () => {
+export const StyledAppointmentStatus: FC = () => {
   return <div></div>;
 };

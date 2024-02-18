@@ -1,4 +1,11 @@
-import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Appointment, UpdateAppointmentOverlayProps } from "../../../types";
 import Overlay from "../base/Overlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
@@ -12,12 +19,18 @@ import axios from "axios";
 import { appointmentsPath } from "../../../utils/dotenv";
 import { Tooltip } from "../../design/Tooltip";
 import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
+import { getItemByLanguageAndCollection } from "../../../utils/clientLanguages";
+import { AuthenticatedUserDataContext } from "../../../contexts/UserContext";
+import { StyledInputV2 } from "../../design/StyledInputV2";
 
 export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
   appointment,
   doctorData,
   patientData,
 }) => {
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
   const [
     isUpdateAppointmentOverlayVisible,
     setIsUpdateAppointmentOverlayVisible,
@@ -145,7 +158,11 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
             <div className="flex flex-col space-y-6">
               <UserPicker
                 shouldDataBeFetched={false}
-                label="select doctor"
+                label={getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "appointmentTableColumnNames",
+                  0
+                )}
                 roleName="doctor"
                 selectedUserId={selectedDoctorId}
                 setSelectedUserId={setSelectedDoctorId}
@@ -156,7 +173,11 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
               />
               <UserPicker
                 shouldDataBeFetched={false}
-                label="select patient"
+                label={getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "appointmentTableColumnNames",
+                  1
+                )}
                 roleName="patient"
                 selectedUserId={selectedPatientId}
                 setSelectedUserId={setSelectedPatientId}
@@ -165,12 +186,54 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
                 disabled
                 z="z-40"
               />
-              <StyledInput
-                label="appointment reason"
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  appointmentToUpdate.appointmentReason.length > 0
+                    ? "text-green-700"
+                    : "text-black"
+                }
+                unfocusedBorderColor={
+                  appointmentToUpdate.appointmentReason.length > 0
+                    ? "border-green-700"
+                    : "border-black"
+                }
+                focusedTextColor={
+                  appointmentToUpdate.appointmentReason.length > 0
+                    ? "focus:text-green-500"
+                    : "focus:text-pink-500"
+                }
+                focusedBorderColor={
+                  appointmentToUpdate.appointmentReason.length > 0
+                    ? "focus:border-green-500"
+                    : "focus:border-pink-500"
+                }
+                focusedBorderColorIconArea={
+                  appointmentToUpdate.appointmentReason.length > 0
+                    ? "border-green-500"
+                    : "border-pink-500"
+                }
+                unfocusedLabelColor={
+                  appointmentToUpdate.appointmentReason.length > 0
+                    ? "text-green-700"
+                    : "text-black"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  appointmentToUpdate.appointmentReason.length > 0
+                    ? "text-green-500"
+                    : "text-pink-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
                 name="appointmentReason"
+                styledInputValue={appointmentToUpdate.appointmentReason}
                 onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
-                inputValue={appointmentToUpdate.appointmentReason}
+                label={getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "appointmentTableColumnNames",
+                  2
+                )}
               />
             </div>
             <div className="flex flex-col space-y-6">
@@ -195,13 +258,66 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
                 }
                 z="z-40"
               />
-              <StyledInput
-                label="appointment cancellation reason"
-                name="appointmentCancellationReason"
-                onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColor="bg-white"
-                inputValue={appointmentToUpdate.appointmentCancellationReason}
-              />
+              {selectedAppointmentStatusValue === "canceled by patient" && (
+                <StyledInputV2
+                  styledInputWidth="w-full"
+                  unfocusedTextColor={
+                    appointmentToUpdate.appointmentCancellationReason &&
+                    appointmentToUpdate.appointmentCancellationReason.length > 0
+                      ? "text-green-700"
+                      : "text-black"
+                  }
+                  unfocusedBorderColor={
+                    appointmentToUpdate.appointmentCancellationReason &&
+                    appointmentToUpdate.appointmentCancellationReason.length > 0
+                      ? "border-green-700"
+                      : "border-black"
+                  }
+                  focusedTextColor={
+                    appointmentToUpdate.appointmentCancellationReason &&
+                    appointmentToUpdate.appointmentCancellationReason.length > 0
+                      ? "focus:text-green-500"
+                      : "focus:text-pink-500"
+                  }
+                  focusedBorderColor={
+                    appointmentToUpdate.appointmentCancellationReason &&
+                    appointmentToUpdate.appointmentCancellationReason.length > 0
+                      ? "focus:border-green-500"
+                      : "focus:border-pink-500"
+                  }
+                  focusedBorderColorIconArea={
+                    appointmentToUpdate.appointmentCancellationReason &&
+                    appointmentToUpdate.appointmentCancellationReason.length > 0
+                      ? "border-green-500"
+                      : "border-pink-500"
+                  }
+                  unfocusedLabelColor={
+                    appointmentToUpdate.appointmentCancellationReason &&
+                    appointmentToUpdate.appointmentCancellationReason.length > 0
+                      ? "text-green-700"
+                      : "text-black"
+                  }
+                  unfocusedLabelBackgroundColor="bg-white"
+                  focusedLabelColor={
+                    appointmentToUpdate.appointmentCancellationReason &&
+                    appointmentToUpdate.appointmentCancellationReason.length > 0
+                      ? "text-green-500"
+                      : "text-pink-500"
+                  }
+                  focusedLabelBackgroundColor="bg-white"
+                  isDisabled={false}
+                  name="appointmentCancellationReason"
+                  styledInputValue={
+                    appointmentToUpdate.appointmentCancellationReason!
+                  }
+                  onChangeStyledInput={handleStyledInputChange}
+                  label={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "appointmentTableColumnNames",
+                    5
+                  )}
+                />
+              )}
             </div>
           </div>
 

@@ -234,6 +234,7 @@ export const UserPicker: FC<UserPickerProps> = ({
           unfocusedBorderColor="border-pink-600"
           focusedTextColor="focus:text-pink-600"
           focusedBorderColor="focus:border-pink-600"
+          focusedBorderColorIconArea="border-pink-600"
           unfocusedLabelColor="text-pink-600"
           unfocusedLabelBackgroundColor="bg-white"
           focusedLabelColor="text-pink-600"
@@ -316,7 +317,7 @@ export const UserPicker: FC<UserPickerProps> = ({
                       <VscDash />
                       <span>{filteredUser.userForename}</span>&nbsp;
                       <span>{filteredUser.userSurname}</span>&nbsp;
-                      <span>{filteredUser.userId}</span>&nbsp;
+                      {/* <span>{filteredUser.userId}</span>&nbsp; */}
                       {roleName === "doctor" &&
                         "(" + filteredUser.medicalSpecialities + ")"}
                     </div>

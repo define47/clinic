@@ -35,11 +35,15 @@ export const ThemeSwitcher: FC = () => {
       const response = await axios.put(
         userPreferencesPath,
         {
-          languageId: authenticatedUserDataState.languageId,
+          languageId: authenticatedUserDataState.language.languageId,
+          languageCode: authenticatedUserDataState.language.languageCode,
+          languageName: authenticatedUserDataState.language.languageName,
           isDarkModeOn: false,
         },
         { withCredentials: true }
       );
+
+      console.log("Pressed light");
     } catch (error) {
       console.log(error);
     }
@@ -51,11 +55,14 @@ export const ThemeSwitcher: FC = () => {
       const response = await axios.put(
         userPreferencesPath,
         {
-          languageId: authenticatedUserDataState.languageId,
+          languageId: authenticatedUserDataState.language.languageId,
+          languageCode: authenticatedUserDataState.language.languageCode,
+          languageName: authenticatedUserDataState.language.languageName,
           isDarkModeOn: true,
         },
         { withCredentials: true }
       );
+      console.log("Pressed Dark");
     } catch (error) {
       console.log(error);
     }

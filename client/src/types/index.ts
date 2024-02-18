@@ -153,6 +153,7 @@ export type MedicalSpecialityPickerProps = {
   selectedPrimaryMedicalSpecialityId?: string;
   selectedSecondaryMedicalSpecialityId?: string;
   selectedTertiaryMedicalSpecialityId?: string;
+  z: string;
 };
 
 export type AppointmentSearchCriterionPickerProps = {

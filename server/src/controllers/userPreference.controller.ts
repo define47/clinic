@@ -84,9 +84,9 @@ export class UserPreferencesController {
           medicalSpecialities: currentSessionValue.medicalSpecialities,
         }),
         language: {
-          languageId: currentSessionValue.languageId,
-          languageCode: newLanguage?.languageCode,
-          languageName: newLanguage?.languageName,
+          languageId: body.languageId,
+          languageCode: body.languageCode,
+          languageName: body.languageName,
         },
         isDarkModeOn: body.isDarkModeOn,
       };
@@ -110,7 +110,7 @@ export class UserPreferencesController {
       });
 
       await redis.sessionRedis.del(`sessionId:${request.cookieData.value}`);
-      reply.code(200).send({});
+      reply.code(200).send({ success: true });
     } catch (error) {
       console.log(error);
     }

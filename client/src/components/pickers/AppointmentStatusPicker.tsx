@@ -161,6 +161,7 @@ export const AppointmentStatusPicker: FC<AppointmentStatusPickerProps> = ({
           unfocusedBorderColor="border-pink-600"
           focusedTextColor="focus:text-pink-600"
           focusedBorderColor="focus:border-pink-600"
+          focusedBorderColorIconArea="border-pink-600"
           unfocusedLabelColor="text-pink-600"
           unfocusedLabelBackgroundColor="bg-white"
           focusedLabelColor="text-pink-600"

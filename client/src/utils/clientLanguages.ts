@@ -9,6 +9,10 @@ type ClientLanguageCollection = {
   searchCriterion: string[];
   searchFieldNames: string[];
   actions: string[];
+  searchCriterionUser: string[];
+  searchCriterionAppointment: string[];
+  medicalSpecialityPickerLabels: string[];
+  pageNavigationButtonNames: string[];
 };
 type ClientLanguage = {
   [languageCode: string]: ClientLanguageCollection;
@@ -83,12 +87,41 @@ export const clientLanguages: ClientLanguage = {
       "Criteriu Căutare Asistenti",
       "Criteriu Căutare Receptionisti",
     ],
-    searchFieldNames: [],
+    searchFieldNames: [
+      "Cauta Programare",
+      "Cauta Pacient",
+      "Cauta Doctor",
+      "Cauta Specialitate Medicala",
+      "Cauta Procedura Medicala",
+      "Cauta Asistent",
+      "Cauta Receptionist",
+    ],
 
     actions: ["Creează", "Modifică", "Șterge"],
+    searchCriterionUser: [
+      "Prenume",
+      "Nume Familie",
+      "Adresa Email",
+      "Numar Telefor",
+    ],
+    searchCriterionAppointment: [
+      "Prenume Doctor",
+      "Nume Familie Doctor",
+      "Prenume si Nume Familie Doctor",
+      "Prenume Pacient",
+      "Nume Familie Pacient",
+      "Prenume si Nume Familie Pacient",
+    ],
+    medicalSpecialityPickerLabels: [
+      "Selectează Specialitate Medicală",
+      "Selectează Specialitate Medicală Primară",
+      "Selectează Specialitate Medicală Secundară",
+      "Selectează Specialitate Medicală Terțiară",
+    ],
+    pageNavigationButtonNames: ["Pagina Anterioară", "Pagina Următoare"],
   },
 
-  en: {
+  "en-GB": {
     sidebarMenuAdmin: [
       "Dashboard",
       "Appointments",
@@ -151,8 +184,37 @@ export const clientLanguages: ClientLanguage = {
       "Search Criteria Nurses",
       "Search Criteria Receptionists",
     ],
-    searchFieldNames: [],
+    searchFieldNames: [
+      "Search Appointment",
+      "Search Patient",
+      "Search Doctor",
+      "Search Medical Speciality",
+      "Search Medical Procedure",
+      "Search Nurse",
+      "Search Receptionist",
+    ],
     actions: ["Create", "Update", "Delete"],
+    searchCriterionUser: [
+      "Forename",
+      "Surname",
+      "Email Address",
+      "Phone Number",
+    ],
+    searchCriterionAppointment: [
+      "Doctor Forename",
+      "Doctor Surname",
+      "Doctor Forename and Surname",
+      "Patient Forename",
+      "Patient Surname",
+      "Patient Forename and Surname",
+    ],
+    medicalSpecialityPickerLabels: [
+      "Select Medical Speciality",
+      "Select Primary Medical Speciality",
+      "Select Secondary Medical Speciality",
+      "Select Tertiary Medical Speciality",
+    ],
+    pageNavigationButtonNames: ["Previous Page", "Next Page"],
   },
 };
 
@@ -167,6 +229,27 @@ export function getItemByLanguageAndCollection(
   const item = items[itemIndex];
   console.log(item);
   return item;
+}
+
+export function getEntityNamesByLanguage(
+  selectedLanguageCode: string,
+  entityName: string
+) {
+  const entityNamesByLanguage =
+    clientLanguages[selectedLanguageCode].entityNames;
+
+  if (entityNamesByLanguage) {
+    const entityNameIndex = [
+      "admin",
+      "doctor",
+      "patient",
+      "receptionist",
+      "medical Speciality",
+      "medical Procedure",
+      "nurse",
+    ].indexOf(entityName);
+    if (entityNameIndex !== -1) return entityNamesByLanguage[entityNameIndex];
+  }
 }
 
 export function getAppointmentTableColumnNamesByLanguage(

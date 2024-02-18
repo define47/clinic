@@ -17,6 +17,7 @@ type StyledInputV2Props = {
   unfocusedLabelBackgroundColor: string;
   focusedLabelBackgroundColor: string;
   focusedLabelColor: string;
+  focusedBorderColorIconArea: string;
   icon?: ReactNode;
   onClickIcon?: () => void;
   isDisabled: boolean;
@@ -36,6 +37,7 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
   unfocusedLabelColor,
   focusedLabelBackgroundColor,
   unfocusedLabelBackgroundColor,
+  focusedBorderColorIconArea,
   focusedLabelColor,
   icon,
   onClickIcon,
@@ -99,7 +101,7 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
       <div
         className={`h-10 w-5 pr-1 bg-white flex items-center justify-center border-y border-r rounded-tr-lg rounded-br-lg transition-all duration-500 cursor-pointer ${
           isInputFocused
-            ? `${focusedBorderColor.split(":")[1]}`
+            ? `${focusedBorderColorIconArea}`
             : `${unfocusedBorderColor}`
         }`}
         onClick={() => {

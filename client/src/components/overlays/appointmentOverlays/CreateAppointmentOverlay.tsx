@@ -25,6 +25,8 @@ import {
 import axios from "axios";
 import { SocketNotificationDataContext } from "../../../contexts/SocketNotificationContext";
 import { StyledInputV2 } from "../../design/StyledInputV2";
+import { getItemByLanguageAndCollection } from "../../../utils/clientLanguages";
+import { AuthenticatedUserDataContext } from "../../../contexts/UserContext";
 
 export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   isCreateAppointmentOverlayVisible,
@@ -33,6 +35,9 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   timetableDate,
   timetableTime,
 }) => {
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
   const socketContext = useContext(SocketNotificationDataContext);
   const { socketNotificationDataState, socketNotificationDataSetState } =
     socketContext!;
@@ -257,83 +262,98 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
           }`}
         >
           <span className="flex justify-center mb-8">Create Appointment</span>
-          <div className="w-full flex justify-between">
-            <div className="w-full lg:flex lg:justify-between lg:space-x-24">
-              <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
-                <UserPicker
-                  shouldDataBeFetched={true}
-                  label="select doctor"
-                  roleName="doctor"
-                  selectedUserId={selectedDoctorId}
-                  setSelectedUserId={setSelectedDoctorId}
-                  selectedUserName={selectedDoctorName}
-                  setSelectedUserName={setSelectedDoctorName}
-                  z="z-40"
-                  disabled={timetableDoctorId ? true : false}
-                />
-                <UserPicker
-                  shouldDataBeFetched={true}
-                  label="select patient"
-                  roleName="patient"
-                  selectedUserId={selectedPatientId}
-                  setSelectedUserId={setSelectedPatientId}
-                  selectedUserName={selectedPatientName}
-                  setSelectedUserName={setSelectedPatientName}
-                  z="z-30"
-                />
-              </div>
-              <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
-                <DateTimePicker
-                  label="Appointment Date Time"
-                  isDateOnly={false}
-                  selectedEntity={selectedAppointmentDateTime}
-                  setSelectedEntity={setSelectedAppointmentDateTime}
-                  defaultDate={defaultDate}
-                  defaultTime={defaultTime}
-                  isOverlayVisible={isCreateAppointmentOverlayVisible}
-                  z="z-20"
-                />
-                <StyledInputV2
-                  styledInputWidth="w-full"
-                  unfocusedTextColor={
-                    appointmentToCreate.appointmentReason.length > 0
-                      ? "text-green-600"
-                      : "text-black"
-                  }
-                  unfocusedBorderColor={
-                    appointmentToCreate.appointmentReason.length > 0
-                      ? "border-green-700"
-                      : "border-black"
-                  }
-                  focusedTextColor={
-                    appointmentToCreate.appointmentReason.length > 0
-                      ? "focus:text-green-500"
-                      : "focus:text-pink-500"
-                  }
-                  focusedBorderColor={
-                    appointmentToCreate.appointmentReason.length > 0
-                      ? "focus:border-green-500"
-                      : "focus:border-pink-500"
-                  }
-                  unfocusedLabelColor={
-                    appointmentToCreate.appointmentReason.length > 0
-                      ? "text-green-700"
-                      : "text-black"
-                  }
-                  unfocusedLabelBackgroundColor="bg-white"
-                  focusedLabelColor={
-                    appointmentToCreate.appointmentReason.length > 0
-                      ? "text-green-500"
-                      : "text-pink-500"
-                  }
-                  focusedLabelBackgroundColor="bg-white"
-                  isDisabled={false}
-                  name="appointmentReason"
-                  styledInputValue={appointmentToCreate.appointmentReason}
-                  onChangeStyledInput={handleStyledInputChange}
-                  label="Reason"
-                />
-              </div>
+          <div className="w-full lg:flex lg:justify-between lg:space-x-24">
+            <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+              <UserPicker
+                shouldDataBeFetched={true}
+                label={getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "appointmentTableColumnNames",
+                  0
+                )}
+                roleName="doctor"
+                selectedUserId={selectedDoctorId}
+                setSelectedUserId={setSelectedDoctorId}
+                selectedUserName={selectedDoctorName}
+                setSelectedUserName={setSelectedDoctorName}
+                z="z-40"
+                disabled={timetableDoctorId ? true : false}
+              />
+              <UserPicker
+                shouldDataBeFetched={true}
+                label={getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "appointmentTableColumnNames",
+                  1
+                )}
+                roleName="patient"
+                selectedUserId={selectedPatientId}
+                setSelectedUserId={setSelectedPatientId}
+                selectedUserName={selectedPatientName}
+                setSelectedUserName={setSelectedPatientName}
+                z="z-30"
+              />
+            </div>
+            <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+              <DateTimePicker
+                label="Appointment Date Time"
+                isDateOnly={false}
+                selectedEntity={selectedAppointmentDateTime}
+                setSelectedEntity={setSelectedAppointmentDateTime}
+                defaultDate={defaultDate}
+                defaultTime={defaultTime}
+                isOverlayVisible={isCreateAppointmentOverlayVisible}
+                z="z-20"
+              />
+              <StyledInputV2
+                styledInputWidth="w-full"
+                unfocusedTextColor={
+                  appointmentToCreate.appointmentReason.length > 0
+                    ? "text-green-700"
+                    : "text-black"
+                }
+                unfocusedBorderColor={
+                  appointmentToCreate.appointmentReason.length > 0
+                    ? "border-green-700"
+                    : "border-black"
+                }
+                focusedTextColor={
+                  appointmentToCreate.appointmentReason.length > 0
+                    ? "focus:text-green-500"
+                    : "focus:text-pink-500"
+                }
+                focusedBorderColor={
+                  appointmentToCreate.appointmentReason.length > 0
+                    ? "focus:border-green-500"
+                    : "focus:border-pink-500"
+                }
+                focusedBorderColorIconArea={
+                  appointmentToCreate.appointmentReason.length > 0
+                    ? "border-green-500"
+                    : "border-pink-500"
+                }
+                unfocusedLabelColor={
+                  appointmentToCreate.appointmentReason.length > 0
+                    ? "text-green-700"
+                    : "text-black"
+                }
+                unfocusedLabelBackgroundColor="bg-white"
+                focusedLabelColor={
+                  appointmentToCreate.appointmentReason.length > 0
+                    ? "text-green-500"
+                    : "text-pink-500"
+                }
+                focusedLabelBackgroundColor="bg-white"
+                isDisabled={false}
+                name="appointmentReason"
+                styledInputValue={appointmentToCreate.appointmentReason}
+                onChangeStyledInput={handleStyledInputChange}
+                label={getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "appointmentTableColumnNames",
+                  2
+                )}
+              />
             </div>
           </div>
 

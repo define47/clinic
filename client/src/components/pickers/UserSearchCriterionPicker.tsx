@@ -37,19 +37,35 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   useEffect(() => {
     setUserSearchCriterion([
       {
-        userSearchCriteriaName: "Forename",
+        userSearchCriteriaName: getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionUser",
+          0
+        ),
         userSearchCriteriaValue: "userForename",
       },
       {
-        userSearchCriteriaName: "Surname",
+        userSearchCriteriaName: getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionUser",
+          1
+        ),
         userSearchCriteriaValue: "userSurname",
       },
       {
-        userSearchCriteriaName: "Email",
+        userSearchCriteriaName: getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionUser",
+          2
+        ),
         userSearchCriteriaValue: "userEmail",
       },
       {
-        userSearchCriteriaName: "Phone Number",
+        userSearchCriteriaName: getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionUser",
+          3
+        ),
         userSearchCriteriaValue: "userPhoneNumber",
       },
     ]);
@@ -106,21 +122,69 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   useEffect(() => {
     if (
       selectedUserSearchCriteriaName.length >= 0 &&
-      selectedUserSearchCriteriaName.toLowerCase() !== "forename" &&
-      selectedUserSearchCriteriaName.toLowerCase() !== "surname" &&
-      selectedUserSearchCriteriaName.toLowerCase() !== "email" &&
-      selectedUserSearchCriteriaName.toLowerCase() !== "phone number"
+      selectedUserSearchCriteriaName.toLowerCase() !==
+        getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionUser",
+          0
+        ).toLowerCase() &&
+      selectedUserSearchCriteriaName.toLowerCase() !==
+        getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionUser",
+          1
+        ).toLowerCase() &&
+      selectedUserSearchCriteriaName.toLowerCase() !==
+        getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionUser",
+          2
+        ).toLowerCase() &&
+      selectedUserSearchCriteriaName.toLowerCase() !==
+        getItemByLanguageAndCollection(
+          authenticatedUserDataState.language.languageCode,
+          "searchCriterionUser",
+          3
+        ).toLowerCase()
     )
       setSelectedUserSearchCriteriaValue("");
-    else if (selectedUserSearchCriteriaName.toLowerCase() === "forename")
+    else if (
+      selectedUserSearchCriteriaName.toLowerCase() ===
+      getItemByLanguageAndCollection(
+        authenticatedUserDataState.language.languageCode,
+        "searchCriterionUser",
+        0
+      ).toLowerCase()
+    )
       setSelectedUserSearchCriteriaValue("userForename");
-    else if (selectedUserSearchCriteriaName.toLowerCase() === "surname")
+    else if (
+      selectedUserSearchCriteriaName.toLowerCase() ===
+      getItemByLanguageAndCollection(
+        authenticatedUserDataState.language.languageCode,
+        "searchCriterionUser",
+        1
+      ).toLowerCase()
+    )
       setSelectedUserSearchCriteriaValue("userSurname");
-    else if (selectedUserSearchCriteriaName.toLowerCase() === "email")
+    else if (
+      selectedUserSearchCriteriaName.toLowerCase() ===
+      getItemByLanguageAndCollection(
+        authenticatedUserDataState.language.languageCode,
+        "searchCriterionUser",
+        2
+      ).toLowerCase()
+    )
       setSelectedUserSearchCriteriaValue("userEmail");
-    else if (selectedUserSearchCriteriaName.toLowerCase() === "phone number")
+    else if (
+      selectedUserSearchCriteriaName.toLowerCase() ===
+      getItemByLanguageAndCollection(
+        authenticatedUserDataState.language.languageCode,
+        "searchCriterionUser",
+        3
+      ).toLowerCase()
+    )
       setSelectedUserSearchCriteriaValue("userPhoneNumber");
-  }, [selectedUserSearchCriteriaName]);
+  }, [selectedUserSearchCriteriaName, authenticatedUserDataState]);
 
   return (
     <div className="w-full flex">
@@ -179,6 +243,7 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
           unfocusedBorderColor="border-pink-600"
           focusedTextColor="focus:text-pink-600"
           focusedBorderColor="focus:border-pink-600"
+          focusedBorderColorIconArea="border-pink-600"
           unfocusedLabelColor="text-pink-600"
           unfocusedLabelBackgroundColor="bg-white"
           focusedLabelColor="text-pink-600"

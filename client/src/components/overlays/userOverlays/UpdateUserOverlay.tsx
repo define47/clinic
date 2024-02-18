@@ -1,4 +1,11 @@
-import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { UpdateUserOverlayPros, User } from "../../../types";
 import { StyledInput } from "../../design/StyledInput";
 import Overlay from "../base/Overlay";
@@ -15,11 +22,19 @@ import { StyledInputV2 } from "../../design/StyledInputV2";
 import validator from "validator";
 import phone from "phone";
 import { GenderPicker } from "../../pickers/GenderPicker";
+import { AuthenticatedUserDataContext } from "../../../contexts/UserContext";
+import {
+  getEntityNamesByLanguage,
+  getItemByLanguageAndCollection,
+} from "../../../utils/clientLanguages";
 
 export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   user,
   roleName,
 }) => {
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
   const [isUpdateUserOverlayVisible, setIsUpdateUserOverlayVisible] =
     useState<boolean>(false);
   const [
@@ -363,6 +378,13 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                     ? "focus:border-green-500"
                     : "focus:border-red-500"
                 }
+                focusedBorderColorIconArea={
+                  userToUpdate.userForename.length === 0
+                    ? "border-pink-500"
+                    : isUserForenameValid
+                    ? "border-green-500"
+                    : "border-red-500"
+                }
                 unfocusedLabelColor={
                   userToUpdate.userForename.length === 0
                     ? "text-pink-700"
@@ -383,7 +405,16 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 name="userForename"
                 styledInputValue={userToUpdate.userForename}
                 onChangeStyledInput={handleStyledInputChange}
-                label="Forename"
+                label={`
+                ${getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "generalUserTableColumnNames",
+                  0
+                )} ${getEntityNamesByLanguage(
+                  authenticatedUserDataState.language.languageCode,
+                  roleName
+                )}
+                `}
               />
               <StyledInputV2
                 styledInputWidth="w-full"
@@ -414,6 +445,13 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                     : isUserSurnameValid
                     ? "focus:border-green-500"
                     : "focus:border-red-500"
+                }
+                focusedBorderColorIconArea={
+                  userToUpdate.userSurname.length === 0
+                    ? "border-pink-500"
+                    : isUserSurnameValid
+                    ? "border-green-500"
+                    : "border-red-500"
                 }
                 unfocusedLabelColor={
                   userToUpdate.userSurname.length === 0
@@ -435,7 +473,16 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 name="userSurname"
                 styledInputValue={userToUpdate.userSurname}
                 onChangeStyledInput={handleStyledInputChange}
-                label="Surname"
+                label={`
+                ${getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "generalUserTableColumnNames",
+                  1
+                )} ${getEntityNamesByLanguage(
+                  authenticatedUserDataState.language.languageCode,
+                  roleName
+                )}
+                `}
               />
               <StyledInputV2
                 styledInputWidth="w-full"
@@ -467,6 +514,13 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                     ? "focus:border-green-500"
                     : "focus:border-red-500"
                 }
+                focusedBorderColorIconArea={
+                  userToUpdate.userEmail.length === 0
+                    ? "border-pink-500"
+                    : isUserEmailValid
+                    ? "border-green-500"
+                    : "border-red-500"
+                }
                 unfocusedLabelColor={
                   userToUpdate.userEmail.length === 0
                     ? "text-pink-700"
@@ -487,7 +541,16 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 name="userEmail"
                 styledInputValue={userToUpdate.userEmail}
                 onChangeStyledInput={handleStyledInputChange}
-                label="Email"
+                label={`
+                ${getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "generalUserTableColumnNames",
+                  2
+                )} ${getEntityNamesByLanguage(
+                  authenticatedUserDataState.language.languageCode,
+                  roleName
+                )}
+                `}
               />
             </div>
             <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
@@ -521,6 +584,13 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                     ? "focus:border-green-500"
                     : "focus:border-red-500"
                 }
+                focusedBorderColorIconArea={
+                  userToUpdate.userPhoneNumber.length === 0
+                    ? "border-pink-500"
+                    : isUserPhoneNumberValid
+                    ? "border-green-500"
+                    : "border-red-500"
+                }
                 unfocusedLabelColor={
                   userToUpdate.userPhoneNumber.length === 0
                     ? "text-pink-700"
@@ -541,7 +611,16 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 name="userPhoneNumber"
                 styledInputValue={userToUpdate.userPhoneNumber}
                 onChangeStyledInput={handleStyledInputChange}
-                label="Phone Number"
+                label={`
+                ${getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "generalUserTableColumnNames",
+                  3
+                )} ${getEntityNamesByLanguage(
+                  authenticatedUserDataState.language.languageCode,
+                  roleName
+                )}
+                `}
               />
 
               {/* <StyledInput
@@ -606,6 +685,13 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                     ? "focus:border-green-500"
                     : "focus:border-pink-500"
                 }
+                focusedBorderColorIconArea={
+                  userToUpdate.userAddress.length === 0
+                    ? "border-pink-500"
+                    : isUserForenameValid
+                    ? "border-green-500"
+                    : "border-red-500"
+                }
                 unfocusedLabelColor={
                   userToUpdate.userAddress.length > 0
                     ? "text-green-700"
@@ -622,7 +708,16 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                 name="userAddress"
                 styledInputValue={userToUpdate.userAddress}
                 onChangeStyledInput={handleStyledInputChange}
-                label="Address"
+                label={`
+                ${getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "generalUserTableColumnNames",
+                  6
+                )} ${getEntityNamesByLanguage(
+                  authenticatedUserDataState.language.languageCode,
+                  roleName
+                )}
+                `}
               />
               {roleName === "doctor" && (
                 <>

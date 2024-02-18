@@ -766,13 +766,59 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               unfocusedBorderColor="border-pink-600"
               focusedTextColor="focus:text-pink-600"
               focusedBorderColor="focus:border-pink-600"
+              focusedBorderColorIconArea="border-pink-600"
               unfocusedLabelColor="text-pink-600"
               unfocusedLabelBackgroundColor="bg-white"
               focusedLabelColor="text-pink-600"
               focusedLabelBackgroundColor="bg-white"
               onClickIcon={() => {}}
               isDisabled={false}
-              label={`${entity} search`}
+              // label={`${entity} search`}
+              label={
+                entity === "appointment"
+                  ? getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "searchFieldNames",
+                      0
+                    )
+                  : entity === "patient"
+                  ? getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "searchFieldNames",
+                      1
+                    )
+                  : entity === "doctor"
+                  ? getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "searchFieldNames",
+                      2
+                    )
+                  : entity === "medicalSpeciality"
+                  ? getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "searchFieldNames",
+                      3
+                    )
+                  : entity === "medicalProcedure"
+                  ? getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "searchFieldNames",
+                      4
+                    )
+                  : entity === "nurse"
+                  ? getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "searchFieldNames",
+                      5
+                    )
+                  : entity === "receptionist"
+                  ? getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "searchFieldNames",
+                      6
+                    )
+                  : ""
+              }
               name={`userSearch`}
               icon={<IoIosSearch />}
               onChangeStyledInput={(event) =>
@@ -797,13 +843,18 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           <div className="w-full flex items-center justify-center">
             <div className="w-96 mr-3">
               <MedicalSpecialityPicker
-                label="select medical speciality"
+                label={getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "medicalSpecialityPickerLabels",
+                  0
+                )}
                 selectedMedicalSpecialityId={selectedMedicalSpecialityId}
                 setSelectedMedicalSpecialityId={setSelectedMedicalSpecialityId}
                 selectedMedicalSpecialityName={selectedMedicalSpecialityName}
                 setSelectedMedicalSpecialityName={
                   setSelectedMedicalSpecialityName
                 }
+                z="z-50"
               />
             </div>
           </div>
@@ -1301,25 +1352,45 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         )}
       </div>
       <div className="w-full flex items-center justify-between mt-2">
-        <StyledRippleButton
-          label={`Previous Page`}
-          type="create"
-          onClick={() => {
-            if (currentPage > 0) setCurrentPage(currentPage - 1);
-          }}
-        />
-        {currentPage + 1}
-        <StyledRippleButton
-          label={`Next Page`}
-          type="create"
-          onClick={() => {
-            if (currentPage < tableTotalPages) setCurrentPage(currentPage + 1);
-          }}
-        />
+        <div className="w-full flex items-start justify-start">
+          {currentPage > 0 && (
+            <StyledRippleButton
+              label={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "pageNavigationButtonNames",
+                0
+              )}
+              type="create"
+              onClick={() => {
+                if (currentPage > 0) setCurrentPage(currentPage - 1);
+              }}
+            />
+          )}
+        </div>
+
+        <span className="w-full flex items-center justify-center">
+          {currentPage + 1}
+        </span>
+        <div className="w-full flex items-end justify-end">
+          {currentPage < tableTotalPages && (
+            <StyledRippleButton
+              label={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "pageNavigationButtonNames",
+                1
+              )}
+              type="create"
+              onClick={() => {
+                if (currentPage < tableTotalPages)
+                  setCurrentPage(currentPage + 1);
+              }}
+            />
+          )}
+        </div>
       </div>
       <div className="w-full flex flex-col justify-center items-center">
         <span>total count: {tableTotalCount}</span>
-        <span>total pages: {tableTotalPages}</span>
+        <span>total pages: {tableTotalPages + 1}</span>
       </div>
       <div>
         {(entity === patientRoleName ||
@@ -1338,12 +1409,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             }
           />
         )}
-        {entity === "medicalProcedure" && (
-          <CreateMedicalProcedureOverlay
-            medicalSpecialityId={selectedMedicalSpecialityId}
-            medicalSpecialityName={selectedMedicalSpecialityName}
-          />
-        )}
+        {entity === "medicalProcedure" &&
+          selectedMedicalSpecialityId !== "" && (
+            <CreateMedicalProcedureOverlay
+              medicalSpecialityId={selectedMedicalSpecialityId}
+              medicalSpecialityName={selectedMedicalSpecialityName}
+            />
+          )}
       </div>
       {/* here notification {JSON.stringify(socketNotificationDataState)} */}
     </div>

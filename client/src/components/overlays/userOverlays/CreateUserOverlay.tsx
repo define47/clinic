@@ -1,4 +1,11 @@
-import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { CreateUserOverlayPros, User } from "../../../types";
 import { StyledInput } from "../../design/StyledInput";
 import Overlay from "../base/Overlay";
@@ -13,11 +20,19 @@ import validator from "validator";
 import { StyledInputV2 } from "../../design/StyledInputV2";
 import phone from "phone";
 import { GenderPicker } from "../../pickers/GenderPicker";
+import { AuthenticatedUserDataContext } from "../../../contexts/UserContext";
+import {
+  getEntityNamesByLanguage,
+  getItemByLanguageAndCollection,
+} from "../../../utils/clientLanguages";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
   roleName,
 }) => {
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
   const [isCreateUserOverlayVisible, setIsCreateUserOverlayVisible] =
     useState<boolean>(false);
   const [
@@ -30,8 +45,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
     userSurname: "",
     userEmail: "",
     userPhoneNumber: "",
-    userGender: "male",
-    userDateOfBirth: "1765-05-23",
+    userGender: "",
+    userDateOfBirth: "1780-01-01",
     userAddress: "",
     userEncryptedPassword: "",
     isUserEmailActivated: false,
@@ -246,6 +261,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                     ? "focus:border-green-500"
                     : "focus:border-red-500"
                 }
+                focusedBorderColorIconArea={
+                  userToCreate.userForename.length === 0
+                    ? "border-pink-500"
+                    : isUserForenameValid
+                    ? "border-green-500"
+                    : "border-red-500"
+                }
                 unfocusedLabelColor={
                   userToCreate.userForename.length === 0
                     ? "text-black"
@@ -266,7 +288,16 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 name="userForename"
                 styledInputValue={userToCreate.userForename}
                 onChangeStyledInput={handleStyledInputChange}
-                label="Forename"
+                label={`
+                ${getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "generalUserTableColumnNames",
+                  0
+                )} ${getEntityNamesByLanguage(
+                  authenticatedUserDataState.language.languageCode,
+                  roleName
+                )}
+                `}
               />
               <StyledInputV2
                 styledInputWidth="w-full"
@@ -297,6 +328,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                     : isUserSurnameValid
                     ? "focus:border-green-500"
                     : "focus:border-red-500"
+                }
+                focusedBorderColorIconArea={
+                  userToCreate.userSurname.length === 0
+                    ? "border-pink-500"
+                    : isUserSurnameValid
+                    ? "border-green-500"
+                    : "border-red-500"
                 }
                 unfocusedLabelColor={
                   userToCreate.userSurname.length === 0
@@ -318,7 +356,16 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 name="userSurname"
                 styledInputValue={userToCreate.userSurname}
                 onChangeStyledInput={handleStyledInputChange}
-                label="Surname"
+                label={`
+                ${getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "generalUserTableColumnNames",
+                  1
+                )} ${getEntityNamesByLanguage(
+                  authenticatedUserDataState.language.languageCode,
+                  roleName
+                )}
+                `}
               />
               <StyledInputV2
                 styledInputWidth="w-full"
@@ -350,6 +397,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                     ? "focus:border-green-500"
                     : "focus:border-red-500"
                 }
+                focusedBorderColorIconArea={
+                  userToCreate.userEmail.length === 0
+                    ? "border-pink-500"
+                    : isUserEmailValid
+                    ? "border-green-500"
+                    : "border-red-500"
+                }
                 unfocusedLabelColor={
                   userToCreate.userEmail.length === 0
                     ? "text-black"
@@ -370,7 +424,16 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 name="userEmail"
                 styledInputValue={userToCreate.userEmail}
                 onChangeStyledInput={handleStyledInputChange}
-                label="Email"
+                label={`
+                ${getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "generalUserTableColumnNames",
+                  2
+                )} ${getEntityNamesByLanguage(
+                  authenticatedUserDataState.language.languageCode,
+                  roleName
+                )}
+                `}
               />
             </div>
             <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
@@ -404,6 +467,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                     ? "focus:border-green-500"
                     : "focus:border-red-500"
                 }
+                focusedBorderColorIconArea={
+                  userToCreate.userPhoneNumber.length === 0
+                    ? "border-pink-500"
+                    : isUserPhoneNumberValid
+                    ? "border-green-500"
+                    : "border-red-500"
+                }
                 unfocusedLabelColor={
                   userToCreate.userPhoneNumber.length === 0
                     ? "text-black"
@@ -424,7 +494,16 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 name="userPhoneNumber"
                 styledInputValue={userToCreate.userPhoneNumber}
                 onChangeStyledInput={handleStyledInputChange}
-                label="Phone Number"
+                label={`
+                ${getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "generalUserTableColumnNames",
+                  3
+                )} ${getEntityNamesByLanguage(
+                  authenticatedUserDataState.language.languageCode,
+                  roleName
+                )}
+                `}
               />
               {/* <StyledInputV2
                 styledInputWidth="w-full"
@@ -526,6 +605,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                     ? "focus:border-green-500"
                     : "focus:border-pink-500"
                 }
+                focusedBorderColorIconArea={
+                  userToCreate.userAddress.length === 0
+                    ? "border-pink-500"
+                    : isUserAddressValid
+                    ? "border-green-500"
+                    : "border-red-500"
+                }
                 unfocusedLabelColor={
                   userToCreate.userAddress.length > 0
                     ? "text-green-700"
@@ -542,13 +628,26 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 name="userAddress"
                 styledInputValue={userToCreate.userAddress}
                 onChangeStyledInput={handleStyledInputChange}
-                label="Address"
+                label={`
+                ${getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "generalUserTableColumnNames",
+                  6
+                )} ${getEntityNamesByLanguage(
+                  authenticatedUserDataState.language.languageCode,
+                  roleName
+                )}
+                `}
               />
 
               {roleName === "doctor" && (
                 <>
                   <MedicalSpecialityPicker
-                    label="primary"
+                    label={getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "medicalSpecialityPickerLabels",
+                      1
+                    )}
                     selectedMedicalSpecialityId={
                       selectedPrimaryMedicalSpecialityId
                     }
@@ -570,10 +669,15 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                     selectedTertiaryMedicalSpecialityId={
                       selectedTertiaryMedicalSpecialityId
                     }
+                    z={"z-30"}
                   />
 
                   <MedicalSpecialityPicker
-                    label="secondary"
+                    label={getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "medicalSpecialityPickerLabels",
+                      2
+                    )}
                     selectedMedicalSpecialityId={
                       selectedSecondaryMedicalSpecialityId
                     }
@@ -595,10 +699,15 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                     selectedTertiaryMedicalSpecialityId={
                       selectedTertiaryMedicalSpecialityId
                     }
+                    z={"z-20"}
                   />
 
                   <MedicalSpecialityPicker
-                    label="tertiary"
+                    label={getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "medicalSpecialityPickerLabels",
+                      3
+                    )}
                     selectedMedicalSpecialityId={
                       selectedTertiaryMedicalSpecialityId
                     }
@@ -620,6 +729,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                     selectedTertiaryMedicalSpecialityId={
                       selectedTertiaryMedicalSpecialityId
                     }
+                    z={"z-10"}
                   />
                 </>
               )}

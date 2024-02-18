@@ -2,6 +2,7 @@ import { FC, useContext } from "react";
 import { UserProfilePicture } from "./UserProfilePicture";
 import { UserProfileInfo } from "./UserProfileInfo";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
+import { UserUtilsDropdown } from "./UserUtilsDropdown";
 
 export const UserProfile: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -15,6 +16,7 @@ export const UserProfile: FC = () => {
         userId={authenticatedUserDataState.userId}
       />
       <UserProfileInfo />
+      <UserUtilsDropdown />
     </div>
   );
 };
