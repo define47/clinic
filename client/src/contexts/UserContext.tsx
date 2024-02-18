@@ -17,8 +17,11 @@ interface AuthenticatedUserDataContextInterface {
   // specialityIds?: string[];
   // specialityNames?: string[];
   medicalSpecialities?: MedicalSpeciality[];
-  languageId: string;
-  languageCode: string;
+  language: {
+    languageId: string;
+    languageCode: string;
+    languageName: string;
+  };
   isDarkModeOn: boolean;
 }
 
@@ -47,8 +50,11 @@ export const AuthenticatedUserDataContextProvider: FC<Props> = ({
       userSurname: "",
       userEmail: "",
       roleNames: [],
-      languageId: "",
-      languageCode: "",
+      language: {
+        languageId: "",
+        languageCode: "",
+        languageName: "",
+      },
       isDarkModeOn: false,
     });
 

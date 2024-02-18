@@ -247,6 +247,20 @@ export class UserController {
       //   languageCode: language?.languageCode,
       //   isDarkModeOn: userPreferencesMapping?.isDarkModeOn,
       // };
+      // const sessionValue = {
+      //   userId: userToLogin?.userId,
+      //   userForename: userToLogin?.userForename,
+      //   userSurname: userToLogin?.userSurname,
+      //   userEmail: userToLogin?.userEmail,
+      //   roleNames: userRoleNames,
+      //   ...((userRoleNames[0] === "doctor" ||
+      //     userRoleNames[1] === "doctor") && {
+      //     medicalSpecialities: doctorSpecialities,
+      //   }),
+      //   languageId: language?.languageId,
+      //   languageCode: language?.languageCode,
+      //   isDarkModeOn: userPreferencesMapping?.isDarkModeOn,
+      // };
       const sessionValue = {
         userId: userToLogin?.userId,
         userForename: userToLogin?.userForename,
@@ -257,8 +271,11 @@ export class UserController {
           userRoleNames[1] === "doctor") && {
           medicalSpecialities: doctorSpecialities,
         }),
-        languageId: language?.languageId,
-        languageCode: language?.languageCode,
+        language: {
+          languageId: language?.languageId,
+          languageCode: language?.languageCode,
+          languageName: language?.languageName,
+        },
         isDarkModeOn: userPreferencesMapping?.isDarkModeOn,
       };
 

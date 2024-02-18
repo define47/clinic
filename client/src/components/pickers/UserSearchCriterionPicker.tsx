@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import {
   UserSearchCriteria,
   UserSearchCriterionPickerProps,
@@ -8,6 +8,8 @@ import { RiArrowDownSLine, RiArrowUpSLine, RiFilterLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
 import { VscDash } from "react-icons/vsc";
 import { StyledInputV2 } from "../design/StyledInputV2";
+import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
+import { getItemByLanguageAndCollection } from "../../utils/clientLanguages";
 
 export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   entity,
@@ -16,6 +18,9 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   setSelectedUserSearchCriteriaValue,
   selectedUserSearchCriteriaValue,
 }) => {
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
   const [userSearchCriterion, setUserSearchCriterion] = useState<
     UserSearchCriteria[]
   >([]);
@@ -199,7 +204,28 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
             )
           }
           isDisabled={false}
-          label={`${entity} Criteria`}
+          // label={`${entity} Criteria`}
+          label={
+            entity === "patient"
+              ? getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "searchCriterion",
+                  1
+                )
+              : entity === "doctor"
+              ? getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "searchCriterion",
+                  2
+                )
+              : entity === "receptionist"
+              ? getItemByLanguageAndCollection(
+                  authenticatedUserDataState.language.languageCode,
+                  "searchCriterion",
+                  4
+                )
+              : ""
+          }
           name={`${entity}Criteria`}
           onChangeStyledInput={(event) => {
             setSelectedUserSearchCriteriaName(event.target.value);

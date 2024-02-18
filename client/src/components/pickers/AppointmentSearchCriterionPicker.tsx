@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import {
   AppointmentSearchCriteria,
   AppointmentSearchCriterionPickerProps,
@@ -8,6 +8,8 @@ import { StyledInput } from "../design/StyledInput";
 import { TiTick } from "react-icons/ti";
 import { VscDash } from "react-icons/vsc";
 import { StyledInputV2 } from "../design/StyledInputV2";
+import { getItemByLanguageAndCollection } from "../../utils/clientLanguages";
+import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 
 export const AppointmentSearchCriterionPicker: FC<
   AppointmentSearchCriterionPickerProps
@@ -19,6 +21,9 @@ export const AppointmentSearchCriterionPicker: FC<
   selectedAppointmentCriteriaName,
   setSelectedAppointmentCriteriaName,
 }) => {
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
   const [appointmentSearchCriterion, setAppointmentSearchCriterion] = useState<
     AppointmentSearchCriteria[]
   >([]);
@@ -239,7 +244,11 @@ export const AppointmentSearchCriterionPicker: FC<
             )
           }
           isDisabled={false}
-          label={`Appointment Criteria`}
+          label={getItemByLanguageAndCollection(
+            authenticatedUserDataState.language.languageCode,
+            "searchCriterion",
+            0
+          )}
           name={`appointmentCriteria`}
           onChangeStyledInput={(event) => {
             setSelectedAppointmentCriteriaName(event.target.value);

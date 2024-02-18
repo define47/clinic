@@ -52,6 +52,10 @@ import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { SendEmailOverlay } from "../overlays/emailOverlays/SendEmailOverlay";
 import { ViewMedicalRecordPatientOverlay } from "../overlays/medicalRecordPatientOverlays/ViewMedicalRecordPatientOverlay";
 import { StyledInputV2 } from "../design/StyledInputV2";
+import {
+  getAppointmentTableColumnNamesByLanguage,
+  getItemByLanguageAndCollection,
+} from "../../utils/clientLanguages";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -226,6 +230,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   useEffect(() => {
     setCurrentPage(0);
   }, [tableLimit]);
+
+  useEffect(() => {
+    console.log(
+      "here period",
+      getItemByLanguageAndCollection("ro", "appointmentTableColumnNames", 0)
+    );
+  }, []);
 
   useEffect(() => {
     if (socketNotificationDataState) {
@@ -822,7 +833,12 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   </td>
                   <td className="px-6 py-4 font-bold">
                     <div className="flex items-center justify-center">
-                      userForename
+                      {/* user forename */}
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "generalUserTableColumnNames",
+                        0
+                      )}
                       {orderBy !== "asc:userForename" && (
                         <RiArrowUpSFill
                           className="text-sm cursor-pointer"
@@ -839,7 +855,12 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   </td>
                   <td className="px-6 py-4 font-bold">
                     <div className="flex items-center justify-center">
-                      userSurname
+                      {/* userSurname */}
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "generalUserTableColumnNames",
+                        1
+                      )}
                       {orderBy !== "asc:userSurname" && (
                         <RiArrowUpSFill
                           className="text-sm cursor-pointer"
@@ -863,24 +884,85 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     )} */}
                     </div>
                   </td>
-                  <td className="px-6 py-4 font-bold">userEmail</td>
-                  <td className="px-6 py-4 font-bold">userPhoneNumber</td>
-                  <td className="px-6 py-4 font-bold">userGender</td>
-                  <td className="px-6 py-4 font-bold">userDateOfBirth</td>
-                  <td className="px-6 py-4 font-bold">userAddress</td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* userEmail */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "generalUserTableColumnNames",
+                      2
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* userPhoneNumber */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "generalUserTableColumnNames",
+                      3
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* userGender */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "generalUserTableColumnNames",
+                      4
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* userDateOfBirth */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "generalUserTableColumnNames",
+                      5
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* userAddress */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "generalUserTableColumnNames",
+                      6
+                    )}
+                  </td>
                   <td className="px-6 py-4 font-bold">userRoleName</td>
                   {entity === "doctor" && (
-                    <td className="px-6 py-4 font-bold">Primary Speciality</td>
-                  )}
-                  {entity === "doctor" && (
                     <td className="px-6 py-4 font-bold">
-                      Secondary Speciality
+                      {/* Primary Speciality */}
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "generalUserTableColumnNames",
+                        7
+                      )}
                     </td>
                   )}
                   {entity === "doctor" && (
-                    <td className="px-6 py-4 font-bold">Tertiary Speciality</td>
+                    <td className="px-6 py-4 font-bold">
+                      {/* Secondary Speciality */}
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "generalUserTableColumnNames",
+                        8
+                      )}
+                    </td>
                   )}
-                  <td className="px-6 py-4 font-bold">Actions</td>
+                  {entity === "doctor" && (
+                    <td className="px-6 py-4 font-bold">
+                      {/* Tertiary Speciality */}
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "generalUserTableColumnNames",
+                        9
+                      )}
+                    </td>
+                  )}
+                  <td className="px-6 py-4 font-bold">
+                    {/* Actions */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "generalUserTableColumnNames",
+                      10
+                    )}
+                  </td>
                 </tr>
               ) : isMedicalSpecialityRow(tableRows[0]) ? (
                 <tr>
@@ -889,31 +971,110 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     Medical Speciality Id
                   </td>
                   <td className="px-6 py-4 font-bold w-1/3">
-                    Medical Speciality Name
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "medicalSpecialityTableColumnNames",
+                      0
+                    )}
                   </td>
-                  <td className="px-6 py-4 font-bold w-1/3">Actions</td>
+                  <td className="px-6 py-4 font-bold w-1/3">
+                    {/* Actions */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "medicalSpecialityTableColumnNames",
+                      1
+                    )}
+                  </td>
                 </tr>
               ) : isAppointmentRow(tableRows[0]) ? (
                 <tr>
                   <td>Index</td>
                   <td className="px-6 py-4 font-bold">appointmentId</td>
-                  <td className="px-6 py-4 font-bold">doctor</td>
-                  <td className="px-6 py-4 font-bold">patient</td>
-                  <td className="px-6 py-4 font-bold">appointmentReason</td>
-                  <td className="px-6 py-4 font-bold">appointmentDateTime</td>
-                  <td className="px-6 py-4 font-bold">appointmentStatus</td>
                   <td className="px-6 py-4 font-bold">
-                    appointmentCancellationReason
+                    {/* doctor */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "appointmentTableColumnNames",
+                      0
+                    )}
                   </td>
-                  <td className="px-6 py-4 font-bold">Actions</td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* patient */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "appointmentTableColumnNames",
+                      1
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* appointmentReason */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "appointmentTableColumnNames",
+                      2
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* appointmentDateTime */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "appointmentTableColumnNames",
+                      3
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* appointmentStatus */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "appointmentTableColumnNames",
+                      4
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* appointmentCancellationReason */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "appointmentTableColumnNames",
+                      5
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* Actions */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "appointmentTableColumnNames",
+                      6
+                    )}
+                  </td>
                 </tr>
               ) : isMedicalProcedureRow(tableRows[0]) ? (
                 <tr>
                   <td>Index</td>
                   <td className="px-6 py-4 font-bold">medicalProcedureId</td>
-                  <td className="px-6 py-4 font-bold">medicalProcedureName</td>
-                  <td className="px-6 py-4 font-bold">medicalProcedurePrice</td>
-                  <td className="px-6 py-4 font-bold">Actions</td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* medicalProcedureName */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "medicalProcedureTableColumnNames",
+                      0
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* medicalProcedurePrice */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "medicalProcedureTableColumnNames",
+                      1
+                    )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* Actions */}
+                    {getItemByLanguageAndCollection(
+                      authenticatedUserDataState.language.languageCode,
+                      "medicalProcedureTableColumnNames",
+                      2
+                    )}
+                  </td>
                 </tr>
               ) : (
                 ""
@@ -1184,7 +1345,6 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           />
         )}
       </div>
-
       {/* here notification {JSON.stringify(socketNotificationDataState)} */}
     </div>
   ) : (

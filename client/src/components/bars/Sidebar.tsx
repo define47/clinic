@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { ChevronFirst, ChevronLast } from "lucide-react";
 import { SidebarItem } from "./SidebarItem";
 import { SidebarProps } from "../../types";
@@ -38,6 +38,8 @@ import {
 } from "../../utils/consts";
 import { logoutUserPath } from "../../utils/dotenv";
 import IatropolisLogo from "../../assets/logo-iatropolis.png";
+import { getItemByLanguageAndCollection } from "../../utils/clientLanguages";
+import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 
 export const Sidebar: FC<SidebarProps> = ({
   isSidebarExpanded,
@@ -45,6 +47,9 @@ export const Sidebar: FC<SidebarProps> = ({
 }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
 
   async function onLogout() {
     try {
@@ -86,38 +91,17 @@ export const Sidebar: FC<SidebarProps> = ({
       >
         <nav className="h-full flex flex-col bg-lightMode-sidebarColor dark:bg-darkMode-sidebarColor border-r shadow-sm">
           <div className="h-14 flex justify-between items-center border-b">
-            {/* <img
-            src="https://img.logoipsum.com/243.svg"
-            className={`overflow-hidden transition-all ${
-              isSidebarExpanded ? "w-32" : "w-32"
-            }`}
-            alt=""
-          /> */}
-            {/* ${
-                isSidebarExpanded ? "w-full text-2xl" : "w-full h-full"
-              } */}
             <span
               className={`overflow-hidden transition-all flex items-center justify-center`}
             >
-              {/* Iatropolis */}
               <img
                 src={IatropolisLogo}
                 alt="Iatropolis, Botosani"
-                className="object-contain h-full w-full"
+                className={`object-contain h-full w-full transition-all duration-500 ${
+                  isSidebarExpanded ? "p-5" : "p-1"
+                }`}
               />
             </span>
-
-            {/* fixed ${
-              isSidebarExpanded ? "left-60 top-16" : "left-[70px] top-7"
-            }  */}
-            {/* <button
-            onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
-            className={`${
-              !isSidebarExpanded && "flex w-full items-center justify-center"
-            } rounded-lg bg-gray-50 hover:bg-gray-100`}
-          >
-            {isSidebarExpanded ? <ChevronFirst /> : <ChevronLast />}
-          </button> */}
           </div>
 
           <ul className="flex-1 px-3">
@@ -130,7 +114,11 @@ export const Sidebar: FC<SidebarProps> = ({
                   <MdOutlineSpaceDashboard />
                 )
               }
-              title="Dashboard"
+              title={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "sidebarMenuAdmin",
+                0
+              )}
               active={pathname === adminDashboardPathname}
               isSidebarExpanded={isSidebarExpanded}
             />
@@ -143,7 +131,11 @@ export const Sidebar: FC<SidebarProps> = ({
                   <GiBookmark />
                 )
               }
-              title="Appointments"
+              title={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "sidebarMenuAdmin",
+                1
+              )}
               active={pathname === appointmentsPathname}
               isSidebarExpanded={isSidebarExpanded}
             />
@@ -156,7 +148,11 @@ export const Sidebar: FC<SidebarProps> = ({
                   <MdOutlinePersonalInjury />
                 )
               }
-              title="Patients"
+              title={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "sidebarMenuAdmin",
+                2
+              )}
               active={pathname === patientsPathname}
               isSidebarExpanded={isSidebarExpanded}
             />
@@ -169,7 +165,11 @@ export const Sidebar: FC<SidebarProps> = ({
                   <RiUserHeartLine />
                 )
               }
-              title="Doctors"
+              title={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "sidebarMenuAdmin",
+                3
+              )}
               active={pathname === doctorsPathname}
               isSidebarExpanded={isSidebarExpanded}
             />
@@ -182,7 +182,11 @@ export const Sidebar: FC<SidebarProps> = ({
                   <RiShieldCrossLine />
                 )
               }
-              title="Medical Specialities"
+              title={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "sidebarMenuAdmin",
+                4
+              )}
               active={pathname === medicalSpecialitiesPathname}
               isSidebarExpanded={isSidebarExpanded}
             />
@@ -195,7 +199,11 @@ export const Sidebar: FC<SidebarProps> = ({
                   <BiInjection />
                 )
               }
-              title="Medical Procedures"
+              title={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "sidebarMenuAdmin",
+                5
+              )}
               active={pathname === medicalProceduresPathname}
               isSidebarExpanded={isSidebarExpanded}
             />
@@ -204,7 +212,11 @@ export const Sidebar: FC<SidebarProps> = ({
               icon={
                 pathname === nursesPathname ? <RiNurseFill /> : <RiNurseLine />
               }
-              title="Nurses"
+              title={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "sidebarMenuAdmin",
+                6
+              )}
               active={pathname === nursesPathname}
               isSidebarExpanded={isSidebarExpanded}
             />
@@ -213,7 +225,11 @@ export const Sidebar: FC<SidebarProps> = ({
               icon={
                 pathname === receptionistsPathname ? <FaUser /> : <FaRegUser />
               }
-              title="Receptionists"
+              title={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "sidebarMenuAdmin",
+                7
+              )}
               active={pathname === receptionistsPathname}
               isSidebarExpanded={isSidebarExpanded}
             />
@@ -227,7 +243,11 @@ export const Sidebar: FC<SidebarProps> = ({
                   <TbSettings />
                 )
               }
-              title="Settings"
+              title={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "sidebarMenuAdmin",
+                8
+              )}
               active={pathname === settingsPathname}
               isSidebarExpanded={isSidebarExpanded}
             />
@@ -240,17 +260,14 @@ export const Sidebar: FC<SidebarProps> = ({
                   <IoHelpCircleOutline />
                 )
               }
-              title="Guide"
+              title={getItemByLanguageAndCollection(
+                authenticatedUserDataState.language.languageCode,
+                "sidebarMenuAdmin",
+                9
+              )}
               active={pathname === adminGuidePathname}
               isSidebarExpanded={isSidebarExpanded}
             />
-            {/* <SidebarItem
-              to={"/login"}
-              icon={<CiLogout onClick={onLogout} />}
-              title="Logout"
-              active={pathname === adminGuidePathname}
-              isSidebarExpanded={isSidebarExpanded}
-            /> */}
           </ul>
           {/* <span onClick={onLogout}>logout</span> */}
           <div className="flex items-center" onClick={onLogout}>

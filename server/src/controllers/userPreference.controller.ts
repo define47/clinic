@@ -58,6 +58,21 @@ export class UserPreferencesController {
       //   languageName: newLanguage?.languageName,
       //   isDarkModeOn: body.isDarkModeOn,
       // };
+      // const sessionValue = {
+      //   userId: currentSessionValue?.userId,
+      //   userForename: currentSessionValue?.userForename,
+      //   userSurname: currentSessionValue?.userSurname,
+      //   userEmail: currentSessionValue?.userEmail,
+      //   roleNames: currentSessionValue.roleNames,
+      //   ...((currentSessionValue.roleNames[0] === "doctor" ||
+      //     currentSessionValue.roleNames[1] === "doctor") && {
+      //     medicalSpecialities: currentSessionValue.medicalSpecialities,
+      //   }),
+      //   languageId: currentSessionValue.languageId,
+      //   languageCode: newLanguage?.languageCode,
+      //   languageName: newLanguage?.languageName,
+      //   isDarkModeOn: body.isDarkModeOn,
+      // };
       const sessionValue = {
         userId: currentSessionValue?.userId,
         userForename: currentSessionValue?.userForename,
@@ -68,9 +83,11 @@ export class UserPreferencesController {
           currentSessionValue.roleNames[1] === "doctor") && {
           medicalSpecialities: currentSessionValue.medicalSpecialities,
         }),
-        languageId: currentSessionValue.languageId,
-        languageCode: newLanguage?.languageCode,
-        languageName: newLanguage?.languageName,
+        language: {
+          languageId: currentSessionValue.languageId,
+          languageCode: newLanguage?.languageCode,
+          languageName: newLanguage?.languageName,
+        },
         isDarkModeOn: body.isDarkModeOn,
       };
 

@@ -117,7 +117,7 @@ export const AdminDashboard: FC = () => {
       {/* <GeneralDataCard entity="admin" /> */}
       {/* <PhoneExtensionPicker defaultPhoneExtension="+591" /> */}
       <div className="w-full h-full space-y-10">
-        {/* {JSON.stringify(authenticatedUserDataState)} */}
+        {JSON.stringify(authenticatedUserDataState.language.languageId)}
         <div className="w-full flex flex-col items-center justify-center">
           <WeekPicker
             setDateWeekStart={setDashboardWeekStart}

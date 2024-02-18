@@ -262,7 +262,7 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
           }
           onClickIcon={() => {}}
           isDisabled={false}
-          label={`Medical Procedure Criteria`}
+          label={label}
           name={`medicalProcedureCriteria`}
           onChangeStyledInput={(event) => {
             setSelectedMedicalSpecialityName(event.target.value);
