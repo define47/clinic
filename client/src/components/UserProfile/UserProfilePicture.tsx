@@ -47,7 +47,8 @@ export const UserProfilePicture: FC<UserProfilePictureProps> = ({
           alt="User Profile"
         />
       ) : (
-        <p>Loading image...</p>
+        ""
+        // <span>Loading image...</span>
         // <div>
         //   <span>{authenticatedUserDataState.userForename[0]}</span>
         //   <span>{authenticatedUserDataState.userSurname[0]}</span>

@@ -8,3 +8,11 @@ export const nursesPathname = "/admins/nurses";
 export const receptionistsPathname = "/admins/receptionists";
 export const settingsPathname = "/admins/settings";
 export const adminGuidePathname = "/admins/guide";
+
+export const receptionistsDashboard = "/receptionists/dashboard";
+export const appointmentsPathnameForReceptionists =
+  "/receptionists/appointments";
+export const patientsPathnameForReceptionists = "/receptionists/patients";
+
+export const doctorsDashboard = "/doctors/dashboard";
+export const appointmentsPathnameForDoctors = "/doctors/appointments";

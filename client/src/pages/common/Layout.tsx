@@ -184,7 +184,30 @@ export const Layout: FC = () => {
       content =
         device === "Desktop" ? (
           <div className="w-screen h-screen flex">
-            <Outlet />
+            <div className="lg:fixed h-full hidden lg:block z-10">
+              <Sidebar
+                isSidebarExpanded={isSidebarExpanded}
+                setIsSidebarExpanded={setIsSidebarExpanded}
+              />
+            </div>
+
+            <div className="w-full flex flex-col h-full flex-wrap">
+              <div className="w-full">
+                <TopBar
+                  isSidebarExtended={isSidebarExpanded}
+                  setIsSidebarExtended={setIsSidebarExpanded}
+                />
+              </div>
+              <div
+                // md:static
+                // left-20 top-14
+                // flex justify-center
+                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
+              >
+                {/* connected? {isSocketConnected.toString()} here: {welcome} */}
+                <Outlet />
+              </div>
+            </div>
           </div>
         ) : device === "Mobile" ? (
           <div></div>
@@ -198,7 +221,30 @@ export const Layout: FC = () => {
       content =
         device === "Desktop" ? (
           <div className="w-screen h-screen flex">
-            <Outlet />
+            <div className="lg:fixed h-full hidden lg:block z-10">
+              <Sidebar
+                isSidebarExpanded={isSidebarExpanded}
+                setIsSidebarExpanded={setIsSidebarExpanded}
+              />
+            </div>
+
+            <div className="w-full flex flex-col h-full flex-wrap">
+              <div className="w-full">
+                <TopBar
+                  isSidebarExtended={isSidebarExpanded}
+                  setIsSidebarExtended={setIsSidebarExpanded}
+                />
+              </div>
+              <div
+                // md:static
+                // left-20 top-14
+                // flex justify-center
+                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
+              >
+                {/* connected? {isSocketConnected.toString()} here: {welcome} */}
+                <Outlet />
+              </div>
+            </div>
           </div>
         ) : device === "Mobile" ? (
           <div></div>
@@ -212,7 +258,23 @@ export const Layout: FC = () => {
       content =
         device === "Desktop" ? (
           <div className="w-screen h-screen flex">
-            <Outlet />
+            <div className="w-full flex flex-col h-full flex-wrap">
+              <div className="w-full">
+                <TopBar
+                  isSidebarExtended={isSidebarExpanded}
+                  setIsSidebarExtended={setIsSidebarExpanded}
+                />
+              </div>
+              <div
+                // md:static
+                // left-20 top-14
+                // flex justify-center
+                className={`p-4 lg:fixed lg:top-14 lg:z-0 lg:h-[calc(100%-56px)] w-full overflow-y-auto  transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
+              >
+                {/* connected? {isSocketConnected.toString()} here: {welcome} */}
+                <Outlet />
+              </div>
+            </div>
           </div>
         ) : device === "Mobile" ? (
           <div></div>

@@ -83,21 +83,8 @@ export const AdminDashboard: FC = () => {
       {/* admin dashboard <Overlay /> */}
       {/* <MedicalProcedurePicker /> */}
       {/* <DragAndDrop /> */}
-      {/* <StyledInputV2
-        unfocusedTextColor="text-red-600"
-        unfocusedBorderColor="border-red-600"
-        focusedTextColor="focus:text-blue-300"
-        focusedBorderColor="focus:border-blue-300"
-        unfocusedLabelColor="text-red-600"
-        unfocusedLabelBackgroundColor="bg-white"
-        focusedLabelColor="text-blue-300"
-        focusedLabelBackgroundColor="bg-gray-100"
-        icon={<RiCalendarFill />}
-        onClickIcon={() => console.log("hello icon")}
-        isDisabled={false}
 
-      /> */}
-      <StyledInputV2
+      {/* <StyledInputV2
         unfocusedTextColor="text-red-600"
         unfocusedBorderColor="border-red-600"
         focusedTextColor="focus:text-blue-300"
@@ -113,27 +100,29 @@ export const AdminDashboard: FC = () => {
         onChangeStyledInput={(event) => {}}
         styledInputValue={""}
         styledInputWidth="w-full"
-      />
+      /> */}
       {/* <GeneralDataCard entity="admin" /> */}
       {/* <PhoneExtensionPicker defaultPhoneExtension="+591" /> */}
       <div className="w-full h-full space-y-10">
-        {JSON.stringify(authenticatedUserDataState.language.languageId)}
+        {JSON.stringify(authenticatedUserDataState)}
         <div className="w-full flex flex-col items-center justify-center">
           <WeekPicker
             setDateWeekStart={setDashboardWeekStart}
             setDashboardWeekEnd={setDashboardWeekEnd}
             initialDate={new Date()}
           />
-          <UserPicker
-            shouldDataBeFetched={true}
-            label="select doctor"
-            roleName="doctor"
-            selectedUserId={selectedDoctorId}
-            setSelectedUserId={setSelectedDoctorId}
-            selectedUserName={selectedDoctorName}
-            setSelectedUserName={setSelectedDoctorName}
-            z="z-50"
-          />
+          <div className="w-72">
+            <UserPicker
+              shouldDataBeFetched={true}
+              label="select doctor"
+              roleName="doctor"
+              selectedUserId={selectedDoctorId}
+              setSelectedUserId={setSelectedDoctorId}
+              selectedUserName={selectedDoctorName}
+              setSelectedUserName={setSelectedDoctorName}
+              z="z-50"
+            />
+          </div>
         </div>
         {selectedDoctorId !== "" && (
           <div className="w-full h-4/5 overflow-y-auto border rounded-xl">

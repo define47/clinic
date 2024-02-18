@@ -29,6 +29,9 @@ import { DoctorDashboard } from "./pages/doctor/DoctorDashboard";
 import { ReceptionistDashboard } from "./pages/receptionist/ReceptionistDashboard";
 import { PatientDashboard } from "./pages/patient/PatientDashboard";
 import { MedicalRecordPatientView } from "./pages/doctor/MedicalRecordPatientView";
+import { ReceptionistPatients } from "./pages/receptionist/ReceptionistPatients";
+import { ReceptionistsAppointments } from "./pages/receptionist/ReceptionistsAppointments";
+import { DoctorAppointments } from "./pages/doctor/DoctorAppointments";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -244,6 +247,10 @@ const App: FC = () => {
                   path="/doctors/dashboard"
                   element={<DoctorDashboard />}
                 />
+                <Route
+                  path="/doctors/appointments"
+                  element={<DoctorAppointments />}
+                />
 
                 <Route
                   path="*"
@@ -258,25 +265,28 @@ const App: FC = () => {
             <>
               <Route
                 path="/"
-                element={<Navigate to="/receptionist/dashboard" />}
-              />
-              <Route
-                path="/doctor"
-                element={<Navigate to="/receptionist/dashboard" />}
+                element={<Navigate to="/receptionists/dashboard" />}
               />
               <Route
                 path="/dashboard"
-                element={<Navigate to="/receptionist/dashboard" />}
+                element={<Navigate to="/receptionists/dashboard" />}
               />
               <Route path="/" element={<Layout />}>
                 <Route
-                  path="/receptionist/dashboard"
+                  path="/receptionists/dashboard"
                   element={<ReceptionistDashboard />}
                 />
-
+                <Route
+                  path="/receptionists/patients"
+                  element={<ReceptionistPatients />}
+                />
+                <Route
+                  path="/receptionists/appointments"
+                  element={<ReceptionistsAppointments />}
+                />
                 <Route
                   path="*"
-                  element={<Navigate to="/receptionist/dashboard" />}
+                  element={<Navigate to="/receptionists/dashboard" />}
                 />
                 {/* element={<p>Path not resolved (Doctors)</p>} */}
               </Route>

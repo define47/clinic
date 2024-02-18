@@ -27,6 +27,7 @@ type DateTimePickerProps = {
   setSelectedEntity: (selectedEntity: string) => void;
   isOverlayVisible?: boolean;
   z: string;
+  isDisabled?: boolean;
 };
 
 export const DateTimePicker: FC<DateTimePickerProps> = ({
@@ -38,6 +39,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   setSelectedEntity,
   isOverlayVisible,
   z,
+  isDisabled,
 }) => {
   // "2024-05-20"
   const currentDate = new Date();
@@ -385,36 +387,36 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
           icon={
             isDateTimePickerShown ? (
               <RiCalendarFill
-                onClick={() => {
-                  setIsDateTimePickerShown(!isDateTimePickerShown);
-                  setAreMonthsShown(false);
-                  setAreYearsShown(false);
-                  setAreTimeSlotsShown(false);
-                }}
+              // onClick={() => {
+              //   setIsDateTimePickerShown(!isDateTimePickerShown);
+              //   setAreMonthsShown(false);
+              //   setAreYearsShown(false);
+              //   setAreTimeSlotsShown(false);
+              // }}
               />
             ) : (
               <RiCalendarFill
-                onClick={() => {
-                  setIsDateTimePickerShown(!isDateTimePickerShown);
-                  setAreMonthsShown(false);
-                  setAreYearsShown(false);
-                  setAreTimeSlotsShown(false);
-                }}
+              // onClick={() => {
+              //   setIsDateTimePickerShown(!isDateTimePickerShown);
+              //   setAreMonthsShown(false);
+              //   setAreYearsShown(false);
+              //   setAreTimeSlotsShown(false);
+              // }}
               />
             )
           }
           onClickIcon={() => {
-            if (isDateTimePickerShown) {
-              setIsDateTimePickerShown(false);
-              setAreMonthsShown(false);
-              setAreYearsShown(false);
-              setAreTimeSlotsShown(false);
-            } else {
-              setIsDateTimePickerShown(true);
-              setAreMonthsShown(false);
-              setAreYearsShown(false);
-              setAreTimeSlotsShown(false);
-            }
+            // if (isDateTimePickerShown) {
+            //   setIsDateTimePickerShown(false);
+            //   setAreMonthsShown(false);
+            //   setAreYearsShown(false);
+            //   setAreTimeSlotsShown(false);
+            // } else {
+            //   setIsDateTimePickerShown(true);
+            //   setAreMonthsShown(false);
+            //   setAreYearsShown(false);
+            //   setAreTimeSlotsShown(false);
+            // }
           }}
           isDisabled={true}
           label={label}
@@ -436,7 +438,9 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
         />
         <span
           className="absolute top-0 h-10 w-full bg-transparent cursor-pointer"
-          onClick={() => setIsDateTimePickerShown(!isDateTimePickerShown)}
+          onClick={() => {
+            if (!isDisabled) setIsDateTimePickerShown(!isDateTimePickerShown);
+          }}
         ></span>
       </div>
       {/* {isDateTimePickerShown && ( */}

@@ -26,7 +26,7 @@ export const TopBar: FC<TopBarProps> = ({
        
        bg-lightMode-topBarColor dark:bg-darkMode-topBarColor border-b px-3`}
     >
-      <div className="w-full bg-red-200 pl-20">{pathname}</div>
+      <div className="w-full pl-20">{pathname}</div>
       <div className="w-full flex justify-center">b</div>
       <div className="w-full flex items-center justify-end text-sm">
         <Notification />

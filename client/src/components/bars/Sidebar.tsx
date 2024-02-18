@@ -28,11 +28,15 @@ import {
   adminDashboardPathname,
   adminGuidePathname,
   appointmentsPathname,
+  appointmentsPathnameForDoctors,
+  appointmentsPathnameForReceptionists,
   doctorsPathname,
   medicalProceduresPathname,
   medicalSpecialitiesPathname,
   nursesPathname,
   patientsPathname,
+  patientsPathnameForReceptionists,
+  receptionistsDashboard,
   receptionistsPathname,
   settingsPathname,
 } from "../../utils/consts";
@@ -105,134 +109,255 @@ export const Sidebar: FC<SidebarProps> = ({
           </div>
 
           <ul className="flex-1 px-3">
-            <SidebarItem
-              to={adminDashboardPathname}
-              icon={
-                pathname === adminDashboardPathname ? (
-                  <MdSpaceDashboard />
-                ) : (
-                  <MdOutlineSpaceDashboard />
-                )
-              }
-              title={getItemByLanguageAndCollection(
-                authenticatedUserDataState.language.languageCode,
-                "sidebarMenuAdmin",
-                0
+            {authenticatedUserDataState.roleNames.length === 2 &&
+              (authenticatedUserDataState.roleNames[0] === "admin" ||
+                authenticatedUserDataState.roleNames[0] === "admin") && (
+                <SidebarItem
+                  to={adminDashboardPathname}
+                  icon={
+                    pathname === adminDashboardPathname ? (
+                      <MdSpaceDashboard />
+                    ) : (
+                      <MdOutlineSpaceDashboard />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    0
+                  )}
+                  active={pathname === adminDashboardPathname}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
               )}
-              active={pathname === adminDashboardPathname}
-              isSidebarExpanded={isSidebarExpanded}
-            />
-            <SidebarItem
-              to={appointmentsPathname}
-              icon={
-                pathname === appointmentsPathname ? (
-                  <GiBookmarklet />
-                ) : (
-                  <GiBookmark />
-                )
-              }
-              title={getItemByLanguageAndCollection(
-                authenticatedUserDataState.language.languageCode,
-                "sidebarMenuAdmin",
-                1
+            {authenticatedUserDataState.roleNames.length === 1 &&
+              authenticatedUserDataState.roleNames[0] === "receptionist" && (
+                <SidebarItem
+                  to={receptionistsDashboard}
+                  icon={
+                    pathname === receptionistsDashboard ? (
+                      <MdSpaceDashboard />
+                    ) : (
+                      <MdOutlineSpaceDashboard />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    0
+                  )}
+                  active={pathname === receptionistsDashboard}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
               )}
-              active={pathname === appointmentsPathname}
-              isSidebarExpanded={isSidebarExpanded}
-            />
-            <SidebarItem
-              to={patientsPathname}
-              icon={
-                pathname === patientsPathname ? (
-                  <MdPersonalInjury />
-                ) : (
-                  <MdOutlinePersonalInjury />
-                )
-              }
-              title={getItemByLanguageAndCollection(
-                authenticatedUserDataState.language.languageCode,
-                "sidebarMenuAdmin",
-                2
+            {authenticatedUserDataState.roleNames.length === 2 &&
+              (authenticatedUserDataState.roleNames[0] === "admin" ||
+                authenticatedUserDataState.roleNames[0] === "admin") && (
+                <SidebarItem
+                  to={appointmentsPathname}
+                  icon={
+                    pathname === appointmentsPathname ? (
+                      <GiBookmarklet />
+                    ) : (
+                      <GiBookmark />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    1
+                  )}
+                  active={pathname === appointmentsPathname}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
               )}
-              active={pathname === patientsPathname}
-              isSidebarExpanded={isSidebarExpanded}
-            />
-            <SidebarItem
-              to={doctorsPathname}
-              icon={
-                pathname === doctorsPathname ? (
-                  <RiUserHeartFill />
-                ) : (
-                  <RiUserHeartLine />
-                )
-              }
-              title={getItemByLanguageAndCollection(
-                authenticatedUserDataState.language.languageCode,
-                "sidebarMenuAdmin",
-                3
+            {authenticatedUserDataState.roleNames.length === 1 &&
+              authenticatedUserDataState.roleNames[0] === "receptionist" && (
+                <SidebarItem
+                  to={appointmentsPathnameForReceptionists}
+                  icon={
+                    pathname === appointmentsPathnameForReceptionists ? (
+                      <GiBookmarklet />
+                    ) : (
+                      <GiBookmark />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    1
+                  )}
+                  active={pathname === appointmentsPathnameForReceptionists}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
               )}
-              active={pathname === doctorsPathname}
-              isSidebarExpanded={isSidebarExpanded}
-            />
-            <SidebarItem
-              to={medicalSpecialitiesPathname}
-              icon={
-                pathname === medicalSpecialitiesPathname ? (
-                  <RiShieldCrossFill />
-                ) : (
-                  <RiShieldCrossLine />
-                )
-              }
-              title={getItemByLanguageAndCollection(
-                authenticatedUserDataState.language.languageCode,
-                "sidebarMenuAdmin",
-                4
+            {authenticatedUserDataState.roleNames.length === 1 &&
+              authenticatedUserDataState.roleNames[0] === "doctor" && (
+                <SidebarItem
+                  to={appointmentsPathnameForDoctors}
+                  icon={
+                    pathname === appointmentsPathnameForDoctors ? (
+                      <GiBookmarklet />
+                    ) : (
+                      <GiBookmark />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    1
+                  )}
+                  active={pathname === appointmentsPathnameForDoctors}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
               )}
-              active={pathname === medicalSpecialitiesPathname}
-              isSidebarExpanded={isSidebarExpanded}
-            />
-            <SidebarItem
-              to={medicalProceduresPathname}
-              icon={
-                pathname === medicalProceduresPathname ? (
-                  <BiSolidInjection />
-                ) : (
-                  <BiInjection />
-                )
-              }
-              title={getItemByLanguageAndCollection(
-                authenticatedUserDataState.language.languageCode,
-                "sidebarMenuAdmin",
-                5
+            {authenticatedUserDataState.roleNames.length === 2 &&
+              (authenticatedUserDataState.roleNames[0] === "admin" ||
+                authenticatedUserDataState.roleNames[0] === "admin") && (
+                <SidebarItem
+                  to={patientsPathname}
+                  icon={
+                    pathname === patientsPathname ? (
+                      <MdPersonalInjury />
+                    ) : (
+                      <MdOutlinePersonalInjury />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    2
+                  )}
+                  active={pathname === patientsPathname}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
               )}
-              active={pathname === medicalProceduresPathname}
-              isSidebarExpanded={isSidebarExpanded}
-            />
-            <SidebarItem
-              to={nursesPathname}
-              icon={
-                pathname === nursesPathname ? <RiNurseFill /> : <RiNurseLine />
-              }
-              title={getItemByLanguageAndCollection(
-                authenticatedUserDataState.language.languageCode,
-                "sidebarMenuAdmin",
-                6
+
+            {authenticatedUserDataState.roleNames.length === 1 &&
+              authenticatedUserDataState.roleNames[0] === "receptionist" && (
+                <SidebarItem
+                  to={patientsPathnameForReceptionists}
+                  icon={
+                    pathname === patientsPathnameForReceptionists ? (
+                      <MdPersonalInjury />
+                    ) : (
+                      <MdOutlinePersonalInjury />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    2
+                  )}
+                  active={pathname === patientsPathnameForReceptionists}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
               )}
-              active={pathname === nursesPathname}
-              isSidebarExpanded={isSidebarExpanded}
-            />
-            <SidebarItem
-              to={receptionistsPathname}
-              icon={
-                pathname === receptionistsPathname ? <FaUser /> : <FaRegUser />
-              }
-              title={getItemByLanguageAndCollection(
-                authenticatedUserDataState.language.languageCode,
-                "sidebarMenuAdmin",
-                7
+            {authenticatedUserDataState.roleNames.length === 2 &&
+              (authenticatedUserDataState.roleNames[0] === "admin" ||
+                authenticatedUserDataState.roleNames[0] === "admin") && (
+                <SidebarItem
+                  to={doctorsPathname}
+                  icon={
+                    pathname === doctorsPathname ? (
+                      <RiUserHeartFill />
+                    ) : (
+                      <RiUserHeartLine />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    3
+                  )}
+                  active={pathname === doctorsPathname}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
               )}
-              active={pathname === receptionistsPathname}
-              isSidebarExpanded={isSidebarExpanded}
-            />
+            {authenticatedUserDataState.roleNames.length === 2 &&
+              (authenticatedUserDataState.roleNames[0] === "admin" ||
+                authenticatedUserDataState.roleNames[0] === "admin") && (
+                <SidebarItem
+                  to={medicalSpecialitiesPathname}
+                  icon={
+                    pathname === medicalSpecialitiesPathname ? (
+                      <RiShieldCrossFill />
+                    ) : (
+                      <RiShieldCrossLine />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    4
+                  )}
+                  active={pathname === medicalSpecialitiesPathname}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
+              )}
+            {authenticatedUserDataState.roleNames.length === 2 &&
+              (authenticatedUserDataState.roleNames[0] === "admin" ||
+                authenticatedUserDataState.roleNames[0] === "admin") && (
+                <SidebarItem
+                  to={medicalProceduresPathname}
+                  icon={
+                    pathname === medicalProceduresPathname ? (
+                      <BiSolidInjection />
+                    ) : (
+                      <BiInjection />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    5
+                  )}
+                  active={pathname === medicalProceduresPathname}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
+              )}
+            {authenticatedUserDataState.roleNames.length === 2 &&
+              (authenticatedUserDataState.roleNames[0] === "admin" ||
+                authenticatedUserDataState.roleNames[0] === "admin") && (
+                <SidebarItem
+                  to={nursesPathname}
+                  icon={
+                    pathname === nursesPathname ? (
+                      <RiNurseFill />
+                    ) : (
+                      <RiNurseLine />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    6
+                  )}
+                  active={pathname === nursesPathname}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
+              )}
+            {authenticatedUserDataState.roleNames.length === 2 &&
+              (authenticatedUserDataState.roleNames[0] === "admin" ||
+                authenticatedUserDataState.roleNames[0] === "admin") && (
+                <SidebarItem
+                  to={receptionistsPathname}
+                  icon={
+                    pathname === receptionistsPathname ? (
+                      <FaUser />
+                    ) : (
+                      <FaRegUser />
+                    )
+                  }
+                  title={getItemByLanguageAndCollection(
+                    authenticatedUserDataState.language.languageCode,
+                    "sidebarMenuAdmin",
+                    7
+                  )}
+                  active={pathname === receptionistsPathname}
+                  isSidebarExpanded={isSidebarExpanded}
+                />
+              )}
             <li className="border-b"></li>
             <SidebarItem
               to={settingsPathname}

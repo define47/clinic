@@ -1,11 +1,12 @@
 import axios from "axios";
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { appointmentsPath } from "../../utils/dotenv";
 import { AppointmentTableData } from "../../types";
 import { CardEntry } from "../design/card/CardEntry";
 import { UpdateAppointmentOverlay } from "../overlays/appointmentOverlays/UpdateAppointmentOverlay";
 import { DeleteAppointmentOverlay } from "../overlays/appointmentOverlays/DeleteAppointmentOverlay";
 import { CreateAppointmentOverlay } from "../overlays/appointmentOverlays/CreateAppointmentOverlay";
+import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
 
 type AppointmentTimetableProps = {
   doctorId: string;
@@ -18,6 +19,9 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
   startWeek,
   endWeek,
 }) => {
+  const socketContext = useContext(SocketNotificationDataContext);
+  const { socketNotificationDataState, socketNotificationDataSetState } =
+    socketContext!;
   const [appointments, setAppointments] = useState<AppointmentTableData[]>([]);
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
   const [selectedWeekDates, setSelectedWeekDates] = useState<string[]>([]);
@@ -202,6 +206,134 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
   useEffect(() => {
     console.log(hasTimetableSlotAppointment);
   }, [hasTimetableSlotAppointment]);
+
+  useEffect(() => {
+    if (socketNotificationDataState) {
+      const receivedSocketData = JSON.parse(socketNotificationDataState);
+      const receivedAction = receivedSocketData.action;
+      const receivedEntity = receivedSocketData.entity;
+      let receivedData = receivedSocketData.data;
+
+      console.log("socket data", receivedData, "socket action", receivedAction);
+
+      // console.log(
+      //   "🚀 ~ useEffect ~ socketNotificationDataState:",
+      //   receivedSocketData
+      // );
+
+      // console.log("🚀 ~ useEffect ~ action:", action);
+
+      // console.log("receivedSocketData", data);
+
+      if (
+        receivedAction === "createAppointment" &&
+        receivedEntity === "appointment" &&
+        doctorId === receivedData.doctor.doctorId
+      ) {
+        receivedData = receivedData as AppointmentTableData;
+        console.log("appointment data event", receivedData.doctor.doctorId);
+
+        setAppointments((prevAppointments: AppointmentTableData[]) => [
+          {
+            // appointment: {
+            // appointmentId: data.appointment.appointmentId,
+            // appointmentDoctorId: data.appointment.appointmentDoctorId,
+            // appointmentPatientId: data.appointment.appointmentPatientId,
+            // appointmentReason: data.appointment.appointmentReason,
+            // appointmentDateTime: data.appointment.appointmentDateTime,
+            // appointmentStatus: data.appointment.appointmentStatus,
+            // appointmentCancellationReason:
+            //   data.appointment.appointmentCancellationReason,
+            // },
+            // doctor: {
+            //   doctorId: data.doctor.doctorId,
+            //   doctorForename: data.doctor.doctorForename,
+            //   doctorSurname: data.doctor.doctorSurname,
+            // },
+            // patient: {
+            //   patientId: data.patientId.patientId,
+            //   patientForename: data.patientId.patientForename,
+            //   patientSurname: data.patientId.patientSurname,
+            //   patientEmail: data.patientId.patientEmail,
+            // },
+            ...receivedData,
+          } as AppointmentTableData,
+          ...prevAppointments,
+        ]);
+      } else if (receivedAction === "updateAppointment") {
+        receivedData = receivedData as AppointmentTableData;
+
+        console.log("data medical procedure update", receivedData);
+
+        setAppointments((prevAppointments: AppointmentTableData[]) => {
+          const updatedEvents = prevAppointments.map(
+            (event: AppointmentTableData) => {
+              if (
+                event.appointment.appointmentId ===
+                receivedData.appointment.appointmentId
+              ) {
+                return {
+                  ...event,
+                  ...receivedData,
+                };
+              } else {
+                return event;
+              }
+            }
+          );
+          return updatedEvents;
+        });
+      } else if (receivedAction === "deleteAppointment") {
+        console.log("data to delete", receivedData);
+
+        setAppointments((prevAppointments: AppointmentTableData[]) =>
+          prevAppointments.filter((appointment: AppointmentTableData) => {
+            // if ('appointmentId' in appointment.appointment) {
+            return (
+              (appointment as AppointmentTableData).appointment
+                .appointmentId !== receivedData
+            );
+            // }
+            // return true;
+          })
+        );
+      }
+    }
+
+    // if (
+    //   socketNotificationDataState &&
+    //   socketNotificationDataState !== undefined
+    // ) {
+    //   console.log("Received Data:", socketNotificationDataState);
+    //   let receivedData = socketNotificationDataState;
+    //   console.log(
+    //     "🚀 ~ useEffect ~ receivedData:",
+    //     JSON.parse(
+    //       (receivedData as unknown as MedicalSpeciality).medicalSpecialityName
+    //     )
+    //   );
+    // }
+
+    // setTableRows((prevUsers: TableRow[]) => [
+    //   {
+    //     userId: "userIdTest",
+    //     userForename: "",
+    //     userSurname: "",
+    //     userEmail: "",
+    //     userPhoneNumber: "",
+    //     userGender: "",
+    //     userDateOfBirth: "",
+    //     userAddress: "",
+    //     userEncryptedPassword: "",
+    //     isUserEmailActivated: false,
+    //     isUserApprovedByAdmin: false,
+    //     isUserBanned: false,
+    //     userRoleId: "",
+    //     userRoleName: "",
+    //   } as User,
+    //   ...prevUsers,
+    // ]);
+  }, [socketNotificationDataState, doctorId]);
 
   return (
     <>
