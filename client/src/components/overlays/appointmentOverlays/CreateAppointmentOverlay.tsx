@@ -228,6 +228,32 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
     console.log("selectedDoctorId", selectedDoctorId);
   }, [selectedDoctorId]);
 
+  useEffect(() => {
+    function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        if (
+          isCreateAppointmentOverlayVisible === true &&
+          isCreateAppointmentConfirmationDialogOverlayVisible === true
+        )
+          setIsCreateAppointmentConfirmationDialogOverlayVisible(false);
+        if (
+          isCreateAppointmentOverlayVisible === true &&
+          isCreateAppointmentConfirmationDialogOverlayVisible === false
+        )
+          setIsCreateAppointmentOverlayVisible(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleCloseOverlayEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleCloseOverlayEscapeKey);
+    };
+  }, [
+    isCreateAppointmentOverlayVisible,
+    isCreateAppointmentConfirmationDialogOverlayVisible,
+  ]);
+
   return (
     <>
       {timetableDoctorId !== undefined ? (

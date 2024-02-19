@@ -124,6 +124,32 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
     }
   }
 
+  useEffect(() => {
+    function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        if (
+          isUpdateAppointmentOverlayVisible === true &&
+          isUpdateAppointmentConfirmationDialogOverlayVisible === true
+        )
+          setIsUpdateAppointmentConfirmationDialogOverlayVisible(false);
+        if (
+          isUpdateAppointmentOverlayVisible === true &&
+          isUpdateAppointmentConfirmationDialogOverlayVisible === false
+        )
+          setIsUpdateAppointmentOverlayVisible(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleCloseOverlayEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleCloseOverlayEscapeKey);
+    };
+  }, [
+    isUpdateAppointmentOverlayVisible,
+    isUpdateAppointmentConfirmationDialogOverlayVisible,
+  ]);
+
   return (
     <>
       {isUpdateAppointmentOverlayVisible ? (

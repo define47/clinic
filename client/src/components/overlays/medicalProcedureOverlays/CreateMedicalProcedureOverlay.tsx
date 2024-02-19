@@ -67,6 +67,32 @@ export const CreateMedicalProcedureOverlay: FC<
     }
   }
 
+  useEffect(() => {
+    function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        if (
+          isCreateMedicalProcedureOverlayVisible === true &&
+          isCreateMedicalProcedureConfirmationDialogOverlayVisible === true
+        )
+          setIsCreateMedicalProcedureConfirmationDialogOverlayVisible(false);
+        if (
+          isCreateMedicalProcedureOverlayVisible === true &&
+          isCreateMedicalProcedureConfirmationDialogOverlayVisible === false
+        )
+          setIsCreateMedicalProcedureOverlayVisible(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleCloseOverlayEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleCloseOverlayEscapeKey);
+    };
+  }, [
+    isCreateMedicalProcedureOverlayVisible,
+    isCreateMedicalProcedureConfirmationDialogOverlayVisible,
+  ]);
+
   return (
     <>
       <StyledRippleButton

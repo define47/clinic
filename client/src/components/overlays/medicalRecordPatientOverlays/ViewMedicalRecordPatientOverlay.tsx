@@ -34,7 +34,7 @@ export const ViewMedicalRecordPatientOverlay: FC<
           <RiEyeLine
             // onClick={() => setIsViewMedicalRecordPatientOverlayVisible(true)}
             onClick={() => {
-              navigate(`/admins/medical-record-patient/${appointmentId}`);
+              navigate(`/doctors/medical-record-patient/${appointmentId}`);
             }}
             className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
           />

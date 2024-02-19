@@ -181,7 +181,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           orderBy: "desc:appointmentDateTime",
           limit: tableLimit,
           page: currentPage,
-          doctorId: "",
+          doctorId:
+            (authenticatedUserDataState.roleNames[0] === "doctor" ||
+              authenticatedUserDataState.roleNames[1] === "doctor") &&
+            authenticatedUserDataState.roleNames[0] !== "admin" &&
+            authenticatedUserDataState.roleNames[1] !== "admin"
+              ? authenticatedUserDataState.userId
+              : "",
           patientId: "",
         };
       else if (entity === "medicalProcedure") {
@@ -419,7 +425,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         );
       } else if (
         receivedAction === "createAppointment" &&
-        receivedEntity === entity
+        receivedEntity === entity &&
+        ((authenticatedUserDataState.roleNames[0] === "doctor" &&
+          authenticatedUserDataState.userId === receivedData.doctor.doctorId) ||
+          authenticatedUserDataState.roleNames[0] === "receptionist" ||
+          authenticatedUserDataState.roleNames[0] === "admin")
       ) {
         receivedData = receivedData as AppointmentTableData;
         console.log(
@@ -1236,7 +1246,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     <td className="px-6 py-4 text-xs">
                       {tableRow.doctor.doctorForename}&nbsp;
                       {tableRow.doctor.doctorSurname}&nbsp;&nbsp;&nbsp;
-                      {tableRow.doctor.doctorId}
+                      {/* {tableRow.doctor.doctorId} */}
                     </td>
                     <td className="px-6 py-4 text-xs">
                       {tableRow.patient.patientForename}&nbsp;
@@ -1266,7 +1276,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       {(authenticatedUserDataState.roleNames[0] === "doctor" ||
                         authenticatedUserDataState.roleNames[1] === "doctor") &&
                         tableRow.appointment.appointmentDoctorId ===
-                          authenticatedUserDataState.userId && (
+                          authenticatedUserDataState.userId &&
+                        tableRow.appointment.appointmentStatus !==
+                          "completed" && (
                           <CreateMedicalRecordPatientOverlay
                             appointment={tableRow}
                           />
@@ -1288,21 +1300,34 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                         <div className="w-5 h-14"></div>
                       )}
 
-                      <UpdateAppointmentOverlay
-                        appointment={tableRow.appointment}
-                        doctorData={tableRow.doctor}
-                        patientData={tableRow.patient}
-                      />
-                      <DeleteAppointmentOverlay
-                        appointmentId={tableRow.appointment.appointmentId}
-                      />
+                      {(authenticatedUserDataState.roleNames[0] === "admin" ||
+                        authenticatedUserDataState.roleNames[0] ===
+                          "receptionist" ||
+                        authenticatedUserDataState.roleNames[1] ===
+                          "admin") && (
+                        <UpdateAppointmentOverlay
+                          appointment={tableRow.appointment}
+                          doctorData={tableRow.doctor}
+                          patientData={tableRow.patient}
+                        />
+                      )}
+
+                      {(authenticatedUserDataState.roleNames[0] === "admin" ||
+                        authenticatedUserDataState.roleNames[0] ===
+                          "receptionist" ||
+                        authenticatedUserDataState.roleNames[1] ===
+                          "admin") && (
+                        <DeleteAppointmentOverlay
+                          appointmentId={tableRow.appointment.appointmentId}
+                        />
+                      )}
 
                       <Tooltip text="View Appointment History">
                         <RiTreasureMapLine
                           className="text-xl hover:text-lightMode-sidebarItemIconColor hover:scale-125 cursor-pointer"
                           onClick={() => {
                             navigate(
-                              `/admins/appointment-history/${tableRow.appointment.appointmentId}`
+                              `/${authenticatedUserDataState.roleNames[0]}s/appointment-history/${tableRow.appointment.appointmentId}`
                             );
                             navigate(0);
                           }}
@@ -1399,16 +1424,19 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           <CreateUserOverlay roleId={roleId} roleName={entity} />
         )}
         {entity === "medicalSpeciality" && <CreateMedicalSpecialityOverlay />}
-        {entity === "appointment" && (
-          <CreateAppointmentOverlay
-            isCreateAppointmentOverlayVisible={
-              isCreateAppointmentOverlayVisible
-            }
-            setIsCreateAppointmentOverlayVisible={
-              setIsCreateAppointmentOverlayVisible
-            }
-          />
-        )}
+        {entity === "appointment" &&
+          (authenticatedUserDataState.roleNames[0] === "admin" ||
+            authenticatedUserDataState.roleNames[0] === "receptionist" ||
+            authenticatedUserDataState.roleNames[1] === "admin") && (
+            <CreateAppointmentOverlay
+              isCreateAppointmentOverlayVisible={
+                isCreateAppointmentOverlayVisible
+              }
+              setIsCreateAppointmentOverlayVisible={
+                setIsCreateAppointmentOverlayVisible
+              }
+            />
+          )}
         {entity === "medicalProcedure" &&
           selectedMedicalSpecialityId !== "" && (
             <CreateMedicalProcedureOverlay
@@ -1727,12 +1755,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                 <div
                   className={`w-56 flex items-center justify-center text-center space-x-3`}
                 >
-                  <UpdateAppointmentOverlay
-                    appointment={tableRow.appointment}
-                    doctorData={tableRow.doctor}
-                    patientData={tableRow.patient}
-                  />
-
+                  {authenticatedUserDataState.roleNames[0] === "admin" && (
+                    <UpdateAppointmentOverlay
+                      appointment={tableRow.appointment}
+                      doctorData={tableRow.doctor}
+                      patientData={tableRow.patient}
+                    />
+                  )}
                   <DeleteAppointmentOverlay
                     appointmentId={tableRow.appointment.appointmentId}
                   />

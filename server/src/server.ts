@@ -36,6 +36,7 @@ import {
   createSpecialities,
 } from "./utils/databaseInteractions.js";
 import { communicationsRoutes } from "./routes/communications.routes.js";
+import { SerialPort } from "serialport";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -119,8 +120,8 @@ fastifyServer.get("/api/user-profile-picture", (request, reply) => {
 
     if (foundFile) {
       const fileExtension = path.extname(foundFile);
-      console.log("Found file:", foundFile);
-      console.log("File extension:", fileExtension);
+      // console.log("Found file:", foundFile);
+      // console.log("File extension:", fileExtension);
       fs.readFile(path.join(directoryPath, foundFile), (err, data) => {
         if (err) {
           console.error("Error reading the image:", err);
@@ -355,28 +356,42 @@ async function main() {
   }
 }
 
-main();
+// const serialPort = new SerialPort({
+//   path: "/dev/ttyUSB0",
+//   baudRate: 9600,
+//   dataBits: 8,
+//   parity: "none",
+//   stopBits: 1,
+// });
 
-// const numClusterWorkers = 8;
-// if (cluster.isPrimary) {
-//   console.log(`Primary ${process.pid} is running`);
-//   for (let i = 0; i < numClusterWorkers; i++) {
-//     cluster.fork();
-//   }
-
-//   cluster.on("exit", (worker, code, signal) =>
-//     console.log(`worker ${worker.process.pid} died`)
-//   );
-
-//   cluster.on("online", (worker) => {
-//     console.log(
-//       `Yay, the worker ${worker.process.pid} responded after it was forked`
-//     );
+// SerialPort.list().then(function (ports) {
+//   ports.forEach(function (port) {
+//     console.log("Port: ", port);
 //   });
-// } else {
-//   try {
-//     main();
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+// });
+
+// main();
+
+const numClusterWorkers = 8;
+if (cluster.isPrimary) {
+  console.log(`Primary ${process.pid} is running`);
+  for (let i = 0; i < numClusterWorkers; i++) {
+    cluster.fork();
+  }
+
+  cluster.on("exit", (worker, code, signal) =>
+    console.log(`worker ${worker.process.pid} died`)
+  );
+
+  cluster.on("online", (worker) => {
+    console.log(
+      `Yay, the worker ${worker.process.pid} responded after it was forked`
+    );
+  });
+} else {
+  try {
+    main();
+  } catch (error) {
+    console.log(error);
+  }
+}

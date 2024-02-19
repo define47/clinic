@@ -80,6 +80,7 @@ export const AdminDashboard: FC = () => {
   }, []);
   return (
     <div className="w-full h-full">
+      <PhoneExtensionPicker defaultPhoneExtension="+40" />
       {/* admin dashboard <Overlay /> */}
       {/* <MedicalProcedurePicker /> */}
       {/* <DragAndDrop /> */}

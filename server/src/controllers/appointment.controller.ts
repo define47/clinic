@@ -9,6 +9,7 @@ import { UserRoleMappingService } from "../services/userRoleMapping.service";
 import { Notification } from "../models/notification.model";
 import { UserService } from "../services/user.service";
 import { AppointmentJoinDoctorAndPatient } from "../models/appointment.model";
+import { sendSms } from "../utils/sms";
 
 export class AppointmentController {
   private readonly _appointmentService: AppointmentService;
@@ -18,6 +19,7 @@ export class AppointmentController {
   private readonly _roleService;
   private readonly _userRoleMappingService;
   private readonly _userService;
+  private _doctorIdAppointment;
 
   public constructor() {
     this._appointmentService = new AppointmentService();
@@ -27,6 +29,7 @@ export class AppointmentController {
     this._roleService = new RoleService();
     this._userRoleMappingService = new UserRoleMappingService();
     this._userService = new UserService();
+    this._doctorIdAppointment = "";
   }
   // doctor-appointment-booked-slots
 
@@ -71,26 +74,43 @@ export class AppointmentController {
       "asc:userForename"
     ))!.tableData;
 
+    console.log("this._doctorIdAppointment", this._doctorIdAppointment, "Here");
+
     console.log(receptionists);
     console.log(admins);
 
     for (let i = 0; i < receptionists.length; i++) {
-      // if (receptionists[i].userId !== userSessionData.userId)
-      await this._userNotificationMappingService.createUserNotificationMapping({
-        receiverId: receptionists[i].userId,
-        notificationId: notification?.notificationId!,
-        isNotificationRead: false,
-      });
+      if (receptionists[i].userId !== userSessionData.userId)
+        await this._userNotificationMappingService.createUserNotificationMapping(
+          {
+            receiverId: receptionists[i].userId,
+            notificationId: notification?.notificationId!,
+            isNotificationRead: false,
+          }
+        );
     }
 
     for (let i = 0; i < admins.length; i++) {
-      // if (admins[i].userId !== userSessionData.userId)
-      await this._userNotificationMappingService.createUserNotificationMapping({
-        receiverId: admins[i].userId,
-        notificationId: notification?.notificationId!,
-        isNotificationRead: false,
-      });
+      if (admins[i].userId !== userSessionData.userId)
+        await this._userNotificationMappingService.createUserNotificationMapping(
+          {
+            receiverId: admins[i].userId,
+            notificationId: notification?.notificationId!,
+            isNotificationRead: false,
+          }
+        );
     }
+
+    // for (let i = 0; i < admins.length; i++) {
+    //   if (admins[i].userId !== this._doctorIdAppointment)
+    //     await this._userNotificationMappingService.createUserNotificationMapping(
+    //       {
+    //         receiverId: this._doctorIdAppointment,
+    //         notificationId: notification?.notificationId!,
+    //         isNotificationRead: false,
+    //       }
+    //     );
+    // }
 
     console.log("Notification Sent");
   }
@@ -197,6 +217,8 @@ export class AppointmentController {
         appointmentHistoryUpdatedBy: userSessionData.userId,
       });
 
+      this._doctorIdAppointment = appointmentToCreate?.appointmentDoctorId!;
+
       await this.sendAppointmentNotification(
         request,
         "create",
@@ -224,6 +246,15 @@ export class AppointmentController {
             data: appointmentData,
           })
         );
+
+      const patient = await this._userService.getUserById(
+        body.appointmentPatientId
+      );
+
+      // sendSms(
+      //   patient?.userPhoneNumber!,
+      //   `Programare ${appointmentToCreate?.appointmentDateTime} Iatropolis`
+      // );
 
       reply.code(200).send({ success: true, appointmentToCreate });
     } catch (error) {}

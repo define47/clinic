@@ -183,7 +183,7 @@ const App: FC = () => {
                   element={<AppointmentHistoryCards />}
                 />
                 <Route
-                  path="/admins/medical-record-patient/:appointmentId"
+                  path="/doctors/medical-record-patient/:appointmentId"
                   element={<MedicalRecordPatientView />}
                 />
                 <Route path="*" element={<p>Path not resolved</p>} />
@@ -251,6 +251,14 @@ const App: FC = () => {
                   path="/doctors/appointments"
                   element={<DoctorAppointments />}
                 />
+                <Route
+                  path="/doctors/appointment-history/:appointmentId"
+                  element={<AppointmentHistoryCards />}
+                />
+                <Route
+                  path="/doctors/medical-record-patient/:appointmentId"
+                  element={<MedicalRecordPatientView />}
+                />
 
                 <Route
                   path="*"
@@ -283,6 +291,10 @@ const App: FC = () => {
                 <Route
                   path="/receptionists/appointments"
                   element={<ReceptionistsAppointments />}
+                />
+                <Route
+                  path="/receptionists/appointment-history/:appointmentId"
+                  element={<AppointmentHistoryCards />}
                 />
                 <Route
                   path="*"

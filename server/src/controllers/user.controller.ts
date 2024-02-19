@@ -62,19 +62,19 @@ export class UserController {
       const query: any = request.query;
 
       const payload = await this._userRoleMappingService.getAllUsersRelatedData(
-        query.roleId,
-        query.searchBy.split(","),
-        query.searchQuery,
-        parseInt(query.limit),
-        parseInt(query.page),
-        query.orderBy
+        // query.roleId,
+        // query.searchBy.split(","),
+        // query.searchQuery,
+        // parseInt(query.limit),
+        // parseInt(query.page),
+        // query.orderBy
 
-        // "0f6c88ca-a4b3-55d3-814b-4cd4daf3cac8",
-        // ["userForename"],
-        // "",
-        // 100,
-        // 0,
-        // "asc:userForename"
+        "0f6c88ca-a4b3-55d3-814b-4cd4daf3cac8",
+        ["userForename"],
+        "",
+        100,
+        0,
+        "asc:userForename"
       );
 
       reply.code(200).send({ success: true, payload });

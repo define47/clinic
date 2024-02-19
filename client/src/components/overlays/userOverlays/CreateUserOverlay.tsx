@@ -169,7 +169,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
           userSurname: userToCreate.userSurname,
           userEmail: userToCreate.userEmail,
           userPhoneNumber: userToCreate.userPhoneNumber,
-          userGender: userToCreate.userGender,
+          userGender: selectedGenderValue,
           // userDateOfBirth: userToCreate.userDateOfBirth,
           userDateOfBirth,
           userAddress: userToCreate.userAddress,
@@ -815,7 +815,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                       confirmationDialogEntryTitleWidth="w-3/12"
                       confirmationDialogEntryTitle="userGender"
                       confirmationDialogEntryBodyWidth="w-8/12"
-                      confirmationDialogEntryBody={userToCreate.userGender}
+                      confirmationDialogEntryBody={selectedGenderValue}
                     />
                     <StyledEntry
                       entryHeight="h-8"
