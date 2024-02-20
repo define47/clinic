@@ -19,9 +19,13 @@ import axios from "axios";
 import { appointmentsPath } from "../../../utils/dotenv";
 import { Tooltip } from "../../design/Tooltip";
 import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
-import { getItemByLanguageAndCollection } from "../../../utils/clientLanguages";
+import {
+  getItemByLanguageAndCollection,
+  getItemInUserSelectedLanguageCode,
+} from "../../../utils/clientLanguages";
 import { AuthenticatedUserDataContext } from "../../../contexts/UserContext";
 import { StyledInputV2 } from "../../design/StyledInputV2";
+import { capitalizeString } from "../../../utils/utils";
 
 export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
   appointment,
@@ -79,9 +83,10 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
         `${doctorData.doctorForename} ${doctorData.doctorSurname}`
       );
       setSelectedPatientName(
-        `${patientData.patientForename} ${patientData.patientForename}`
+        `${patientData.patientForename} ${patientData.patientSurname}`
       );
-      setSelectedAppointmentStatusName(appointment.appointmentStatus);
+      // setSelectedAppointmentStatusName(appointment.appointmentStatus);
+      setSelectedAppointmentStatusValue(appointment.appointmentStatus);
     }
   }, [
     isUpdateAppointmentOverlayVisible,
@@ -149,6 +154,24 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
     isUpdateAppointmentOverlayVisible,
     isUpdateAppointmentConfirmationDialogOverlayVisible,
   ]);
+  useEffect(() => {
+    const found = getItemInUserSelectedLanguageCode(
+      authenticatedUserDataState.language.languageCode,
+      "appointmentStatuses",
+      selectedAppointmentStatusName
+    );
+
+    if (found)
+      console.log(
+        "selectedAppointmentStatusName",
+        // getItemInUserSelectedLanguageCode(
+        //   authenticatedUserDataState.language.languageCode,
+        //   "appointmentStatuses",
+        //   selectedAppointmentStatusName
+        // )!
+        capitalizeString(found)
+      );
+  }, [selectedAppointmentStatusName, authenticatedUserDataState]);
 
   return (
     <>
@@ -164,7 +187,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
       )}
 
       <Overlay
-        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
+        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
           isUpdateAppointmentOverlayVisible
             ? "visible backdrop-blur-sm"
             : "invisible"
@@ -173,15 +196,15 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
         closeModal={handleOverlayClick}
       >
         <div
-          className={`bg-white border border-gray-500 w-2/3 h-1/2 rounded-xl shadow p-6 transition-all ${
+          className={`w-11/12 h-4/5 overflow-y-auto lg:w-3/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
             isUpdateAppointmentOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
           }`}
         >
           <span className="flex justify-center mb-8">Update Appointment</span>
-          <div className="w-full flex justify-between">
-            <div className="flex flex-col space-y-6">
+          <div className="w-full lg:flex lg:justify-between lg:space-x-24">
+            <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
               <UserPicker
                 shouldDataBeFetched={false}
                 label={getItemByLanguageAndCollection(
@@ -262,7 +285,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
                 )}
               />
             </div>
-            <div className="flex flex-col space-y-6">
+            <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
               <DateTimePicker
                 label="Appointment Date Time"
                 isDateOnly={false}
@@ -273,6 +296,14 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
                 isOverlayVisible={isUpdateAppointmentOverlayVisible}
                 z="z-50"
               />
+
+              {/* capitalizeString(
+                getItemInUserSelectedLanguageCode(
+                  authenticatedUserDataState.language.languageCode,
+                  "appointmentStatuses",
+                  "selectedAppointmentStatusName"
+                )!
+              ) */}
               <AppointmentStatusPicker
                 selectedAppointmentStatusName={selectedAppointmentStatusName}
                 setSelectedAppointmentStatusName={
@@ -284,6 +315,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
                 }
                 z="z-40"
               />
+
               {selectedAppointmentStatusValue === "canceled by patient" && (
                 <StyledInputV2
                   styledInputWidth="w-full"

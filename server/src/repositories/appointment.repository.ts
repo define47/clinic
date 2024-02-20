@@ -493,8 +493,8 @@ export class AppointmentRepository
             )
           );
 
-          console.log("current day start:", currentDayStartInUTC);
-          console.log("current day end:", currentDayEndInUTC);
+          // console.log("current day start:", currentDayStartInUTC);
+          // console.log("current day end:", currentDayEndInUTC);
 
           startDate = currentDayStartInUTC;
           endDate = currentDayEndInUTC;
@@ -506,8 +506,8 @@ export class AppointmentRepository
           lastDayOfCurrentWeek.setUTCHours(23, 59, 59, 999);
           lastDayOfCurrentWeek.setDate(lastDayOfCurrentWeek.getDate() + 6);
 
-          console.log("first day of current week:", firstDayOfCurrentWeek);
-          console.log("last day of current week:", lastDayOfCurrentWeek);
+          // console.log("first day of current week:", firstDayOfCurrentWeek);
+          // console.log("last day of current week:", lastDayOfCurrentWeek);
 
           startDate = firstDayOfCurrentWeek;
           endDate = lastDayOfCurrentWeek;
@@ -536,8 +536,8 @@ export class AppointmentRepository
             )
           );
 
-          console.log("current month start:", currentMonthStart);
-          console.log("current month end:", currentMonthEnd);
+          // console.log("current month start:", currentMonthStart);
+          // console.log("current month end:", currentMonthEnd);
 
           startDate = currentMonthStart;
           endDate = currentMonthEnd;
@@ -554,14 +554,14 @@ export class AppointmentRepository
           endOfNextWeek.setUTCDate(startOfNextWeek.getUTCDate() + 6);
           endOfNextWeek.setUTCHours(23, 59, 59, 999);
 
-          console.log("Start of next week (UTC):", startOfNextWeek);
-          console.log("End of next week (UTC):", endOfNextWeek);
+          // console.log("Start of next week (UTC):", startOfNextWeek);
+          // console.log("End of next week (UTC):", endOfNextWeek);
 
           startDate = startOfNextWeek;
           endDate = endOfNextWeek;
           break;
         case "custom":
-          console.log("customStartDate", customStartDate);
+          // console.log("customStartDate", customStartDate);
 
           startDate = new Date(customStartDate);
           startDate.setUTCHours(0, 0, 0);

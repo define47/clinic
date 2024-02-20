@@ -744,6 +744,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                     selectedTertiaryMedicalSpecialityId={
                       selectedTertiaryMedicalSpecialityId
                     }
+                    z="z-50"
                   />
                   {user.medicalSpecialities &&
                     user.medicalSpecialities.length >= 2 && (
@@ -770,6 +771,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                         selectedTertiaryMedicalSpecialityId={
                           selectedTertiaryMedicalSpecialityId
                         }
+                        z="z-40"
                       />
                     )}
                   {user.medicalSpecialities &&
@@ -797,6 +799,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
                         selectedTertiaryMedicalSpecialityId={
                           selectedTertiaryMedicalSpecialityId
                         }
+                        z="z-30"
                       />
                     )}
                 </>

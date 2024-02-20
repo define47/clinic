@@ -177,17 +177,18 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
   //   }
   // }, []);
 
-  // useEffect(() => {
-  //   const foundSpeciality = medicalSpecialities.find(
-  //     (medicalSpeciality) =>
-  //       medicalSpeciality.medicalSpecialityName.toLowerCase() ===
-  //       selectedMedicalSpecialityName.toLowerCase()
-  //   );
+  useEffect(() => {
+    const foundSpeciality = medicalSpecialities.find(
+      (medicalSpeciality) =>
+        medicalSpeciality.medicalSpecialityName.toLowerCase() ===
+        selectedMedicalSpecialityName.toLowerCase()
+    );
 
-  //   if (foundSpeciality) {
-  //     setSelectedMedicalSpecialityId(foundSpeciality.medicalSpecialityId!);
-  //   }
-  // }, []);
+    if (foundSpeciality) {
+      setSelectedMedicalSpecialityId(foundSpeciality.medicalSpecialityId!);
+      setSelectedMedicalSpecialityName(foundSpeciality.medicalSpecialityName);
+    }
+  }, [selectedMedicalSpecialityId, selectedMedicalSpecialityName]);
 
   return (
     <div className="w-full flex">
@@ -227,14 +228,56 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
         /> */}
 
         <StyledInputV2
-          unfocusedTextColor="text-pink-600"
-          unfocusedBorderColor="border-pink-600"
-          focusedTextColor="focus:text-pink-600"
-          focusedBorderColor="focus:border-pink-600"
-          focusedBorderColorIconArea="border-pink-600"
-          unfocusedLabelColor="text-pink-600"
+          unfocusedTextColor={
+            selectedMedicalSpecialityName.length === 0
+              ? "text-black"
+              : selectedMedicalSpecialityId.length > 0
+              ? "text-green-700"
+              : "text-red-700"
+          }
+          unfocusedBorderColor={
+            selectedMedicalSpecialityName.length === 0
+              ? "border-black"
+              : selectedMedicalSpecialityId.length > 0
+              ? "border-green-700"
+              : "border-red-700"
+          }
+          focusedTextColor={
+            selectedMedicalSpecialityName.length === 0
+              ? "focus:text-pink-500"
+              : selectedMedicalSpecialityId.length > 0
+              ? "focus:text-green-500"
+              : "focus:text-red-500"
+          }
+          focusedBorderColor={
+            selectedMedicalSpecialityName.length === 0
+              ? "focus:border-pink-500"
+              : selectedMedicalSpecialityId.length > 0
+              ? "focus:border-green-500"
+              : "focus:border-red-500"
+          }
+          focusedBorderColorIconArea={
+            selectedMedicalSpecialityName.length === 0
+              ? "border-pink-500"
+              : selectedMedicalSpecialityId.length > 0
+              ? "border-green-500"
+              : "border-red-500"
+          }
+          unfocusedLabelColor={
+            selectedMedicalSpecialityName.length === 0
+              ? "text-black"
+              : selectedMedicalSpecialityId.length > 0
+              ? "text-green-700"
+              : "text-red-700"
+          }
           unfocusedLabelBackgroundColor="bg-white"
-          focusedLabelColor="text-pink-600"
+          focusedLabelColor={
+            selectedMedicalSpecialityName.length === 0
+              ? "text-pink-500"
+              : selectedMedicalSpecialityId.length > 0
+              ? "text-green-500"
+              : "text-red-500"
+          }
           focusedLabelBackgroundColor="bg-white"
           icon={
             <div

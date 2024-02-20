@@ -13,6 +13,7 @@ type ClientLanguageCollection = {
   searchCriterionAppointment: string[];
   medicalSpecialityPickerLabels: string[];
   pageNavigationButtonNames: string[];
+  appointmentStatuses: string[];
 };
 type ClientLanguage = {
   [languageCode: string]: ClientLanguageCollection;
@@ -119,6 +120,17 @@ export const clientLanguages: ClientLanguage = {
       "Selectează Specialitate Medicală Terțiară",
     ],
     pageNavigationButtonNames: ["Pagina Anterioară", "Pagina Următoare"],
+    appointmentStatuses: [
+      "Programat",
+      "Reprogramat",
+      "Complet",
+      "Neprezentat",
+      "Aprobare In Asteptare",
+      "Asteptand",
+      "Confirmated De Catre Pacient",
+      "Anulat De Catre Pacient",
+      "Achitat",
+    ],
   },
 
   "en-GB": {
@@ -215,8 +227,47 @@ export const clientLanguages: ClientLanguage = {
       "Select Tertiary Medical Speciality",
     ],
     pageNavigationButtonNames: ["Previous Page", "Next Page"],
+    appointmentStatuses: [
+      "Scheduled",
+      "Rescheduled",
+      "Completed",
+      "No-Show",
+      "Pending Approval",
+      "Waiting",
+      "Confirmed By Patient",
+      "Canceled By Patient",
+      "Paid",
+    ],
   },
 };
+
+export function getItemInUserSelectedLanguageCode(
+  userSelectedLanguageCode: string,
+  collectionKey: keyof ClientLanguageCollection,
+  itemName: string
+) {
+  const userSelectedLanguageCodeCollections =
+    clientLanguages[userSelectedLanguageCode];
+
+  if (collectionKey === "appointmentStatuses") {
+    const foundAppointmentIndex = [
+      "Scheduled",
+      "Rescheduled",
+      "Completed",
+      "No-Show",
+      "Pending Approval",
+      "Waiting",
+      "Confirmed By Patient",
+      "Canceled By Patient",
+      "Paid",
+    ].indexOf(itemName);
+
+    if (foundAppointmentIndex !== -1)
+      return userSelectedLanguageCodeCollections.appointmentStatuses[
+        foundAppointmentIndex
+      ];
+  }
+}
 
 export function getItemByLanguageAndCollection(
   selectedLanguageCode: string,

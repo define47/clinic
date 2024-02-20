@@ -64,7 +64,7 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
         // focus:border-blue-300
         // focus:text-blue-300
         ref={styledInputRef}
-        className={`w-full h-10 pl-1 bg-white border-y border-l outline-none rounded-tl-lg rounded-bl-lg transition-all duration-500 ${unfocusedBorderColor} ${focusedBorderColor} ${unfocusedTextColor} ${focusedTextColor} cursor-pointer`}
+        className={`w-full h-10 pl-1 bg-white border-y border-l outline-none rounded-tl-lg rounded-bl-lg transition-all duration-500 ${unfocusedBorderColor} ${focusedBorderColor} ${unfocusedTextColor} ${focusedTextColor} cursor-pointer disabled:cursor-not-allowed`}
         value={styledInputValue}
         name={name}
         onChange={(event) => {
