@@ -15,6 +15,7 @@ import { GeneralDataCard } from "../../components/design/card/GeneralDataCard";
 import { UserPicker } from "../../components/pickers/UserPicker";
 import { StyledInputV2 } from "../../components/design/StyledInputV2";
 import { RiCalendarFill } from "react-icons/ri";
+import { StyledAppointmentStatusName } from "../../components/design/StyledAppointmentStatusName";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -81,6 +82,8 @@ export const AdminDashboard: FC = () => {
   return (
     <div className="w-full h-full">
       <PhoneExtensionPicker defaultPhoneExtension="+40" />
+      <StyledAppointmentStatusName appointmentStatusName="completed" />
+      <StyledAppointmentStatusName appointmentStatusName="canceled" />
       {/* admin dashboard <Overlay /> */}
       {/* <MedicalProcedurePicker /> */}
       {/* <DragAndDrop /> */}

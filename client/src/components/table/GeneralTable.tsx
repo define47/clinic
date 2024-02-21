@@ -56,6 +56,7 @@ import {
   getAppointmentTableColumnNamesByLanguage,
   getItemByLanguageAndCollection,
 } from "../../utils/clientLanguages";
+import { StyledAppointmentStatusName } from "../design/StyledAppointmentStatusName";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -1266,8 +1267,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                         .split("T")[1]
                         .substring(0, 5)}
                     </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.appointment.appointmentStatus}
+                    <td className="w-60 px-6 py-4 text-xs">
+                      {/* {tableRow.appointment.appointmentStatus} */}
+                      <StyledAppointmentStatusName
+                        appointmentStatusName={
+                          tableRow.appointment.appointmentStatus
+                        }
+                      />
                     </td>
                     <td className="px-6 py-4 text-xs">
                       {tableRow.appointment.appointmentCancellationReason}

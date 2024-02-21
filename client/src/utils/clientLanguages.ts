@@ -127,7 +127,7 @@ export const clientLanguages: ClientLanguage = {
       "Neprezentat",
       "Aprobare In Asteptare",
       "Asteptand",
-      "Confirmated De Catre Pacient",
+      "Confirmat De Catre Pacient",
       "Anulat De Catre Pacient",
       "Achitat",
     ],

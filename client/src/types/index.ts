@@ -393,3 +393,14 @@ export type GenderPickerProps = {
   setSelectedGenderValue: (selectedGenderValue: string) => void;
   z: string;
 };
+
+export type UnderlinedTextProps = {
+  text: string;
+  textColor: string;
+  underlineColorGradientStart: string;
+  underlineColorGradientEnd: string;
+};
+
+export type StyledAppointmentStatusProps = {
+  appointmentStatusName: string;
+};

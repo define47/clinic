@@ -1,10 +1,11 @@
 import { ChangeEvent, FC, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserToLogin } from "../../types";
 import { loginUserPath } from "../../utils/dotenv";
 import { StyledInput } from "../../components/design/StyledInput";
 import axios from "axios";
 import { StyledInputV2 } from "../../components/design/StyledInputV2";
+import { UnderlinedText } from "../../components/design/UnderlinedText";
 
 export const LoginUser: FC = () => {
   const navigate = useNavigate();
@@ -38,7 +39,8 @@ export const LoginUser: FC = () => {
   }
   return (
     <div className="h-full w-full flex absolute items-center justify-center">
-      <div className="p-8 h-96 w-96 bg-transparent backdrop-blur-sm border border-gray-300 rounded-xl flex flex-col justify-center items-center space-y-4">
+      <div className="p-8 h-3/5 w-4/5 lg:h-2/5 lg:w-1/5 bg-transparent backdrop-blur-sm border border-gray-300 rounded-xl flex flex-col justify-center items-center space-y-4">
+        <span className="text-gray-300 text-xl">Welcome Back</span>
         {/* <StyledInput
           label="userEmail"
           name="userEmail"
@@ -99,15 +101,23 @@ export const LoginUser: FC = () => {
           textColorFocused="focus:text-green-500"
           labelColor="text-white"
         /> */}
-        <button onClick={onLogin}>Submit</button>
-        <div className="text-gray-300">
-          <span>Don't Have An Account?</span>&nbsp;
-          <span className="hover:underline">Sign Up Here!</span>
-          <div className="group text-blue-500 transition-all duration-300 ease-in-out">
-            <span className="bg-left-bottom bg-gradient-to-r from-blue-500 to-blue-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
-              This text gets underlined on hover from left
-            </span>{" "}
-          </div>
+        <span
+          className="w-2/3 flex items-center justify-center border bg-transparent text-gray-300 py-2 px-5 rounded-xl cursor-pointer transition-all duration-500 hover:bg-white hover:text-black"
+          onClick={onLogin}
+        >
+          Login
+        </span>
+        <div className="w-full flex flex-col items-center justify-center text-gray-300">
+          <span>Don't Have An Account?</span>
+
+          <Link to="/signup">
+            <UnderlinedText
+              text="Sign Up Here!"
+              textColor="text-pink-500"
+              underlineColorGradientStart="from-pink-600"
+              underlineColorGradientEnd="to-pink-600"
+            />
+          </Link>
         </div>
       </div>
     </div>

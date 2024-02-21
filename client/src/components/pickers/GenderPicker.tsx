@@ -73,13 +73,56 @@ export const GenderPicker: FC<GenderPickerProps> = ({
     <div className="w-full flex">
       <div className={`w-full relative ${z}`} ref={genderPickerRef}>
         <StyledInputV2
-          unfocusedTextColor="text-pink-600"
-          unfocusedBorderColor="border-pink-600"
-          focusedTextColor="focus:text-pink-600"
-          focusedBorderColor="focus:border-pink-600"
-          unfocusedLabelColor="text-pink-600"
+          unfocusedTextColor={
+            selectedGenderName.length === 0
+              ? "text-black"
+              : selectedGenderValue.length > 0
+              ? "text-green-700"
+              : "text-red-700"
+          }
+          unfocusedBorderColor={
+            selectedGenderName.length === 0
+              ? "border-black"
+              : selectedGenderValue.length > 0
+              ? "border-green-700"
+              : "border-red-700"
+          }
+          focusedTextColor={
+            selectedGenderName.length === 0
+              ? "focus:text-pink-500"
+              : selectedGenderValue.length > 0
+              ? "focus:text-green-500"
+              : "focus:text-red-500"
+          }
+          focusedBorderColor={
+            selectedGenderName.length === 0
+              ? "focus:border-pink-500"
+              : selectedGenderValue.length > 0
+              ? "focus:border-green-500"
+              : "focus:border-red-500"
+          }
+          focusedBorderColorIconArea={
+            selectedGenderName.length === 0
+              ? "border-pink-500"
+              : selectedGenderValue.length > 0
+              ? "border-green-500"
+              : "border-red-500"
+          }
+          unfocusedLabelColor={
+            selectedGenderName.length === 0
+              ? "text-black"
+              : selectedGenderValue.length > 0
+              ? "text-green-700"
+              : "text-red-700"
+          }
           unfocusedLabelBackgroundColor="bg-white"
-          focusedLabelColor="text-pink-600"
+          focusedLabelColor={
+            selectedGenderName.length === 0
+              ? "text-pink-500"
+              : selectedGenderValue.length > 0
+              ? "text-green-500"
+              : "text-red-500"
+          }
           focusedLabelBackgroundColor="bg-white"
           icon={
             <div

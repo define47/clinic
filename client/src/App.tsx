@@ -32,6 +32,7 @@ import { MedicalRecordPatientView } from "./pages/doctor/MedicalRecordPatientVie
 import { ReceptionistPatients } from "./pages/receptionist/ReceptionistPatients";
 import { ReceptionistsAppointments } from "./pages/receptionist/ReceptionistsAppointments";
 import { DoctorAppointments } from "./pages/doctor/DoctorAppointments";
+import { SignUp } from "./pages/common/SignUp/SignUp";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -119,7 +120,7 @@ const App: FC = () => {
       if (response.data.success) {
         authenticatedUserDataSetState(JSON.parse(response.data.payload));
       } else {
-        navigate("/login");
+        if (!pathname.includes("signup")) navigate("/login");
       }
     }
 
@@ -143,6 +144,7 @@ const App: FC = () => {
     <div>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         {authenticatedUserDataState.roleNames.length === 2 &&
           ((authenticatedUserDataState.roleNames[0] === "admin" &&
             authenticatedUserDataState.roleNames[1] === "doctor") ||
