@@ -3,8 +3,7 @@ import {
   UserSearchCriteria,
   UserSearchCriterionPickerProps,
 } from "../../types";
-import { StyledInput } from "../design/StyledInput";
-import { RiArrowDownSLine, RiArrowUpSLine, RiFilterLine } from "react-icons/ri";
+import { RiArrowUpSLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
 import { VscDash } from "react-icons/vsc";
 import { StyledInputV2 } from "../design/StyledInputV2";
@@ -19,8 +18,7 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
   selectedUserSearchCriteriaValue,
 }) => {
   const authContext = useContext(AuthenticatedUserDataContext);
-  const { authenticatedUserDataState, authenticatedUserDataSetState } =
-    authContext!;
+  const { authenticatedUserDataState } = authContext!;
   const [userSearchCriterion, setUserSearchCriterion] = useState<
     UserSearchCriteria[]
   >([]);
@@ -186,6 +184,23 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
       setSelectedUserSearchCriteriaValue("userPhoneNumber");
   }, [selectedUserSearchCriteriaName, authenticatedUserDataState]);
 
+  useEffect(() => {
+    const foundUserSearchCriteria = userSearchCriterion.find(
+      (userSearchCriteria) =>
+        userSearchCriteria.userSearchCriteriaName.toLowerCase() ===
+        selectedUserSearchCriteriaName.toLowerCase()
+    );
+
+    if (foundUserSearchCriteria) {
+      setSelectedUserSearchCriteriaValue(
+        foundUserSearchCriteria.userSearchCriteriaValue
+      );
+      setSelectedUserSearchCriteriaName(
+        foundUserSearchCriteria.userSearchCriteriaName
+      );
+    }
+  }, [selectedUserSearchCriteriaName, selectedUserSearchCriteriaValue]);
+
   return (
     <div className="w-full flex">
       <div className="w-full relative z-50" ref={userSearchCriterionPickerRef}>
@@ -239,14 +254,56 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
           isPickerVisible={isUserSearchCriterionPickerVisible}
         /> */}
         <StyledInputV2
-          unfocusedTextColor="text-pink-600"
-          unfocusedBorderColor="border-pink-600"
-          focusedTextColor="focus:text-pink-600"
-          focusedBorderColor="focus:border-pink-600"
-          focusedBorderColorIconArea="border-pink-600"
-          unfocusedLabelColor="text-pink-600"
+          unfocusedTextColor={
+            selectedUserSearchCriteriaName.length === 0
+              ? "text-black"
+              : selectedUserSearchCriteriaValue.length > 0
+              ? "text-green-700"
+              : "text-red-700"
+          }
+          unfocusedBorderColor={
+            selectedUserSearchCriteriaName.length === 0
+              ? "border-black"
+              : selectedUserSearchCriteriaValue.length > 0
+              ? "border-green-700"
+              : "border-red-700"
+          }
+          focusedTextColor={
+            selectedUserSearchCriteriaName.length === 0
+              ? "focus:text-pink-500"
+              : selectedUserSearchCriteriaValue.length > 0
+              ? "focus:text-green-500"
+              : "focus:text-red-500"
+          }
+          focusedBorderColor={
+            selectedUserSearchCriteriaName.length === 0
+              ? "focus:border-pink-500"
+              : selectedUserSearchCriteriaValue.length > 0
+              ? "focus:border-green-500"
+              : "focus:border-red-500"
+          }
+          focusedBorderColorIconArea={
+            selectedUserSearchCriteriaName.length === 0
+              ? "border-pink-500"
+              : selectedUserSearchCriteriaValue.length > 0
+              ? "border-green-500"
+              : "border-red-500"
+          }
+          unfocusedLabelColor={
+            selectedUserSearchCriteriaName.length === 0
+              ? "text-black"
+              : selectedUserSearchCriteriaValue.length > 0
+              ? "text-green-700"
+              : "text-red-700"
+          }
           unfocusedLabelBackgroundColor="bg-white"
-          focusedLabelColor="text-pink-600"
+          focusedLabelColor={
+            selectedUserSearchCriteriaName.length === 0
+              ? "text-pink-500"
+              : selectedUserSearchCriteriaValue.length > 0
+              ? "text-green-500"
+              : "text-red-500"
+          }
           focusedLabelBackgroundColor="bg-white"
           icon={
             <div

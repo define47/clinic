@@ -4,7 +4,6 @@ import {
   AppointmentSearchCriterionPickerProps,
 } from "../../types";
 import { RiArrowUpSLine } from "react-icons/ri";
-import { StyledInput } from "../design/StyledInput";
 import { TiTick } from "react-icons/ti";
 import { VscDash } from "react-icons/vsc";
 import { StyledInputV2 } from "../design/StyledInputV2";
@@ -22,8 +21,7 @@ export const AppointmentSearchCriterionPicker: FC<
   setSelectedAppointmentCriteriaName,
 }) => {
   const authContext = useContext(AuthenticatedUserDataContext);
-  const { authenticatedUserDataState, authenticatedUserDataSetState } =
-    authContext!;
+  const { authenticatedUserDataState } = authContext!;
   const [appointmentSearchCriterion, setAppointmentSearchCriterion] = useState<
     AppointmentSearchCriteria[]
   >([]);
@@ -197,6 +195,23 @@ export const AppointmentSearchCriterionPicker: FC<
     // }
   }, [filteredAppointmentSearchCriterion, selectedAppointmentCriteriaName]);
 
+  useEffect(() => {
+    const foundAppointmentSearchCriteria = appointmentSearchCriterion.find(
+      (appointmentSearchCriteria) =>
+        appointmentSearchCriteria.appointmentSearchCriteriaName.toLowerCase() ===
+        selectedAppointmentCriteriaName.toLowerCase()
+    );
+
+    if (foundAppointmentSearchCriteria) {
+      setSelectedAppointmentCriteriaValue(
+        foundAppointmentSearchCriteria.appointmentSearchCriteriaValue
+      );
+      setSelectedAppointmentCriteriaName(
+        foundAppointmentSearchCriteria.appointmentSearchCriteriaName
+      );
+    }
+  }, [selectedAppointmentCriteriaName, selectedAppointmentCriteriaValue]);
+
   return (
     <div className="w-full flex">
       <div
@@ -237,14 +252,56 @@ export const AppointmentSearchCriterionPicker: FC<
           isPickerVisible={isAppointmentSearchCriterionPickerVisible}
         /> */}
         <StyledInputV2
-          unfocusedTextColor="text-pink-600"
-          unfocusedBorderColor="border-pink-600"
-          focusedTextColor="focus:text-pink-600"
-          focusedBorderColor="focus:border-pink-600"
-          focusedBorderColorIconArea="border-pink-600"
-          unfocusedLabelColor="text-pink-600"
+          unfocusedTextColor={
+            selectedAppointmentCriteriaName.length === 0
+              ? "text-black"
+              : selectedAppointmentCriteriaValue.length > 0
+              ? "text-green-700"
+              : "text-red-700"
+          }
+          unfocusedBorderColor={
+            selectedAppointmentCriteriaName.length === 0
+              ? "border-black"
+              : selectedAppointmentCriteriaValue.length > 0
+              ? "border-green-700"
+              : "border-red-700"
+          }
+          focusedTextColor={
+            selectedAppointmentCriteriaName.length === 0
+              ? "focus:text-pink-500"
+              : selectedAppointmentCriteriaValue.length > 0
+              ? "focus:text-green-500"
+              : "focus:text-red-500"
+          }
+          focusedBorderColor={
+            selectedAppointmentCriteriaName.length === 0
+              ? "focus:border-pink-500"
+              : selectedAppointmentCriteriaValue.length > 0
+              ? "focus:border-green-500"
+              : "focus:border-red-500"
+          }
+          focusedBorderColorIconArea={
+            selectedAppointmentCriteriaName.length === 0
+              ? "border-pink-500"
+              : selectedAppointmentCriteriaValue.length > 0
+              ? "border-green-500"
+              : "border-red-500"
+          }
+          unfocusedLabelColor={
+            selectedAppointmentCriteriaName.length === 0
+              ? "text-black"
+              : selectedAppointmentCriteriaValue.length > 0
+              ? "text-green-700"
+              : "text-red-700"
+          }
           unfocusedLabelBackgroundColor="bg-white"
-          focusedLabelColor="text-pink-600"
+          focusedLabelColor={
+            selectedAppointmentCriteriaName.length === 0
+              ? "text-pink-500"
+              : selectedAppointmentCriteriaValue.length > 0
+              ? "text-green-500"
+              : "text-red-500"
+          }
           focusedLabelBackgroundColor="bg-white"
           icon={
             <div

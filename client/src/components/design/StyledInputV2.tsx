@@ -8,6 +8,8 @@ import {
 } from "react";
 
 type StyledInputV2Props = {
+  inputBackgroundColor?: string;
+  iconAreaBackgroundColor?: string;
   styledInputWidth: string;
   unfocusedTextColor: string;
   unfocusedBorderColor: string;
@@ -29,6 +31,8 @@ type StyledInputV2Props = {
 };
 
 export const StyledInputV2: FC<StyledInputV2Props> = ({
+  inputBackgroundColor,
+  iconAreaBackgroundColor,
   styledInputWidth,
   unfocusedTextColor,
   unfocusedBorderColor,
@@ -64,7 +68,9 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
         // focus:border-blue-300
         // focus:text-blue-300
         ref={styledInputRef}
-        className={`w-full h-10 pl-1 bg-white border-y border-l outline-none rounded-tl-lg rounded-bl-lg transition-all duration-500 ${unfocusedBorderColor} ${focusedBorderColor} ${unfocusedTextColor} ${focusedTextColor} cursor-pointer disabled:cursor-not-allowed`}
+        className={`w-full h-10 pl-1 ${
+          inputBackgroundColor ? inputBackgroundColor : "bg-white"
+        } border-y border-l outline-none rounded-tl-lg rounded-bl-lg transition-all duration-500 ${unfocusedBorderColor} ${focusedBorderColor} ${unfocusedTextColor} ${focusedTextColor} cursor-pointer disabled:cursor-not-allowed`}
         value={styledInputValue}
         name={name}
         onChange={(event) => {
@@ -99,7 +105,9 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
         {label}
       </label>
       <div
-        className={`h-10 w-5 pr-1 bg-white flex items-center justify-center border-y border-r rounded-tr-lg rounded-br-lg transition-all duration-500 cursor-pointer ${
+        className={`h-10 w-5 pr-1 ${
+          iconAreaBackgroundColor ? iconAreaBackgroundColor : "bg-white"
+        } flex items-center justify-center border-y border-r rounded-tr-lg rounded-br-lg transition-all duration-500 cursor-pointer ${
           isInputFocused
             ? `${focusedBorderColorIconArea}`
             : `${unfocusedBorderColor}`
