@@ -102,9 +102,7 @@ export const CreateMedicalProcedureOverlay: FC<
       />
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
-          isCreateMedicalProcedureOverlayVisible
-            ? "visible backdrop-blur-sm"
-            : "invisible"
+          isCreateMedicalProcedureOverlayVisible ? "visible" : "invisible"
         }`}
         closeModal={() => setIsCreateMedicalProcedureOverlayVisible(false)}
       >
@@ -263,7 +261,7 @@ export const CreateMedicalProcedureOverlay: FC<
           <ConfirmationDialogOverlay
             className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
               isCreateMedicalProcedureConfirmationDialogOverlayVisible
-                ? "visible backdrop-blur-sm"
+                ? "visible"
                 : "invisible"
             }`}
             closeConfirmationDialogModal={() =>

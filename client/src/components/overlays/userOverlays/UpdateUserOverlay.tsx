@@ -319,7 +319,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
 
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
-          isUpdateUserOverlayVisible ? "visible backdrop-blur-sm" : "invisible"
+          isUpdateUserOverlayVisible ? "visible" : "invisible"
         }`}
         // closeModal={() => setIsUpdateUserOverlayVisible(false)}
         closeModal={handleOverlayClick}
@@ -825,7 +825,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
           <ConfirmationDialogOverlay
             className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
               isUpdateUserConfirmationDialogOverlayVisible
-                ? "visible backdrop-blur-sm"
+                ? "visible"
                 : "invisible"
             }`}
             closeConfirmationDialogModal={() =>

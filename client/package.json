@@ -28,6 +28,7 @@
     "react-router-dom": "^6.21.3",
     "react-to-print": "^2.14.15",
     "socket.io-client": "^4.7.4",
+    "sonner": "^1.4.0",
     "tsparticles": "^3.1.0",
     "validator": "^13.11.0"
   },

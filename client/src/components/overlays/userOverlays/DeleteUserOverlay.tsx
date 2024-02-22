@@ -56,9 +56,7 @@ export const DeleteUserOverlay: FC<DeleteUserOverlayPros> = ({
       )}
       <ConfirmationDialogOverlay
         className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
-          isDeleteUserConfirmationDialogOverlayVisible
-            ? "visible backdrop-blur-sm"
-            : "invisible"
+          isDeleteUserConfirmationDialogOverlayVisible ? "visible" : "invisible"
         }`}
         closeConfirmationDialogModal={() =>
           setIsDeleteUserConfirmationDialogOverlayVisible(false)

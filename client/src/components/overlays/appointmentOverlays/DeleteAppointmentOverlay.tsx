@@ -56,7 +56,7 @@ export const DeleteAppointmentOverlay: FC<DeleteAppointmentOverlayPros> = ({
       <ConfirmationDialogOverlay
         className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
           isDeleteAppointmentConfirmationDialogOverlayVisible
-            ? "visible backdrop-blur-sm"
+            ? "visible"
             : "invisible"
         }`}
         closeConfirmationDialogModal={() =>

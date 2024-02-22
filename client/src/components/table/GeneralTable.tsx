@@ -57,6 +57,7 @@ import {
   getItemByLanguageAndCollection,
 } from "../../utils/clientLanguages";
 import { StyledAppointmentStatusName } from "../design/StyledAppointmentStatusName";
+import { Toaster } from "sonner";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -1451,6 +1452,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           )}
       </div>
       {/* here notification {JSON.stringify(socketNotificationDataState)} */}
+      <div className="absolute top-0 right-0 z-50">
+        <Toaster position="top-right" richColors />
+      </div>
     </div>
   ) : (
     <div className="h-full bg-white">

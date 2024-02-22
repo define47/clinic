@@ -88,9 +88,7 @@ export const CreateMedicalRecordPatientOverlay: FC<
 
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
-          isCreateMedicalRecordPatientOverlayVisible
-            ? "visible backdrop-blur-sm"
-            : "invisible"
+          isCreateMedicalRecordPatientOverlayVisible ? "visible" : "invisible"
         }`}
         // closeModal={() => setIsUpdateUserOverlayVisible(false)}
         closeModal={handleOverlayClick}
@@ -154,7 +152,7 @@ export const CreateMedicalRecordPatientOverlay: FC<
             <ConfirmationDialogOverlay
               className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
                 isCreateMedicalRecordPatientConfirmationDialogOverlayVisible
-                  ? "visible backdrop-blur-sm"
+                  ? "visible"
                   : "invisible"
               }`}
               closeConfirmationDialogModal={() =>

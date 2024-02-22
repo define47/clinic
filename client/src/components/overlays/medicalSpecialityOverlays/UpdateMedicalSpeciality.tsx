@@ -108,9 +108,7 @@ export const UpdateMedicalSpeciality: FC<
       )}
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
-          isUpdateMedicalSpecialityOverlayVisible
-            ? "visible backdrop-blur-sm"
-            : "invisible"
+          isUpdateMedicalSpecialityOverlayVisible ? "visible" : "invisible"
         }`}
         closeModal={() => setIsUpdateMedicalSpecialityOverlayVisible(false)}
       >
@@ -205,7 +203,7 @@ export const UpdateMedicalSpeciality: FC<
           <ConfirmationDialogOverlay
             className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
               isUpdateMedicalSpecialityConfirmationDialogOverlayVisible
-                ? "visible backdrop-blur-sm"
+                ? "visible"
                 : "invisible"
             }`}
             closeConfirmationDialogModal={() =>

@@ -25,6 +25,7 @@ import {
   getEntityNamesByLanguage,
   getItemByLanguageAndCollection,
 } from "../../../utils/clientLanguages";
+import { toast } from "sonner";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -41,13 +42,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   ] = useState<boolean>(false);
   const [userToCreate, setUserToCreate] = useState<User>({
     userId: "",
-    userForename: "",
-    userSurname: "",
-    userEmail: "",
-    userPhoneNumber: "",
-    userGender: "",
+    userForename: "patientFN",
+    userSurname: "patientLN",
+    userEmail: "patientEM@gmail.com",
+    userPhoneNumber: "patientPH",
+    userGender: "male",
     userDateOfBirth: "1780-01-01",
-    userAddress: "",
+    userAddress: "patientAddr",
     userEncryptedPassword: "",
     isUserEmailActivated: false,
     isUserApprovedByAdmin: false,
@@ -188,6 +189,14 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
         }
       );
 
+      if (response.data.success) {
+        setIsCreateUserConfirmationDialogOverlayVisible(false);
+        setIsCreateUserOverlayVisible(false);
+        toast.success("Created User Successfully");
+      } else {
+        toast.error("NOT Created User Successfully");
+      }
+
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -215,7 +224,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
 
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
-          isCreateUserOverlayVisible ? "visible backdrop-blur-sm" : "invisible"
+          isCreateUserOverlayVisible ? "visible" : "invisible"
         }`}
         // closeModal={() => setIsCreateUserOverlayVisible(false)}
         closeModal={handleOverlayClick}
@@ -754,7 +763,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
           <ConfirmationDialogOverlay
             className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
               isCreateUserConfirmationDialogOverlayVisible
-                ? "visible backdrop-blur-sm"
+                ? "visible"
                 : "invisible"
             }`}
             closeConfirmationDialogModal={() =>

@@ -188,9 +188,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
 
       <Overlay
         className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
-          isUpdateAppointmentOverlayVisible
-            ? "visible backdrop-blur-sm"
-            : "invisible"
+          isUpdateAppointmentOverlayVisible ? "visible" : "invisible"
         }`}
         // closeModal={() => setIsCreateUserOverlayVisible(false)}
         closeModal={handleOverlayClick}
@@ -398,7 +396,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
           <ConfirmationDialogOverlay
             className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
               isUpdateAppointmentConfirmationDialogOverlayVisible
-                ? "visible backdrop-blur-sm"
+                ? "visible"
                 : "invisible"
             }`}
             closeConfirmationDialogModal={() =>
