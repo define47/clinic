@@ -307,16 +307,16 @@ export const UserPicker: FC<UserPickerProps> = ({
           styledInputWidth="w-full"
         />
         <ul
-          className={`absolute w-full bg-white overflow-y-auto h-40 ${
+          className={`absolute w-full bg-white dark:bg-darkMode-itemBackgroundColor overflow-y-auto h-40 ${
             isUserPickerVisible
-              ? "opacity-100 duration-500 border border-gray-300 rounded-lg"
+              ? "opacity-100 duration-500 border border-lightMode-borderColor dark:border-darkMode-borderColor dark:text-gray-500 rounded-lg"
               : "opacity-0 duration-500 pointer-events-none"
           }`}
         >
           {selectedUserName === ""
             ? users.map((user: User) => (
                 <li
-                  className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
+                  className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable cursor-pointer border-b border-lightMode-borderColor dark:border-darkMode-borderColor"
                   key={user.userId}
                   onClick={() => handleUserClick(user)}
                 >
@@ -350,7 +350,7 @@ export const UserPicker: FC<UserPickerProps> = ({
               ))
             : filteredUsers.map((filteredUser: User) => (
                 <li
-                  className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
+                  className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable cursor-pointer border-b border-lightMode-borderColor dark:border-darkMode-borderColor"
                   key={filteredUser.userId}
                   onClick={() => handleUserClick(filteredUser)}
                 >

@@ -67,7 +67,7 @@ export const DeleteMedicalProcedureOverlay: FC<
         }
       >
         <div
-          className={`w-1/3 h-1/4 bg-white flex transition-all rounded-xl ${
+          className={`w-1/3 h-1/4 bg-lightMode-overlayBackgroundColor dark:bg-darkMode-overlayBackgroundColor border border-gray-500 flex transition-all rounded-xl ${
             isDeleteMedicalProcedureConfirmationDialogOverlayVisible
               ? "scale-100 opacity-100 duration-200"
               : "scale-125 opacity-0 duration-200"
@@ -75,7 +75,7 @@ export const DeleteMedicalProcedureOverlay: FC<
           onClick={(e) => e.stopPropagation()}
         >
           <div className="w-full flex flex-col p-4">
-            <span className="w-full flex justify-center mb-8">
+            <span className="w-full flex justify-center mb-8 dark:text-gray-500">
               Are you sure want to delete the Medical Procedure?
             </span>
             <div>

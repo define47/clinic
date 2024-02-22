@@ -93,8 +93,8 @@ export const Sidebar: FC<SidebarProps> = ({
           setIsSidebarExpanded(false);
         }}
       >
-        <nav className="h-full flex flex-col bg-lightMode-sidebarColor dark:bg-darkMode-sidebarColor border-r shadow-sm">
-          <div className="h-14 flex justify-between items-center border-b">
+        <nav className="h-full flex flex-col bg-lightMode-sidebarColor dark:bg-darkMode-sidebarColor border-r border-lightMode-borderColor dark:border-darkMode-borderColor shadow-sm transition-all duration-500">
+          <div className="h-14 flex justify-between items-center border-b border-lightMode-borderColor dark:border-darkMode-borderColor">
             <span
               className={`overflow-hidden transition-all flex items-center justify-center`}
             >
@@ -350,7 +350,7 @@ export const Sidebar: FC<SidebarProps> = ({
                 isSidebarExpanded={isSidebarExpanded}
               />
             )}
-            <li className="border-b"></li>
+            <li className="border-b border-lightMode-borderColor dark:border-darkMode-borderColor"></li>
             <SidebarItem
               to={settingsPathname}
               icon={

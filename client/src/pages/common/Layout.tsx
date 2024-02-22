@@ -134,7 +134,7 @@ export const Layout: FC = () => {
       content =
         // select-none
         device === "Desktop" ? (
-          <div className="w-screen h-screen flex">
+          <div className="w-screen h-screen flex dark:bg-black">
             <div className="lg:fixed h-full hidden lg:block z-10">
               <Sidebar
                 isSidebarExpanded={isSidebarExpanded}
@@ -153,7 +153,7 @@ export const Layout: FC = () => {
                 // md:static
                 // left-20 top-14
                 // flex justify-center
-                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
+                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-layoutColor`}
               >
                 {/* connected? {isSocketConnected.toString()} here: {welcome} */}
                 <Outlet />
@@ -162,13 +162,13 @@ export const Layout: FC = () => {
           </div>
         ) : device === "Mobile" ? (
           // h-lvh
-          <div className="relative h-dvh bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor">
+          <div className="relative h-dvh bg-lightMode-layoutColor dark:bg-darkMode-layoutColor">
             {/* <div className="w-full bg-purple-200">hello</div> */}
             {/* <TopBarMobile /> */}
 
             <div
               // h-[calc(100dvh-70.4px)]
-              className={`p-4 h-[calc(100dvh-60px)] overflow-y-auto bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
+              className={`p-4 h-[calc(100dvh-60px)] overflow-y-auto bg-lightMode-layoutColor dark:bg-darkMode-layoutColor`}
             >
               <Outlet />
             </div>
@@ -202,7 +202,7 @@ export const Layout: FC = () => {
                 // md:static
                 // left-20 top-14
                 // flex justify-center
-                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
+                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-layoutColor`}
               >
                 {/* connected? {isSocketConnected.toString()} here: {welcome} */}
                 <Outlet />
@@ -239,7 +239,7 @@ export const Layout: FC = () => {
                 // md:static
                 // left-20 top-14
                 // flex justify-center
-                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
+                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-layoutColor`}
               >
                 {/* connected? {isSocketConnected.toString()} here: {welcome} */}
                 <Outlet />
@@ -269,7 +269,7 @@ export const Layout: FC = () => {
                 // md:static
                 // left-20 top-14
                 // flex justify-center
-                className={`p-4 lg:fixed lg:top-14 lg:z-0 lg:h-[calc(100%-56px)] w-full overflow-y-auto  transition-all bg-lightMode-layoutColor dark:bg-darkMode-backgroundColor`}
+                className={`p-4 lg:fixed lg:top-14 lg:z-0 lg:h-[calc(100%-56px)] w-full overflow-y-auto  transition-all bg-lightMode-layoutColor dark:bg-darkMode-layoutColor`}
               >
                 {/* connected? {isSocketConnected.toString()} here: {welcome} */}
                 <Outlet />

@@ -22,9 +22,7 @@ export const TopBar: FC<TopBarProps> = ({
       //     : "lg:w-[calc(100%-40px)] lg:left-20"
       // }
       // fixed left-20 w-[calc(100%-40px)]
-      className={`hidden h-14 lg:flex items-center justify-between w-full transition-all
-       
-       bg-lightMode-topBarColor dark:bg-darkMode-topBarColor border-b px-3`}
+      className={`hidden h-14 lg:flex items-center justify-between w-full bg-lightMode-topBarColor dark:bg-darkMode-topBarColor dark:text-darkMode-topBarItemTextColor border-b border-lightMode-borderColor dark:border-darkMode-borderColor px-3 transition-all duration-500`}
     >
       <div className="w-full pl-20">{pathname}</div>
       <div className="w-full flex justify-center">b</div>

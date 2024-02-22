@@ -345,9 +345,9 @@ export const AppointmentSearchCriterionPicker: FC<
           styledInputWidth="w-full"
         />
         <ul
-          className={`absolute w-full bg-white overflow-y-auto h-40 ${
+          className={`absolute w-full bg-white dark:bg-darkMode-itemBackgroundColor overflow-y-auto h-40 ${
             isAppointmentSearchCriterionPickerVisible
-              ? "opacity-100 duration-500 border border-gray-300 rounded-lg"
+              ? "opacity-100 duration-500 border border-lightMode-borderColor dark:border-darkMode-borderColor rounded-lg"
               : "opacity-0 duration-500 pointer-events-none"
           }`}
         >
@@ -355,7 +355,7 @@ export const AppointmentSearchCriterionPicker: FC<
             ? appointmentSearchCriterion.map(
                 (appointmentSearchCriteria: AppointmentSearchCriteria) => (
                   <li
-                    className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
+                    className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable cursor-pointer border-b border-lightMode-borderColor dark:border-darkMode-borderColor"
                     key={
                       appointmentSearchCriteria.appointmentSearchCriteriaName
                     }
@@ -385,7 +385,7 @@ export const AppointmentSearchCriterionPicker: FC<
                   filteredAppointmentSearchCriteria: AppointmentSearchCriteria
                 ) => (
                   <li
-                    className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
+                    className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable cursor-pointer border-b border-lightMode-borderColor dark:border-darkMode-borderColor"
                     key={
                       filteredAppointmentSearchCriteria.appointmentSearchCriteriaName
                     }

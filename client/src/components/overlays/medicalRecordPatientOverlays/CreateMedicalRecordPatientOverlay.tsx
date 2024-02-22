@@ -96,7 +96,7 @@ export const CreateMedicalRecordPatientOverlay: FC<
         closeModal={handleOverlayClick}
       >
         <div
-          className={`bg-white border border-gray-500 w-5/6 h-5/6 rounded-xl shadow p-6 transition-all ${
+          className={`bg-lightMode-overlayBackgroundColor dark:bg-darkMode-overlayBackgroundColor border border-gray-500 w-5/6 h-5/6 rounded-xl shadow p-6 transition-all ${
             isCreateMedicalRecordPatientOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
@@ -164,7 +164,7 @@ export const CreateMedicalRecordPatientOverlay: FC<
               }
             >
               <div
-                className={`w-96 h-96 bg-white flex items-center justify-center transition-all ${
+                className={`w-96 h-96 bg-white dark:bg-darkMode-itemBackgroundColor border border-lightMode-borderColor dark:border-darkMode-borderColor flex items-center justify-center transition-all ${
                   isCreateMedicalRecordPatientConfirmationDialogOverlayVisible
                     ? "scale-100 opacity-100 duration-200"
                     : "scale-125 opacity-0 duration-200"

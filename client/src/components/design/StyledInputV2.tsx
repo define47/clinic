@@ -69,7 +69,9 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
         // focus:text-blue-300
         ref={styledInputRef}
         className={`w-full h-10 pl-1 ${
-          inputBackgroundColor ? inputBackgroundColor : "bg-white"
+          inputBackgroundColor
+            ? inputBackgroundColor
+            : "bg-white dark:bg-darkMode-itemBackgroundColor"
         } border-y border-l outline-none rounded-tl-lg rounded-bl-lg transition-all duration-500 ${unfocusedBorderColor} ${focusedBorderColor} ${unfocusedTextColor} ${focusedTextColor} cursor-pointer disabled:cursor-not-allowed`}
         value={styledInputValue}
         name={name}
@@ -106,7 +108,9 @@ export const StyledInputV2: FC<StyledInputV2Props> = ({
       </label>
       <div
         className={`h-10 w-5 pr-1 ${
-          iconAreaBackgroundColor ? iconAreaBackgroundColor : "bg-white"
+          iconAreaBackgroundColor
+            ? iconAreaBackgroundColor
+            : "bg-white dark:bg-darkMode-itemBackgroundColor"
         } flex items-center justify-center border-y border-r rounded-tr-lg rounded-br-lg transition-all duration-500 cursor-pointer ${
           isInputFocused
             ? `${focusedBorderColorIconArea}`

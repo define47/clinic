@@ -281,7 +281,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
         closeModal={handleOverlayClick}
       >
         <div
-          className={`w-11/12 h-4/5 overflow-y-auto lg:w-3/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
+          className={`w-11/12 h-4/5 overflow-y-auto lg:w-3/4 lg:h-1/2 rounded-xl shadow p-6 bg-lightMode-overlayBackgroundColor dark:bg-darkMode-overlayBackgroundColor border border-gray-500 transition-all ${
             isCreateAppointmentOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
@@ -446,7 +446,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
             }
           >
             <div
-              className={`w-96 h-96 bg-white flex items-center justify-center transition-all ${
+              className={`w-96 h-96 bg-lightMode-overlayBackgroundColor dark:bg-darkMode-overlayBackgroundColor border border-gray-500 rounded-xl flex items-center justify-center transition-all ${
                 isCreateAppointmentConfirmationDialogOverlayVisible
                   ? "scale-100 opacity-100 duration-200"
                   : "scale-125 opacity-0 duration-200"

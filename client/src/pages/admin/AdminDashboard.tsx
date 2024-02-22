@@ -81,9 +81,9 @@ export const AdminDashboard: FC = () => {
   }, []);
   return (
     <div className="w-full h-full">
-      <PhoneExtensionPicker defaultPhoneExtension="+40" />
+      {/* <PhoneExtensionPicker defaultPhoneExtension="+40" />
       <StyledAppointmentStatusName appointmentStatusName="completed" />
-      <StyledAppointmentStatusName appointmentStatusName="canceled" />
+      <StyledAppointmentStatusName appointmentStatusName="canceled" /> */}
       {/* admin dashboard <Overlay /> */}
       {/* <MedicalProcedurePicker /> */}
       {/* <DragAndDrop /> */}

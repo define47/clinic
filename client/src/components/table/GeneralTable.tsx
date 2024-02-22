@@ -561,7 +561,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   }, [device, orientation]);
 
   return device === "Desktop" ? (
-    <div className="w-full bg-white h-full border p-4 rounded-xl font-roboto">
+    <div className="w-full bg-lightMode-tableBackgroundColor dark:bg-darkMode-tableBackgroundColor dark:text-gray-500 h-full border border-lightMode-borderColor dark:border-darkMode-borderColor p-4 rounded-xl font-roboto">
       {/* <div className="flex items-center justify-between">
         {(entity === "doctor" ||
           entity === "patient" ||
@@ -880,11 +880,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
       </div>
       <div
         ref={componentRef}
-        className="w-full border rounded-xl h-4/5 overflow-auto hidden lg:block"
+        className="w-full border border-lightMode-borderColor dark:border-darkMode-borderColor rounded-xl h-4/5 overflow-auto hidden lg:block"
       >
         {tableRows.length > 0 && (
           <table className="w-full text-center text-xs font-light border rounded-xl">
-            <thead className="w-full border-b bg-white font-medium">
+            <thead className="w-full border-b border-lightMode-borderColor dark:border-darkMode-borderColor bg-lightMode-tableHeaderBackgroundColor dark:bg-darkMode-tableHeaderBackgroundColor font-medium">
               {isUserRow(tableRows[0]) ? (
                 <tr>
                   <td>Index</td>
@@ -1147,16 +1147,14 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                 isUserRow(tableRow) ? (
                   <tr
                     key={tableRow.userId}
-                    className={`border-b border-neutral-400 odd:bg-neutral-100 even:bg-white transition duration-300 ease-in-out hover:bg-pink-100 ${
+                    className={`border-b border-lightMode-borderColor dark:border-darkMode-borderColor odd:bg-lightMode-oddRowTable even:bg-lightMode-evenRowTable odd:dark:bg-darkMode-oddRowTable even:dark:bg-darkMode-evenRowTable transition duration-300 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable ${
                       (clickedTableRow as User)?.userId === tableRow.userId &&
-                      "!bg-pink-200"
+                      "!bg-lightMode-selectedTableRow dark:!bg-darkMode-selectedTableRow"
                     }`}
                     onClick={() => setClickedTableRow(tableRow)}
                   >
                     <td>{tableRowIndex + 1 + currentPage * 5}</td>
-                    <td className="px-6 py-4 text-xs text-gray-700">
-                      {tableRow.userId}
-                    </td>
+                    <td className="px-6 py-4 text-xs">{tableRow.userId}</td>
                     <td className="px-6 py-4 text-xs">
                       {tableRow.userForename}
                     </td>
@@ -1209,10 +1207,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                 ) : isMedicalSpecialityRow(tableRow) ? (
                   <tr
                     key={tableRow.medicalSpecialityId}
-                    className={`border-b border-neutral-400 odd:bg-neutral-100 even:bg-white transition duration-300 ease-in-out hover:bg-pink-100 ${
+                    className={`border-b border-lightMode-borderColor dark:border-darkMode-borderColor odd:bg-lightMode-oddRowTable even:bg-lightMode-evenRowTable odd:dark:bg-darkMode-oddRowTable even:dark:bg-darkMode-evenRowTable transition duration-300 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable ${
                       (clickedTableRow as MedicalSpeciality)
                         ?.medicalSpecialityId ===
-                        tableRow.medicalSpecialityId && "!bg-pink-200"
+                        tableRow.medicalSpecialityId &&
+                      "!bg-lightMode-selectedTableRow dark:!bg-darkMode-selectedTableRow"
                     }`}
                     onClick={() => setClickedTableRow(tableRow)}
                   >
@@ -1233,10 +1232,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                 ) : isAppointmentRow(tableRow) ? (
                   <tr
                     key={tableRow.appointment.appointmentId}
-                    className={`border-b border-neutral-400 odd:bg-neutral-100 even:bg-white transition duration-300 ease-in-out hover:bg-pink-100 ${
+                    className={`border-b border-lightMode-borderColor dark:border-darkMode-borderColor odd:bg-lightMode-oddRowTable even:bg-lightMode-evenRowTable odd:dark:bg-darkMode-oddRowTable even:dark:bg-darkMode-evenRowTable transition duration-300 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable ${
                       (clickedTableRow as AppointmentTableData)?.appointment
                         .appointmentId === tableRow.appointment.appointmentId &&
-                      "!bg-pink-200"
+                      "!bg-lightMode-selectedTableRow dark:!bg-darkMode-selectedTableRow"
                     }`}
                     onClick={() => setClickedTableRow(tableRow)}
                   >
@@ -1347,10 +1346,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                 ) : isMedicalProcedureRow(tableRow) ? (
                   <tr
                     key={tableRow.medicalProcedureId}
-                    className={`border-b border-neutral-400 odd:bg-neutral-100 even:bg-white transition duration-300 ease-in-out hover:bg-pink-100 ${
+                    className={`border-b border-lightMode-borderColor dark:border-darkMode-borderColor odd:bg-lightMode-oddRowTable even:bg-lightMode-evenRowTable odd:dark:bg-darkMode-oddRowTable even:dark:bg-darkMode-evenRowTable transition duration-300 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable ${
                       (clickedTableRow as MedicalProcedure)
                         ?.medicalProcedureId === tableRow.medicalProcedureId &&
-                      "!bg-pink-200"
+                      "!bg-lightMode-selectedTableRow dark:!bg-darkMode-selectedTableRow"
                     }`}
                     onClick={() => setClickedTableRow(tableRow)}
                   >

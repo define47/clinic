@@ -221,7 +221,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
         closeModal={handleOverlayClick}
       >
         <div
-          className={`w-11/12 h-4/5 overflow-y-auto lg:w-3/4 lg:h-1/2 rounded-xl shadow p-6 bg-white border border-gray-500 transition-all ${
+          className={`w-11/12 h-4/5 overflow-y-auto lg:w-3/4 lg:h-1/2 rounded-xl shadow p-6 bg-lightMode-overlayBackgroundColor dark:bg-darkMode-overlayBackgroundColor border border-gray-500 transition-all ${
             isCreateUserOverlayVisible
               ? "scale-100 opacity-100 duration-500"
               : "scale-125 opacity-0 duration-500"
@@ -762,7 +762,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
             }
           >
             <div
-              className={`lg:w-2/3 lg:h-1/3 p-4 bg-white flex flex-col rounded-xl transition-all ${
+              className={`lg:w-2/3 lg:h-1/3 p-4 bg-lightMode-overlayBackgroundColor dark:bg-darkMode-overlayBackgroundColor border border-gray-500 flex flex-col rounded-xl transition-all ${
                 isCreateUserConfirmationDialogOverlayVisible
                   ? "scale-100 opacity-100 duration-200"
                   : "scale-125 opacity-0 duration-200"
