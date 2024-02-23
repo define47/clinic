@@ -42,13 +42,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   ] = useState<boolean>(false);
   const [userToCreate, setUserToCreate] = useState<User>({
     userId: "",
-    userForename: "patientFN",
-    userSurname: "patientLN",
-    userEmail: "patientEM@gmail.com",
-    userPhoneNumber: "patientPH",
+    userForename: `${roleName}FN`,
+    userSurname: `${roleName}SN`,
+    userEmail: `${roleName}EM`,
+    userPhoneNumber: `${roleName}PH`,
     userGender: "male",
     userDateOfBirth: "1780-01-01",
-    userAddress: "patientAddr",
+    userAddress: `${roleName}Addr`,
     userEncryptedPassword: "",
     isUserEmailActivated: false,
     isUserApprovedByAdmin: false,
@@ -160,6 +160,13 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
     console.log("isUserForenameValid", isUserForenameValid);
     console.log("isUserEmailValid", isUserEmailValid);
   }, [isUserEmailValid, isUserForenameValid]);
+
+  useEffect(() => {
+    console.log(selectedPrimaryMedicalSpecialityId);
+  }, [
+    selectedPrimaryMedicalSpecialityId,
+    selectedPrimaryMedicalSpecialityName,
+  ]);
 
   async function onCreateUser() {
     try {
@@ -651,7 +658,9 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
 
               {roleName === "doctor" && (
                 <>
+                  {selectedPrimaryMedicalSpecialityId}
                   <MedicalSpecialityPicker
+                    medicalSpecialityRank="primary"
                     label={getItemByLanguageAndCollection(
                       authenticatedUserDataState.language.languageCode,
                       "medicalSpecialityPickerLabels",
@@ -682,6 +691,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                   />
 
                   <MedicalSpecialityPicker
+                    medicalSpecialityRank="secondary"
                     label={getItemByLanguageAndCollection(
                       authenticatedUserDataState.language.languageCode,
                       "medicalSpecialityPickerLabels",
@@ -712,6 +722,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                   />
 
                   <MedicalSpecialityPicker
+                    medicalSpecialityRank="tertiary"
                     label={getItemByLanguageAndCollection(
                       authenticatedUserDataState.language.languageCode,
                       "medicalSpecialityPickerLabels",

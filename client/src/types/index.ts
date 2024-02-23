@@ -143,6 +143,7 @@ export type UserSearchCriterionPickerProps = {
 };
 
 export type MedicalSpecialityPickerProps = {
+  medicalSpecialityRank: string;
   label: string;
   selectedMedicalSpecialityName: string;
   setSelectedMedicalSpecialityName: (

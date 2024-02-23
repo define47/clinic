@@ -395,12 +395,14 @@ export class UserController {
   public postUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body: any = request.body;
-
-      console.log("bodypostuser", body);
+      console.log("🚀 ~ UserController ~ postUser= ~ body:", body);
 
       const roleIds: string[] = body.roleIds;
+
       let foundRoles: string[] = [];
+
       let foundMedicalSpecialities: string[] = [];
+
       const specialityIds = body.specialityIds?.filter(function (
         value: string
       ) {
@@ -481,20 +483,27 @@ export class UserController {
           console.log("specialityIds", specialityIds);
 
           for (let j = 0; j < specialityIds.length; j++) {
-            console.log("specialityIds[i]", specialityIds[i]);
-
-            await this._doctorSpecialityMappingService.createMedicalDoctorSpecialityMapping(
-              {
-                userId: postUser.userId,
-                medicalSpecialityId: specialityIds[j],
-                isPrimaryMedicalSpeciality: j === 0,
-                isSecondaryMedicalSpeciality: j === 1,
-                isTertiaryMedicalSpeciality: j === 2,
-              }
-            );
+            let current = specialityIds.split(":");
+            // await this._doctorSpecialityMappingService.createMedicalDoctorSpecialityMapping(
+            //   {
+            //     userId: postUser.userId,
+            //     medicalSpecialityId: specialityIds[j],
+            //     isPrimaryMedicalSpeciality: j === 0,
+            //     isSecondaryMedicalSpeciality: j === 1,
+            //     isTertiaryMedicalSpeciality: j === 2,
+            //   }
+            // );
           }
         }
       }
+
+      console.log("🚀 ~ UserController ~ postUser= ~ roleIds:", roleIds);
+      console.log("🚀 ~ UserController ~ postUser= ~ foundRoles:", foundRoles);
+      console.log(
+        "🚀 ~ UserController ~ postUser= ~ foundMedicalSpecialities:",
+        foundMedicalSpecialities
+      );
+      console.log("🚀 ~ UserController ~ postUser= ~ postUser:", postUser);
 
       const { redis } = fastifyServer;
 

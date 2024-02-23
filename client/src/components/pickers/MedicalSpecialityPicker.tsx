@@ -9,6 +9,7 @@ import { VscDash } from "react-icons/vsc";
 import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
+  medicalSpecialityRank,
   label,
   selectedMedicalSpecialityId,
   setSelectedMedicalSpecialityId,
@@ -120,9 +121,13 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
   //   };
   // }, []);
   function handleMedicalSpecialityClick(medicalSpeciality: MedicalSpeciality) {
-    // setUserSearchCriteriaTerm(userSearchCriteria.userSearchCriteriaName);
+    // setSelectedMedicalSpecialityName(medicalSpeciality.medicalSpecialityName);
+    // setSelectedMedicalSpecialityId(medicalSpeciality.medicalSpecialityId!);
+    // setIsMedicalSpecialityPickerVisible(false);
     setSelectedMedicalSpecialityName(medicalSpeciality.medicalSpecialityName);
-    setSelectedMedicalSpecialityId(medicalSpeciality.medicalSpecialityId!);
+    setSelectedMedicalSpecialityId(
+      `${medicalSpecialityRank}:${medicalSpeciality.medicalSpecialityId!}`
+    );
     setIsMedicalSpecialityPickerVisible(false);
   }
 
@@ -152,7 +157,9 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
         filteredMedicalSpecialities[i].medicalSpecialityName.toLowerCase()
       ) {
         setSelectedMedicalSpecialityId(
-          filteredMedicalSpecialities[i].medicalSpecialityId!
+          `${medicalSpecialityRank}:${filteredMedicalSpecialities[i]
+            .medicalSpecialityId!}`
+          // filteredMedicalSpecialities[i].medicalSpecialityId!
         );
         break;
       }
