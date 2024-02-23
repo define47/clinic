@@ -392,6 +392,7 @@ export class AppointmentRepository
             appointmentStatus: appointmentTable.appointmentStatus,
             appointmentCancellationReason:
               appointmentTable.appointmentCancellationReason,
+            appointmentPrice: appointmentTable.appointmentPrice,
           },
           doctor: {
             doctorId: doctor.userId,
@@ -725,6 +726,7 @@ export class AppointmentRepository
             appointmentStatus: appointmentTable.appointmentStatus,
             appointmentCancellationReason:
               appointmentTable.appointmentCancellationReason,
+            appointmentPrice: appointmentTable.appointmentPrice,
           },
           doctor: {
             doctorId: doctor.userId,

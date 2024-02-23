@@ -15,7 +15,10 @@ import axios from "axios";
 import { usersPath } from "../../../utils/dotenv";
 import { PiPencil, PiPencilLineFill } from "react-icons/pi";
 import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
-import { determineSpecialityOrder } from "../../../utils/utils";
+import {
+  capitalizeString,
+  determineSpecialityOrder,
+} from "../../../utils/utils";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { Tooltip } from "../../design/Tooltip";
 import { StyledInputV2 } from "../../design/StyledInputV2";
@@ -26,6 +29,7 @@ import { AuthenticatedUserDataContext } from "../../../contexts/UserContext";
 import {
   getEntityNamesByLanguage,
   getItemByLanguageAndCollection,
+  getItemInUserSelectedLanguageCode,
 } from "../../../utils/clientLanguages";
 
 export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
@@ -107,7 +111,14 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   useEffect(() => {
     if (isUpdateUserOverlayVisible) {
       setUserToUpdate(user);
-      setSelectedGenderName(user.userGender);
+      setSelectedGenderName(
+        getItemInUserSelectedLanguageCode(
+          authenticatedUserDataState.language.languageCode,
+          "genders",
+          capitalizeString(user.userGender)!
+        )!
+      );
+      setSelectedGenderValue(user.userGender);
 
       if (user.medicalSpecialities) {
         setSelectedPrimaryMedicalSpecialityName(

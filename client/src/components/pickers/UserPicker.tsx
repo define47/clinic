@@ -198,6 +198,13 @@ export const UserPicker: FC<UserPickerProps> = ({
     }
   }, [foundUser, roleName, selectedUserId]);
 
+  useEffect(() => {
+    if (selectedUserId === "") {
+      setSelectedUserId("");
+      setSelectedUserName("");
+    }
+  }, [selectedUserId]);
+
   return (
     <div className="w-full flex">
       <div className={`w-full relative ${z}`} ref={userSearchPickerRef}>

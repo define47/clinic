@@ -1,7 +1,9 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import { Gender, GenderPickerProps } from "../../types";
 import { StyledInputV2 } from "../design/StyledInputV2";
 import { RiArrowUpSLine } from "react-icons/ri";
+import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
+import { getItemInUserSelectedLanguageCode } from "../../utils/clientLanguages";
 
 export const GenderPicker: FC<GenderPickerProps> = ({
   selectedGenderValue,
@@ -10,6 +12,9 @@ export const GenderPicker: FC<GenderPickerProps> = ({
   setSelectedGenderName,
   z,
 }) => {
+  const authContext = useContext(AuthenticatedUserDataContext);
+  const { authenticatedUserDataState, authenticatedUserDataSetState } =
+    authContext!;
   const [genders, setGenders] = useState<Gender[]>([]);
   const [isGenderPickerVisible, setIsGenderPickerVisible] =
     useState<boolean>(false);
@@ -19,8 +24,22 @@ export const GenderPicker: FC<GenderPickerProps> = ({
 
   useEffect(() => {
     setGenders([
-      { genderValue: "male", genderName: "male" },
-      { genderValue: "female", genderName: "female" },
+      {
+        genderValue: "male",
+        genderName: getItemInUserSelectedLanguageCode(
+          authenticatedUserDataState.language.languageCode,
+          "genders",
+          "Male"
+        )!,
+      },
+      {
+        genderName: getItemInUserSelectedLanguageCode(
+          authenticatedUserDataState.language.languageCode,
+          "genders",
+          "Female"
+        )!,
+        genderValue: "female",
+      },
     ]);
   }, []);
 
@@ -58,16 +77,18 @@ export const GenderPicker: FC<GenderPickerProps> = ({
     setIsGenderPickerVisible(false);
   }
 
-  const foundGender = genders.find(
-    (gender) => gender.genderValue === selectedGenderValue
-  );
-
   useEffect(() => {
+    const foundGender = genders.find(
+      (gender) => gender.genderValue === selectedGenderValue
+    );
+
+    console.log("foundGender", foundGender);
+
     if (foundGender) {
       setSelectedGenderValue(foundGender.genderValue);
       setSelectedGenderName(foundGender.genderName);
     }
-  }, [foundGender, selectedGenderValue, selectedGenderName]);
+  }, [selectedGenderValue, selectedGenderName]);
 
   return (
     <div className="w-full flex">
@@ -151,6 +172,12 @@ export const GenderPicker: FC<GenderPickerProps> = ({
           styledInputValue={selectedGenderName}
           styledInputWidth="w-full"
         />
+        <span
+          className={`absolute top-0 h-10 w-full bg-transparent cursor-pointer`}
+          onClick={() => {
+            setIsGenderPickerVisible(!isGenderPickerVisible);
+          }}
+        ></span>
         <ul
           className={`absolute w-full bg-white overflow-y-auto h-40 ${
             isGenderPickerVisible

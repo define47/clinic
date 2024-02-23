@@ -1,5 +1,5 @@
 {
-  "id": "7f432a75-1465-4b08-b503-248afd9f6ffa",
+  "id": "312864fe-01a1-45d1-b883-fc9abc1dd4f8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -47,6 +47,12 @@
         "appointmentCancellationReason": {
           "name": "appointmentCancellationReason",
           "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "appointmentPrice": {
+          "name": "appointmentPrice",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         }
@@ -607,6 +613,50 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "Patient": {
+      "name": "Patient",
+      "schema": "iatropolis",
+      "columns": {
+        "patientId": {
+          "name": "patientId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "patientCNP": {
+          "name": "patientCNP",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Patient_patientId_User_userId_fk": {
+          "name": "Patient_patientId_User_userId_fk",
+          "tableFrom": "Patient",
+          "tableTo": "User",
+          "schemaTo": "iatropolis",
+          "columnsFrom": [
+            "patientId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "Patient_patientId_pk": {
+          "name": "Patient_patientId_pk",
+          "columns": [
+            "patientId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "Role": {
       "name": "Role",
       "schema": "iatropolis",
@@ -636,6 +686,49 @@
           ]
         }
       }
+    },
+    "RolePermissionMapping": {
+      "name": "RolePermissionMapping",
+      "schema": "iatropolis",
+      "columns": {
+        "permissionId": {
+          "name": "permissionId",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "roleId": {
+          "name": "roleId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "permissionName": {
+          "name": "permissionName",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "RolePermissionMapping_roleId_Role_roleId_fk": {
+          "name": "RolePermissionMapping_roleId_Role_roleId_fk",
+          "tableFrom": "RolePermissionMapping",
+          "tableTo": "Role",
+          "schemaTo": "iatropolis",
+          "columnsFrom": [
+            "roleId"
+          ],
+          "columnsTo": [
+            "roleId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     },
     "User": {
       "name": "User",

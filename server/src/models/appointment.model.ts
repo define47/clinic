@@ -1,4 +1,4 @@
-import { pgEnum, timestamp, varchar } from "drizzle-orm/pg-core";
+import { integer, pgEnum, timestamp, varchar } from "drizzle-orm/pg-core";
 import { clinicSchema } from "../utils/drizzle";
 import { userTable } from "./user.model";
 
@@ -10,6 +10,7 @@ export type Appointment = {
   appointmentDateTime: Date;
   appointmentStatus: string;
   appointmentCancellationReason: string;
+  appointmentPrice: number;
 };
 
 export type AppointmentJoinDoctorAndPatient = {
@@ -21,6 +22,7 @@ export type AppointmentJoinDoctorAndPatient = {
     appointmentDateTime: Date;
     appointmentStatus: string;
     appointmentCancellationReason: string | null;
+    appointmentPrice: number | null;
   };
   doctor: {
     doctorId: string;
@@ -50,6 +52,7 @@ export type AppointmentUpdateAttributes = {
   appointmentDateTime: Date;
   appointmentStatus: string;
   appointmentCancellationReason: string;
+  appointmentPrice: number;
 };
 
 // "scheduled",
@@ -91,4 +94,5 @@ export const appointmentTable = clinicSchema.table("Appointment", {
   appointmentCancellationReason: varchar("appointmentCancellationReason", {
     length: 256,
   }),
+  appointmentPrice: integer("appointmentPrice"),
 });

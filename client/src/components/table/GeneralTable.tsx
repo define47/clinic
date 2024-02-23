@@ -55,9 +55,12 @@ import { StyledInputV2 } from "../design/StyledInputV2";
 import {
   getAppointmentTableColumnNamesByLanguage,
   getItemByLanguageAndCollection,
+  getItemInUserSelectedLanguageCode,
 } from "../../utils/clientLanguages";
 import { StyledAppointmentStatusName } from "../design/StyledAppointmentStatusName";
 import { Toaster } from "sonner";
+import { capitalizeString } from "../../utils/utils";
+import { OrderByIndicator } from "./OrderByIndicator";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -79,7 +82,8 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   const [tableLimit, setTableLimit] = useState<number>(999);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [clickedTableRow, setClickedTableRow] = useState<TableRow>();
-  const [orderBy, setOrderBy] = useState<string>("asc:userForename");
+  const [orderByIndicator, setOrderByIndicator] =
+    useState<string>("asc:userForename");
   const [roleId, setRoleId] = useState<string>("");
 
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -156,7 +160,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           searchQuery,
           limit: tableLimit,
           page: currentPage,
-          orderBy,
+          orderBy: orderByIndicator,
         };
       else if (entity === "medicalSpeciality")
         queryParams = {
@@ -225,7 +229,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   }, [
     entity,
     roleId,
-    orderBy,
+    orderByIndicator,
     searchQuery,
     selectedUserSearchCriteriaValue,
     selectedTable,
@@ -904,7 +908,12 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                         "generalUserTableColumnNames",
                         0
                       )}
-                      {orderBy !== "asc:userForename" && (
+                      <OrderByIndicator
+                        orderByIndicator={orderByIndicator}
+                        setOrderByIndicator={setOrderByIndicator}
+                        orderByColumn="userForename"
+                      />
+                      {/* {orderBy !== "asc:userForename" && (
                         <RiArrowUpSFill
                           className="text-sm cursor-pointer"
                           onClick={() => setOrderBy("asc:userForename")}
@@ -915,7 +924,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                           className="text-sm cursor-pointer"
                           onClick={() => setOrderBy("desc:userForename")}
                         />
-                      )}
+                      )} */}
                     </div>
                   </td>
                   <td className="px-6 py-4 font-bold">
@@ -926,7 +935,12 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                         "generalUserTableColumnNames",
                         1
                       )}
-                      {orderBy !== "asc:userSurname" && (
+                      <OrderByIndicator
+                        orderByIndicator={orderByIndicator}
+                        setOrderByIndicator={setOrderByIndicator}
+                        orderByColumn="userSurname"
+                      />
+                      {/* {orderBy !== "asc:userSurname" && (
                         <RiArrowUpSFill
                           className="text-sm cursor-pointer"
                           onClick={() => setOrderBy("asc:userSurname")}
@@ -937,33 +951,38 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                           className="text-sm cursor-pointer"
                           onClick={() => setOrderBy("desc:userSurname")}
                         />
-                      )}
-                      {/* {orderBy === "asc:userSurname" ? (
-                      
-                    ) : orderBy === "desc:userForename" ? (
-                      <RiArrowDownSFill
-                        onClick={() => setOrderBy("asc:userSurname")}
-                      />
-                    ) : (
-                      ""
-                    )} */}
+                      )} */}
                     </div>
                   </td>
                   <td className="px-6 py-4 font-bold">
-                    {/* userEmail */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "generalUserTableColumnNames",
-                      2
-                    )}
+                    <div className="flex items-center justify-center">
+                      {/* userEmail */}
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "generalUserTableColumnNames",
+                        2
+                      )}
+                      <OrderByIndicator
+                        orderByIndicator={orderByIndicator}
+                        setOrderByIndicator={setOrderByIndicator}
+                        orderByColumn="userEmail"
+                      />
+                    </div>
                   </td>
                   <td className="px-6 py-4 font-bold">
-                    {/* userPhoneNumber */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "generalUserTableColumnNames",
-                      3
-                    )}
+                    <div className="flex items-center justify-center">
+                      {/* userPhoneNumber */}
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "generalUserTableColumnNames",
+                        3
+                      )}
+                      <OrderByIndicator
+                        orderByIndicator={orderByIndicator}
+                        setOrderByIndicator={setOrderByIndicator}
+                        orderByColumn="userPhoneNumber"
+                      />
+                    </div>
                   </td>
                   <td className="px-6 py-4 font-bold">
                     {/* userGender */}
@@ -1036,11 +1055,18 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     Medical Speciality Id
                   </td>
                   <td className="px-6 py-4 font-bold w-1/3">
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "medicalSpecialityTableColumnNames",
-                      0
-                    )}
+                    <div className="flex items-center justify-center">
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "medicalSpecialityTableColumnNames",
+                        0
+                      )}
+                      <OrderByIndicator
+                        orderByIndicator={orderByIndicator}
+                        setOrderByIndicator={setOrderByIndicator}
+                        orderByColumn="medicalSpecialityName"
+                      />
+                    </div>
                   </td>
                   <td className="px-6 py-4 font-bold w-1/3">
                     {/* Actions */}
@@ -1102,6 +1128,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       "appointmentTableColumnNames",
                       5
                     )}
+                  </td>
+                  <td className="px-6 py-4 font-bold">
+                    {/* Actions */}
+                    Price
                   </td>
                   <td className="px-6 py-4 font-bold">
                     {/* Actions */}
@@ -1168,7 +1198,15 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     <td className="px-6 py-4 text-xs">
                       {tableRow.userPhoneNumber}
                     </td>
-                    <td className="px-6 py-4 text-xs">{tableRow.userGender}</td>
+                    <td className="px-6 py-4 text-xs">
+                      {
+                        getItemInUserSelectedLanguageCode(
+                          authenticatedUserDataState.language.languageCode,
+                          "genders",
+                          capitalizeString(tableRow.userGender)!
+                        )!
+                      }
+                    </td>
                     <td className="px-6 py-4 text-xs">
                       {tableRow.userDateOfBirth.split("-").reverse().join("-")}
                     </td>
@@ -1279,6 +1317,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     </td>
                     <td className="px-6 py-4 text-xs">
                       {tableRow.appointment.appointmentCancellationReason}
+                    </td>
+                    <td className="px-6 py-4 text-xs">
+                      {tableRow.appointment.appointmentPrice} RON
                     </td>
                     <td className="h-14 flex items-center justify-center space-x-2">
                       {(authenticatedUserDataState.roleNames[0] === "doctor" ||

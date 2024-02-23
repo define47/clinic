@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Appointment" (
 	"appointmentDateTime" timestamp NOT NULL,
 	"appointmentReason" varchar(256) NOT NULL,
 	"appointmentStatus" "appointmentStatus" NOT NULL,
-	"appointmentCancellationReason" varchar(256)
+	"appointmentCancellationReason" varchar(256),
+	"appointmentPrice" integer
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."AppointmentHistory" (
@@ -107,10 +108,22 @@ CREATE TABLE IF NOT EXISTS "iatropolis"."Notification" (
 	"notificationDateTime" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "iatropolis"."Patient" (
+	"patientId" varchar,
+	"patientCNP" varchar(100) NOT NULL,
+	CONSTRAINT "Patient_patientId_pk" PRIMARY KEY("patientId")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."Role" (
 	"roleId" varchar PRIMARY KEY NOT NULL,
 	"roleName" varchar(50) NOT NULL,
 	CONSTRAINT "Role_roleName_unique" UNIQUE("roleName")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "iatropolis"."RolePermissionMapping" (
+	"permissionId" varchar PRIMARY KEY NOT NULL,
+	"roleId" varchar NOT NULL,
+	"permissionName" varchar(100) NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "iatropolis"."User" (
@@ -225,6 +238,18 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "iatropolis"."Notification" ADD CONSTRAINT "Notification_notificationSenderId_User_userId_fk" FOREIGN KEY ("notificationSenderId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "iatropolis"."Patient" ADD CONSTRAINT "Patient_patientId_User_userId_fk" FOREIGN KEY ("patientId") REFERENCES "iatropolis"."User"("userId") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "iatropolis"."RolePermissionMapping" ADD CONSTRAINT "RolePermissionMapping_roleId_Role_roleId_fk" FOREIGN KEY ("roleId") REFERENCES "iatropolis"."Role"("roleId") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

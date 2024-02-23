@@ -14,6 +14,7 @@ type ClientLanguageCollection = {
   medicalSpecialityPickerLabels: string[];
   pageNavigationButtonNames: string[];
   appointmentStatuses: string[];
+  genders: string[];
 };
 type ClientLanguage = {
   [languageCode: string]: ClientLanguageCollection;
@@ -131,6 +132,7 @@ export const clientLanguages: ClientLanguage = {
       "Anulat De Catre Pacient",
       "Achitat",
     ],
+    genders: ["Masculin", "Feminin"],
   },
 
   "en-GB": {
@@ -238,6 +240,7 @@ export const clientLanguages: ClientLanguage = {
       "Canceled By Patient",
       "Paid",
     ],
+    genders: ["Male", "Female"],
   },
 };
 
@@ -249,7 +252,12 @@ export function getItemInUserSelectedLanguageCode(
   const userSelectedLanguageCodeCollections =
     clientLanguages[userSelectedLanguageCode];
 
-  if (collectionKey === "appointmentStatuses") {
+  if (collectionKey === "genders") {
+    const foundGenderIndex = ["Male", "Female"].indexOf(itemName);
+
+    if (foundGenderIndex !== -1)
+      return userSelectedLanguageCodeCollections.genders[foundGenderIndex];
+  } else if (collectionKey === "appointmentStatuses") {
     const foundAppointmentIndex = [
       "Scheduled",
       "Rescheduled",

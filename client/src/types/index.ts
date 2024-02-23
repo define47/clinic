@@ -32,6 +32,7 @@ export type AppointmentTableData = {
     appointmentDateTime: string;
     appointmentStatus: string;
     appointmentCancellationReason: string;
+    appointmentPrice?: string;
   };
   doctor: {
     doctorId: string;

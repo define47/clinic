@@ -275,6 +275,7 @@ export class AppointmentController {
           appointmentStatus: body.appointmentStatus,
           appointmentDateTime: new Date(body.appointmentDateTime),
           appointmentCancellationReason: body.appointmentCancellationReason,
+          appointmentPrice: body.appointmentPrice,
         }
       );
       const { redis } = fastifyServer;

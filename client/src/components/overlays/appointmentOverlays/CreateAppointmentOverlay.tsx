@@ -262,6 +262,52 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
     isCreateAppointmentConfirmationDialogOverlayVisible,
   ]);
 
+  useEffect(() => {
+    function getFirstAvailableTimeSlots() {
+      const timeSlots = [];
+      let hour = 8; // Starting hour
+      let minute = 0; // Starting minute
+
+      while (hour <= 17) {
+        timeSlots.push(
+          `${hour.toString().padStart(2, "0")}:${minute
+            .toString()
+            .padStart(2, "0")}`
+        );
+
+        // Increment by 15 minutes
+        minute += 15;
+        if (minute === 60) {
+          minute = 0;
+          hour += 1;
+        }
+      }
+
+      for (let i = 0; i < forbiddenTimeSlots.length; i++) {
+        timeSlots.splice(timeSlots.indexOf(forbiddenTimeSlots[i]), 1);
+      }
+
+      console.log("timeSlots", timeSlots);
+
+      setDefaultTime(timeSlots[0]);
+    }
+
+    getFirstAvailableTimeSlots();
+  }, [forbiddenTimeSlots]);
+
+  useEffect(() => {
+    setDefaultTime("08:00");
+  }, [selectedDoctorId]);
+
+  useEffect(() => {
+    setSelectedDoctorId("");
+    setSelectedPatientId("");
+    setAppointmentToCreate((prevAppointmentToCreate) => ({
+      ...prevAppointmentToCreate,
+      appointmentReason: "",
+    }));
+  }, [isCreateAppointmentOverlayVisible]);
+
   return (
     <>
       {timetableDoctorId !== undefined ? (

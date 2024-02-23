@@ -126,6 +126,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "appointmentReason",
         "appointmentStatus",
         "appointmentCancellationReason",
+        "appointmentPrice",
       ];
     else if (table === appointmentHistoryTable)
       this._tableColumns = [
