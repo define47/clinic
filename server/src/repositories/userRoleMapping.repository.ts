@@ -143,29 +143,60 @@ export class UserRoleMappingRepository
     }
 
     const columnToOrderByData = orderBy.split(":");
-    let columnToOrderBy;
+    let orderByIndicator = asc(userTable.userForename);
+    let orderByDirection = orderBy.split(":")[0];
+    let orderByColumn = orderBy.split(":")[1];
 
     // * Make it nicer
+    // if (
+    //   columnToOrderByData[0] === "asc" &&
+    //   columnToOrderByData[1] !== "medicalSpecialityName"
+    // ) {
+    //   columnToOrderBy = asc(userTable[columnToOrderByData[1] as keyof User]);
+    // } else if (
+    //   columnToOrderByData[0] === "desc" &&
+    //   columnToOrderByData[1] !== "medicalSpecialityName"
+    // ) {
+    //   columnToOrderBy = desc(userTable[columnToOrderByData[1] as keyof User]);
+    // } else if (
+    //   columnToOrderByData[0] === "asc" &&
+    //   columnToOrderByData[1] === "medicalSpecialityName"
+    // ) {
+    //   columnToOrderBy = asc(medicalSpecialityTable.medicalSpecialityName);
+    // } else if (
+    //   columnToOrderByData[0] === "desc" &&
+    //   columnToOrderByData[1] === "medicalSpecialityName"
+    // ) {
+    //   columnToOrderBy = desc(medicalSpecialityTable.medicalSpecialityName);
+    // }
+
+    console.log("orderByuser", orderBy, orderByDirection, orderByColumn);
+
     if (
-      columnToOrderByData[0] === "asc" &&
-      columnToOrderByData[1] !== "medicalSpecialityName"
+      orderByDirection === "asc" &&
+      (orderByColumn === "userForename" ||
+        orderByColumn === "userSurname" ||
+        orderByColumn === "userEmail" ||
+        orderByColumn === "userPhoneNumber" ||
+        orderByColumn === "userDateOfBirth")
     ) {
-      columnToOrderBy = asc(userTable[columnToOrderByData[1] as keyof User]);
+      orderByIndicator = asc(userTable[orderByColumn as keyof User]);
     } else if (
-      columnToOrderByData[0] === "desc" &&
-      columnToOrderByData[1] !== "medicalSpecialityName"
+      orderByDirection === "desc" &&
+      (orderByColumn === "userForename" ||
+        orderByColumn === "userSurname" ||
+        orderByColumn === "userEmail" ||
+        orderByColumn === "userPhoneNumber" ||
+        orderByColumn === "userDateOfBirth")
     ) {
-      columnToOrderBy = desc(userTable[columnToOrderByData[1] as keyof User]);
+      orderByIndicator = desc(userTable[orderByColumn as keyof User]);
     } else if (
-      columnToOrderByData[0] === "asc" &&
-      columnToOrderByData[1] === "medicalSpecialityName"
+      orderByDirection === "asc" &&
+      orderByColumn === "medicalSpecialityName"
     ) {
-      columnToOrderBy = asc(medicalSpecialityTable.medicalSpecialityName);
-    } else if (
-      columnToOrderByData[0] === "desc" &&
-      columnToOrderByData[1] === "medicalSpecialityName"
-    ) {
-      columnToOrderBy = desc(medicalSpecialityTable.medicalSpecialityName);
+      orderByIndicator = asc(
+        medicalSpecialityTable[orderByColumn as keyof MedicalSpeciality]
+      );
     }
 
     const condition = {
@@ -220,7 +251,7 @@ export class UserRoleMappingRepository
         .where(condition.userSearchQuery)
         .limit(limit)
         .offset(offset)
-        .orderBy(columnToOrderBy!);
+        .orderBy(orderByIndicator!);
 
       return {
         tableData: data as UserRoleMappingJoinUserAndRole[],
@@ -282,7 +313,7 @@ export class UserRoleMappingRepository
           )
         )
         .where(condition.doctorSearchQuery)
-        .orderBy(columnToOrderBy!);
+        .orderBy(orderByIndicator!);
 
       const resultArray = Array.from(
         data

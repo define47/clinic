@@ -56,7 +56,7 @@ export const CreateMedicalProcedureOverlay: FC<
       const response = await axios.post(
         medicalProceduresPath,
         {
-          medicalSpecialityId,
+          medicalSpecialityId: medicalSpecialityId.slice(1),
           medicalProcedureName: medicalProcedureToCreate.medicalProcedureName,
           medicalProcedurePrice: medicalProcedureToCreate.medicalProcedurePrice,
         },

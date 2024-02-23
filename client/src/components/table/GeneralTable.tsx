@@ -82,8 +82,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
   const [tableLimit, setTableLimit] = useState<number>(999);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [clickedTableRow, setClickedTableRow] = useState<TableRow>();
-  const [orderByIndicator, setOrderByIndicator] =
-    useState<string>("asc:userForename");
+  const [orderByIndicator, setOrderByIndicator] = useState<string>("");
   const [roleId, setRoleId] = useState<string>("");
 
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -160,7 +159,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           searchQuery,
           limit: tableLimit,
           page: currentPage,
-          orderBy: orderByIndicator,
+          orderBy: orderByIndicator ? orderByIndicator : "asc:userForename",
         };
       else if (entity === "medicalSpeciality")
         queryParams = {
@@ -204,7 +203,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           searchQuery,
           limit: tableLimit,
           page: currentPage,
-          orderBy: "asc:medicalProcedureName",
+          orderBy: orderByIndicator,
         };
       }
 
@@ -994,12 +993,20 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     )}
                   </td>
                   <td className="px-6 py-4 font-bold">
-                    {/* userDateOfBirth */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "generalUserTableColumnNames",
-                      5
-                    )}
+                    <div className="flex items-center justify-center">
+                      {/* userDateOfBirth */}
+
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "generalUserTableColumnNames",
+                        5
+                      )}
+                      <OrderByIndicator
+                        orderByIndicator={orderByIndicator}
+                        setOrderByIndicator={setOrderByIndicator}
+                        orderByColumn="userDateOfBirth"
+                      />
+                    </div>
                   </td>
                   <td className="px-6 py-4 font-bold">
                     {/* userAddress */}
@@ -1148,20 +1155,34 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   <td>Index</td>
                   <td className="px-6 py-4 font-bold">medicalProcedureId</td>
                   <td className="px-6 py-4 font-bold">
-                    {/* medicalProcedureName */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "medicalProcedureTableColumnNames",
-                      0
-                    )}
+                    <div className="flex items-center justify-center">
+                      {/* medicalProcedureName */}
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "medicalProcedureTableColumnNames",
+                        0
+                      )}
+                      <OrderByIndicator
+                        orderByIndicator={orderByIndicator}
+                        setOrderByIndicator={setOrderByIndicator}
+                        orderByColumn="medicalProcedureName"
+                      />
+                    </div>
                   </td>
                   <td className="px-6 py-4 font-bold">
-                    {/* medicalProcedurePrice */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "medicalProcedureTableColumnNames",
-                      1
-                    )}
+                    <div className="flex items-center justify-center">
+                      {/* medicalProcedurePrice */}
+                      {getItemByLanguageAndCollection(
+                        authenticatedUserDataState.language.languageCode,
+                        "medicalProcedureTableColumnNames",
+                        1
+                      )}
+                      <OrderByIndicator
+                        orderByIndicator={orderByIndicator}
+                        setOrderByIndicator={setOrderByIndicator}
+                        orderByColumn="medicalProcedurePrice"
+                      />
+                    </div>
                   </td>
                   <td className="px-6 py-4 font-bold">
                     {/* Actions */}
@@ -1623,11 +1644,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
         {entity === "medicalProcedure" && (
           <MedicalSpecialityPicker
+            medicalSpecialityRank=""
             label="select medical speciality"
             selectedMedicalSpecialityId={selectedMedicalSpecialityId}
             setSelectedMedicalSpecialityId={setSelectedMedicalSpecialityId}
             selectedMedicalSpecialityName={selectedMedicalSpecialityName}
             setSelectedMedicalSpecialityName={setSelectedMedicalSpecialityName}
+            z="z-50"
           />
         )}
 

@@ -66,15 +66,15 @@ export class MedicalSpecialityMedicalProcedureMappingRepository
       }
     | undefined
   > {
-    let orderByFinalColumn;
+    let orderByFinalColumn = asc(medicalProcedureTable.medicalProcedureName);
     const orderDirection = orderBy.split(":")[0];
     const orderColumn = orderBy.split(":")[1];
 
-    if (orderDirection === "asc") {
+    if (orderDirection === "asc" && orderColumn.length > 2) {
       orderByFinalColumn = asc(
         medicalProcedureTable[orderColumn as keyof MedicalProcedure]
       );
-    } else if (orderDirection === "desc") {
+    } else if (orderDirection === "desc" && orderColumn.length > 2) {
       orderByFinalColumn = desc(
         medicalProcedureTable[orderColumn as keyof MedicalProcedure]
       );
