@@ -166,24 +166,6 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
     }
   }, [selectedMedicalSpecialityName, filterMedicalSpecialities]);
 
-  // useEffect(() => {
-  //   setSelectedMedicalSpecialityName("anesthesiology");
-  // }, []);
-
-  // useEffect(() => {
-  //   for (let i = 0; i < medicalSpecialties.length; i++) {
-  //     if (
-  //       selectedMedicalSpecialityName.toLowerCase() ===
-  //       medicalSpecialties[i].medicalSpecialityName.toLowerCase()
-  //     ) {
-  //       setSelectedMedicalSpecialityId(
-  //         medicalSpecialties[i].medicalSpecialityId!
-  //       );
-  //       break;
-  //     }
-  //   }
-  // }, []);
-
   useEffect(() => {
     const foundSpeciality = medicalSpecialities.find(
       (medicalSpeciality) =>
@@ -192,7 +174,9 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
     );
 
     if (foundSpeciality) {
-      setSelectedMedicalSpecialityId(foundSpeciality.medicalSpecialityId!);
+      setSelectedMedicalSpecialityId(
+        `${medicalSpecialityRank}:${foundSpeciality.medicalSpecialityId!}`
+      );
       setSelectedMedicalSpecialityName(foundSpeciality.medicalSpecialityName);
     }
   }, [selectedMedicalSpecialityId, selectedMedicalSpecialityName]);
@@ -327,11 +311,11 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
           {selectedMedicalSpecialityName === ""
             ? medicalSpecialities.map(
                 (medicalSpeciality: MedicalSpeciality) =>
-                  selectedPrimaryMedicalSpecialityId !==
+                  selectedPrimaryMedicalSpecialityId?.split(":")[1] !==
                     medicalSpeciality.medicalSpecialityId &&
-                  selectedSecondaryMedicalSpecialityId !==
+                  selectedSecondaryMedicalSpecialityId?.split(":")[1] !==
                     medicalSpeciality.medicalSpecialityId &&
-                  selectedTertiaryMedicalSpecialityId !==
+                  selectedTertiaryMedicalSpecialityId?.split(":")[1] !==
                     medicalSpeciality.medicalSpecialityId && (
                     <li
                       className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable cursor-pointer border-b border-lightMode-borderColor dark:border-darkMode-borderColor"

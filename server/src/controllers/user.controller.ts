@@ -424,7 +424,7 @@ export class UserController {
         for (let i = 0; i < specialityIds.length; i++) {
           const speciality =
             await this._medicalSpecialityService.getMedicalSpecialityById(
-              specialityIds[i]
+              specialityIds[i].split(":")[1]
             );
           if (!speciality)
             return reply.code(200).send({
@@ -480,10 +480,10 @@ export class UserController {
 
         // * if doctor
         if (roleIds[i] === getDoctorRoleIdEnv()) {
-          console.log("specialityIds", specialityIds);
-
           for (let j = 0; j < specialityIds.length; j++) {
-            let current = specialityIds.split(":");
+            let current = specialityIds[j].split(":");
+            let currentMedicalSpecialityRank = current[0];
+            let currentMedicalSpecialityId = current[1];
             // await this._doctorSpecialityMappingService.createMedicalDoctorSpecialityMapping(
             //   {
             //     userId: postUser.userId,
@@ -493,12 +493,29 @@ export class UserController {
             //     isTertiaryMedicalSpeciality: j === 2,
             //   }
             // );
+
+            await this._doctorSpecialityMappingService.createMedicalDoctorSpecialityMapping(
+              {
+                userId: postUser.userId,
+                medicalSpecialityId: currentMedicalSpecialityId,
+                isPrimaryMedicalSpeciality:
+                  currentMedicalSpecialityRank === "primary",
+                isSecondaryMedicalSpeciality:
+                  currentMedicalSpecialityRank === "secondary",
+                isTertiaryMedicalSpeciality:
+                  currentMedicalSpecialityRank === "tertiary",
+              }
+            );
           }
         }
       }
 
       console.log("🚀 ~ UserController ~ postUser= ~ roleIds:", roleIds);
       console.log("🚀 ~ UserController ~ postUser= ~ foundRoles:", foundRoles);
+      console.log(
+        "🚀 ~ UserController ~ postUser= ~ specialityIds:",
+        specialityIds
+      );
       console.log(
         "🚀 ~ UserController ~ postUser= ~ foundMedicalSpecialities:",
         foundMedicalSpecialities

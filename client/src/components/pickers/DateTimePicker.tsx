@@ -28,6 +28,7 @@ type DateTimePickerProps = {
   isOverlayVisible?: boolean;
   z: string;
   isDisabled?: boolean;
+  forbiddenTimeSlots?: string[];
 };
 
 export const DateTimePicker: FC<DateTimePickerProps> = ({
@@ -40,6 +41,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
   isOverlayVisible,
   z,
   isDisabled,
+  forbiddenTimeSlots,
 }) => {
   // "2024-05-20"
   const currentDate = new Date();
@@ -693,10 +695,17 @@ export const DateTimePicker: FC<DateTimePickerProps> = ({
               {timeSlots.map((timeSlot: string) => (
                 <span
                   key={timeSlot}
-                  className={`flex items-center justify-center border hover:border-pink-400 hover:scale-105 p-2 cursor-pointer ${
+                  className={`flex items-center justify-center border p-2 ${
                     selectedTimeSlot === timeSlot && "border-pink-400"
+                  } ${
+                    forbiddenTimeSlots?.includes(timeSlot)
+                      ? "cursor-not-allowed bg-gray-300"
+                      : "cursor-pointer hover:border-pink-400 hover:scale-105"
                   }`}
-                  onClick={() => setSelectedTimeSlot(timeSlot)}
+                  onClick={() => {
+                    if (!forbiddenTimeSlots?.includes(timeSlot))
+                      setSelectedTimeSlot(timeSlot);
+                  }}
                 >
                   {timeSlot}
                 </span>

@@ -14,9 +14,19 @@ export const appointmentRoutes: (
   fastifyServer.get(
     "/",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      if (request.query.appointmentId)
+      // if (request.query.appointmentId)
+      //   await appointmentController.getAppointmentById(request, reply);
+      // else await appointmentController.getAllAppointments(request, reply);
+
+      if (request.query.message === "appointment")
         await appointmentController.getAppointmentById(request, reply);
-      else await appointmentController.getAllAppointments(request, reply);
+      else if (request.query.message === "appointments")
+        await appointmentController.getAllAppointments(request, reply);
+      else if (request.query.message === "bookedDoctorAppointmentsSlots")
+        await appointmentController.getDoctorAppointmentBookedSlots(
+          request,
+          reply
+        );
     }
   );
 

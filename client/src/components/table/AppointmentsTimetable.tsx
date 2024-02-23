@@ -50,6 +50,7 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
         let queryParams = {};
 
         queryParams = {
+          message: "appointments",
           searchInTable: "doctor",
           orderInTable: "appointment",
           searchBy: "userForename",

@@ -76,12 +76,13 @@ export const MedicalRecordPatientView: FC = () => {
 
       const response = await axios.get(appointmentsPath, {
         params: {
+          message: "appointment",
           appointmentId,
         },
         withCredentials: true,
       });
 
-      console.log(response.data);
+      console.log("app", response.data);
 
       if (response.data.success) setAppointment(response.data.payload);
     } catch (error) {

@@ -13,11 +13,9 @@ import {
 } from "../../../types";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import Overlay from "../base/Overlay";
-import { StyledInput } from "../../design/StyledInput";
 import { UserPicker } from "../../pickers/UserPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
-import { AppointmentStatusPicker } from "../../pickers/AppointmentStatusPicker";
 import {
   appointmentsDoctorAvailabilityPath,
   appointmentsPath,
@@ -58,6 +56,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   });
   const [bookedDoctorAppointmentSlots, setBookedDoctorAppointmentSlots] =
     useState<BookedDoctorAppointmentSlot[]>([]);
+  const [forbiddenTimeSlots, setForbiddenTimeSlots] = useState<string[]>([]);
 
   const [selectedDoctorId, setSelectedDoctorId] = useState<string>("");
   const [selectedDoctorName, setSelectedDoctorName] = useState<string>("");
@@ -65,11 +64,6 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   const [selectedPatientName, setSelectedPatientName] = useState<string>("");
   const [selectedAppointmentDateTime, setSelectedAppointmentDateTime] =
     useState<string>("");
-
-  const [isSelectedDoctorIdValid, setIsSelectedDoctorIdValid] =
-    useState<boolean>(false);
-  const [isSelectedPatientIdValid, setIsSelectedPatientIdValid] =
-    useState<boolean>(false);
 
   const [defaultDate, setDefaultDate] = useState<string>("");
   const [defaultTime, setDefaultTime] = useState<string>("");
@@ -143,8 +137,9 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
     async function getDoctorAppointmentAvailability() {
       try {
         if (selectedDoctorId) {
-          const response = await axios.get(appointmentsDoctorAvailabilityPath, {
+          const response = await axios.get(appointmentsPath, {
             params: {
+              message: "bookedDoctorAppointmentsSlots",
               doctorId: selectedDoctorId,
               date: selectedAppointmentDateTime.split("T")[0],
             },
@@ -161,6 +156,19 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
 
     getDoctorAppointmentAvailability();
   }, [selectedDoctorId, selectedAppointmentDateTime]);
+
+  useEffect(() => {
+    const appointmentDateTimes: string[] = bookedDoctorAppointmentSlots.map(
+      (appointment) =>
+        appointment.appointmentDateTime.split("T")[1].substring(0, 5)
+    );
+
+    setForbiddenTimeSlots(appointmentDateTimes);
+  }, [bookedDoctorAppointmentSlots]);
+
+  useEffect(() => {
+    console.log("forbiddenTimeSlots", forbiddenTimeSlots);
+  }, [forbiddenTimeSlots]);
 
   useEffect(() => {
     if (socketNotificationDataState) {
@@ -329,6 +337,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
                 isOverlayVisible={isCreateAppointmentOverlayVisible}
                 z="z-20"
                 isDisabled={timetableDoctorId !== undefined ? true : false}
+                forbiddenTimeSlots={forbiddenTimeSlots}
               />
               <StyledInputV2
                 styledInputWidth="w-full"

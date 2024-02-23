@@ -161,13 +161,6 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
     console.log("isUserEmailValid", isUserEmailValid);
   }, [isUserEmailValid, isUserForenameValid]);
 
-  useEffect(() => {
-    console.log(selectedPrimaryMedicalSpecialityId);
-  }, [
-    selectedPrimaryMedicalSpecialityId,
-    selectedPrimaryMedicalSpecialityName,
-  ]);
-
   async function onCreateUser() {
     try {
       const response = await axios.post(
@@ -658,7 +651,6 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
 
               {roleName === "doctor" && (
                 <>
-                  {selectedPrimaryMedicalSpecialityId}
                   <MedicalSpecialityPicker
                     medicalSpecialityRank="primary"
                     label={getItemByLanguageAndCollection(

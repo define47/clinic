@@ -166,6 +166,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         };
       else if (entity === "appointment")
         queryParams = {
+          message: "appointments",
           searchInTable: selectedTable !== "" ? selectedTable : "doctor",
           orderInTable: "appointment",
           searchBy:
@@ -194,7 +195,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         };
       else if (entity === "medicalProcedure") {
         queryParams = {
-          medicalSpecialityId: selectedMedicalSpecialityId,
+          medicalSpecialityId: selectedMedicalSpecialityId.substring(1),
           searchQuery,
           limit: tableLimit,
           page: currentPage,
@@ -855,6 +856,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           <div className="w-full flex items-center justify-center">
             <div className="w-96 mr-3">
               <MedicalSpecialityPicker
+                medicalSpecialityRank=""
                 label={getItemByLanguageAndCollection(
                   authenticatedUserDataState.language.languageCode,
                   "medicalSpecialityPickerLabels",
