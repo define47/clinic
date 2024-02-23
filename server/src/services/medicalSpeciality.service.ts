@@ -41,7 +41,8 @@ export class MedicalSpecialityService implements IMedicalSpecialityService {
   public async getAllMedicalSpecialities(
     searchQuery: string,
     limit: number,
-    page: number
+    page: number,
+    orderBy: string
   ): Promise<
     | { tableData: MedicalSpeciality[]; totalCount: number; totalPages: number }
     | undefined
@@ -49,7 +50,8 @@ export class MedicalSpecialityService implements IMedicalSpecialityService {
     return await this._medicalSpecialityRepository.getAllMedicalSpecialities(
       searchQuery,
       limit,
-      page
+      page,
+      orderBy
     );
   }
 

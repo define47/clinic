@@ -7,7 +7,7 @@ import {
 } from "../models/medicalSpeciality.model";
 import { BaseRepository } from "./base.repository";
 import { IMedicalSpecialityRepository } from "./medicalSpeciality.irepository";
-import { Table, asc, count, ilike } from "drizzle-orm";
+import { Table, asc, count, desc, ilike } from "drizzle-orm";
 
 export class MedicalSpecialityRepository
   extends BaseRepository<MedicalSpeciality>
@@ -48,7 +48,8 @@ export class MedicalSpecialityRepository
   public async getAllMedicalSpecialities(
     searchQuery: string,
     limit: number,
-    page: number
+    page: number,
+    orderBy: string
   ): Promise<
     | {
         tableData: MedicalSpeciality[];
@@ -71,6 +72,16 @@ export class MedicalSpecialityRepository
 
     const offset = page * limit;
 
+    let orderByIndicator = asc(medicalSpecialityTable.medicalSpecialityName);
+
+    let orderByDirection = orderBy.split(":")[0];
+    let orderByColumn = orderBy.split(":")[1];
+
+    if (orderByDirection === "asc")
+      orderByIndicator = asc(medicalSpecialityTable.medicalSpecialityName);
+    else if (orderByDirection === "desc")
+      orderByIndicator = desc(medicalSpecialityTable.medicalSpecialityName);
+
     const medicalSpecialities = await this._drizzle
       .select({
         medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
@@ -80,7 +91,7 @@ export class MedicalSpecialityRepository
       .where(condition.medicalSpecialitySearchQuery)
       .limit(limit)
       .offset(offset)
-      .orderBy(asc(medicalSpecialityTable.medicalSpecialityName));
+      .orderBy(orderByIndicator);
 
     return {
       tableData: medicalSpecialities,

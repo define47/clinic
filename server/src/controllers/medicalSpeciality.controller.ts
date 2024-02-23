@@ -20,7 +20,8 @@ export class MedicalSpecialityController {
         await this._medicalSpecialityService.getAllMedicalSpecialities(
           query.searchQuery,
           parseInt(query.limit),
-          parseInt(query.page)
+          parseInt(query.page),
+          query.orderBy
         );
 
       reply.code(200).send({ success: true, payload });

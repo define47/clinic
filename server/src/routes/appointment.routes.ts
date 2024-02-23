@@ -17,12 +17,12 @@ export const appointmentRoutes: (
       // if (request.query.appointmentId)
       //   await appointmentController.getAppointmentById(request, reply);
       // else await appointmentController.getAllAppointments(request, reply);
-
-      if (request.query.message === "appointment")
+      const query: any = request.query;
+      if (query.message === "appointment")
         await appointmentController.getAppointmentById(request, reply);
-      else if (request.query.message === "appointments")
+      else if (query.message === "appointments")
         await appointmentController.getAllAppointments(request, reply);
-      else if (request.query.message === "bookedDoctorAppointmentsSlots")
+      else if (query.message === "bookedDoctorAppointmentsSlots")
         await appointmentController.getDoctorAppointmentBookedSlots(
           request,
           reply

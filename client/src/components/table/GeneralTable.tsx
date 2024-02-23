@@ -167,12 +167,13 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           searchQuery,
           limit: tableLimit,
           page: currentPage,
+          orderBy: orderByIndicator,
         };
       else if (entity === "appointment")
         queryParams = {
           message: "appointments",
           searchInTable: selectedTable !== "" ? selectedTable : "doctor",
-          orderInTable: "appointment",
+          orderInTable: "doctor",
           searchBy:
             selectedAppointmentCriteriaValue !== ""
               ? selectedAppointmentCriteriaValue
@@ -185,7 +186,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           // scheduleFilter: "custom",
           customStartDate: "2024-02-09",
           customEndDate: "2024-02-09",
-          orderBy: "desc:appointmentDateTime",
+          orderBy: "desc:userForename",
           limit: tableLimit,
           page: currentPage,
           doctorId:
@@ -1319,7 +1320,8 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                       {tableRow.appointment.appointmentCancellationReason}
                     </td>
                     <td className="px-6 py-4 text-xs">
-                      {tableRow.appointment.appointmentPrice} RON
+                      {tableRow.appointment.appointmentPrice}&nbsp;
+                      {tableRow.appointment.appointmentPrice && "RON"}
                     </td>
                     <td className="h-14 flex items-center justify-center space-x-2">
                       {(authenticatedUserDataState.roleNames[0] === "doctor" ||

@@ -16,7 +16,8 @@ export interface IMedicalSpecialityService {
   getAllMedicalSpecialities(
     searchQuery: string,
     limit: number,
-    page: number
+    page: number,
+    orderBy: string
   ): Promise<
     | {
         tableData: MedicalSpeciality[];

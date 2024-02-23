@@ -42,6 +42,7 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
           searchQuery: "",
           limit: 9999999,
           page: 0,
+          orderBy: "asc:medicalSpecialityName",
         },
         withCredentials: true,
       });
