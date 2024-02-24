@@ -375,8 +375,10 @@ export type PhoneExtensionPickerProps = {
 };
 
 export type GeneralDataCardProps = {
+  generalDataCardTitle: string;
   entity?: string;
   period?: string;
+  choice?: string;
 };
 
 export type ViewMedicalRecordPatientOverlayProps = {

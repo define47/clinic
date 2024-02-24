@@ -42,7 +42,7 @@ export class DoctorMedicalSpecialityMappingRepository
   }
 
   public async getDoctorMedicalSpecialityMappingsCountByMedicalSpeciality() {
-    return this._drizzle
+    const originalData = await this._drizzle
       .select({
         totalCount: count(),
         medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
@@ -66,7 +66,45 @@ export class DoctorMedicalSpecialityMappingRepository
         doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
         doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
         doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality
-      );
+      )
+      .orderBy(medicalSpecialityTable.medicalSpecialityName);
+
+    const transformedData = {};
+
+    // Process each entry in the original data
+    originalData.forEach((entry) => {
+      const {
+        medicalSpecialityName,
+        isPrimaryMedicalSpeciality,
+        isSecondaryMedicalSpeciality,
+        isTertiaryMedicalSpeciality,
+        totalCount,
+      } = entry;
+
+      // Check if the medical speciality exists in the transformed data object
+      if (!transformedData[medicalSpecialityName]) {
+        // If not, initialize the entry with default values
+        transformedData[medicalSpecialityName] = {
+          medicalSpecialityName,
+          primary: 0,
+          secondary: 0,
+          tertiary: 0,
+        };
+      }
+
+      // Update the counts in the transformed data object
+      transformedData[medicalSpecialityName].primary +=
+        isPrimaryMedicalSpeciality ? totalCount : 0;
+      transformedData[medicalSpecialityName].secondary +=
+        isSecondaryMedicalSpeciality ? totalCount : 0;
+      transformedData[medicalSpecialityName].tertiary +=
+        isTertiaryMedicalSpeciality ? totalCount : 0;
+    });
+
+    // Convert the object values to an array
+    const finalTransformedData = Object.values(transformedData);
+
+    return finalTransformedData;
   }
 
   public async createDoctorMedicalSpecialityMapping(

@@ -15,6 +15,7 @@ import {
   and,
   asc,
   count,
+  countDistinct,
   desc,
   eq,
   gte,
@@ -159,9 +160,9 @@ export class AppointmentRepository
   // }
 
   public async getAppointmentInfoByPeriod(
+    choice: string,
     period: string,
     doctorId: string,
-    patientId: string,
     appointmentStatus: string
   ): Promise<any> {
     try {
@@ -279,36 +280,29 @@ export class AppointmentRepository
       const generalDataAppointmentCondition = {
         generalCondition: and(
           gte(appointmentTable.appointmentDateTime, startDate!),
-          lte(appointmentTable.appointmentDateTime, endDate!),
-          eq(
-            appointmentTable.appointmentStatus,
-            AppointmentStatusEnum.enumValues[appointmentStatusIndex]
-          )
+          lte(appointmentTable.appointmentDateTime, endDate!)
+          // eq(
+          //   appointmentTable.appointmentStatus,
+          //   AppointmentStatusEnum.enumValues[appointmentStatusIndex]
+          // )
         ),
         doctorCondition: and(
           gte(appointmentTable.appointmentDateTime, startDate!),
           lte(appointmentTable.appointmentDateTime, endDate!),
-          eq(
-            appointmentTable.appointmentStatus,
-            AppointmentStatusEnum.enumValues[appointmentStatusIndex]
-          ),
+          // eq(
+          //   appointmentTable.appointmentStatus,
+          //   AppointmentStatusEnum.enumValues[appointmentStatusIndex]
+          // ),
           eq(appointmentTable.appointmentDoctorId, doctorId)
-        ),
-        patientCondition: and(
-          gte(appointmentTable.appointmentDateTime, startDate!),
-          lte(appointmentTable.appointmentDateTime, endDate!),
-          eq(appointmentTable.appointmentPatientId, patientId)
         ),
       };
 
       let cond;
-
       if (doctorId) cond = generalDataAppointmentCondition.doctorCondition;
-      else if (patientId)
-        cond = generalDataAppointmentCondition.patientCondition;
       else cond = generalDataAppointmentCondition.generalCondition;
 
       const doctor = alias(userTable, "doctor");
+      const patient = alias(userTable, "patient");
 
       // const data = await this._drizzle
       //   .select({
@@ -366,26 +360,116 @@ export class AppointmentRepository
       //     // appointmentTable.appointmentStatus,
       //     sql`DATE(${appointmentTable.appointmentDateTime})`
       //   );
-      const data = await this._drizzle
-        .select({
-          doctorId: doctor.userId,
-          doctorForename: doctor.userForename,
-          doctorSurname: doctor.userSurname,
-          appointmentDateTime: sql`DATE(${appointmentTable.appointmentDateTime})`,
-          appointmentStatus: appointmentTable.appointmentStatus,
-          appointmentCount: sql<number>`COUNT(${sql`DATE(${appointmentTable.appointmentDateTime})`})`,
-        })
-        .from(appointmentTable)
-        .innerJoin(
-          doctor,
-          eq(appointmentTable.appointmentDoctorId, doctor.userId)
-        )
-        .where(cond)
-        .groupBy(
-          doctor.userId,
-          appointmentTable.appointmentStatus,
-          sql`DATE(${appointmentTable.appointmentDateTime})`
-        );
+      // const data = await this._drizzle
+      //   .select({
+      //     // doctorId: doctor.userId,
+      //     // doctorForename: doctor.userForename,
+      //     // doctorSurname: doctor.userSurname,
+      //     appointmentDateTime: sql`TO_CHAR(${appointmentTable.appointmentDateTime}, 'DD-MM-YYYY')`,
+
+      //     // appointmentStatus: appointmentTable.appointmentStatus,
+      //     appointmentCount: sql<number>`COUNT(${sql`DATE(${appointmentTable.appointmentDateTime})`})`,
+      //   })
+      //   .from(appointmentTable)
+      //   .innerJoin(
+      //     doctor,
+      //     eq(appointmentTable.appointmentDoctorId, doctor.userId)
+      //   )
+      //   .where(cond)
+      //   .groupBy(
+      //     // doctor.userId,
+      //     // appointmentTable.appointmentStatus,
+      //     sql`TO_CHAR(${appointmentTable.appointmentDateTime}, 'DD-MM-YYYY')`
+      //   );
+
+      let data;
+      // data = await this._drizzle
+      //   .select({
+      //     // doctorId: doctor.userId,
+      //     // doctorForename: doctor.userForename,
+      //     // doctorSurname: doctor.userSurname,
+      //     appointmentDateTime: sql`TO_CHAR(${appointmentTable.appointmentDateTime}, 'DD-MM-YYYY')`,
+
+      //     // appointmentStatus: appointmentTable.appointmentStatus,
+      //     appointmentCount: sql<number>`COUNT(${sql`DATE(${appointmentTable.appointmentDateTime})`})`,
+      //   })
+      //   .from(appointmentTable)
+      //   .innerJoin(
+      //     doctor,
+      //     eq(appointmentTable.appointmentDoctorId, doctor.userId)
+      //   )
+      //   .where(cond)
+      //   .groupBy(
+      //     // doctor.userId,
+      //     // appointmentTable.appointmentStatus,
+      //     sql`TO_CHAR(${appointmentTable.appointmentDateTime}, 'DD-MM-YYYY')`
+      //   );
+
+      console.log(choice);
+
+      if (choice === "getTotalNumberOfAppointmentsPerPeriod") {
+        data = await this._drizzle
+          .select({
+            appointmentCount: sql<number>`COUNT(${sql`DATE(${appointmentTable.appointmentDateTime})`})`,
+          })
+          .from(appointmentTable)
+          .innerJoin(
+            doctor,
+            eq(appointmentTable.appointmentDoctorId, doctor.userId)
+          )
+          .where(cond);
+      } else if (
+        choice === "getTotalNumberOfDoctorsPerPeriodWithAppointments"
+      ) {
+        data = await this._drizzle
+          .select({
+            appointmentCount: countDistinct(
+              appointmentTable.appointmentDoctorId
+            ),
+          })
+          .from(appointmentTable)
+          .innerJoin(
+            doctor,
+            eq(appointmentTable.appointmentDoctorId, doctor.userId)
+          )
+          .where(cond);
+      } else if (
+        choice === "getTotalNumberOfPatientsPerPeriodWithAppointments"
+      ) {
+        data = await this._drizzle
+          .select({
+            appointmentCount: countDistinct(
+              appointmentTable.appointmentPatientId
+            ),
+          })
+          .from(appointmentTable)
+          .where(cond);
+      } else if (
+        choice === "getTotalNumberOfAppointmentsPerPeriodPerEachDate"
+      ) {
+        data = await this._drizzle
+          .select({
+            // doctorId: doctor.userId,
+            // doctorForename: doctor.userForename,
+            // doctorSurname: doctor.userSurname,
+            appointmentDateTime: sql`TO_CHAR(${appointmentTable.appointmentDateTime}, 'DD-MM-YYYY')`,
+
+            // appointmentStatus: appointmentTable.appointmentStatus,
+            appointmentCount: sql<number>`COUNT(${sql`DATE(${appointmentTable.appointmentDateTime})`})`,
+          })
+          .from(appointmentTable)
+          .innerJoin(
+            doctor,
+            eq(appointmentTable.appointmentDoctorId, doctor.userId)
+          )
+          .where(cond)
+          .groupBy(
+            // doctor.userId,
+            // appointmentTable.appointmentStatus,
+            sql`TO_CHAR(${appointmentTable.appointmentDateTime}, 'DD-MM-YYYY')`
+          );
+      }
+
       return data;
     } catch (error) {}
   }

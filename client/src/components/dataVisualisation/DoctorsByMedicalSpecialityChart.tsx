@@ -1,4 +1,5 @@
-import { FC } from "react";
+import axios from "axios";
+import { FC, useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -11,10 +12,12 @@ import {
 } from "recharts";
 
 export const DoctorsByMedicalSpecialityChart: FC = () => {
+  const [dbData, setDbData] = useState<any>();
+
   const medicalSpecialityName = "medicalSpecialityName";
-  const isPrimaryMedicalSpeciality = "isPrimaryMedicalSpeciality";
-  const isSecondaryMedicalSpeciality = "isSecondaryMedicalSpeciality";
-  const isTertiaryMedicalSpeciality = "isTertiaryMedicalSpeciality";
+  const isPrimaryMedicalSpeciality = "primary";
+  const isSecondaryMedicalSpeciality = "secondary";
+  const isTertiaryMedicalSpeciality = "tertiary";
   const data = [
     {
       [medicalSpecialityName]: "Anesthesiology",
@@ -64,20 +67,45 @@ export const DoctorsByMedicalSpecialityChart: FC = () => {
   const secondaryColor = "#be185d";
   const tertiaryColor = "#ec4899";
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          "http://192.168.2.16:40587/api/general-data",
+          {
+            params: {
+              entity: "doctorMedicalSpecialityMappingsCountByMedicalSpeciality",
+            },
+            withCredentials: true,
+          }
+        );
+
+        console.log("here data", response.data.payload);
+
+        setDbData(response.data.payload);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
-    <ResponsiveContainer width="100%" height="70%">
+    <ResponsiveContainer width="100%" height="40%">
       <BarChart
-        data={data}
+        data={dbData}
+        // width={"10%"}
+        // height={250}
         layout="horizontal"
         margin={{
           top: 0,
           right: 0,
-          left: 1,
-          bottom: 15,
+          left: 0,
+          bottom: 30,
         }}
-        // barSize={15}
+        barSize={25}
         // barCategoryGap={35}
-        barCategoryGap={100}
+        // barCategoryGap={100}
       >
         <CartesianGrid />
         {/* <XAxis
@@ -97,15 +125,29 @@ export const DoctorsByMedicalSpecialityChart: FC = () => {
             position: "insideLeft",
           }}
         /> */}
-        <XAxis dataKey={medicalSpecialityName} />
-        <YAxis />
+        <XAxis
+          dataKey={medicalSpecialityName}
+          label={{
+            value: "Medical Speciality",
+            position: "insideBottom",
+            offset: -15,
+          }}
+        />
+        <YAxis
+          label={{
+            value: "Number of Medical Specialities",
+            angle: -90,
+            position: "top",
+            offset: -145,
+          }}
+        />
         <Tooltip
-          cursor={{ stroke: "red", strokeWidth: 2 }}
+          cursor={{ stroke: "#ec4899", strokeWidth: 1 }}
           //   viewBox={{ x: 50, y: 0, width: 100, height: 200 }}
         />
-        <Legend />
+        <Legend layout="horizontal" verticalAlign="top" align="right" />
         <Bar
-          dataKey="isPrimaryMedicalSpeciality"
+          dataKey={isPrimaryMedicalSpeciality}
           stackId="a"
           fill={primaryColor}
           //   radius={[10, 0, 0, 10]}
@@ -113,14 +155,14 @@ export const DoctorsByMedicalSpecialityChart: FC = () => {
           background={{ fill: "#e6edf4" }} // for that gray
         />
         <Bar
-          dataKey="isSecondaryMedicalSpeciality"
+          dataKey={isSecondaryMedicalSpeciality}
           stackId="a"
           fill={secondaryColor}
           //   radius={[0, 0, 0, 0]}
           radius={[0, 0, 0, 0]}
         />
         <Bar
-          dataKey="isTertiaryMedicalSpeciality"
+          dataKey={isTertiaryMedicalSpeciality}
           stackId="a"
           fill={tertiaryColor}
           //   radius={[0, 10, 10, 0]}

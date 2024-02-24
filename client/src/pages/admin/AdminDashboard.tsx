@@ -17,6 +17,7 @@ import { StyledInputV2 } from "../../components/design/StyledInputV2";
 import { RiCalendarFill } from "react-icons/ri";
 import { StyledAppointmentStatusName } from "../../components/design/StyledAppointmentStatusName";
 import { DoctorsByMedicalSpecialityChart } from "../../components/dataVisualisation/DoctorsByMedicalSpecialityChart";
+import { AppointmentAreaChart } from "../../components/dataVisualisation/AppointmentAreaChart";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -82,34 +83,9 @@ export const AdminDashboard: FC = () => {
   }, []);
   return (
     <div className="w-full h-full">
-      <DoctorsByMedicalSpecialityChart />
-      {/* <PhoneExtensionPicker defaultPhoneExtension="+40" />
-      <StyledAppointmentStatusName appointmentStatusName="completed" />
-      <StyledAppointmentStatusName appointmentStatusName="canceled" /> */}
-      {/* admin dashboard <Overlay /> */}
-      {/* <MedicalProcedurePicker /> */}
-      {/* <DragAndDrop /> */}
-
-      {/* <StyledInputV2
-        unfocusedTextColor="text-red-600"
-        unfocusedBorderColor="border-red-600"
-        focusedTextColor="focus:text-blue-300"
-        focusedBorderColor="focus:border-blue-300"
-        unfocusedLabelColor="text-red-600"
-        unfocusedLabelBackgroundColor="bg-white"
-        focusedLabelColor="text-blue-300"
-        focusedLabelBackgroundColor="bg-gray-100"
-        onClickIcon={() => console.log("hello icon")}
-        isDisabled={false}
-        label={`Criteria`}
-        name={`Criteria`}
-        onChangeStyledInput={(event) => {}}
-        styledInputValue={""}
-        styledInputWidth="w-full"
-      /> */}
-      {/* <GeneralDataCard entity="admin" /> */}
-      {/* <PhoneExtensionPicker defaultPhoneExtension="+591" /> */}
-      <div className="w-full h-full space-y-10">
+      <div
+        className={`w-full ${selectedDoctorId !== "" && "h-full"} space-y-10`}
+      >
         {JSON.stringify(authenticatedUserDataState)}
         <div className="w-full flex flex-col items-center justify-center">
           <WeekPicker
@@ -189,6 +165,159 @@ export const AdminDashboard: FC = () => {
         <UserPicker label="patient picker" roleName="patient" z="z-40" /> */}
         {/* <LimitPicker /> */}
       </div>
+      <div className="w-full grid grid-cols-4 gap-3">
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Admins"
+            entity="admin"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Doctors"
+            entity="doctor"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Patients"
+            entity="patient"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Receptionists"
+            entity="receptionist"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Appointments Today"
+            entity="appointment"
+            period="today"
+            choice="getTotalNumberOfAppointmentsPerPeriod"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Appointments Week"
+            entity="appointment"
+            period="week"
+            choice="getTotalNumberOfAppointmentsPerPeriod"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Appointments Next Week"
+            entity="appointment"
+            period="nextWeek"
+            choice="getTotalNumberOfAppointmentsPerPeriod"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Appointments Month"
+            entity="appointment"
+            period="month"
+            choice="getTotalNumberOfAppointmentsPerPeriod"
+          />
+        </div>
+
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Doctors With Appointments Today"
+            entity="appointment"
+            period="today"
+            choice="getTotalNumberOfDoctorsPerPeriodWithAppointments"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Doctors With Appointments Week"
+            entity="appointment"
+            period="week"
+            choice="getTotalNumberOfDoctorsPerPeriodWithAppointments"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Doctors With Appointments Next Week"
+            entity="appointment"
+            period="nextWeek"
+            choice="getTotalNumberOfDoctorsPerPeriodWithAppointments"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Doctors With Appointments Month"
+            entity="appointment"
+            period="month"
+            choice="getTotalNumberOfDoctorsPerPeriodWithAppointments"
+          />
+        </div>
+
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Patients With Appointments Today"
+            entity="appointment"
+            period="today"
+            choice="getTotalNumberOfPatientsPerPeriodWithAppointments"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Patients With Appointments Week"
+            entity="appointment"
+            period="week"
+            choice="getTotalNumberOfPatientsPerPeriodWithAppointments"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Patients With Appointments Next Week"
+            entity="appointment"
+            period="nextWeek"
+            choice="getTotalNumberOfPatientsPerPeriodWithAppointments"
+          />
+        </div>
+        <div className="col-span-4 lg:col-span-1">
+          <GeneralDataCard
+            generalDataCardTitle="Total Number Of Patients With Appointments Month"
+            entity="appointment"
+            period="month"
+            choice="getTotalNumberOfPatientsPerPeriodWithAppointments"
+          />
+        </div>
+      </div>
+      <DoctorsByMedicalSpecialityChart />
+      <AppointmentAreaChart />
+      {/* <PhoneExtensionPicker defaultPhoneExtension="+40" />
+      <StyledAppointmentStatusName appointmentStatusName="completed" />
+      <StyledAppointmentStatusName appointmentStatusName="canceled" /> */}
+      {/* admin dashboard <Overlay /> */}
+      {/* <MedicalProcedurePicker /> */}
+      {/* <DragAndDrop /> */}
+
+      {/* <StyledInputV2
+        unfocusedTextColor="text-red-600"
+        unfocusedBorderColor="border-red-600"
+        focusedTextColor="focus:text-blue-300"
+        focusedBorderColor="focus:border-blue-300"
+        unfocusedLabelColor="text-red-600"
+        unfocusedLabelBackgroundColor="bg-white"
+        focusedLabelColor="text-blue-300"
+        focusedLabelBackgroundColor="bg-gray-100"
+        onClickIcon={() => console.log("hello icon")}
+        isDisabled={false}
+        label={`Criteria`}
+        name={`Criteria`}
+        onChangeStyledInput={(event) => {}}
+        styledInputValue={""}
+        styledInputWidth="w-full"
+      /> */}
+      {/* <GeneralDataCard entity="admin" /> */}
+      {/* <PhoneExtensionPicker defaultPhoneExtension="+591" /> */}
+
       {/* <ConfirmationDialogEntry
         confirmationDialogEntryTitleWidth="w-10"
         confirmationDialogEntryTitle={"userForename"}

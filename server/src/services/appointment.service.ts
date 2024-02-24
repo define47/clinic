@@ -20,15 +20,15 @@ export class AppointmentService implements IAppointmentService {
   }
 
   public async getAppointmentInfoByPeriod(
+    choice: string,
     period: string,
     doctorId: string,
-    patientId: string,
     appointmentStatus: string
   ): Promise<any> {
     return this._appointmentRepository.getAppointmentInfoByPeriod(
+      choice,
       period,
       doctorId,
-      patientId,
       appointmentStatus
     );
   }
