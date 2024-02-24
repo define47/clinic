@@ -1019,12 +1019,19 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                   <td className="px-6 py-4 font-bold">userRoleName</td>
                   {entity === "doctor" && (
                     <td className="px-6 py-4 font-bold">
-                      {/* Primary Speciality */}
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "generalUserTableColumnNames",
-                        7
-                      )}
+                      <div className="flex items-center justify-center">
+                        {/* Primary Speciality */}
+                        {getItemByLanguageAndCollection(
+                          authenticatedUserDataState.language.languageCode,
+                          "generalUserTableColumnNames",
+                          7
+                        )}
+                        <OrderByIndicator
+                          orderByIndicator={orderByIndicator}
+                          setOrderByIndicator={setOrderByIndicator}
+                          orderByColumn="medicalSpecialityName"
+                        />
+                      </div>
                     </td>
                   )}
                   {entity === "doctor" && (

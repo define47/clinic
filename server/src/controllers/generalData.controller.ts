@@ -9,18 +9,22 @@ import {
   getPatientRoleIdEnv,
   getReceptionistRoleIdEnv,
 } from "../utils/dotenv";
+import { DoctorMedicalSpecialityMappingService } from "../services/doctorMedicalSpecialityMapping.service";
 
 export class GeneralDataController {
   private readonly _userService: UserService;
   private readonly _userRoleMappingService: UserRoleMappingService;
   private readonly _medicalSpecialityService: MedicalSpecialityService;
   private readonly _appointmentService: AppointmentService;
+  private readonly _doctorMedicalSpecialityMappingService: DoctorMedicalSpecialityMappingService;
 
   public constructor() {
     this._userService = new UserService();
     this._userRoleMappingService = new UserRoleMappingService();
     this._medicalSpecialityService = new MedicalSpecialityService();
     this._appointmentService = new AppointmentService();
+    this._doctorMedicalSpecialityMappingService =
+      new DoctorMedicalSpecialityMappingService();
   }
 
   public async getTotalCount(request: FastifyRequest, reply: FastifyReply) {
@@ -73,11 +77,20 @@ export class GeneralDataController {
         payload = await this._appointmentService.getAppointmentInfoByPeriod(
           query.period,
           query.doctorId,
+          query.patientId,
           query.appointmentStatus
         );
-      }
+      } else if (
+        query.entity ===
+        "doctorMedicalSpecialityMappingsCountByMedicalSpeciality"
+      )
+        payload =
+          await this._doctorMedicalSpecialityMappingService.getDoctorMedicalSpecialityMappingsCountByMedicalSpeciality();
 
-      reply.code(200).send({ success: true, payload });
+      reply.code(200).send({
+        success: payload !== undefined,
+        payload,
+      });
     } catch (error) {
       console.log(error);
     }

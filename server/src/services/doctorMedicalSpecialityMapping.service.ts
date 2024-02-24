@@ -38,6 +38,10 @@ export class DoctorMedicalSpecialityMappingService
     );
   }
 
+  public async getDoctorMedicalSpecialityMappingsCountByMedicalSpeciality() {
+    return await this._doctorMedicalSpecialityMappingRepository.getDoctorMedicalSpecialityMappingsCountByMedicalSpeciality();
+  }
+
   public async createMedicalDoctorSpecialityMapping(
     doctorMedicalSpecialityMappingCreationAttributes: DoctorMedicalSpecialityMappingCreationAttributes
   ): Promise<DoctorMedicalSpecialityMapping | undefined> {

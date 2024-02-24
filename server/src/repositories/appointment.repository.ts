@@ -161,6 +161,7 @@ export class AppointmentRepository
   public async getAppointmentInfoByPeriod(
     period: string,
     doctorId: string,
+    patientId: string,
     appointmentStatus: string
   ): Promise<any> {
     try {
@@ -276,7 +277,15 @@ export class AppointmentRepository
       }
 
       const generalDataAppointmentCondition = {
-        condition: and(
+        generalCondition: and(
+          gte(appointmentTable.appointmentDateTime, startDate!),
+          lte(appointmentTable.appointmentDateTime, endDate!),
+          eq(
+            appointmentTable.appointmentStatus,
+            AppointmentStatusEnum.enumValues[appointmentStatusIndex]
+          )
+        ),
+        doctorCondition: and(
           gte(appointmentTable.appointmentDateTime, startDate!),
           lte(appointmentTable.appointmentDateTime, endDate!),
           eq(
@@ -285,14 +294,19 @@ export class AppointmentRepository
           ),
           eq(appointmentTable.appointmentDoctorId, doctorId)
         ),
+        patientCondition: and(
+          gte(appointmentTable.appointmentDateTime, startDate!),
+          lte(appointmentTable.appointmentDateTime, endDate!),
+          eq(appointmentTable.appointmentPatientId, patientId)
+        ),
       };
-      console.log(
-        period,
-        appointmentStatus,
-        appointmentStatusIndex,
-        "enumValue",
-        AppointmentStatusEnum.enumValues[0]
-      );
+
+      let cond;
+
+      if (doctorId) cond = generalDataAppointmentCondition.doctorCondition;
+      else if (patientId)
+        cond = generalDataAppointmentCondition.patientCondition;
+      else cond = generalDataAppointmentCondition.generalCondition;
 
       const doctor = alias(userTable, "doctor");
 
@@ -332,13 +346,33 @@ export class AppointmentRepository
       //     appointmentTable.appointmentStatus
       //   );
 
+      // const data = await this._drizzle
+      //   .select({
+      //     doctorId: doctor.userId,
+      //     doctorForename: doctor.userForename,
+      //     doctorSurname: doctor.userSurname,
+      //     appointmentDateTime: sql`DATE(${appointmentTable.appointmentDateTime})`,
+      //     // appointmentStatus: appointmentTable.appointmentStatus,
+      //     appointmentCount: sql<number>`COUNT(${sql`DATE(${appointmentTable.appointmentDateTime})`})`,
+      //   })
+      //   .from(appointmentTable)
+      //   .innerJoin(
+      //     doctor,
+      //     eq(appointmentTable.appointmentDoctorId, doctor.userId)
+      //   )
+      //   .where(generalDataAppointmentCondition.condition)
+      //   .groupBy(
+      //     doctor.userId,
+      //     // appointmentTable.appointmentStatus,
+      //     sql`DATE(${appointmentTable.appointmentDateTime})`
+      //   );
       const data = await this._drizzle
         .select({
           doctorId: doctor.userId,
           doctorForename: doctor.userForename,
           doctorSurname: doctor.userSurname,
           appointmentDateTime: sql`DATE(${appointmentTable.appointmentDateTime})`,
-          // appointmentStatus: appointmentTable.appointmentStatus,
+          appointmentStatus: appointmentTable.appointmentStatus,
           appointmentCount: sql<number>`COUNT(${sql`DATE(${appointmentTable.appointmentDateTime})`})`,
         })
         .from(appointmentTable)
@@ -346,10 +380,10 @@ export class AppointmentRepository
           doctor,
           eq(appointmentTable.appointmentDoctorId, doctor.userId)
         )
-        .where(generalDataAppointmentCondition.condition)
+        .where(cond)
         .groupBy(
           doctor.userId,
-          // appointmentTable.appointmentStatus,
+          appointmentTable.appointmentStatus,
           sql`DATE(${appointmentTable.appointmentDateTime})`
         );
       return data;

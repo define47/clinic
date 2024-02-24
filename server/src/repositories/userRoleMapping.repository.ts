@@ -190,13 +190,15 @@ export class UserRoleMappingRepository
         orderByColumn === "userDateOfBirth")
     ) {
       orderByIndicator = desc(userTable[orderByColumn as keyof User]);
-    } else if (
-      orderByDirection === "asc" &&
-      orderByColumn === "medicalSpecialityName"
-    ) {
-      orderByIndicator = asc(
-        medicalSpecialityTable[orderByColumn as keyof MedicalSpeciality]
-      );
+    } else if (orderByColumn === "medicalSpecialityName") {
+      if (orderByDirection === "asc")
+        orderByIndicator = asc(
+          medicalSpecialityTable[orderByColumn as keyof MedicalSpeciality]
+        );
+      else if (orderByDirection === "desc")
+        orderByIndicator = desc(
+          medicalSpecialityTable[orderByColumn as keyof MedicalSpeciality]
+        );
     }
 
     const condition = {
@@ -313,7 +315,10 @@ export class UserRoleMappingRepository
           )
         )
         .where(condition.doctorSearchQuery)
-        .orderBy(orderByIndicator!);
+        .orderBy(
+          desc(doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality),
+          asc(medicalSpecialityTable.medicalSpecialityName)
+        );
 
       const resultArray = Array.from(
         data

@@ -22,11 +22,13 @@ export class AppointmentService implements IAppointmentService {
   public async getAppointmentInfoByPeriod(
     period: string,
     doctorId: string,
+    patientId: string,
     appointmentStatus: string
   ): Promise<any> {
     return this._appointmentRepository.getAppointmentInfoByPeriod(
       period,
       doctorId,
+      patientId,
       appointmentStatus
     );
   }

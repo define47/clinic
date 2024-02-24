@@ -16,6 +16,7 @@ import { UserPicker } from "../../components/pickers/UserPicker";
 import { StyledInputV2 } from "../../components/design/StyledInputV2";
 import { RiCalendarFill } from "react-icons/ri";
 import { StyledAppointmentStatusName } from "../../components/design/StyledAppointmentStatusName";
+import { DoctorsByMedicalSpecialityChart } from "../../components/dataVisualisation/DoctorsByMedicalSpecialityChart";
 
 export const AdminDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -81,6 +82,7 @@ export const AdminDashboard: FC = () => {
   }, []);
   return (
     <div className="w-full h-full">
+      <DoctorsByMedicalSpecialityChart />
       {/* <PhoneExtensionPicker defaultPhoneExtension="+40" />
       <StyledAppointmentStatusName appointmentStatusName="completed" />
       <StyledAppointmentStatusName appointmentStatusName="canceled" /> */}

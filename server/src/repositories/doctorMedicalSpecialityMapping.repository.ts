@@ -8,7 +8,7 @@ import {
 } from "../models/doctorMedicalSpecialityMapping.model";
 import { BaseRepository } from "./base.repository";
 import { IDoctorSpecialityMappingRepository } from "./doctorMedicalSpecialityMapping.irepository";
-import { Table, and, eq } from "drizzle-orm";
+import { Table, and, count, eq } from "drizzle-orm";
 import {
   MedicalSpeciality,
   medicalSpecialityTable,
@@ -39,6 +39,34 @@ export class DoctorMedicalSpecialityMappingRepository
       .select()
       .from(doctorMedicalSpecialityMappingTable)
       .where(eq(doctorMedicalSpecialityMappingTable.userId, doctorId));
+  }
+
+  public async getDoctorMedicalSpecialityMappingsCountByMedicalSpeciality() {
+    return this._drizzle
+      .select({
+        totalCount: count(),
+        medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
+        isPrimaryMedicalSpeciality:
+          doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
+        isSecondaryMedicalSpeciality:
+          doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
+        isTertiaryMedicalSpeciality:
+          doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
+      })
+      .from(doctorMedicalSpecialityMappingTable)
+      .innerJoin(
+        medicalSpecialityTable,
+        eq(
+          doctorMedicalSpecialityMappingTable.medicalSpecialityId,
+          medicalSpecialityTable.medicalSpecialityId
+        )
+      )
+      .groupBy(
+        medicalSpecialityTable.medicalSpecialityId,
+        doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
+        doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
+        doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality
+      );
   }
 
   public async createDoctorMedicalSpecialityMapping(
