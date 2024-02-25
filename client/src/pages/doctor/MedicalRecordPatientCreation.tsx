@@ -15,6 +15,7 @@ import IatropolisLogo from "../../assets/logo-iatropolis.png";
 import { StyledEntry } from "../../components/design/StyledEntry";
 import { UnderlinedTextArea } from "../../components/design/UnderlinedTextArea";
 import { MedicalProcedurePicker } from "../../components/pickers/MedicalProcedurePicker";
+import { useReactToPrint } from "react-to-print";
 
 export const MedicalRecordPatientCreation: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -88,13 +89,34 @@ export const MedicalRecordPatientCreation: FC = () => {
   }, [medicalRecordPatientToCreate]);
 
   const pageRef = useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => pageRef.current,
+    //   pageStyle: `
+    //   @page {
+    //     size: auto;
+    //     margin: 0.3in 0.2in 0.3in 0.2in !important;
+    //   }
+    //   .page-counter {
+    //     content: counter(page);
+    //     counter-increment: page;
+    //     position: absolute;
+    //     bottom: 10px;
+    //     right: 10px;
+    //   }
+    // `
+
+    onAfterPrint: () => console.log("print completed"),
+  });
 
   return (
     <>
+      <button className="text-emerald-400" onClick={handlePrint}>
+        Print
+      </button>
       <div className="w-full h-screen flex items-center justify-center mt-20 mb-20">
         <div
           ref={pageRef}
-          className="page p-4 w-full h-full flex flex-col rounded-xl"
+          className="page p-4 w-full h-full flex flex-col rounded-xl overflow-y-scroll"
         >
           <img
             src={IatropolisLogo}
@@ -178,7 +200,7 @@ export const MedicalRecordPatientCreation: FC = () => {
             </div>
           </div>
           <div className="w-full flex flex-col space-y-5 mt-7">
-            <div className="flex flex-col">
+            <div className="flex flex-col test">
               <span className="font-bold text-lg">Symptoms</span>
               <UnderlinedTextArea
                 name="symptoms"
@@ -187,11 +209,11 @@ export const MedicalRecordPatientCreation: FC = () => {
               />
             </div>
             {/* <div className="flex flex-col">
-              <span className="font-bold text-lg">Conducted Tests</span>
-              <MedicalProcedurePicker />
-            </div> */}
+                <span className="font-bold text-lg">Conducted Tests</span>
+                <MedicalProcedurePicker />
+              </div> */}
 
-            <div className="flex flex-col">
+            <div className="flex flex-col test">
               <span className="font-bold text-lg">Diagnosis</span>
               <UnderlinedTextArea
                 name="diagnosis"
@@ -199,7 +221,7 @@ export const MedicalRecordPatientCreation: FC = () => {
                 underlinedTextAreaInput={medicalRecordPatientToCreate.diagnosis}
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col test">
               <span className="font-bold text-lg">Recommendations</span>
               <UnderlinedTextArea
                 name="recommendations"

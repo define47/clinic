@@ -16,7 +16,9 @@ export const UnderlinedTextArea: FC<UnderlinedTextAreaProps> = ({
   const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (underlinedTextAreaRef.current) {
       underlinedTextAreaRef.current.style.height = "auto";
-      underlinedTextAreaRef.current.style.height = `${e.target.scrollHeight}px`; //- 16
+      underlinedTextAreaRef.current.style.height = `${
+        e.target.scrollHeight - 16
+      }px`;
     }
   };
 
