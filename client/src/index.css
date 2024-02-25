@@ -244,8 +244,6 @@ h2 {
 .page {
   width: 210mm;
   min-height: 297mm;
-  /* padding: 5mm; */
-  /* margin: 0 auto; */
   border: 1px #d3d3d3 solid;
   border-radius: 5px;
   background: white;
@@ -297,4 +295,32 @@ h2 {
 
 .styled_line_height {
   line-height: var(--line-height);
+}
+
+.underlined-textarea {
+  background-attachment: local;
+  background-image: linear-gradient(to right, white 10px, transparent 10px),
+    linear-gradient(to left, white 10px, transparent 10px),
+    repeating-linear-gradient(
+      white,
+      white 30px,
+      #ccc 30px,
+      #ccc 31px,
+      white 31px
+    );
+  line-height: 31px;
+  padding: 8px 10px;
+}
+
+.pageV2 {
+  background: white;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+.pageV2[size="A4"] {
+  width: 21cm;
+  height: 29.7cm;
 }

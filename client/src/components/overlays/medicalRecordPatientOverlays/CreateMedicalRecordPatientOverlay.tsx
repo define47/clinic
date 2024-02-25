@@ -12,6 +12,7 @@ import { MedicalProcedurePicker } from "../../pickers/MedicalProcedurePicker";
 import { StyledTextArea } from "../../design/StyledTextArea";
 import axios from "axios";
 import { medicalRecordPatientsPath } from "../../../utils/dotenv";
+import { useNavigate } from "react-router-dom";
 
 export const CreateMedicalRecordPatientOverlay: FC<
   CreateMedicalRecordPatientOverlayProps
@@ -73,6 +74,8 @@ export const CreateMedicalRecordPatientOverlay: FC<
     }
   }
 
+  const navigate = useNavigate();
+
   return (
     <>
       {isCreateMedicalRecordPatientOverlayVisible ? (
@@ -80,114 +83,132 @@ export const CreateMedicalRecordPatientOverlay: FC<
       ) : (
         <Tooltip text={`Create Medical Record Patient`}>
           <RiFilePaper2Line
-            onClick={() => setIsCreateMedicalRecordPatientOverlayVisible(true)}
+            onClick={() =>
+              navigate(
+                `/doctors/medical-record-patient-creation/${appointment.appointment.appointmentId}`
+              )
+            }
             className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
           />
         </Tooltip>
       )}
-
-      <Overlay
-        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
-          isCreateMedicalRecordPatientOverlayVisible ? "visible" : "invisible"
-        }`}
-        // closeModal={() => setIsUpdateUserOverlayVisible(false)}
-        closeModal={handleOverlayClick}
-      >
-        <div
-          className={`bg-lightMode-overlayBackgroundColor dark:bg-darkMode-overlayBackgroundColor border border-gray-500 w-5/6 h-5/6 rounded-xl shadow p-6 transition-all ${
-            isCreateMedicalRecordPatientOverlayVisible
-              ? "scale-100 opacity-100 duration-500"
-              : "scale-125 opacity-0 duration-500"
-          }`}
-          // onClick={(e) => e.stopPropagation()}
-        >
-          <span className="flex justify-center mb-8">
-            Create Medical Record Patient
-          </span>
-          <div className="w-full lg:flex lg:justify-between">
-            <div className="w-full flex flex-col">
-              <StyledTextArea
-                styledInputWidth="w-11/12"
-                label="Symptoms"
-                name="symptoms"
-                onChangeStyledInput={handleStyledTextAreaChange}
-              />
-
-              <StyledTextArea
-                styledInputWidth="w-11/12"
-                label="Recommendations"
-                name="recommendations"
-                onChangeStyledInput={handleStyledTextAreaChange}
-              />
-            </div>
-            <div className="w-full flex flex-col">
-              <StyledTextArea
-                styledInputWidth="w-11/12"
-                label="Diagnosis"
-                name="diagnosis"
-                onChangeStyledInput={handleStyledTextAreaChange}
-              />
-              <MedicalProcedurePicker />
-            </div>
-          </div>
-          <div className="w-full mt-14 flex justify-between">
-            <StyledRippleButton
-              label="Continue"
-              type="create"
-              onClick={() =>
-                setIsCreateMedicalRecordPatientConfirmationDialogOverlayVisible(
-                  true
-                )
-              }
-            />
-
-            <StyledRippleButton
-              label="Cancel"
-              type="delete"
-              onClick={() =>
-                setIsCreateMedicalRecordPatientOverlayVisible(false)
-              }
-            />
-
-            <ConfirmationDialogOverlay
-              className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
-                isCreateMedicalRecordPatientConfirmationDialogOverlayVisible
-                  ? "visible"
-                  : "invisible"
-              }`}
-              closeConfirmationDialogModal={() =>
-                setIsCreateMedicalRecordPatientConfirmationDialogOverlayVisible(
-                  false
-                )
-              }
-            >
-              <div
-                className={`w-96 h-96 bg-white dark:bg-darkMode-itemBackgroundColor border border-lightMode-borderColor dark:border-darkMode-borderColor flex items-center justify-center transition-all ${
-                  isCreateMedicalRecordPatientConfirmationDialogOverlayVisible
-                    ? "scale-100 opacity-100 duration-200"
-                    : "scale-125 opacity-0 duration-200"
-                }`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <StyledRippleButton
-                  label="Yes"
-                  type="yes"
-                  onClick={onCreateMedicalRecordPatient}
-                />
-                <StyledRippleButton
-                  label="Cancel"
-                  type="delete"
-                  onClick={() =>
-                    setIsCreateMedicalRecordPatientConfirmationDialogOverlayVisible(
-                      false
-                    )
-                  }
-                />
-              </div>
-            </ConfirmationDialogOverlay>
-          </div>
-        </div>
-      </Overlay>
     </>
   );
+  // (
+  //   <>
+  // {isCreateMedicalRecordPatientOverlayVisible ? (
+  //   <RiFilePaper2Fill className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
+  // ) : (
+  //   <Tooltip text={`Create Medical Record Patient`}>
+  //     <RiFilePaper2Line
+  //       onClick={() => setIsCreateMedicalRecordPatientOverlayVisible(true)}
+  //       className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
+  //     />
+  //   </Tooltip>
+  // )}
+
+  //     <Overlay
+  //       className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
+  //         isCreateMedicalRecordPatientOverlayVisible ? "visible" : "invisible"
+  //       }`}
+  //       // closeModal={() => setIsUpdateUserOverlayVisible(false)}
+  //       closeModal={handleOverlayClick}
+  //     >
+  //       <div
+  //         className={`bg-lightMode-overlayBackgroundColor dark:bg-darkMode-overlayBackgroundColor border border-gray-500 w-5/6 h-5/6 rounded-xl shadow p-6 transition-all ${
+  //           isCreateMedicalRecordPatientOverlayVisible
+  //             ? "scale-100 opacity-100 duration-500"
+  //             : "scale-125 opacity-0 duration-500"
+  //         }`}
+  //         // onClick={(e) => e.stopPropagation()}
+  //       >
+  //         <span className="flex justify-center mb-8">
+  //           Create Medical Record Patient
+  //         </span>
+  //         <div className="w-full lg:flex lg:justify-between">
+  //           <div className="w-full flex flex-col">
+  //             <StyledTextArea
+  //               styledInputWidth="w-11/12"
+  //               label="Symptoms"
+  //               name="symptoms"
+  //               onChangeStyledInput={handleStyledTextAreaChange}
+  //             />
+
+  //             <StyledTextArea
+  //               styledInputWidth="w-11/12"
+  //               label="Recommendations"
+  //               name="recommendations"
+  //               onChangeStyledInput={handleStyledTextAreaChange}
+  //             />
+  //           </div>
+  //           <div className="w-full flex flex-col">
+  //             <StyledTextArea
+  //               styledInputWidth="w-11/12"
+  //               label="Diagnosis"
+  //               name="diagnosis"
+  //               onChangeStyledInput={handleStyledTextAreaChange}
+  //             />
+  //             <MedicalProcedurePicker />
+  //           </div>
+  //         </div>
+  //         <div className="w-full mt-14 flex justify-between">
+  //           <StyledRippleButton
+  //             label="Continue"
+  //             type="create"
+  //             onClick={() =>
+  //               setIsCreateMedicalRecordPatientConfirmationDialogOverlayVisible(
+  //                 true
+  //               )
+  //             }
+  //           />
+
+  //           <StyledRippleButton
+  //             label="Cancel"
+  //             type="delete"
+  //             onClick={() =>
+  //               setIsCreateMedicalRecordPatientOverlayVisible(false)
+  //             }
+  //           />
+
+  //           <ConfirmationDialogOverlay
+  //             className={`fixed inset-0 flex justify-center items-center bg-black/20 transition-all z-50  ${
+  //               isCreateMedicalRecordPatientConfirmationDialogOverlayVisible
+  //                 ? "visible"
+  //                 : "invisible"
+  //             }`}
+  //             closeConfirmationDialogModal={() =>
+  //               setIsCreateMedicalRecordPatientConfirmationDialogOverlayVisible(
+  //                 false
+  //               )
+  //             }
+  //           >
+  //             <div
+  //               className={`w-96 h-96 bg-white dark:bg-darkMode-itemBackgroundColor border border-lightMode-borderColor dark:border-darkMode-borderColor flex items-center justify-center transition-all ${
+  //                 isCreateMedicalRecordPatientConfirmationDialogOverlayVisible
+  //                   ? "scale-100 opacity-100 duration-200"
+  //                   : "scale-125 opacity-0 duration-200"
+  //               }`}
+  //               onClick={(e) => e.stopPropagation()}
+  //             >
+  //               <StyledRippleButton
+  //                 label="Yes"
+  //                 type="yes"
+  //                 onClick={onCreateMedicalRecordPatient}
+  //               />
+  //               <StyledRippleButton
+  //                 label="Cancel"
+  //                 type="delete"
+  //                 onClick={() =>
+  //                   setIsCreateMedicalRecordPatientConfirmationDialogOverlayVisible(
+  //                     false
+  //                   )
+  //                 }
+  //               />
+  //             </div>
+  //           </ConfirmationDialogOverlay>
+  //         </div>
+  //       </div>
+  //     </Overlay>
+  //   </>
+  // );
 };
