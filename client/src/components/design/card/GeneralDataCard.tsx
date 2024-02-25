@@ -54,7 +54,7 @@ export const GeneralDataCard: FC<GeneralDataCardProps> = ({
   }, [result]);
 
   return (
-    <div className="w-full h-24 flex items-center justify-between bg-gradient-to-br from-pink-100 to-pink-200 shadow-xl bg-black/30 p-4 text-lg rounded-xl border border-gray-200">
+    <div className="w-full h-24 flex items-center justify-between bg-gradient-to-br from-gray-50 to-gray-100 shadow-2xl bg-black/90 p-4 text-lg rounded-xl border border-gray-200">
       <div className="flex flex-col">
         <span>{generalDataCardTitle}</span>
         <span>{result}</span>

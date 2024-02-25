@@ -182,6 +182,13 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
     }
   }, [selectedMedicalSpecialityId, selectedMedicalSpecialityName]);
 
+  useEffect(() => {
+    if (selectedMedicalSpecialityId === "") {
+      setSelectedMedicalSpecialityId("");
+      setSelectedMedicalSpecialityName("");
+    }
+  }, [selectedMedicalSpecialityId]);
+
   return (
     <div className="w-full flex">
       <div className={`w-full relative ${z}`} ref={medicalSpecialityPickerRef}>

@@ -190,6 +190,13 @@ export const AppointmentStatusPicker: FC<AppointmentStatusPickerProps> = ({
     }
   }, [foundAppointmentStatus, selectedAppointmentStatusValue]);
 
+  useEffect(() => {
+    if (selectedAppointmentStatusValue === "") {
+      setSelectedAppointmentStatusValue("");
+      setSelectedAppointmentStatusName("");
+    }
+  }, [selectedAppointmentStatusValue]);
+
   return (
     <div className="w-full flex">
       <div className={`w-full relative ${z}`} ref={appointmentStatusPickerRef}>

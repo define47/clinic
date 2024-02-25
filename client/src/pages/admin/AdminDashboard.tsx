@@ -192,7 +192,7 @@ export const AdminDashboard: FC = () => {
         </div>
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Appointments Today"
+            generalDataCardTitle="Total Number of Appointments for Today"
             entity="appointment"
             period="today"
             choice="getTotalNumberOfAppointmentsPerPeriod"
@@ -200,7 +200,7 @@ export const AdminDashboard: FC = () => {
         </div>
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Appointments Week"
+            generalDataCardTitle="Total Number of Appointments for this Week"
             entity="appointment"
             period="week"
             choice="getTotalNumberOfAppointmentsPerPeriod"
@@ -208,7 +208,7 @@ export const AdminDashboard: FC = () => {
         </div>
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Appointments Next Week"
+            generalDataCardTitle="Total Number of Appointments for Next Week"
             entity="appointment"
             period="nextWeek"
             choice="getTotalNumberOfAppointmentsPerPeriod"
@@ -216,7 +216,7 @@ export const AdminDashboard: FC = () => {
         </div>
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Appointments Month"
+            generalDataCardTitle="Total Number of Appointments for this Month"
             entity="appointment"
             period="month"
             choice="getTotalNumberOfAppointmentsPerPeriod"
@@ -225,7 +225,7 @@ export const AdminDashboard: FC = () => {
 
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Doctors With Appointments Today"
+            generalDataCardTitle="Total Number of Doctors with Appointments for Today"
             entity="appointment"
             period="today"
             choice="getTotalNumberOfDoctorsPerPeriodWithAppointments"
@@ -233,7 +233,7 @@ export const AdminDashboard: FC = () => {
         </div>
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Doctors With Appointments Week"
+            generalDataCardTitle="Total Number of Doctors with Appointments this Week"
             entity="appointment"
             period="week"
             choice="getTotalNumberOfDoctorsPerPeriodWithAppointments"
@@ -241,7 +241,7 @@ export const AdminDashboard: FC = () => {
         </div>
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Doctors With Appointments Next Week"
+            generalDataCardTitle="Total Number of Doctors with Appointments for Next Week"
             entity="appointment"
             period="nextWeek"
             choice="getTotalNumberOfDoctorsPerPeriodWithAppointments"
@@ -249,7 +249,7 @@ export const AdminDashboard: FC = () => {
         </div>
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Doctors With Appointments Month"
+            generalDataCardTitle="Total Number of Doctors with Appointments this Month"
             entity="appointment"
             period="month"
             choice="getTotalNumberOfDoctorsPerPeriodWithAppointments"
@@ -258,7 +258,7 @@ export const AdminDashboard: FC = () => {
 
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Patients With Appointments Today"
+            generalDataCardTitle="Total Number of Patients with Appointments for Today"
             entity="appointment"
             period="today"
             choice="getTotalNumberOfPatientsPerPeriodWithAppointments"
@@ -266,7 +266,7 @@ export const AdminDashboard: FC = () => {
         </div>
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Patients With Appointments Week"
+            generalDataCardTitle="Total Number of Patients With Appointments this Week"
             entity="appointment"
             period="week"
             choice="getTotalNumberOfPatientsPerPeriodWithAppointments"
@@ -274,7 +274,7 @@ export const AdminDashboard: FC = () => {
         </div>
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Patients With Appointments Next Week"
+            generalDataCardTitle="Total Number of Patients with Appointments for Next Week"
             entity="appointment"
             period="nextWeek"
             choice="getTotalNumberOfPatientsPerPeriodWithAppointments"
@@ -282,7 +282,7 @@ export const AdminDashboard: FC = () => {
         </div>
         <div className="col-span-4 lg:col-span-1">
           <GeneralDataCard
-            generalDataCardTitle="Total Number Of Patients With Appointments Month"
+            generalDataCardTitle="Total Number of Patients with Appointments this Month"
             entity="appointment"
             period="month"
             choice="getTotalNumberOfPatientsPerPeriodWithAppointments"

@@ -212,6 +212,13 @@ export const AppointmentSearchCriterionPicker: FC<
     }
   }, [selectedAppointmentCriteriaName, selectedAppointmentCriteriaValue]);
 
+  useEffect(() => {
+    if (selectedAppointmentCriteriaValue === "") {
+      setSelectedAppointmentCriteriaValue("");
+      setSelectedAppointmentCriteriaName("");
+    }
+  }, [selectedAppointmentCriteriaValue]);
+
   return (
     <div className="w-full flex">
       <div

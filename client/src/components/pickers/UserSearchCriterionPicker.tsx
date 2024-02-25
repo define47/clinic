@@ -201,6 +201,13 @@ export const UserSearchCriterionPicker: FC<UserSearchCriterionPickerProps> = ({
     }
   }, [selectedUserSearchCriteriaName, selectedUserSearchCriteriaValue]);
 
+  useEffect(() => {
+    if (selectedUserSearchCriteriaValue === "") {
+      setSelectedUserSearchCriteriaValue("");
+      setSelectedUserSearchCriteriaName("");
+    }
+  }, [selectedUserSearchCriteriaValue]);
+
   return (
     <div className="w-full flex">
       <div className="w-full relative z-50" ref={userSearchCriterionPickerRef}>

@@ -147,10 +147,11 @@ export class UserController {
 
       const { redis } = fastifyServer;
 
-      const userPreferencesMapping =
+      let userPreferencesMapping =
         await this._userPreferencesMappingService.getUserPreferencesMappingByUserId(
           userToLogin?.userId!
         );
+      console.log("userPreferencesMapping", userPreferencesMapping);
 
       if (userPreferencesMapping === undefined) {
         // const romanianLanguage = await this._languageService.getLanguageById(
@@ -163,18 +164,23 @@ export class UserController {
 
         console.log(romanianLanguage);
 
-        await this._userPreferencesMappingService.createUserPreferencesMapping({
-          userId: userToLogin?.userId!,
-          languageId: romanianLanguage?.languageId!,
-          isDarkModeOn: false,
-        });
+        userPreferencesMapping =
+          await this._userPreferencesMappingService.createUserPreferencesMapping(
+            {
+              userId: userToLogin?.userId!,
+              languageId: romanianLanguage?.languageId!,
+              isDarkModeOn: false,
+            }
+          );
+
+        console.log("userPreferencesMapping", userPreferencesMapping);
       }
 
       const language = await this._languageService.getLanguageById(
         userPreferencesMapping?.languageId!
       );
 
-      console.log(language);
+      console.log("language", language);
 
       let userRoleNames = [];
       const userToLoginRoles =
@@ -279,7 +285,7 @@ export class UserController {
         isDarkModeOn: userPreferencesMapping?.isDarkModeOn,
       };
 
-      console.log(sessionValue);
+      console.log("here", sessionValue);
 
       console.log(`${clc.cyan("created session:")} get sessionId:${sessionId}`);
 

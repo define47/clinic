@@ -15,6 +15,7 @@ type ClientLanguageCollection = {
   pageNavigationButtonNames: string[];
   appointmentStatuses: string[];
   genders: string[];
+  // generalDataCardTitles: string[];
 };
 type ClientLanguage = {
   [languageCode: string]: ClientLanguageCollection;

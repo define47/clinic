@@ -293,6 +293,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
                 defaultTime={defaultTime}
                 isOverlayVisible={isUpdateAppointmentOverlayVisible}
                 z="z-50"
+                isDisabled={selectedAppointmentStatusValue !== "rescheduled"}
               />
 
               {/* capitalizeString(

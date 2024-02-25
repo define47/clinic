@@ -244,7 +244,7 @@ export class AppointmentRepository
           break;
         case "nextWeek":
           let startOfNextWeek = new Date(currentDate);
-          let daysUntilNextMonday = 8 - currentDate.getUTCDay();
+          let daysUntilNextMonday = (8 - currentDate.getUTCDay()) % 7;
           startOfNextWeek.setUTCDate(
             currentDate.getUTCDate() + daysUntilNextMonday
           );
@@ -404,8 +404,6 @@ export class AppointmentRepository
       //     // appointmentTable.appointmentStatus,
       //     sql`TO_CHAR(${appointmentTable.appointmentDateTime}, 'DD-MM-YYYY')`
       //   );
-
-      console.log(choice);
 
       if (choice === "getTotalNumberOfAppointmentsPerPeriod") {
         data = await this._drizzle
@@ -663,7 +661,7 @@ export class AppointmentRepository
           break;
         case "nextWeek":
           let startOfNextWeek = new Date(currentDate);
-          let daysUntilNextMonday = 8 - currentDate.getUTCDay();
+          let daysUntilNextMonday = (8 - currentDate.getUTCDay()) % 7;
           startOfNextWeek.setUTCDate(
             currentDate.getUTCDate() + daysUntilNextMonday
           );
@@ -673,8 +671,8 @@ export class AppointmentRepository
           endOfNextWeek.setUTCDate(startOfNextWeek.getUTCDate() + 6);
           endOfNextWeek.setUTCHours(23, 59, 59, 999);
 
-          // console.log("Start of next week (UTC):", startOfNextWeek);
-          // console.log("End of next week (UTC):", endOfNextWeek);
+          console.log("Start of next week (UTC):", startOfNextWeek);
+          console.log("End of next week (UTC):", endOfNextWeek);
 
           startDate = startOfNextWeek;
           endDate = endOfNextWeek;
