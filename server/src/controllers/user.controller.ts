@@ -435,7 +435,7 @@ export class UserController {
           if (!speciality)
             return reply.code(200).send({
               success: false,
-              message: `speciality ${roleIds[i]} not found`,
+              message: `speciality ${specialityIds[i]} not found`,
             });
           foundMedicalSpecialities.push(
             // medicalSpecialityId:

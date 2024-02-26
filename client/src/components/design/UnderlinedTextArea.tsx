@@ -27,7 +27,7 @@ export const UnderlinedTextArea: FC<UnderlinedTextAreaProps> = ({
     <textarea
       ref={underlinedTextAreaRef}
       className="w-full underlined-textarea resize-none outline-none overflow-hidden"
-      rows={1}
+      rows={5}
       // cols={5}
       value={underlinedTextAreaInput}
       onChange={(event) => {
