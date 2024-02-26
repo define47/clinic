@@ -15,16 +15,34 @@ export const UserProfileInfo: FC = () => {
         {authenticatedUserDataState?.roleNames[1]}
       </div>
       <div>
-        {authenticatedUserDataState?.medicalSpecialities?.length >= 1 &&
-          authenticatedUserDataState?.medicalSpecialities![0]
-            .medicalSpecialityName}
-        {authenticatedUserDataState?.medicalSpecialities?.length > 1 &&
-          authenticatedUserDataState?.medicalSpecialities[1]
-            ?.medicalSpecialityName}
+        {authenticatedUserDataState?.medicalSpecialities?.length >= 1 && (
+          <span>
+            {
+              authenticatedUserDataState?.medicalSpecialities![0]
+                .medicalSpecialityName
+            }
+            ,&nbsp;
+          </span>
+        )}
+
+        {authenticatedUserDataState?.medicalSpecialities?.length > 1 && (
+          <span>
+            {
+              authenticatedUserDataState?.medicalSpecialities[1]
+                ?.medicalSpecialityName
+            }
+            ,&nbsp;
+          </span>
+        )}
         {authenticatedUserDataState?.medicalSpecialities?.length > 2 &&
-          authenticatedUserDataState?.medicalSpecialities[2] &&
-          authenticatedUserDataState?.medicalSpecialities[2]
-            ?.medicalSpecialityName}
+          authenticatedUserDataState?.medicalSpecialities[2] && (
+            <span>
+              {
+                authenticatedUserDataState?.medicalSpecialities[2]
+                  ?.medicalSpecialityName
+              }
+            </span>
+          )}
       </div>
     </div>
   );

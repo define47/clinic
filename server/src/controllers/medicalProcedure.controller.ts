@@ -34,6 +34,21 @@ export class MedicalProcedureController {
     }
   };
 
+  public getMedicalProceduresByMedicalSpecialities = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const query: any = request.query;
+      const payload =
+        await this._medicalSpecialityMedicalProcedureMappingService.getAllMedicalProceduresByMedicalSpecialities(
+          query.medicalSpecialityIds.split(",")
+        );
+
+      reply.status(200).send({ success: payload !== undefined, payload });
+    } catch (error) {}
+  };
+
   public postMedicalProcedure = async (
     request: FastifyRequest,
     reply: FastifyReply

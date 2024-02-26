@@ -7,7 +7,7 @@ import {
 } from "../models/medicalSpecialityMedicalProcedureMapping.model";
 import { BaseRepository } from "./base.repository";
 import { IMedicalSpecialityMedicalProcedureMappingRepository } from "./medicalSpecialityMedicalProcedureMapping.irepository";
-import { Table, and, asc, count, desc, eq, ilike } from "drizzle-orm";
+import { Table, and, asc, count, desc, eq, ilike, or } from "drizzle-orm";
 import { medicalSpecialityTable } from "../models/medicalSpeciality.model";
 import {
   MedicalProcedure,
@@ -161,6 +161,63 @@ export class MedicalSpecialityMedicalProcedureMappingRepository
     medicalProcedureId: string
   ): Promise<MedicalSpecialityMedicalProcedureMapping | undefined> {
     throw new Error("Method not implemented.");
+  }
+
+  public async getAllMedicalProceduresByMedicalSpecialities(
+    medicalSpecialityIds: string[]
+  ) {
+    console.log(medicalSpecialityIds[0]);
+
+    const condition = {
+      oneMedicalSpecialityIds: eq(
+        medicalSpecialityTable.medicalSpecialityId,
+        medicalSpecialityIds[0]
+      ),
+      twoMedicalSpecialityIds: or(
+        eq(medicalSpecialityTable.medicalSpecialityId, medicalSpecialityIds[0]),
+        eq(medicalSpecialityTable.medicalSpecialityId, medicalSpecialityIds[1])
+      ),
+      threeMedicalSpecialityIds: or(
+        eq(medicalSpecialityTable.medicalSpecialityId, medicalSpecialityIds[0]),
+        eq(medicalSpecialityTable.medicalSpecialityId, medicalSpecialityIds[1]),
+        eq(medicalSpecialityTable.medicalSpecialityId, medicalSpecialityIds[2])
+      ),
+    };
+
+    let cond;
+    if (medicalSpecialityIds.length === 1)
+      cond = condition.oneMedicalSpecialityIds;
+    else if (medicalSpecialityIds.length === 2)
+      cond = condition.twoMedicalSpecialityIds;
+    else if (medicalSpecialityIds.length === 3)
+      cond = condition.threeMedicalSpecialityIds;
+
+    const data = await this._drizzle
+      .select({
+        medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
+        medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
+        medicalProcedureId: medicalProcedureTable.medicalProcedureId,
+        medicalProcedureName: medicalProcedureTable.medicalProcedureName,
+        medicalProcedurePrice: medicalProcedureTable.medicalProcedurePrice,
+      })
+      .from(this._table)
+      .innerJoin(
+        medicalSpecialityTable,
+        eq(
+          medicalSpecialityMedicalProcedureMappingTable.medicalSpecialityId,
+          medicalSpecialityTable.medicalSpecialityId
+        )
+      )
+      .innerJoin(
+        medicalProcedureTable,
+        eq(
+          medicalSpecialityMedicalProcedureMappingTable.medicalProcedureId,
+          medicalProcedureTable.medicalProcedureId
+        )
+      )
+      .where(cond);
+
+    return data;
   }
 
   public async createMedicalSpecialityMedicalProcedureMapping(

@@ -44,6 +44,14 @@ export class MedicalSpecialityMedicalProcedureMappingService
     throw new Error("Method not implemented.");
   }
 
+  public async getAllMedicalProceduresByMedicalSpecialities(
+    medicalSpecialityIds: string[]
+  ) {
+    return await this._medicalSpecialityMedicalProcedureRepository.getAllMedicalProceduresByMedicalSpecialities(
+      medicalSpecialityIds
+    );
+  }
+
   public async createMedicalSpecialityMedicalProcedureMapping(
     medicalSpecialityMedicalProcedureMappingCreationAttributes: MedicalSpecialityMedicalProcedureMappingCreationAttributes
   ): Promise<MedicalSpecialityMedicalProcedureMapping | undefined> {

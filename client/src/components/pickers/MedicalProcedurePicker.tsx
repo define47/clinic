@@ -2,7 +2,7 @@ import { FC, useContext, useEffect, useState } from "react";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import axios from "axios";
 import { Group, MedicalProcedure, MedicalSpeciality } from "../../types";
-import { medicalProceduresPath } from "../../utils/dotenv";
+import { medicalProceduresAPI } from "../../utils/dotenv";
 import { VscDash } from "react-icons/vsc";
 
 export const MedicalProcedurePicker: FC = () => {
@@ -123,7 +123,7 @@ export const MedicalProcedurePicker: FC = () => {
       //     }
       //   }
 
-      const response = await axios.get(medicalProceduresPath, {
+      const response = await axios.get(medicalProceduresAPI, {
         params: {
           medicalSpecialityId:
             authenticatedUserDataState?.medicalSpecialities![0]
@@ -158,7 +158,7 @@ export const MedicalProcedurePicker: FC = () => {
 
       // //////
 
-      const response1 = await axios.get(medicalProceduresPath, {
+      const response1 = await axios.get(medicalProceduresAPI, {
         params: {
           medicalSpecialityId:
             authenticatedUserDataState?.medicalSpecialities![1]
@@ -194,7 +194,7 @@ export const MedicalProcedurePicker: FC = () => {
         }
       }
 
-      const response2 = await axios.get(medicalProceduresPath, {
+      const response2 = await axios.get(medicalProceduresAPI, {
         params: {
           medicalSpecialityId:
             authenticatedUserDataState?.medicalSpecialities![2]
@@ -328,6 +328,10 @@ export const MedicalProcedurePicker: FC = () => {
   useEffect(() => {
     console.log("dragData", dragData);
   }, [dragData]);
+
+  useEffect(() => {
+    console.log("medicalProcedures", medicalProcedures);
+  }, [medicalProcedures]);
 
   return (
     <>

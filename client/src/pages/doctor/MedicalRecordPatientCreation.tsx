@@ -16,6 +16,7 @@ import { StyledEntry } from "../../components/design/StyledEntry";
 import { UnderlinedTextArea } from "../../components/design/UnderlinedTextArea";
 import { MedicalProcedurePicker } from "../../components/pickers/MedicalProcedurePicker";
 import { useReactToPrint } from "react-to-print";
+import { MedicalProcedurePickerMedicalRecord } from "../../components/pickers/MedicalProcedurePickerMedicalRecord";
 
 export const MedicalRecordPatientCreation: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -211,9 +212,10 @@ export const MedicalRecordPatientCreation: FC = () => {
                   }
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="w-full flex flex-col">
                 <span className="font-bold text-lg">Conducted Tests</span>
-                <MedicalProcedurePicker />
+                {/* <MedicalProcedurePicker /> */}
+                <MedicalProcedurePickerMedicalRecord />
               </div>
 
               <div className="flex flex-col test">

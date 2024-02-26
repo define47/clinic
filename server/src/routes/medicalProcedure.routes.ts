@@ -5,10 +5,18 @@ export async function medicalProcedureRoutes(fastifyServer: FastifyInstance) {
   fastifyServer.get(
     "/",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      await medicalProcedureController.getMedicalProceduresByMedicalSpeciality(
-        request,
-        reply
-      );
+      if (request.query.message === "medicalProceduresByMedicalSpeciality")
+        await medicalProcedureController.getMedicalProceduresByMedicalSpeciality(
+          request,
+          reply
+        );
+      else if (
+        request.query.message === "medicalProceduresByMedicalSpecialities"
+      )
+        await medicalProcedureController.getMedicalProceduresByMedicalSpecialities(
+          request,
+          reply
+        );
     }
   );
 

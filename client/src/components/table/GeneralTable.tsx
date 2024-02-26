@@ -199,6 +199,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         };
       else if (entity === "medicalProcedure") {
         queryParams = {
+          message: "medicalProceduresByMedicalSpeciality",
           medicalSpecialityId: selectedMedicalSpecialityId.substring(1),
           searchQuery,
           limit: tableLimit,

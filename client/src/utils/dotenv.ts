@@ -24,7 +24,7 @@ export const medicalSpecialitiesPath = `${import.meta.env.VITE_SERVER_SCHEME}${
 export const appointmentsPath = `${serverURL}${
   import.meta.env.VITE_SERVER_APPOINTMENTS_PATH
 }`;
-export const medicalProceduresPath = `${serverURL}${
+export const medicalProceduresAPI = `${serverURL}${
   import.meta.env.VITE_SERVER_MEDICAL_PROCEDURES_PATH
 }`;
 export const appointmentsDoctorAvailabilityPath = `${serverURL}${

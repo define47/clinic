@@ -5,7 +5,7 @@ import { Tooltip } from "../../design/Tooltip";
 import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
-import { medicalProceduresPath } from "../../../utils/dotenv";
+import { medicalProceduresAPI } from "../../../utils/dotenv";
 
 export const DeleteMedicalProcedureOverlay: FC<
   DeleteMedicalProcedureOverlayProps
@@ -31,7 +31,7 @@ export const DeleteMedicalProcedureOverlay: FC<
 
   async function onDeleteMedicalProcedure() {
     try {
-      const response = await axios.delete(medicalProceduresPath, {
+      const response = await axios.delete(medicalProceduresAPI, {
         data: {
           medicalSpecialityId,
           medicalProcedureId: medicalProcedure.medicalProcedureId,
