@@ -15,7 +15,6 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
   const [dragData, setDragData] = useState<any>({
     medicalSpecialityId: "",
     originalMedicalSpecialityId: "",
-    updatedMedicalSpecialityId: "",
     currentGroupId: "",
     medicalProcedureId: "",
     medicalProcedureName: "",
@@ -43,7 +42,6 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
 
         if (response.data.success) {
           const data = response.data.payload.map((medicalProcedure) => ({
-            updatedMedicalSpecialityId: "",
             originalMedicalSpecialityId: medicalProcedure.medicalSpecialityId,
             currentGroupId: medicalProcedure.medicalSpecialityId,
             ...medicalProcedure,
@@ -98,10 +96,10 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
 
   function handleGroupChange(
     medicalProcedureId: string,
-    medicalSpecialityId: string,
-    updatedMedicalSpecialityId: string
+    originalMedicalSpecialityId: string,
+    updatedGroupId: string
   ) {
-    if (updatedMedicalSpecialityId === "123456") {
+    if (updatedGroupId === "123456") {
       setMedicalProcedures((prevMedicalProcedures: any) => {
         const updatedMedicalProcedures = prevMedicalProcedures.map(
           (prevMedicalProcedure: any) => {
@@ -110,9 +108,33 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
             ) {
               return {
                 medicalSpecialityId: "",
-                originalMedicalSpeciality: medicalSpecialityId,
-
+                originalMedicalSpecialityId,
                 currentGroupId: "123456",
+                medicalProcedureId: prevMedicalProcedure.medicalProcedureId,
+                medicalProcedureName: prevMedicalProcedure.medicalProcedureName,
+                medicalProcedurePrice:
+                  prevMedicalProcedure.medicalProcedurePrice,
+              };
+            } else {
+              return prevMedicalProcedure;
+            }
+          }
+        );
+        return updatedMedicalProcedures;
+      });
+    } else {
+      setMedicalProcedures((prevMedicalProcedures: any) => {
+        const updatedMedicalProcedures = prevMedicalProcedures.map(
+          (prevMedicalProcedure: any) => {
+            if (
+              prevMedicalProcedure.medicalProcedureId === medicalProcedureId
+            ) {
+              return {
+                medicalSpecialityId:
+                  prevMedicalProcedure.originalMedicalSpecialityId,
+                originalMedicalSpecialityId,
+                currentGroupId:
+                  prevMedicalProcedure.originalMedicalSpecialityId,
                 medicalProcedureId: prevMedicalProcedure.medicalProcedureId,
                 medicalProcedureName: prevMedicalProcedure.medicalProcedureName,
                 medicalProcedurePrice:
@@ -128,11 +150,11 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
     }
   }
 
-  const handleDrop = (e, updatedMedicalSpecialityId: string) => {
+  const handleDrop = (e, updatedGroupId: string) => {
     handleGroupChange(
       dragData.medicalProcedureId,
       dragData.medicalSpecialityId,
-      updatedMedicalSpecialityId
+      updatedGroupId
     );
     setIsDragging(false);
   };
@@ -171,6 +193,24 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
                       onDragStart={(e) =>
                         handleDragStart(e, medicalProcedure, medicalSpeciality)
                       }
+                      onClick={() => {
+                        setDragData({
+                          ...medicalProcedure,
+                        });
+                      }}
+                      onDoubleClick={() => {
+                        medicalProcedure.currentGroupId === "123456"
+                          ? handleGroupChange(
+                              dragData.medicalProcedureId,
+                              dragData.originalMedicalSpecialityId,
+                              dragData.originalMedicalSpecialityId
+                            )
+                          : handleGroupChange(
+                              dragData.medicalProcedureId,
+                              dragData.originalMedicalSpecialityId,
+                              "123456"
+                            );
+                      }}
                     >
                       {medicalProcedure.medicalProcedureName} - $
                       {medicalProcedure.medicalProcedurePrice}

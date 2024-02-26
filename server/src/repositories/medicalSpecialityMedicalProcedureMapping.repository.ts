@@ -194,7 +194,7 @@ export class MedicalSpecialityMedicalProcedureMappingRepository
 
     const data = await this._drizzle
       .select({
-        medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
+        // medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
         medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
         medicalProcedureId: medicalProcedureTable.medicalProcedureId,
         medicalProcedureName: medicalProcedureTable.medicalProcedureName,
