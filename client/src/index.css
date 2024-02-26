@@ -272,9 +272,20 @@ h2 {
     content: counter(page);
   }
 
+  .wrapper-test {
+    /* display: table; */
+    /* page-break-inside: auto; */
+  }
   .test {
     display: table;
+    /* break-before: avoid; */
+    /* break-after: avoid; */
+    /* break-inside: avoid; */
   }
+
+  /* .test2 {
+    break-inside: avoid;
+  } */
 }
 
 :root {

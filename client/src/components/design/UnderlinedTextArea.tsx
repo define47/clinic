@@ -17,7 +17,8 @@ export const UnderlinedTextArea: FC<UnderlinedTextAreaProps> = ({
     if (underlinedTextAreaRef.current) {
       underlinedTextAreaRef.current.style.height = "auto";
       underlinedTextAreaRef.current.style.height = `${
-        e.target.scrollHeight - 16
+        e.target.scrollHeight
+        // - 16
       }px`;
     }
   };
@@ -26,7 +27,7 @@ export const UnderlinedTextArea: FC<UnderlinedTextAreaProps> = ({
     <textarea
       ref={underlinedTextAreaRef}
       className="w-full underlined-textarea resize-none outline-none overflow-hidden"
-      rows={5}
+      rows={1}
       // cols={5}
       value={underlinedTextAreaInput}
       onChange={(event) => {

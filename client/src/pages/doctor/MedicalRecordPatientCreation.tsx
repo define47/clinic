@@ -201,7 +201,7 @@ export const MedicalRecordPatientCreation: FC = () => {
           </div>
           <div className="w-full flex flex-col space-y-5 mt-7">
             <div className="flex flex-col test">
-              <span className="font-bold text-lg">Symptoms</span>
+              <span className="font-bold text-lg ">Symptoms</span>
               <UnderlinedTextArea
                 name="symptoms"
                 onChangeUnderlinedTextAreaInput={handleStyledInputChange}

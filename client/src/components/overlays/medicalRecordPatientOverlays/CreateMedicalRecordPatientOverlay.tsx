@@ -94,18 +94,18 @@ export const CreateMedicalRecordPatientOverlay: FC<
       )}
     </>
   );
-  // (
+  // return (
   //   <>
-  // {isCreateMedicalRecordPatientOverlayVisible ? (
-  //   <RiFilePaper2Fill className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
-  // ) : (
-  //   <Tooltip text={`Create Medical Record Patient`}>
-  //     <RiFilePaper2Line
-  //       onClick={() => setIsCreateMedicalRecordPatientOverlayVisible(true)}
-  //       className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
-  //     />
-  //   </Tooltip>
-  // )}
+  //     {isCreateMedicalRecordPatientOverlayVisible ? (
+  //       <RiFilePaper2Fill className="text-xl text-lightMode-sidebarItemIconColor scale-125" />
+  //     ) : (
+  //       <Tooltip text={`Create Medical Record Patient`}>
+  //         <RiFilePaper2Line
+  //           onClick={() => setIsCreateMedicalRecordPatientOverlayVisible(true)}
+  //           className="text-xl cursor-pointer hover:text-lightMode-sidebarItemIconColor hover:scale-125"
+  //         />
+  //       </Tooltip>
+  //     )}
 
   //     <Overlay
   //       className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-40  ${
