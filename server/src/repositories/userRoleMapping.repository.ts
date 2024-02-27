@@ -270,16 +270,16 @@ export class UserRoleMappingRepository
 
       data = await this._drizzle
         .select({
-          userId: userTable.userId,
-          userForename: userTable.userForename,
-          userSurname: userTable.userSurname,
-          userEmail: userTable.userEmail,
-          userPhoneNumber: userTable.userPhoneNumber,
-          userGender: userTable.userGender,
-          userDateOfBirth: userTable.userDateOfBirth,
-          userAddress: userTable.userAddress,
-          userRoleId: userRoleMappingTable.roleId,
-          userRoleName: roleTable.roleName,
+          patientId: userTable.userId,
+          patientForename: userTable.userForename,
+          patientSurname: userTable.userSurname,
+          patientEmail: userTable.userEmail,
+          patientPhoneNumber: userTable.userPhoneNumber,
+          patientGender: userTable.userGender,
+          patientDateOfBirth: userTable.userDateOfBirth,
+          patientAddress: userTable.userAddress,
+          patientRoleId: userRoleMappingTable.roleId,
+          patientRoleName: roleTable.roleName,
           patientCNP: patientTable.patientCNP,
         })
         .from(this._table)

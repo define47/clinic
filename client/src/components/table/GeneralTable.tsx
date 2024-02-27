@@ -5,6 +5,7 @@ import {
   GeneralTableProps,
   MedicalProcedure,
   MedicalSpeciality,
+  Patient,
   TableRow,
   User,
 } from "../../types";
@@ -124,6 +125,10 @@ export const GeneralTable: FC<GeneralTableProps> = ({
 
   function isUserRow(tableRow: TableRow): tableRow is User {
     return "userId" in tableRow;
+  }
+
+  function isPatientRow(tableRow: TableRow): tableRow is Patient {
+    return "patientId" in tableRow;
   }
 
   function isMedicalSpecialityRow(

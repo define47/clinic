@@ -54,8 +54,23 @@ export type MedicalProcedure = {
   // medicalProcedureEstimatedTimeMinutes: number;
 };
 
+export type Patient = {
+  patientId: string;
+  patientForename: string;
+  patientSurname: string;
+  patientEmail: string;
+  patientPhoneNumber: string;
+  patientGender: string;
+  patientDateOfBirth: string;
+  patientAddress: string;
+  patientRoleId: string;
+  patientRoleName: string;
+  patientCNP: string;
+};
+
 export type TableRow =
   | User
+  | Patient
   | MedicalSpeciality
   | AppointmentTableData
   | MedicalProcedure;
