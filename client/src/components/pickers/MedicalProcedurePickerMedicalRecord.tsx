@@ -159,8 +159,36 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
     setIsDragging(false);
   };
 
+  const [foundConductedTests, setFoundConductedTests] = useState<any>([]);
+  const [price, setPrice] = useState<number>(-1);
+  useEffect(() => {
+    const foundConductedTests = medicalProcedures.filter(
+      (medicalProcedure) => medicalProcedure.currentGroupId === "123456"
+    );
+
+    console.log("foundConductedTests", foundConductedTests);
+
+    if (foundConductedTests.length > 0) {
+      const price = foundConductedTests.reduce(
+        (accumulator, foundConductedTest) => {
+          return accumulator + foundConductedTest.medicalProcedurePrice;
+        },
+        0
+      );
+
+      // setPrice(price);
+      console.log("foundConductedTests price", price);
+    }
+    setFoundConductedTests(foundConductedTests);
+  }, [medicalProcedures]);
+
   return (
     <div className="flex w-full items-center justify-between">
+      {foundConductedTests.length > 0 &&
+        foundConductedTests?.map((foundConductedTest) => (
+          <div>{foundConductedTest.medicalProcedureId}</div>
+        ))}
+      <div>final price:{price}</div>
       {medicalSpecialities.length > 0 &&
         medicalSpecialities.map((medicalSpeciality) => (
           <div
