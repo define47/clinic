@@ -10,6 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { generalDataPath } from "../../utils/dotenv";
 
 export const AppointmentAreaChart: FC = () => {
   const [data, setData] = useState<any>([]);
@@ -17,19 +18,16 @@ export const AppointmentAreaChart: FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(
-          "http://192.168.2.16:40587/api/general-data",
-          {
-            params: {
-              choice: "getTotalNumberOfAppointmentsPerPeriodPerEachDate",
-              entity: "appointment",
-              period: "month",
-              doctorId: "",
-              appointmentStatus: "",
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(generalDataPath, {
+          params: {
+            choice: "getTotalNumberOfAppointmentsPerPeriodPerEachDate",
+            entity: "appointment",
+            period: "month",
+            doctorId: "",
+            appointmentStatus: "",
+          },
+          withCredentials: true,
+        });
 
         const transformedData = response.data.payload.map((entry: any) => ({
           date: entry.appointmentDateTime, // Assuming "appointmentDateTime" is the date field

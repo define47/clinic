@@ -36,6 +36,7 @@ import {
   MedicalSpeciality,
   medicalSpecialityTable,
 } from "../models/medicalSpeciality.model";
+import { patientTable } from "../models/patient.model";
 
 export class UserRoleMappingRepository
   extends BaseRepository<UserRoleMapping>
@@ -223,7 +224,6 @@ export class UserRoleMappingRepository
     let offset = page * limit;
 
     if (
-      roleId === getPatientRoleIdEnv() ||
       roleId === getAdminRoleIdEnv() ||
       roleId === getReceptionistRoleIdEnv()
     ) {
@@ -250,6 +250,45 @@ export class UserRoleMappingRepository
         .from(this._table)
         .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
         .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
+        .where(condition.userSearchQuery)
+        .limit(limit)
+        .offset(offset)
+        .orderBy(orderByIndicator!);
+
+      return {
+        tableData: data as UserRoleMappingJoinUserAndRole[],
+        totalPages: Math.ceil(totalCount[0].totalCount / limit) - 1,
+        totalCount: totalCount[0].totalCount,
+      };
+    } else if (roleId === getPatientRoleIdEnv()) {
+      totalCount = await this._drizzle
+        .select({ totalCount: count() })
+        .from(this._table)
+        .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
+        .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
+        .where(condition.userSearchQuery);
+
+      data = await this._drizzle
+        .select({
+          userId: userTable.userId,
+          userForename: userTable.userForename,
+          userSurname: userTable.userSurname,
+          userEmail: userTable.userEmail,
+          userPhoneNumber: userTable.userPhoneNumber,
+          userGender: userTable.userGender,
+          userDateOfBirth: userTable.userDateOfBirth,
+          userAddress: userTable.userAddress,
+          userRoleId: userRoleMappingTable.roleId,
+          userRoleName: roleTable.roleName,
+          patientCNP: patientTable.patientCNP,
+        })
+        .from(this._table)
+        .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
+        .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
+        .innerJoin(
+          patientTable,
+          eq(userRoleMappingTable.userId, patientTable.patientId)
+        )
         .where(condition.userSearchQuery)
         .limit(limit)
         .offset(offset)

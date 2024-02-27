@@ -10,6 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { generalDataPath } from "../../utils/dotenv";
 
 export const DoctorsByMedicalSpecialityChart: FC = () => {
   const [dbData, setDbData] = useState<any>();
@@ -70,15 +71,12 @@ export const DoctorsByMedicalSpecialityChart: FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(
-          "http://192.168.2.16:40587/api/general-data",
-          {
-            params: {
-              entity: "doctorMedicalSpecialityMappingsCountByMedicalSpeciality",
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(generalDataPath, {
+          params: {
+            entity: "doctorMedicalSpecialityMappingsCountByMedicalSpeciality",
+          },
+          withCredentials: true,
+        });
 
         console.log("here data", response.data.payload);
 

@@ -38,6 +38,10 @@ import {
   MedicalSpecialityMedicalProcedureMappingUpdateAttributes,
 } from "../models/medicalSpecialityMedicalProcedureMapping.model";
 import { NotificationCreationAttributes } from "../models/notification.model";
+import {
+  PatientCreationAttributes,
+  PatientUpdateAttributes,
+} from "../models/patient.model";
 
 export interface IBaseRepository<T> {
   getById(id: string): Promise<T | undefined>;
@@ -60,6 +64,7 @@ export interface IBaseRepository<T> {
       | MedicalSpecialityMedicalProcedureMappingCreationAttributes
       | DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
       | NotificationCreationAttributes
+      | PatientCreationAttributes
   ): Promise<T | undefined>;
 
   update(
@@ -75,6 +80,7 @@ export interface IBaseRepository<T> {
       | MedicalRecordPatientUpdateAttributes
       | UserPreferencesMappingUpdateAttributes
       | MedicalSpecialityMedicalProcedureMappingUpdateAttributes
+      | PatientUpdateAttributes
   ): Promise<T | undefined>;
 
   delete(id: string): Promise<string | undefined>;

@@ -176,7 +176,7 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
         0
       );
 
-      // setPrice(price);
+      setPrice(price);
       console.log("foundConductedTests price", price);
     }
     setFoundConductedTests(foundConductedTests);
@@ -184,11 +184,11 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
 
   return (
     <div className="flex w-full items-center justify-between">
-      {foundConductedTests.length > 0 &&
+      {/* {foundConductedTests.length > 0 &&
         foundConductedTests?.map((foundConductedTest) => (
           <div>{foundConductedTest.medicalProcedureId}</div>
         ))}
-      <div>final price:{price}</div>
+      <div>final price:{price}</div> */}
       {medicalSpecialities.length > 0 &&
         medicalSpecialities.map((medicalSpeciality) => (
           <div

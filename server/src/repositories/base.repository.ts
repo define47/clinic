@@ -74,6 +74,11 @@ import {
   UserNotificationMappingCreationAttributes,
   userNotificationMappingTable,
 } from "../models/userNotificationMapping.model";
+import {
+  PatientCreationAttributes,
+  PatientUpdateAttributes,
+  patientTable,
+} from "../models/patient.model";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected readonly _drizzle: NodePgDatabase<Record<string, never>>;
@@ -179,6 +184,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         "notificationId",
         "isNotificationRead",
       ];
+    else if (table === patientTable)
+      this._tableColumns = ["patientId", "patientCNP"];
     else this._tableColumns = [];
 
     // type MyKeys = keyof typeof this._table.$inferSelect;
@@ -198,176 +205,6 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     //   updatedAt: "",
     // };
     // console.log("here", Object.keys(dummyVariable));
-  }
-
-  private getNecessaryAttributesForUUIDv5(): Array<
-    keyof (
-      | UserCreationAttributes
-      | RoleCreationAttributes
-      | MedicalSpecialityCreationAttributes
-      | UserRoleMappingCreationAttributes
-      | DoctorMedicalSpecialityMappingCreationAttributes
-      | AppointmentCreationAttributes
-      | AppointmentHistoryCreationAttributes
-      | MedicalRecordPatientCreationAttributes
-      | LanguageCreationAttributes
-      | MedicalProcedureCreationAttributes
-    )
-  > {
-    if (this._table === userTable) {
-      return ["userEmail"] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    } else if (this._table === roleTable) {
-      return ["roleName"] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    } else if (this._table === medicalSpecialityTable) {
-      return ["medicalSpecialityName"] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    } else if (this._table === userRoleMappingTable) {
-      return ["userId", "roleId"] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    } else if (this._table === doctorMedicalSpecialityMappingTable) {
-      return ["userId", "medicalSpecialityId"] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    } else if (this._table === appointmentTable) {
-      return [
-        "appointmentDoctorId",
-        "appointmentPatientId",
-        "appointmentDateTime",
-      ] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    } else if (this._table === appointmentHistoryTable) {
-      return [
-        "appointmentId",
-        "appointmentHistoryCreatedAt",
-        "appointmentHistoryUpdatedAt",
-      ] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    } else if (this._table === medicalRecordPatientTable)
-      return ["appointmentId"] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    else if (this._table === languageTable)
-      return ["languageName"] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    else if (this._table === medicalProcedureTable)
-      return ["medicalProcedureName"] as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    // else if (this._drizzle === notificationTable)
-    //     return ["notificationDateTime"]
-    else {
-      return "" as keyof (
-        | UserCreationAttributes
-        | RoleCreationAttributes
-        | MedicalSpecialityCreationAttributes
-        | UserRoleMappingCreationAttributes
-        | DoctorMedicalSpecialityMappingCreationAttributes
-        | AppointmentCreationAttributes
-        | AppointmentHistoryCreationAttributes
-        | MedicalRecordPatientCreationAttributes
-        | LanguageCreationAttributes
-        | MedicalProcedureCreationAttributes
-      );
-    }
   }
 
   public async getById(id: string): Promise<T> {
@@ -405,6 +242,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | DoctorMedicalSpecialityMappingKnownMedicalSpecialityRankCreationAttributes
       | NotificationCreationAttributes
       | UserNotificationMappingCreationAttributes
+      | PatientCreationAttributes
   ): Promise<T | undefined> {
     try {
       let id;
@@ -522,7 +360,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         this._table === userRoleMappingTable ||
         this._table === userNotificationMappingTable ||
         this._table === userPreferencesMappingTable ||
-        this._table === medicalSpecialityMedicalProcedureMappingTable
+        this._table === medicalSpecialityMedicalProcedureMappingTable ||
+        this._table === patientTable
       )
         return (
           await this._drizzle
@@ -626,6 +465,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       | UserPreferencesMappingUpdateAttributes
       | MedicalProcedureUpdateAttributes
       | MedicalSpecialityMedicalProcedureMappingUpdateAttributes
+      | PatientUpdateAttributes
   ): Promise<T | undefined> {
     try {
       const entityAttributes: Record<string, any> = {};

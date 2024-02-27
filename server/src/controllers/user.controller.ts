@@ -13,12 +13,14 @@ import { DoctorMedicalSpecialityMapping } from "../models/doctorMedicalSpecialit
 import { UserRoleMapping } from "../models/userRoleMapping.model";
 import {
   getDoctorRoleIdEnv,
+  getPatientRoleIdEnv,
   getReactClientIPAddressEnv,
 } from "../utils/dotenv";
 import { MESSAGE_CHANNEL, fastifyServer } from "../server";
 import { LanguageService } from "../services/language.service";
 import { UserPreferencesMappingService } from "../services/userPreferencesMapping.service";
 import { MedicalSpeciality } from "../models/medicalSpeciality.model";
+import { PatientService } from "../services/patient.service";
 
 export class UserController {
   private readonly _userService: UserService;
@@ -28,6 +30,7 @@ export class UserController {
   private readonly _medicalSpecialityService: MedicalSpecialityService;
   private readonly _languageService: LanguageService;
   private readonly _userPreferencesMappingService: UserPreferencesMappingService;
+  private readonly _patientService: PatientService;
 
   public constructor() {
     this._userService = new UserService();
@@ -38,6 +41,7 @@ export class UserController {
     this._medicalSpecialityService = new MedicalSpecialityService();
     this._languageService = new LanguageService();
     this._userPreferencesMappingService = new UserPreferencesMappingService();
+    this._patientService = new PatientService();
   }
 
   private checkUserEmailValidity = async (userEmail: string) => {
@@ -513,6 +517,11 @@ export class UserController {
               }
             );
           }
+        } else if (roleIds[i] === getPatientRoleIdEnv()) {
+          await this._patientService.createPatient({
+            patientId: postUser?.userId!,
+            patientCNP: body.patientCNP,
+          });
         }
       }
 

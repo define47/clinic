@@ -10,7 +10,10 @@ import { AppointmentTableData, MedicalRecordPatient } from "../../types";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { appointmentsPath } from "../../utils/dotenv";
+import {
+  appointmentsPath,
+  medicalRecordPatientsPath,
+} from "../../utils/dotenv";
 import IatropolisLogo from "../../assets/logo-iatropolis.png";
 import { StyledEntry } from "../../components/design/StyledEntry";
 import { UnderlinedTextArea } from "../../components/design/UnderlinedTextArea";
@@ -88,6 +91,24 @@ export const MedicalRecordPatientCreation: FC = () => {
   useEffect(() => {
     console.log(medicalRecordPatientToCreate);
   }, [medicalRecordPatientToCreate]);
+
+  async function onCreateMedicalRecordPatient() {
+    try {
+      const response = await axios.post(
+        medicalRecordPatientsPath,
+        {
+          appointmentId: appointment.appointment.appointmentId,
+          symptoms: medicalRecordPatientToCreate.symptoms,
+          diagnosis: medicalRecordPatientToCreate.diagnosis,
+          conductedTests: "medicalRecordPatientToCreate.conductedTests",
+          recommendations: medicalRecordPatientToCreate.recommendations,
+        },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const pageRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
@@ -185,18 +206,20 @@ export const MedicalRecordPatientCreation: FC = () => {
                   confirmationDialogEntryTitle="Speciality"
                   confirmationDialogEntryBodyWidth="w-4/6"
                   confirmationDialogEntryBody={`${
-                    authenticatedUserDataState?.medicalSpecialities?.[0]
-                      ?.medicalSpecialityName
-                  } ${
-                    authenticatedUserDataState?.medicalSpecialities?.[1]
-                      ?.medicalSpecialityName
-                      ? authenticatedUserDataState?.medicalSpecialities?.[1]
-                      : ""
-                  } ${
-                    authenticatedUserDataState?.medicalSpecialities?.[2]
-                      ?.medicalSpecialityName
-                      ? authenticatedUserDataState?.medicalSpecialities?.[2]
-                      : ""
+                    authenticatedUserDataState?.medicalSpecialities?.length >=
+                      1 &&
+                    authenticatedUserDataState?.medicalSpecialities![0]
+                      .medicalSpecialityName
+                  }, ${
+                    authenticatedUserDataState?.medicalSpecialities?.length >=
+                      2 &&
+                    authenticatedUserDataState?.medicalSpecialities![1]
+                      .medicalSpecialityName
+                  }, ${
+                    authenticatedUserDataState?.medicalSpecialities?.length >=
+                      3 &&
+                    authenticatedUserDataState?.medicalSpecialities![2]
+                      .medicalSpecialityName
                   }`}
                 />
               </div>

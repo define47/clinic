@@ -2,6 +2,20 @@ import { primaryKey, varchar } from "drizzle-orm/pg-core";
 import { clinicSchema } from "../utils/drizzle";
 import { userTable } from "./user.model";
 
+export type Patient = {
+  patientId?: string;
+  patientCNP: string;
+};
+
+export type PatientCreationAttributes = {
+  patientId: string;
+  patientCNP: string;
+};
+
+export type PatientUpdateAttributes = {
+  patientCNP: string;
+};
+
 export const patientTable = clinicSchema.table(
   "Patient",
   {
