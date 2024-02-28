@@ -285,7 +285,7 @@ export class UserRoleMappingRepository
         .from(this._table)
         .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
         .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
-        .innerJoin(
+        .leftJoin(
           patientTable,
           eq(userRoleMappingTable.userId, patientTable.patientId)
         )

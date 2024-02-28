@@ -6,8 +6,8 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Patient, UpdateUserOverlayPros, User } from "../../../types";
-import { StyledInput } from "../../design/StyledInput";
+import { UpdateUserOverlayPros, User } from "../../../types";
+
 import Overlay from "../base/Overlay";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
@@ -47,6 +47,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   ] = useState<boolean>(false);
   const [userToUpdate, setUserToUpdate] = useState<User>({
     userId: "",
+    userCNP: "",
     userForename: "",
     userSurname: "",
     userEmail: "",
@@ -99,6 +100,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   const [isUserEmailValid, setIsUserEmailValid] = useState<boolean>(false);
   const [isUserPhoneNumberValid, setIsUserPhoneNumberValid] =
     useState<boolean>(false);
+  const [isUserCNPValid, setIsUserCNPValid] = useState<boolean>(false);
 
   const [userDateOfBirth, setUserDateOfBirth] = useState<string>("");
   const [defaultDate, setDefaultDate] = useState<string>("");
@@ -184,6 +186,8 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
       setIsUserEmailValid(validator.isEmail(value));
     } else if (name === "userPhoneNumber") {
       setIsUserPhoneNumberValid(phone(value).isValid);
+    } else if (name === "userCNP") {
+      setIsUserCNPValid(validator.isNumeric(value));
     }
     setUserToUpdate((prevUserToUpdate) => ({
       ...prevUserToUpdate,
@@ -195,6 +199,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
     setIsUserForenameValid(regex.test(user.userForename));
     setIsUserSurnameValid(regex.test(user.userSurname));
     setIsUserEmailValid(validator.isEmail(user.userEmail));
+    if (user.userCNP) setIsUserCNPValid(validator.isNumeric(user.userCNP));
   }, [user]);
 
   async function onUpdateUser() {
@@ -351,14 +356,67 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
           <span className="flex justify-center mb-8">Update {roleName}</span>
           <div className="w-full lg:flex lg:justify-between lg:space-x-24">
             <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
-              {/* <StyledInput
-                label="userForename"
-                name="userForename"
-                onChangeStyledInput={handleStyledInputChange}
-                labelBackgroundColorUnfocused="bg-white"
-                inputValue={userToUpdate.userForename}
-                // inputValue=""
-              /> */}
+              {roleName === "patient" && (
+                <StyledInputV2
+                  styledInputWidth="w-full"
+                  unfocusedTextColor={
+                    userToUpdate.userCNP && userToUpdate.userCNP.length === 0
+                      ? "text-pink-700"
+                      : isUserCNPValid
+                      ? "text-green-700"
+                      : "text-red-700"
+                  }
+                  unfocusedBorderColor={
+                    userToUpdate.userCNP && userToUpdate.userCNP!.length === 0
+                      ? "border-pink-700"
+                      : isUserCNPValid
+                      ? "border-green-700"
+                      : "border-red-700"
+                  }
+                  focusedTextColor={
+                    userToUpdate.userCNP && userToUpdate.userCNP!.length === 0
+                      ? "focus:text-pink-500"
+                      : isUserCNPValid
+                      ? "focus:text-green-500"
+                      : "focus:text-red-500"
+                  }
+                  focusedBorderColor={
+                    userToUpdate.userCNP && userToUpdate.userCNP!.length === 0
+                      ? "focus:border-pink-500"
+                      : isUserCNPValid
+                      ? "focus:border-green-500"
+                      : "focus:border-red-500"
+                  }
+                  focusedBorderColorIconArea={
+                    userToUpdate.userCNP && userToUpdate.userCNP!.length === 0
+                      ? "border-pink-500"
+                      : isUserCNPValid
+                      ? "border-green-500"
+                      : "border-red-500"
+                  }
+                  unfocusedLabelColor={
+                    userToUpdate.userCNP && userToUpdate.userCNP!.length === 0
+                      ? "text-pink-700"
+                      : isUserCNPValid
+                      ? "text-green-700"
+                      : "text-red-700"
+                  }
+                  unfocusedLabelBackgroundColor="bg-white"
+                  focusedLabelColor={
+                    userToUpdate.userCNP && userToUpdate.userCNP!.length === 0
+                      ? "text-pink-500"
+                      : isUserCNPValid
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }
+                  focusedLabelBackgroundColor="bg-white"
+                  isDisabled={false}
+                  name="userCNP"
+                  styledInputValue={userToUpdate.userCNP!}
+                  onChangeStyledInput={handleStyledInputChange}
+                  label="CNP"
+                />
+              )}
               <StyledInputV2
                 styledInputWidth="w-full"
                 unfocusedTextColor={
