@@ -423,3 +423,28 @@ export type UnderlinedTextProps = {
 export type StyledAppointmentStatusProps = {
   appointmentStatusName: string;
 };
+
+export type UserBodyProps = {
+  entity: string;
+  tableRow: User;
+  tableRowIndex: number;
+  clickedTableRow: TableRow | undefined;
+  setClickedTableRow: (clickedTableRow: TableRow) => void;
+  currentPage: number;
+};
+
+export type MedicalSpecialityBodyProps = {
+  tableRow: MedicalSpeciality;
+  tableRowIndex: number;
+  clickedTableRow: TableRow | undefined;
+  setClickedTableRow: (clickedTableRow: TableRow) => void;
+  currentPage: number;
+};
+
+export type AppointmentBodyProps = {
+  tableRow: AppointmentTableData;
+  tableRowIndex: number;
+  clickedTableRow: TableRow | undefined;
+  setClickedTableRow: (clickedTableRow: TableRow) => void;
+  currentPage: number;
+};

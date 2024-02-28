@@ -62,6 +62,14 @@ import { StyledAppointmentStatusName } from "../design/StyledAppointmentStatusNa
 import { Toaster } from "sonner";
 import { capitalizeString } from "../../utils/utils";
 import { OrderByIndicator } from "./OrderByIndicator";
+import { PatientHeader } from "./headers/PatientHeader";
+import { UserHeader } from "./headers/UserHeader";
+import { AppointmentHeader } from "./headers/AppointmentHeader";
+import { MedicalSpecialityHeader } from "./headers/MedicalSpecialityHeader";
+import { MedicalProcedureHeader } from "./headers/MedicalProcedureHeader";
+import { UserBody } from "./bodies/UserBody";
+import { MedicalSpecialityBody } from "./bodies/MedicalSpecialityBody";
+import { AppointmentBody } from "./bodies/AppointmentBody";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -899,313 +907,31 @@ export const GeneralTable: FC<GeneralTableProps> = ({
           <table className="w-full text-center text-xs font-light border rounded-xl">
             <thead className="w-full border-b border-lightMode-borderColor dark:border-darkMode-borderColor bg-lightMode-tableHeaderBackgroundColor dark:bg-darkMode-tableHeaderBackgroundColor font-medium">
               {isUserRow(tableRows[0]) ? (
-                <tr>
-                  <td>Index</td>
-                  <td className="px-6 py-4 font-bold">
-                    <div className="flex items-center justify-center">
-                      userId
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    <div className="flex items-center justify-center">
-                      {/* user forename */}
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "generalUserTableColumnNames",
-                        0
-                      )}
-                      <OrderByIndicator
-                        orderByIndicator={orderByIndicator}
-                        setOrderByIndicator={setOrderByIndicator}
-                        orderByColumn="userForename"
-                      />
-                      {/* {orderBy !== "asc:userForename" && (
-                        <RiArrowUpSFill
-                          className="text-sm cursor-pointer"
-                          onClick={() => setOrderBy("asc:userForename")}
-                        />
-                      )}
-                      {orderBy === "asc:userForename" && (
-                        <RiArrowDownSFill
-                          className="text-sm cursor-pointer"
-                          onClick={() => setOrderBy("desc:userForename")}
-                        />
-                      )} */}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    <div className="flex items-center justify-center">
-                      {/* userSurname */}
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "generalUserTableColumnNames",
-                        1
-                      )}
-                      <OrderByIndicator
-                        orderByIndicator={orderByIndicator}
-                        setOrderByIndicator={setOrderByIndicator}
-                        orderByColumn="userSurname"
-                      />
-                      {/* {orderBy !== "asc:userSurname" && (
-                        <RiArrowUpSFill
-                          className="text-sm cursor-pointer"
-                          onClick={() => setOrderBy("asc:userSurname")}
-                        />
-                      )}
-                      {orderBy === "asc:userSurname" && (
-                        <RiArrowDownSFill
-                          className="text-sm cursor-pointer"
-                          onClick={() => setOrderBy("desc:userSurname")}
-                        />
-                      )} */}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    <div className="flex items-center justify-center">
-                      {/* userEmail */}
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "generalUserTableColumnNames",
-                        2
-                      )}
-                      <OrderByIndicator
-                        orderByIndicator={orderByIndicator}
-                        setOrderByIndicator={setOrderByIndicator}
-                        orderByColumn="userEmail"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    <div className="flex items-center justify-center">
-                      {/* userPhoneNumber */}
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "generalUserTableColumnNames",
-                        3
-                      )}
-                      <OrderByIndicator
-                        orderByIndicator={orderByIndicator}
-                        setOrderByIndicator={setOrderByIndicator}
-                        orderByColumn="userPhoneNumber"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* userGender */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "generalUserTableColumnNames",
-                      4
-                    )}
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    <div className="flex items-center justify-center">
-                      {/* userDateOfBirth */}
-
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "generalUserTableColumnNames",
-                        5
-                      )}
-                      <OrderByIndicator
-                        orderByIndicator={orderByIndicator}
-                        setOrderByIndicator={setOrderByIndicator}
-                        orderByColumn="userDateOfBirth"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* userAddress */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "generalUserTableColumnNames",
-                      6
-                    )}
-                  </td>
-                  <td className="px-6 py-4 font-bold">userRoleName</td>
-                  {entity === "doctor" && (
-                    <td className="px-6 py-4 font-bold">
-                      <div className="flex items-center justify-center">
-                        {/* Primary Speciality */}
-                        {getItemByLanguageAndCollection(
-                          authenticatedUserDataState.language.languageCode,
-                          "generalUserTableColumnNames",
-                          7
-                        )}
-                        <OrderByIndicator
-                          orderByIndicator={orderByIndicator}
-                          setOrderByIndicator={setOrderByIndicator}
-                          orderByColumn="medicalSpecialityName"
-                        />
-                      </div>
-                    </td>
-                  )}
-                  {entity === "doctor" && (
-                    <td className="px-6 py-4 font-bold">
-                      {/* Secondary Speciality */}
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "generalUserTableColumnNames",
-                        8
-                      )}
-                    </td>
-                  )}
-                  {entity === "doctor" && (
-                    <td className="px-6 py-4 font-bold">
-                      {/* Tertiary Speciality */}
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "generalUserTableColumnNames",
-                        9
-                      )}
-                    </td>
-                  )}
-                  <td className="px-6 py-4 font-bold">
-                    {/* Actions */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "generalUserTableColumnNames",
-                      10
-                    )}
-                  </td>
-                </tr>
+                <UserHeader
+                  entity={entity}
+                  orderByIndicator={orderByIndicator}
+                  setOrderByIndicator={setOrderByIndicator}
+                />
+              ) : isPatientRow(tableRows[0]) ? (
+                <PatientHeader
+                  orderByIndicator={orderByIndicator}
+                  setOrderByIndicator={setOrderByIndicator}
+                />
               ) : isMedicalSpecialityRow(tableRows[0]) ? (
-                <tr>
-                  <td>Index</td>
-                  <td className="px-6 py-4 font-bold w-1/3">
-                    Medical Speciality Id
-                  </td>
-                  <td className="px-6 py-4 font-bold w-1/3">
-                    <div className="flex items-center justify-center">
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "medicalSpecialityTableColumnNames",
-                        0
-                      )}
-                      <OrderByIndicator
-                        orderByIndicator={orderByIndicator}
-                        setOrderByIndicator={setOrderByIndicator}
-                        orderByColumn="medicalSpecialityName"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-bold w-1/3">
-                    {/* Actions */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "medicalSpecialityTableColumnNames",
-                      1
-                    )}
-                  </td>
-                </tr>
+                <MedicalSpecialityHeader
+                  orderByIndicator={orderByIndicator}
+                  setOrderByIndicator={setOrderByIndicator}
+                />
               ) : isAppointmentRow(tableRows[0]) ? (
-                <tr>
-                  <td>Index</td>
-                  <td className="px-6 py-4 font-bold">appointmentId</td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* doctor */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "appointmentTableColumnNames",
-                      0
-                    )}
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* patient */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "appointmentTableColumnNames",
-                      1
-                    )}
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* appointmentReason */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "appointmentTableColumnNames",
-                      2
-                    )}
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* appointmentDateTime */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "appointmentTableColumnNames",
-                      3
-                    )}
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* appointmentStatus */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "appointmentTableColumnNames",
-                      4
-                    )}
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* appointmentCancellationReason */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "appointmentTableColumnNames",
-                      5
-                    )}
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* Actions */}
-                    Price
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* Actions */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "appointmentTableColumnNames",
-                      6
-                    )}
-                  </td>
-                </tr>
+                <AppointmentHeader
+                  orderByIndicator={orderByIndicator}
+                  setOrderByIndicator={setOrderByIndicator}
+                />
               ) : isMedicalProcedureRow(tableRows[0]) ? (
-                <tr>
-                  <td>Index</td>
-                  <td className="px-6 py-4 font-bold">medicalProcedureId</td>
-                  <td className="px-6 py-4 font-bold">
-                    <div className="flex items-center justify-center">
-                      {/* medicalProcedureName */}
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "medicalProcedureTableColumnNames",
-                        0
-                      )}
-                      <OrderByIndicator
-                        orderByIndicator={orderByIndicator}
-                        setOrderByIndicator={setOrderByIndicator}
-                        orderByColumn="medicalProcedureName"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    <div className="flex items-center justify-center">
-                      {/* medicalProcedurePrice */}
-                      {getItemByLanguageAndCollection(
-                        authenticatedUserDataState.language.languageCode,
-                        "medicalProcedureTableColumnNames",
-                        1
-                      )}
-                      <OrderByIndicator
-                        orderByIndicator={orderByIndicator}
-                        setOrderByIndicator={setOrderByIndicator}
-                        orderByColumn="medicalProcedurePrice"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-bold">
-                    {/* Actions */}
-                    {getItemByLanguageAndCollection(
-                      authenticatedUserDataState.language.languageCode,
-                      "medicalProcedureTableColumnNames",
-                      2
-                    )}
-                  </td>
-                </tr>
+                <MedicalProcedureHeader
+                  orderByIndicator={orderByIndicator}
+                  setOrderByIndicator={setOrderByIndicator}
+                />
               ) : (
                 ""
               )}
@@ -1213,216 +939,30 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             <tbody>
               {tableRows.map((tableRow: TableRow, tableRowIndex: number) =>
                 isUserRow(tableRow) ? (
-                  <tr
-                    key={tableRow.userId}
-                    className={`border-b border-lightMode-borderColor dark:border-darkMode-borderColor odd:bg-lightMode-oddRowTable even:bg-lightMode-evenRowTable odd:dark:bg-darkMode-oddRowTable even:dark:bg-darkMode-evenRowTable transition duration-300 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable ${
-                      (clickedTableRow as User)?.userId === tableRow.userId &&
-                      "!bg-lightMode-selectedTableRow dark:!bg-darkMode-selectedTableRow"
-                    }`}
-                    onClick={() => setClickedTableRow(tableRow)}
-                  >
-                    <td>{tableRowIndex + 1 + currentPage * 5}</td>
-                    <td className="px-6 py-4 text-xs">{tableRow.userId}</td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.userForename}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.userSurname}
-                    </td>
-                    <td className="px-6 py-4 text-xs">{tableRow.userEmail}</td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.userPhoneNumber}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {
-                        getItemInUserSelectedLanguageCode(
-                          authenticatedUserDataState.language.languageCode,
-                          "genders",
-                          capitalizeString(tableRow.userGender)!
-                        )!
-                      }
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.userDateOfBirth.split("-").reverse().join("-")}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.userAddress}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.userRoleName}
-                    </td>
-                    {entity === "doctor" && (
-                      <td className="px-6 py-4 text-xs">
-                        {determineSpecialityOrder(
-                          tableRow.medicalSpecialities!,
-                          "P"
-                        )?.slice(0, -3)}
-                      </td>
-                    )}
-                    {entity === "doctor" && (
-                      <td className="px-6 py-4 text-xs">
-                        {determineSpecialityOrder(
-                          tableRow.medicalSpecialities!,
-                          "S"
-                        )?.slice(0, -3)}
-                      </td>
-                    )}
-                    {entity === "doctor" && (
-                      <td className="px-6 py-4 text-xs">
-                        {determineSpecialityOrder(
-                          tableRow.medicalSpecialities!,
-                          "T"
-                        )?.slice(0, -3)}
-                      </td>
-                    )}
-                    <td className="h-14 flex items-center justify-center space-x-2">
-                      <UpdateUserOverlay user={tableRow} roleName={entity} />
-                      <DeleteUserOverlay user={tableRow} roleName={entity} />
-                    </td>
-                  </tr>
+                  <UserBody
+                    entity={entity}
+                    tableRow={tableRow}
+                    tableRowIndex={tableRowIndex}
+                    clickedTableRow={clickedTableRow}
+                    setClickedTableRow={setClickedTableRow}
+                    currentPage={currentPage}
+                  />
                 ) : isMedicalSpecialityRow(tableRow) ? (
-                  <tr
-                    key={tableRow.medicalSpecialityId}
-                    className={`border-b border-lightMode-borderColor dark:border-darkMode-borderColor odd:bg-lightMode-oddRowTable even:bg-lightMode-evenRowTable odd:dark:bg-darkMode-oddRowTable even:dark:bg-darkMode-evenRowTable transition duration-300 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable ${
-                      (clickedTableRow as MedicalSpeciality)
-                        ?.medicalSpecialityId ===
-                        tableRow.medicalSpecialityId &&
-                      "!bg-lightMode-selectedTableRow dark:!bg-darkMode-selectedTableRow"
-                    }`}
-                    onClick={() => setClickedTableRow(tableRow)}
-                  >
-                    <td>{tableRowIndex}</td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.medicalSpecialityId}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.medicalSpecialityName}
-                    </td>
-                    <td className="h-14 flex items-center justify-center space-x-2">
-                      <UpdateMedicalSpeciality medicalSpeciality={tableRow} />
-                      <DeleteMedicalSpecialityOverlay
-                        medicalSpeciality={tableRow}
-                      />
-                    </td>
-                  </tr>
+                  <MedicalSpecialityBody
+                    tableRow={tableRow}
+                    currentPage={currentPage}
+                    tableRowIndex={tableRowIndex}
+                    clickedTableRow={clickedTableRow}
+                    setClickedTableRow={setClickedTableRow}
+                  />
                 ) : isAppointmentRow(tableRow) ? (
-                  <tr
-                    key={tableRow.appointment.appointmentId}
-                    className={`border-b border-lightMode-borderColor dark:border-darkMode-borderColor odd:bg-lightMode-oddRowTable even:bg-lightMode-evenRowTable odd:dark:bg-darkMode-oddRowTable even:dark:bg-darkMode-evenRowTable transition duration-300 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable ${
-                      (clickedTableRow as AppointmentTableData)?.appointment
-                        .appointmentId === tableRow.appointment.appointmentId &&
-                      "!bg-lightMode-selectedTableRow dark:!bg-darkMode-selectedTableRow"
-                    }`}
-                    onClick={() => setClickedTableRow(tableRow)}
-                  >
-                    <td>{tableRowIndex}</td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.appointment.appointmentId}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.doctor.doctorForename}&nbsp;
-                      {tableRow.doctor.doctorSurname}&nbsp;&nbsp;&nbsp;
-                      {/* {tableRow.doctor.doctorId} */}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.patient.patientForename}&nbsp;
-                      {tableRow.patient.patientSurname}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.appointment.appointmentReason}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.appointment.appointmentDateTime
-                        .split("T")[0]
-                        .split("-")
-                        .reverse()
-                        .join("-")}
-                      &nbsp;
-                      {tableRow.appointment.appointmentDateTime
-                        .split("T")[1]
-                        .substring(0, 5)}
-                    </td>
-                    <td className="w-60 px-6 py-4 text-xs">
-                      {/* {tableRow.appointment.appointmentStatus} */}
-                      <StyledAppointmentStatusName
-                        appointmentStatusName={
-                          tableRow.appointment.appointmentStatus
-                        }
-                      />
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.appointment.appointmentCancellationReason}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.appointment.appointmentPrice}&nbsp;
-                      {tableRow.appointment.appointmentPrice && "RON"}
-                    </td>
-                    <td className="h-14 flex items-center justify-center space-x-2">
-                      {(authenticatedUserDataState.roleNames[0] === "doctor" ||
-                        authenticatedUserDataState.roleNames[1] === "doctor") &&
-                        tableRow.appointment.appointmentDoctorId ===
-                          authenticatedUserDataState.userId &&
-                        tableRow.appointment.appointmentStatus !==
-                          "completed" && (
-                          <CreateMedicalRecordPatientOverlay
-                            appointment={tableRow}
-                          />
-                        )}
-
-                      {(authenticatedUserDataState.roleNames[0] === "doctor" ||
-                        authenticatedUserDataState.roleNames[1] === "doctor") &&
-                        tableRow.appointment.appointmentDoctorId ===
-                          authenticatedUserDataState.userId &&
-                        tableRow.appointment.appointmentStatus ===
-                          "completed" && (
-                          <ViewMedicalRecordPatientOverlay
-                            appointmentId={tableRow.appointment.appointmentId}
-                          />
-                        )}
-
-                      {tableRow.appointment.appointmentDoctorId !==
-                        authenticatedUserDataState.userId && (
-                        <div className="w-5 h-14"></div>
-                      )}
-
-                      {(authenticatedUserDataState.roleNames[0] === "admin" ||
-                        authenticatedUserDataState.roleNames[0] ===
-                          "receptionist" ||
-                        authenticatedUserDataState.roleNames[1] ===
-                          "admin") && (
-                        <UpdateAppointmentOverlay
-                          appointment={tableRow.appointment}
-                          doctorData={tableRow.doctor}
-                          patientData={tableRow.patient}
-                        />
-                      )}
-
-                      {(authenticatedUserDataState.roleNames[0] === "admin" ||
-                        authenticatedUserDataState.roleNames[0] ===
-                          "receptionist" ||
-                        authenticatedUserDataState.roleNames[1] ===
-                          "admin") && (
-                        <DeleteAppointmentOverlay
-                          appointmentId={tableRow.appointment.appointmentId}
-                        />
-                      )}
-
-                      <Tooltip text="View Appointment History">
-                        <RiTreasureMapLine
-                          className="text-xl hover:text-lightMode-sidebarItemIconColor hover:scale-125 cursor-pointer"
-                          onClick={() => {
-                            navigate(
-                              `/${authenticatedUserDataState.roleNames[0]}s/appointment-history/${tableRow.appointment.appointmentId}`
-                            );
-                            navigate(0);
-                          }}
-                        />
-                      </Tooltip>
-                      <SendEmailOverlay
-                        patientEmail={tableRow.patient.patientEmail}
-                      />
-                    </td>
-                  </tr>
+                  <AppointmentBody
+                    tableRow={tableRow}
+                    currentPage={currentPage}
+                    tableRowIndex={tableRowIndex}
+                    clickedTableRow={clickedTableRow}
+                    setClickedTableRow={setClickedTableRow}
+                  />
                 ) : isMedicalProcedureRow(tableRow) ? (
                   <tr
                     key={tableRow.medicalProcedureId}

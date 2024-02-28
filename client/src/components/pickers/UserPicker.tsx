@@ -348,8 +348,8 @@ export const UserPicker: FC<UserPickerProps> = ({
                               )
                           )} */}
                     </div>
-                    {selectedUserName.toLowerCase() ===
-                      `${user.userForename.toLowerCase()} ${user.userSurname.toLowerCase()}` && (
+                    {selectedUserName?.toLowerCase() ===
+                      `${user.userForename?.toLowerCase()} ${user.userSurname?.toLowerCase()}` && (
                       <TiTick />
                     )}
                   </div>
