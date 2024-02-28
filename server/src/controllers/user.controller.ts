@@ -545,7 +545,10 @@ export class UserController {
           JSON.stringify({
             action: "createUser",
             data: {
-              user: postUser,
+              user:
+                roleIds[0] === getPatientRoleIdEnv()
+                  ? { ...postUser, userCNP: body.patientCNP }
+                  : postUser,
               roles: foundRoles,
               medicalSpecialities: foundMedicalSpecialities,
             },
@@ -584,7 +587,13 @@ export class UserController {
 
       console.log(body.specialityIds);
 
-      if (body.specialityIds.length !== 0) {
+      if (body.userCNP) {
+        await this._patientService.updatePatient(putUser?.userId!, {
+          patientCNP: body.userCNP,
+        });
+      }
+
+      if (body.specialityIds && body.specialityIds.length !== 0) {
         const specialityIds = body.specialityIds;
         const currentDoctorMedicalSpecialitiesMappings =
           await this._doctorSpecialityMappingService.getDoctorMedicalSpecialityMappingByDoctorId(
@@ -600,7 +609,7 @@ export class UserController {
           ) {
             for (let j = 0; j < specialityIds.length; j++) {
               let currentData = specialityIds[j].split(":");
-              let doctorMedicalSpecialityMappingToUpdate;
+              console.log("currentdata", currentData[0], currentData[1]);
 
               if (
                 currentData[0] === "primary" &&
@@ -702,18 +711,48 @@ export class UserController {
 
       console.log("updated MedicalSpecialities", foundMedicalSpecialities);
 
+      const roles =
+        await this._userRoleMappingService.getUserRoleMappingsByUserId(
+          putUser?.userId!
+        );
+
+      let data;
+
+      console.log("roles", roles);
+      if (roles) {
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].roleId === getDoctorRoleIdEnv()) {
+            data = {
+              user: putUser,
+              roles: ["doctor"],
+              medicalSpecialities: foundMedicalSpecialities,
+            };
+          } else if (roles[i].roleId === getPatientRoleIdEnv()) {
+            data = {
+              user: { ...putUser, userCNP: body.userCNP },
+              roles: ["patient"],
+            };
+          }
+        }
+      }
+
+      // {
+      //   user: putUser,
+      //   ...(foundMedicalSpecialities.length !== 0 && {
+      //     roles: ["doctor"],
+      //   }),
+      //   ...(body.userCNP && {
+      //     roles: ["patient"],
+      //   }),
+      //   medicalSpecialities: foundMedicalSpecialities,
+      // }
+
       if (putUser)
         await redis.publisher.publish(
           MESSAGE_CHANNEL,
           JSON.stringify({
             action: "updateUser",
-            data: {
-              user: putUser,
-              ...(foundMedicalSpecialities.length !== 0 && {
-                roles: ["doctor"],
-              }),
-              medicalSpecialities: foundMedicalSpecialities,
-            },
+            data,
           })
         );
 
@@ -753,6 +792,8 @@ export class UserController {
           }
 
           break;
+        } else if (userRoleMappings[i].roleId === getPatientRoleIdEnv()) {
+          await this._patientService.deletePatient(user?.userId!);
         }
       }
 

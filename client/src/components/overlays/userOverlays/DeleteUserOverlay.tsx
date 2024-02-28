@@ -32,22 +32,10 @@ export const DeleteUserOverlay: FC<DeleteUserOverlayPros> = ({
 
   async function onDeleteUser() {
     try {
-      let response;
-
-      if (roleName === "doctor") {
-        user = user as User;
-        response = await axios.delete(usersPath, {
-          data: { userId: user.userId },
-          withCredentials: true,
-        });
-      } else if (roleName === "patient") {
-        user = user as Patient;
-        response = await axios.delete(usersPath, {
-          data: { userId: user.patientId },
-          withCredentials: true,
-        });
-      } else {
-      }
+      const response = await axios.delete(usersPath, {
+        data: { userId: user.userId },
+        withCredentials: true,
+      });
     } catch (error) {
       console.log(error);
     }

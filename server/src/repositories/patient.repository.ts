@@ -27,4 +27,8 @@ export class PatientRepository extends BaseRepository<Patient> {
   ) {
     return await this.update(patientId, patientUpdateAttributes);
   }
+
+  public async deletePatient(patientId: string) {
+    return await this.delete(patientId);
+  }
 }

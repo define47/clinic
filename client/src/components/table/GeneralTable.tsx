@@ -62,7 +62,7 @@ import { StyledAppointmentStatusName } from "../design/StyledAppointmentStatusNa
 import { Toaster } from "sonner";
 import { capitalizeString } from "../../utils/utils";
 import { OrderByIndicator } from "./OrderByIndicator";
-import { PatientHeader } from "./headers/PatientHeader";
+
 import { UserHeader } from "./headers/UserHeader";
 import { AppointmentHeader } from "./headers/AppointmentHeader";
 import { MedicalSpecialityHeader } from "./headers/MedicalSpecialityHeader";
@@ -288,6 +288,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
             ...(roles[0] === "doctor" && {
               medicalSpecialities: medicalSpecialities,
             }),
+            ...(roles[0] === "patient" && {
+              userCNP: user.userCNP,
+            }),
           } as User,
           ...prevUsers,
         ]);
@@ -302,10 +305,11 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         );
       } else if (receivedAction === "updateUser") {
         const user = receivedData.user as User;
+        console.log("user related data update", user);
+
         const roles = receivedData.roles as string[];
         const medicalSpecialities =
           receivedData.medicalSpecialities as string[];
-        console.log("medicalSpecialities event", medicalSpecialities);
 
         setTableRows((prevUsers: TableRow[]) => {
           const updatedEvents = prevUsers.map((event: TableRow) => {
@@ -326,6 +330,9 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     medicalSpecialities: medicalSpecialities,
                   }),
                 // medicalSpecialities,
+                ...(roles[0] === "patient" && {
+                  userCNP: user.userCNP,
+                }),
               };
             } else {
               return event;

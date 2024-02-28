@@ -419,15 +419,6 @@ export type UserBodyProps = {
   currentPage: number;
 };
 
-export type PatientBodyProps = {
-  entity: string;
-  tableRow: Patient;
-  tableRowIndex: number;
-  clickedTableRow: TableRow | undefined;
-  setClickedTableRow: (clickedTableRow: TableRow) => void;
-  currentPage: number;
-};
-
 export type MedicalSpecialityBodyProps = {
   tableRow: MedicalSpeciality;
   tableRowIndex: number;

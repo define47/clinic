@@ -31,4 +31,8 @@ export class PatientService {
       patientUpdateAttributes
     );
   }
+
+  public async deletePatient(patientId: string) {
+    return this._patientRepository.deletePatient(patientId);
+  }
 }
