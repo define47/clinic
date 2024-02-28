@@ -37,6 +37,24 @@ export class AppointmentController {
   }
   // doctor-appointment-booked-slots
 
+  public async getAppointmentCountByPeriodAndStatus(
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) {
+    try {
+      const query: any = request.query;
+      const payload =
+        await this._appointmentService.getAppointmentCountByPeriodAndStatus(
+          query.period,
+          query.appointmentStatus
+        );
+
+      reply.code(200).send({ success: payload !== undefined, payload });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   private async sendAppointmentNotification(
     request: FastifyRequest,
     notificationAction: string,

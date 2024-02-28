@@ -27,6 +27,11 @@ export const appointmentRoutes: (
           request,
           reply
         );
+      else if (query.message === "appointmentCountByPeriodAndStatus")
+        await appointmentController.getAppointmentCountByPeriodAndStatus(
+          request,
+          reply
+        );
     }
   );
 

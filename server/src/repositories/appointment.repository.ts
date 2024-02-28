@@ -25,6 +25,7 @@ import {
 } from "drizzle-orm";
 import { User, userTable } from "../models/user.model";
 import { PgColumn, alias } from "drizzle-orm/pg-core";
+import { getTimeFrame } from "../utils/utils";
 
 export class AppointmentRepository
   extends BaseRepository<Appointment>
@@ -470,6 +471,27 @@ export class AppointmentRepository
 
       return data;
     } catch (error) {}
+  }
+
+  public async getAppointmentCountByPeriodAndStatus(
+    period: string,
+    appointmentStatus: string
+  ): Promise<any> {
+    const timeFrame = getTimeFrame(period);
+    const data = await this._drizzle
+      .select({
+        appointmentCount: sql<number>`COUNT(${sql`DATE(${appointmentTable.appointmentDateTime})`})`,
+      })
+      .from(appointmentTable)
+      .where(
+        and(
+          gte(appointmentTable.appointmentDateTime, timeFrame.startDate!),
+          lte(appointmentTable.appointmentDateTime, timeFrame.endDate!),
+          eq(appointmentTable.appointmentStatus, appointmentStatus)
+        )
+      );
+
+    return data;
   }
 
   public async getAppointmentById(appointmentId: string): Promise<any> {

@@ -80,6 +80,16 @@ export class AppointmentService implements IAppointmentService {
     );
   }
 
+  public async getAppointmentCountByPeriodAndStatus(
+    period: string,
+    appointmentStatus: string
+  ): Promise<any> {
+    return await this._appointmentRepository.getAppointmentCountByPeriodAndStatus(
+      period,
+      appointmentStatus
+    );
+  }
+
   public async createAppointment(
     appointmentCreationAttributes: AppointmentCreationAttributes
   ): Promise<Appointment | undefined> {

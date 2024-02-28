@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { GeneralDataCardProps } from "../../../types";
 import axios from "axios";
-import { generalDataPath } from "../../../utils/dotenv";
+import { appointmentsPath, generalDataPath } from "../../../utils/dotenv";
 import { RiUserHeartLine } from "react-icons/ri";
 import { MdOutlinePersonalInjury } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
@@ -14,6 +14,10 @@ export const GeneralDataCard: FC<GeneralDataCardProps> = ({
   choice,
 }) => {
   const [result, setResult] = useState<number>();
+  const [amountOfCompletedAppointments, setAmountOfCompletedAppointments] =
+    useState<number>(0);
+  const [amountOfScheduledAppointments, setAmountOfScheduledAppointments] =
+    useState<number>(0);
   useEffect(() => {
     async function fetchGeneralData() {
       let response;
@@ -42,7 +46,33 @@ export const GeneralDataCard: FC<GeneralDataCardProps> = ({
 
         if (response?.data.success)
           setResult(response.data.payload[0].appointmentCount);
-        console.log("result app", response.data.payload[0].appointmentCount);
+
+        // const scheduledResp = await axios.get(appointmentsPath, {
+        //   params: {
+        //     message: "appointmentCountByPeriodAndStatus",
+        //     period,
+        //     appointmentStatus: "scheduled",
+        //   },
+        //   withCredentials: true,
+        // });
+
+        const completedResp = await axios.get(appointmentsPath, {
+          params: {
+            message: "appointmentCountByPeriodAndStatus",
+            period,
+            appointmentStatus: "completed",
+          },
+          withCredentials: true,
+        });
+
+        // console.log("payload", scheduledResp.data.payload);
+
+        setAmountOfCompletedAppointments(
+          completedResp.data.payload[0].appointmentCount
+        );
+        // setAmountOfScheduledAppointments(
+        //   scheduledResp.data.payload[0].appointmentCount
+        // );
       }
     }
 
@@ -58,6 +88,9 @@ export const GeneralDataCard: FC<GeneralDataCardProps> = ({
       <div className="flex flex-col">
         <span>{generalDataCardTitle}</span>
         <span>{result}</span>
+        {generalDataCardTitle === "Total Number of Appointments for Today" && (
+          <div>comp {amountOfCompletedAppointments / result}</div>
+        )}
       </div>
       {entity === "doctor" ? (
         <RiUserHeartLine className="text-3xl" />
