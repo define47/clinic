@@ -70,6 +70,12 @@ import { MedicalProcedureHeader } from "./headers/MedicalProcedureHeader";
 import { UserBody } from "./bodies/UserBody";
 import { MedicalSpecialityBody } from "./bodies/MedicalSpecialityBody";
 import { AppointmentBody } from "./bodies/AppointmentBody";
+import {
+  isAppointmentRow,
+  isMedicalProcedureRow,
+  isMedicalSpecialityRow,
+  isUserRow,
+} from "../../utils/typeGuards";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -130,32 +136,6 @@ export const GeneralTable: FC<GeneralTableProps> = ({
     // else if (entity === "nurse")
     // setRoleId(nurse)
   }, [entity]);
-
-  function isUserRow(tableRow: TableRow): tableRow is User {
-    return "userId" in tableRow;
-  }
-
-  function isPatientRow(tableRow: TableRow): tableRow is Patient {
-    return "patientId" in tableRow;
-  }
-
-  function isMedicalSpecialityRow(
-    tableRow: TableRow
-  ): tableRow is MedicalSpeciality {
-    return "medicalSpecialityId" in tableRow;
-  }
-
-  function isAppointmentRow(
-    tableRow: TableRow
-  ): tableRow is AppointmentTableData {
-    return "appointment" in tableRow && "appointmentId" in tableRow.appointment;
-  }
-
-  function isMedicalProcedureRow(
-    tableRow: TableRow
-  ): tableRow is MedicalProcedure {
-    return "medicalProcedureId" in tableRow;
-  }
 
   async function fetchTableData() {
     try {
@@ -909,11 +889,6 @@ export const GeneralTable: FC<GeneralTableProps> = ({
               {isUserRow(tableRows[0]) ? (
                 <UserHeader
                   entity={entity}
-                  orderByIndicator={orderByIndicator}
-                  setOrderByIndicator={setOrderByIndicator}
-                />
-              ) : isPatientRow(tableRows[0]) ? (
-                <PatientHeader
                   orderByIndicator={orderByIndicator}
                   setOrderByIndicator={setOrderByIndicator}
                 />

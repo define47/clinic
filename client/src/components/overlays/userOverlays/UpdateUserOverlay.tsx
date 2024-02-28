@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { UpdateUserOverlayPros, User } from "../../../types";
+import { Patient, UpdateUserOverlayPros, User } from "../../../types";
 import { StyledInput } from "../../design/StyledInput";
 import Overlay from "../base/Overlay";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";

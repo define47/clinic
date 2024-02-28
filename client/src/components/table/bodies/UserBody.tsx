@@ -31,6 +31,9 @@ export const UserBody: FC<UserBodyProps> = ({
     >
       <td>{tableRowIndex + 1 + currentPage * 5}</td>
       <td className="px-6 py-4 text-xs">{tableRow.userId}</td>
+      {entity === "patient" && (
+        <td className="px-6 py-4 text-xs">{tableRow.userCNP}</td>
+      )}
       <td className="px-6 py-4 text-xs">{tableRow.userForename}</td>
       <td className="px-6 py-4 text-xs">{tableRow.userSurname}</td>
       <td className="px-6 py-4 text-xs">{tableRow.userEmail}</td>

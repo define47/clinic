@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
-import { DeleteUserOverlayPros } from "../../../types";
+import { DeleteUserOverlayPros, Patient, User } from "../../../types";
 import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
 import axios from "axios";
 import { usersPath } from "../../../utils/dotenv";
@@ -32,10 +32,22 @@ export const DeleteUserOverlay: FC<DeleteUserOverlayPros> = ({
 
   async function onDeleteUser() {
     try {
-      const response = await axios.delete(usersPath, {
-        data: { userId: user.userId },
-        withCredentials: true,
-      });
+      let response;
+
+      if (roleName === "doctor") {
+        user = user as User;
+        response = await axios.delete(usersPath, {
+          data: { userId: user.userId },
+          withCredentials: true,
+        });
+      } else if (roleName === "patient") {
+        user = user as Patient;
+        response = await axios.delete(usersPath, {
+          data: { userId: user.patientId },
+          withCredentials: true,
+        });
+      } else {
+      }
     } catch (error) {
       console.log(error);
     }

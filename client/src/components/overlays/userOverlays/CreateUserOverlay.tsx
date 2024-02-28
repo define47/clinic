@@ -42,6 +42,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   ] = useState<boolean>(false);
   const [userToCreate, setUserToCreate] = useState<User>({
     userId: "",
+    userCNP: "",
     userForename: `${roleName}FN`,
     userSurname: `${roleName}SN`,
     userEmail: `${roleName}EM`,
@@ -100,6 +101,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   const [isUserEmailValid, setIsUserEmailValid] = useState<boolean>(false);
   const [isUserPhoneNumberValid, setIsUserPhoneNumberValid] =
     useState<boolean>(false);
+  const [isUserCNPvalid, setIsUserCNPValid] = useState<boolean>(false);
   const [isUserGenderValid, setIsUserGenderValid] = useState<boolean>(false);
   const [isUserAddressValid, setIsUserAddressValid] = useState<boolean>(false);
 
@@ -148,6 +150,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
       setIsUserPhoneNumberValid(phone("+40" + value).isValid);
     } else if (name === "userGender") {
       setIsUserGenderValid(regex.test(value));
+    } else if (name === "userCNP") {
+      setIsUserCNPValid(validator.isNumeric(value));
     }
 
     setUserToCreate((prevUserToCreate) => ({
@@ -182,6 +186,9 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
               selectedSecondaryMedicalSpecialityId,
               selectedTertiaryMedicalSpecialityId,
             ],
+          }),
+          ...(roleName === "patient" && {
+            patientCNP: userToCreate.userCNP,
           }),
         },
         {
@@ -240,6 +247,67 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
           <span className="flex justify-center mb-8">Create {roleName}</span>
           <div className="w-full lg:flex lg:justify-between lg:space-x-24">
             <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
+              {roleName === "patient" && (
+                <StyledInputV2
+                  styledInputWidth="w-full"
+                  unfocusedTextColor={
+                    userToCreate.userCNP!.length === 0
+                      ? "text-black"
+                      : isUserCNPvalid
+                      ? "text-green-700"
+                      : "text-red-700"
+                  }
+                  unfocusedBorderColor={
+                    userToCreate.userCNP!.length === 0
+                      ? "border-black"
+                      : isUserCNPvalid
+                      ? "border-green-700"
+                      : "border-red-700"
+                  }
+                  focusedTextColor={
+                    userToCreate.userCNP!.length === 0
+                      ? "focus:text-pink-500"
+                      : isUserCNPvalid
+                      ? "focus:text-green-500"
+                      : "focus:text-red-500"
+                  }
+                  focusedBorderColor={
+                    userToCreate.userCNP!.length === 0
+                      ? "focus:border-pink-500"
+                      : isUserCNPvalid
+                      ? "focus:border-green-500"
+                      : "focus:border-red-500"
+                  }
+                  focusedBorderColorIconArea={
+                    userToCreate.userCNP!.length === 0
+                      ? "border-pink-500"
+                      : isUserCNPvalid
+                      ? "border-green-500"
+                      : "border-red-500"
+                  }
+                  unfocusedLabelColor={
+                    userToCreate.userCNP!.length === 0
+                      ? "text-black"
+                      : isUserCNPvalid
+                      ? "text-green-700"
+                      : "text-red-700"
+                  }
+                  unfocusedLabelBackgroundColor="bg-white"
+                  focusedLabelColor={
+                    userToCreate.userCNP!.length === 0
+                      ? "text-pink-500"
+                      : isUserCNPvalid
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }
+                  focusedLabelBackgroundColor="bg-white"
+                  isDisabled={false}
+                  name="userCNP"
+                  styledInputValue={userToCreate.userCNP!}
+                  onChangeStyledInput={handleStyledInputChange}
+                  label="CNP"
+                />
+              )}
               <StyledInputV2
                 styledInputWidth="w-full"
                 unfocusedTextColor={

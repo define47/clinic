@@ -23,6 +23,11 @@ export const UserHeader: FC<UserHeaderProps> = ({
       <td className="px-6 py-4 font-bold">
         <div className="flex items-center justify-center">userId</div>
       </td>
+      {entity === "patient" && (
+        <td className="px-6 py-4 font-bold">
+          <div className="flex items-center justify-center">CNP</div>
+        </td>
+      )}
       <td className="px-6 py-4 font-bold">
         <div className="flex items-center justify-center">
           {/* user forename */}

@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 
 export type User = {
   userId: string;
+  userCNP?: string;
   userForename: string;
   userSurname: string;
   userEmail: string;
@@ -54,23 +55,8 @@ export type MedicalProcedure = {
   // medicalProcedureEstimatedTimeMinutes: number;
 };
 
-export type Patient = {
-  patientId: string;
-  patientForename: string;
-  patientSurname: string;
-  patientEmail: string;
-  patientPhoneNumber: string;
-  patientGender: string;
-  patientDateOfBirth: string;
-  patientAddress: string;
-  patientRoleId: string;
-  patientRoleName: string;
-  patientCNP: string;
-};
-
 export type TableRow =
   | User
-  | Patient
   | MedicalSpeciality
   | AppointmentTableData
   | MedicalProcedure;
@@ -123,7 +109,7 @@ export type UpdateUserOverlayPros = {
 };
 
 export type DeleteUserOverlayPros = {
-  user: User;
+  user: User | Patient;
   roleName: string;
 };
 
@@ -427,6 +413,15 @@ export type StyledAppointmentStatusProps = {
 export type UserBodyProps = {
   entity: string;
   tableRow: User;
+  tableRowIndex: number;
+  clickedTableRow: TableRow | undefined;
+  setClickedTableRow: (clickedTableRow: TableRow) => void;
+  currentPage: number;
+};
+
+export type PatientBodyProps = {
+  entity: string;
+  tableRow: Patient;
   tableRowIndex: number;
   clickedTableRow: TableRow | undefined;
   setClickedTableRow: (clickedTableRow: TableRow) => void;
