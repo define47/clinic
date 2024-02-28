@@ -45,6 +45,7 @@ export const UserProfilePicture: FC<UserProfilePictureProps> = ({
           className={`${userProfilePictureWidth} ${userProfilePictureHeight} rounded-full`}
           src={imageUrl}
           alt="User Profile"
+          loading="lazy"
         />
       ) : (
         ""

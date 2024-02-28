@@ -8,8 +8,12 @@ import { RoleService } from "../services/role.service";
 import { UserRoleMappingService } from "../services/userRoleMapping.service";
 import { Notification } from "../models/notification.model";
 import { UserService } from "../services/user.service";
-import { AppointmentJoinDoctorAndPatient } from "../models/appointment.model";
+import {
+  Appointment,
+  AppointmentJoinDoctorAndPatient,
+} from "../models/appointment.model";
 import { sendSms } from "../utils/sms";
+import { User } from "../models/user.model";
 
 export class AppointmentController {
   private readonly _appointmentService: AppointmentService;
@@ -19,7 +23,7 @@ export class AppointmentController {
   private readonly _roleService;
   private readonly _userRoleMappingService;
   private readonly _userService;
-  private _doctorIdAppointment;
+  // private _doctorIdAppointment;
 
   public constructor() {
     this._appointmentService = new AppointmentService();
@@ -29,14 +33,16 @@ export class AppointmentController {
     this._roleService = new RoleService();
     this._userRoleMappingService = new UserRoleMappingService();
     this._userService = new UserService();
-    this._doctorIdAppointment = "";
+    // this._doctorIdAppointment = "";
   }
   // doctor-appointment-booked-slots
 
   private async sendAppointmentNotification(
     request: FastifyRequest,
     notificationAction: string,
-    notificationBody: string
+    appointment: Appointment,
+    doctor: User,
+    patient: User
   ) {
     const { redis } = fastifyServer;
 
@@ -48,7 +54,16 @@ export class AppointmentController {
       notificationSenderId: userSessionData.userId,
       notificationAction,
       notificationEntity: "appointment",
-      notificationBody: JSON.stringify(notificationBody),
+      notificationBody: JSON.stringify(
+        JSON.stringify({
+          appointment: {
+            appointmentDateTime: appointment?.appointmentDateTime,
+            appointmentStatus: appointment?.appointmentStatus,
+          },
+          patient,
+          doctor,
+        })
+      ),
       notificationDateTime: new Date(),
     });
 
@@ -73,8 +88,6 @@ export class AppointmentController {
       0,
       "asc:userForename"
     ))!.tableData;
-
-    console.log("this._doctorIdAppointment", this._doctorIdAppointment, "Here");
 
     console.log(receptionists);
     console.log(admins);
@@ -111,6 +124,12 @@ export class AppointmentController {
     //       }
     //     );
     // }
+
+    await this._userNotificationMappingService.createUserNotificationMapping({
+      receiverId: doctor.userId,
+      notificationId: notification?.notificationId!,
+      isNotificationRead: false,
+    });
 
     console.log("Notification Sent");
   }
@@ -217,24 +236,20 @@ export class AppointmentController {
         appointmentHistoryUpdatedBy: userSessionData.userId,
       });
 
-      this._doctorIdAppointment = appointmentToCreate?.appointmentDoctorId!;
+      // this._doctorIdAppointment = appointmentToCreate?.appointmentDoctorId!;
+      const patient = await this._userService.getUserById(
+        appointmentToCreate?.appointmentPatientId!
+      );
+      const doctor = await this._userService.getUserById(
+        appointmentToCreate?.appointmentDoctorId!
+      );
 
       await this.sendAppointmentNotification(
         request,
         "create",
-        // JSON.stringify(appointmentToCreate)
-        JSON.stringify({
-          appointment: {
-            appointmentDateTime: appointmentToCreate?.appointmentDateTime,
-            appointmentStatus: appointmentToCreate?.appointmentStatus,
-          },
-          patient: await this._userService.getUserById(
-            appointmentToCreate?.appointmentPatientId!
-          ),
-          doctor: await this._userService.getUserById(
-            appointmentToCreate?.appointmentDoctorId!
-          ),
-        })
+        appointmentToCreate!,
+        doctor!,
+        patient!
       );
 
       if (appointmentData)
@@ -246,10 +261,6 @@ export class AppointmentController {
             data: appointmentData,
           })
         );
-
-      const patient = await this._userService.getUserById(
-        body.appointmentPatientId
-      );
 
       // sendSms(
       //   patient?.userPhoneNumber!,
@@ -313,23 +324,38 @@ export class AppointmentController {
       });
       // }
 
+      const patient = await this._userService.getUserById(
+        appointmentToUpdate?.appointmentPatientId!
+      );
+      const doctor = await this._userService.getUserById(
+        appointmentToUpdate?.appointmentDoctorId!
+      );
+
       await this.sendAppointmentNotification(
         request,
         "update",
-        // JSON.stringify(appointmentToCreate)
-        JSON.stringify({
-          appointment: {
-            appointmentDateTime: appointmentToUpdate?.appointmentDateTime,
-            appointmentStatus: appointmentToUpdate?.appointmentStatus,
-          },
-          patient: await this._userService.getUserById(
-            appointmentToUpdate?.appointmentPatientId!
-          ),
-          doctor: await this._userService.getUserById(
-            appointmentToUpdate?.appointmentDoctorId!
-          ),
-        })
+        appointmentToUpdate!,
+        doctor!,
+        patient!
       );
+
+      // await this.sendAppointmentNotification(
+      //   request,
+      //   "update",
+      //   // JSON.stringify(appointmentToCreate)
+      //   JSON.stringify({
+      //     appointment: {
+      //       appointmentDateTime: appointmentToUpdate?.appointmentDateTime,
+      //       appointmentStatus: appointmentToUpdate?.appointmentStatus,
+      //     },
+      //     patient: await this._userService.getUserById(
+      //       appointmentToUpdate?.appointmentPatientId!
+      //     ),
+      //     doctor: await this._userService.getUserById(
+      //       appointmentToUpdate?.appointmentDoctorId!
+      //     ),
+      //   })
+      // );
 
       // await this.sendAppointmentNotification(
       //   request,
@@ -369,37 +395,36 @@ export class AppointmentController {
         body.appointmentId
       );
 
-      const appointment =
-        await this._appointmentService.getAppointmentByIdJoinDoctorAndPatient(
-          body.appointmentId
-        );
+      // const appointment =
+      //   await this._appointmentService.getAppointmentByIdJoinDoctorAndPatient(
+      //     body.appointmentId
+      //   );
+
+      const appointment = await this._appointmentService.getAppointmentById(
+        body.appointmentId
+      );
+
+      console.log("appointment", appointment);
 
       const appointmentToDelete =
         await this._appointmentService.deleteAppointment(body.appointmentId);
 
+      console.log("appointmentToDelete", appointmentToDelete);
+
+      const patient = await this._userService.getUserById(
+        appointment?.appointmentPatientId!
+      );
+      const doctor = await this._userService.getUserById(
+        appointment?.appointmentDoctorId!
+      );
+
       await this.sendAppointmentNotification(
         request,
         "delete",
-        // JSON.stringify(appointmentToCreate)
-        JSON.stringify({
-          appointment: {
-            appointmentDateTime: appointment?.appointment.appointmentDateTime,
-            appointmentStatus: appointment?.appointment.appointmentStatus,
-          },
-          patient: await this._userService.getUserById(
-            appointment?.patient.patientId!
-          ),
-          doctor: await this._userService.getUserById(
-            appointment?.doctor.doctorId!
-          ),
-        })
+        appointment!,
+        doctor!,
+        patient!
       );
-
-      // await this.sendAppointmentNotification(
-      //   request,
-      //   "delete",
-      //   JSON.stringify(appointmentToDelete)
-      // );
 
       await redis.publisher.publish(
         MESSAGE_CHANNEL,
@@ -410,6 +435,8 @@ export class AppointmentController {
       );
 
       reply.code(200).send({ success: true, appointmentToDelete });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 }

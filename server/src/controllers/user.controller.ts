@@ -15,6 +15,7 @@ import {
   getDoctorRoleIdEnv,
   getPatientRoleIdEnv,
   getReactClientIPAddressEnv,
+  getReceptionistRoleIdEnv,
 } from "../utils/dotenv";
 import { MESSAGE_CHANNEL, fastifyServer } from "../server";
 import { LanguageService } from "../services/language.service";
@@ -731,6 +732,11 @@ export class UserController {
             data = {
               user: { ...putUser, userCNP: body.userCNP },
               roles: ["patient"],
+            };
+          } else if (roles[i].roleId === getReceptionistRoleIdEnv()) {
+            data = {
+              user: { ...putUser },
+              roles: ["receptionist"],
             };
           }
         }

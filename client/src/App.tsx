@@ -266,6 +266,10 @@ const App: FC = () => {
                   path="/doctors/medical-record-patient/:appointmentId"
                   element={<MedicalRecordPatientView />}
                 />
+                <Route
+                  path="/doctors/medical-record-patient-creation/:appointmentId"
+                  element={<MedicalRecordPatientCreation />}
+                />
 
                 <Route
                   path="*"

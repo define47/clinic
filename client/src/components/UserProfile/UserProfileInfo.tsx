@@ -7,6 +7,7 @@ export const UserProfileInfo: FC = () => {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex">
+        <span>{authenticatedUserDataState.userId}</span>&nbsp;
         <span>{authenticatedUserDataState.userForename}</span>&nbsp;
         <span>{authenticatedUserDataState.userSurname}</span>
       </div>
