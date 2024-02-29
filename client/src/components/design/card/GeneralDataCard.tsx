@@ -83,13 +83,29 @@ export const GeneralDataCard: FC<GeneralDataCardProps> = ({
     console.log("result", result);
   }, [result]);
 
+  const percentageWidth = `${((amountOfCompletedAppointments / result) * 100)
+    .toString()
+    .substring(0, 5)}%`;
+
   return (
-    <div className="w-full h-24 flex items-center justify-between bg-gradient-to-br from-gray-50 to-gray-100 shadow-2xl bg-black/90 p-4 text-lg rounded-xl border border-gray-200">
-      <div className="flex flex-col">
+    // bg-gradient-to-br from-gray-50 to-gray-100
+    <div className="w-full h-24 flex items-center justify-between bg-white dark:bg-darkMode-itemBackgroundColor dark:text-gray-400 dark:border-darkMode-itemBackgroundColor shadow-2xl bg-black/90 p-4 text-lg rounded-xl border border-gray-200">
+      <div className="w-full flex flex-col">
         <span>{generalDataCardTitle}</span>
         <span>{result}</span>
-        {generalDataCardTitle === "Total Number of Appointments for Today" && (
-          <div>comp {amountOfCompletedAppointments / result}</div>
+        {(generalDataCardTitle === "Total Number of Appointments for Today" ||
+          generalDataCardTitle ===
+            "Total Number of Appointments for this Week" ||
+          generalDataCardTitle ===
+            "Total Number of Appointments for Next Week" ||
+          generalDataCardTitle ===
+            "Total Number of Appointments for this Month") && (
+          <div className="w-full h-1.5 flex items-center bg-gray-200 rounded-xl">
+            <span
+              className={`h-1.5 bg-green-500 rounded-xl`}
+              style={{ width: percentageWidth }}
+            ></span>
+          </div>
         )}
       </div>
       {entity === "doctor" ? (
