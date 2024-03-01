@@ -486,108 +486,110 @@ export class AppointmentRepository
       //     break;
       // }
 
-      switch (scheduleFilter) {
-        case "today":
-          const currentDayStartInUTC = new Date(
-            Date.UTC(
-              currentDate.getUTCFullYear(),
-              currentDate.getUTCMonth(),
-              currentDate.getUTCDate(),
-              0,
-              0,
-              0
-            )
-          );
-          const currentDayEndInUTC = new Date(
-            Date.UTC(
-              currentDate.getUTCFullYear(),
-              currentDate.getUTCMonth(),
-              currentDate.getUTCDate(),
-              23,
-              59,
-              59,
-              999
-            )
-          );
+      const timeFrame = getTimeFrame(scheduleFilter);
 
-          // console.log("current day start:", currentDayStartInUTC);
-          // console.log("current day end:", currentDayEndInUTC);
+      // switch (scheduleFilter) {
+      //   case "today":
+      //     const currentDayStartInUTC = new Date(
+      //       Date.UTC(
+      //         currentDate.getUTCFullYear(),
+      //         currentDate.getUTCMonth(),
+      //         currentDate.getUTCDate(),
+      //         0,
+      //         0,
+      //         0
+      //       )
+      //     );
+      //     const currentDayEndInUTC = new Date(
+      //       Date.UTC(
+      //         currentDate.getUTCFullYear(),
+      //         currentDate.getUTCMonth(),
+      //         currentDate.getUTCDate(),
+      //         23,
+      //         59,
+      //         59,
+      //         999
+      //       )
+      //     );
 
-          startDate = currentDayStartInUTC;
-          endDate = currentDayEndInUTC;
-          break;
-        case "week":
-          const firstDayOfCurrentWeek = this.getFirstDayOfWeek(new Date());
-          firstDayOfCurrentWeek.setUTCHours(0, 0, 0, 0);
-          const lastDayOfCurrentWeek = new Date(firstDayOfCurrentWeek);
-          lastDayOfCurrentWeek.setUTCHours(23, 59, 59, 999);
-          lastDayOfCurrentWeek.setDate(lastDayOfCurrentWeek.getDate() + 6);
+      //     // console.log("current day start:", currentDayStartInUTC);
+      //     // console.log("current day end:", currentDayEndInUTC);
 
-          // console.log("first day of current week:", firstDayOfCurrentWeek);
-          // console.log("last day of current week:", lastDayOfCurrentWeek);
+      //     startDate = currentDayStartInUTC;
+      //     endDate = currentDayEndInUTC;
+      //     break;
+      //   case "week":
+      //     const firstDayOfCurrentWeek = this.getFirstDayOfWeek(new Date());
+      //     firstDayOfCurrentWeek.setUTCHours(0, 0, 0, 0);
+      //     const lastDayOfCurrentWeek = new Date(firstDayOfCurrentWeek);
+      //     lastDayOfCurrentWeek.setUTCHours(23, 59, 59, 999);
+      //     lastDayOfCurrentWeek.setDate(lastDayOfCurrentWeek.getDate() + 6);
 
-          startDate = firstDayOfCurrentWeek;
-          endDate = lastDayOfCurrentWeek;
-          break;
-        case "month":
-          const currentMonthStart = new Date(
-            Date.UTC(
-              currentDate.getUTCFullYear(),
-              currentDate.getUTCMonth(),
-              1,
-              0,
-              0,
-              0,
-              0
-            )
-          );
-          const currentMonthEnd = new Date(
-            Date.UTC(
-              currentDate.getUTCFullYear(),
-              currentDate.getUTCMonth() + 1,
-              0,
-              23,
-              59,
-              59,
-              999
-            )
-          );
+      //     // console.log("first day of current week:", firstDayOfCurrentWeek);
+      //     // console.log("last day of current week:", lastDayOfCurrentWeek);
 
-          // console.log("current month start:", currentMonthStart);
-          // console.log("current month end:", currentMonthEnd);
+      //     startDate = firstDayOfCurrentWeek;
+      //     endDate = lastDayOfCurrentWeek;
+      //     break;
+      //   case "month":
+      //     const currentMonthStart = new Date(
+      //       Date.UTC(
+      //         currentDate.getUTCFullYear(),
+      //         currentDate.getUTCMonth(),
+      //         1,
+      //         0,
+      //         0,
+      //         0,
+      //         0
+      //       )
+      //     );
+      //     const currentMonthEnd = new Date(
+      //       Date.UTC(
+      //         currentDate.getUTCFullYear(),
+      //         currentDate.getUTCMonth() + 1,
+      //         0,
+      //         23,
+      //         59,
+      //         59,
+      //         999
+      //       )
+      //     );
 
-          startDate = currentMonthStart;
-          endDate = currentMonthEnd;
-          break;
-        case "nextWeek":
-          let startOfNextWeek = new Date(currentDate);
-          let daysUntilNextMonday = (8 - currentDate.getUTCDay()) % 7;
-          startOfNextWeek.setUTCDate(
-            currentDate.getUTCDate() + daysUntilNextMonday
-          );
-          startOfNextWeek.setUTCHours(0, 0, 0, 0);
+      //     // console.log("current month start:", currentMonthStart);
+      //     // console.log("current month end:", currentMonthEnd);
 
-          let endOfNextWeek = new Date(startOfNextWeek);
-          endOfNextWeek.setUTCDate(startOfNextWeek.getUTCDate() + 6);
-          endOfNextWeek.setUTCHours(23, 59, 59, 999);
+      //     startDate = currentMonthStart;
+      //     endDate = currentMonthEnd;
+      //     break;
+      //   case "nextWeek":
+      //     let startOfNextWeek = new Date(currentDate);
+      //     let daysUntilNextMonday = (8 - currentDate.getUTCDay()) % 7;
+      //     startOfNextWeek.setUTCDate(
+      //       currentDate.getUTCDate() + daysUntilNextMonday
+      //     );
+      //     startOfNextWeek.setUTCHours(0, 0, 0, 0);
 
-          console.log("Start of next week (UTC):", startOfNextWeek);
-          console.log("End of next week (UTC):", endOfNextWeek);
+      //     let endOfNextWeek = new Date(startOfNextWeek);
+      //     endOfNextWeek.setUTCDate(startOfNextWeek.getUTCDate() + 6);
+      //     endOfNextWeek.setUTCHours(23, 59, 59, 999);
 
-          startDate = startOfNextWeek;
-          endDate = endOfNextWeek;
-          break;
-        case "custom":
-          // console.log("customStartDate", customStartDate);
+      //     console.log("Start of next week (UTC):", startOfNextWeek);
+      //     console.log("End of next week (UTC):", endOfNextWeek);
 
-          startDate = new Date(customStartDate);
-          startDate.setUTCHours(0, 0, 0);
-          endDate = new Date(customEndDate);
-          endDate.setUTCHours(23, 59, 59);
-          break;
-        default:
-          break;
-      }
+      //     startDate = startOfNextWeek;
+      //     endDate = endOfNextWeek;
+      //     break;
+      //   case "custom":
+      //     // console.log("customStartDate", customStartDate);
+
+      //     startDate = new Date(customStartDate);
+      //     startDate.setUTCHours(0, 0, 0);
+      //     endDate = new Date(customEndDate);
+      //     endDate.setUTCHours(23, 59, 59);
+      //     break;
+      //   default:
+      //     break;
+      // }
 
       let columnToSearchBy1: PgColumn<any>;
       let columnToSearchBy2: PgColumn<any>;
@@ -701,8 +703,8 @@ export class AppointmentRepository
       }
       const appointmentSearchQuery = {
         condition: and(
-          gte(appointmentTable.appointmentDateTime, startDate!),
-          lte(appointmentTable.appointmentDateTime, endDate!),
+          gte(appointmentTable.appointmentDateTime, timeFrame.startDate!),
+          lte(appointmentTable.appointmentDateTime, timeFrame.endDate!),
           searchBy.length === 1
             ? ilike(columnToSearchBy1, `${searchQuery}%`)
             : searchBy.length === 2
