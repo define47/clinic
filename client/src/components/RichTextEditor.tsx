@@ -1,19 +1,98 @@
 import { FC, useEffect, useState } from "react";
 
 export const RichTextEditor: FC = () => {
-  const [content, setContent] = useState<string>("Type here...");
+  const [content, setContent] = useState<string>("");
 
-  //   const handleInputChange = (e) => {
-  //     setContent(e.target.innerHTML);
-  //   };
+  // function isBold() {
+  //   const selection = window.getSelection();
+  //   if (selection) {
+  //     const range = selection.getRangeAt(0);
+  //     const parentElement = range.commonAncestorContainer.parentElement;
+  //     console.log(parentElement);
 
-  //   const execCommand = (command, arg) => {
-  //     document.execCommand(command, false, arg);
-  //   };
+  //     console.log(
+  //       "isBold",
+  //       parentElement && parentElement.nodeName === "STRONG"
+  //     );
 
-  const toggleStyles = (command) => {
-    document.execCommand(command, false, null);
-  };
+  //     return parentElement && parentElement.nodeName === "STRONG";
+  //   }
+  //   return false;
+  // }
+
+  function isBold(node: Node) {
+    return (
+      node.nodeType === Node.ELEMENT_NODE &&
+      (node as Element).tagName === "STRONG"
+    );
+  }
+
+  // function onBold() {
+  //   const selection = window.getSelection();
+  //   const range = selection?.getRangeAt(0);
+
+  //   if (range) {
+  //     const isTextBold = isBold();
+  //     if (isTextBold) {
+  //       const parentElement = range.commonAncestorContainer.parentElement;
+  //       console.log("parentElement", parentElement);
+
+  //       if (parentElement) {
+  //         // Replace the <strong> element with its text content
+  //         const textNode = document.createTextNode(
+  //           parentElement.textContent || ""
+  //         );
+  //         parentElement.replaceWith(textNode);
+  //       }
+  //     } else {
+  //       const selectedText = range.toString();
+  //       const strongElement = document.createElement("strong");
+  //       strongElement.appendChild(document.createTextNode(selectedText));
+
+  //       range.deleteContents();
+  //       range.insertNode(strongElement);
+  //     }
+  //   }
+
+  //   console.log("selection", selection?.toString());
+  //   console.log("range", range?.toString());
+  // }
+
+  // function toggleBold() {
+  //   const selection = window.getSelection();
+  //   if (selection) {
+  //     const range = selection.getRangeAt(0);
+  //     const selectedText = range.toString();
+
+  //     if (selectedText) {
+  //       // Split the range into a start node, selected nodes, and an end node
+  //       const [startNode, endNode] = [range.startContainer, range.endContainer];
+  //       const nodesToToggle: Node[] = [];
+
+  //       let currentNode = startNode;
+
+  //       // Traverse the range and collect the nodes to toggle
+  //       while (currentNode && currentNode !== endNode.nextSibling) {
+  //         nodesToToggle.push(currentNode);
+  //         currentNode = currentNode.nextSibling || currentNode.parentElement?.nextSibling;
+  //       }
+
+  //       // Toggle the bold state for each collected node
+  //       nodesToToggle.forEach((node) => {
+  //         if (isBold(node)) {
+  //           // Remove bold style
+  //           const textNode = document.createTextNode(node.textContent || "");
+  //           node.replaceWith(textNode);
+  //         } else {
+  //           // Apply bold style
+  //           const strongElement = document.createElement("strong");
+  //           strongElement.appendChild(document.createTextNode(node.textContent || ""));
+  //           node.replaceWith(strongElement);
+  //         }
+  //       });
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     console.log(content);
@@ -21,9 +100,9 @@ export const RichTextEditor: FC = () => {
 
   return (
     <>
-      <button className="text-green-500" onClick={() => toggleStyles("bold")}>
-        Bold
-      </button>
+      {/* <button className="text-black" onClick={toggleBold}>/
+        B
+      </button> */}
       <div
         className="outline-none border border-gray-500"
         contentEditable
@@ -31,35 +110,73 @@ export const RichTextEditor: FC = () => {
           if (event.currentTarget.textContent)
             setContent(event.currentTarget.textContent);
         }}
-      ></div>
+      >
+        abcdefghijklmnopqrst
+        <strong>here</strong>
+      </div>
     </>
-    // <div>
-    //   <div
-    //     contentEditable="true"
-    //     id="myEditor"
-    //     className="editor"
-    //     onInput={handleInputChange}
-    //     dangerouslySetInnerHTML={{ __html: content }}
-    //   />
-    //   <br />
-    //   <button className="text-green-500" onClick={() => toggleStyles("bold")}>
-    //     Bold
-    //   </button>
-    //   <button className="text-green-500" onClick={() => toggleStyles("italic")}>
-    //     Italic
-    //   </button>
-    //   <button
-    //     className="text-green-500"
-    //     onClick={() => toggleStyles("underline")}
-    //   >
-    //     Underline
-    //   </button>
-    //   <button
-    //     className="text-green-500"
-    //     onClick={() => execCommand("insertUnorderedList")}
-    //   >
-    //     Bullet Points
-    //   </button>
-    // </div>
   );
 };
+
+// import { FC, useEffect, useState } from "react";
+
+// export const RichTextEditor: FC = () => {
+//   const [content, setContent] = useState<string>("");
+
+//   useEffect(() => {
+//     console.log("content", content);
+//   }, [content]);
+
+//   const execCommand = (command, arg) => {
+//     document.execCommand(command, false, arg);
+//   };
+
+//   const toggleStyles = (command) => {
+//     document.execCommand(command, false, null);
+//   };
+
+//   const getHtmlContent = () => {
+//     const editableDiv = document.getElementById("editableDiv");
+//     if (editableDiv) {
+//       console.log("HTML Content:", editableDiv.innerHTML);
+//       // You can save the HTML content or use it as needed
+//     }
+//   };
+
+//   return (
+//     <>
+//       <div className="flex space-x-4">
+//         <button className="text-black" onClick={() => toggleStyles("bold")}>
+//           Bold
+//         </button>
+//         <button className="text-black" onClick={() => toggleStyles("italic")}>
+//           Italic
+//         </button>
+//         <button
+//           className="text-black"
+//           onClick={() => toggleStyles("underline")}
+//         >
+//           Underline
+//         </button>
+//         <button
+//           className="text-black"
+//           onClick={() => execCommand("insertUnorderedList")}
+//         >
+//           Bullet Points
+//         </button>
+//       </div>
+//       <div
+//         id="editableDiv"
+//         className="outline-none border border-gray-500"
+//         contentEditable
+// onInput={(event) => {
+//   if (event.currentTarget.textContent)
+//     setContent(event.currentTarget.textContent);
+// }}
+//       ></div>
+//       <button className="text-black mt-4" onClick={getHtmlContent}>
+//         Get HTML Content
+//       </button>
+//     </>
+//   );
+// };

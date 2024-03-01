@@ -37,6 +37,7 @@ import {
 } from "./utils/databaseInteractions.js";
 import { communicationsRoutes } from "./routes/communications.routes.js";
 import { SerialPort } from "serialport";
+import { getEntityMessage } from "./utils/serverLanguages.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -332,6 +333,8 @@ const buildServer = async () => {
   // createPatients(0, 100);
 
   // await createAppointments(0, 150);
+
+  getEntityMessage("en", "patient", "create", "success");
 
   return fastifyServer;
 };

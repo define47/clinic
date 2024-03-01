@@ -104,7 +104,9 @@ export const GeneralDataCard: FC<GeneralDataCardProps> = ({
             <span
               className={`h-1.5 bg-green-500 rounded-xl`}
               style={{ width: percentageWidth }}
-            ></span>
+            >
+              {/* {percentageWidth} {amountOfCompletedAppointments} {result} */}
+            </span>
           </div>
         )}
       </div>

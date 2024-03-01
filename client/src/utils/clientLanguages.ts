@@ -287,7 +287,7 @@ export function getItemByLanguageAndCollection(
   const items =
     languageCollection[collectionKey as keyof ClientLanguageCollection];
   const item = items[itemIndex];
-  console.log(item);
+  // console.log(item);
   return item;
 }
 
