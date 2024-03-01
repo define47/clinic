@@ -12,6 +12,7 @@ import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledInput } from "../../design/StyledInput";
 import { medicalProceduresAPI } from "../../../utils/dotenv";
 import { StyledInputV2 } from "../../design/StyledInputV2";
+import { Toaster, toast } from "sonner";
 
 export const UpdateMedicalProcedureOverlay: FC<
   UpdateMedicalProcedureOverlayProps
@@ -101,6 +102,14 @@ export const UpdateMedicalProcedureOverlay: FC<
         },
         { withCredentials: true }
       );
+
+      if (response.data.success) {
+        setIsUpdateMedicalProcedureConfirmationDialogOverlayVisible(false);
+        setIsUpdateMedicalProcedureOverlayVisible(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
 
       console.log(response);
     } catch (error) {
@@ -323,6 +332,7 @@ export const UpdateMedicalProcedureOverlay: FC<
             </div>
           </ConfirmationDialogOverlay>
         </div>
+        <Toaster position="top-right" richColors />
       </Overlay>
     </>
   );

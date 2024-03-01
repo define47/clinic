@@ -31,6 +31,7 @@ import {
   getItemByLanguageAndCollection,
   getItemInUserSelectedLanguageCode,
 } from "../../../utils/clientLanguages";
+import { Toaster, toast } from "sonner";
 
 export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
   user,
@@ -286,7 +287,13 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
         }
       );
 
-      console.log(response);
+      if (response.data.success) {
+        setIsUpdateUserConfirmationDialogOverlayVisible(false);
+        setIsUpdateUserOverlayVisible(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -916,6 +923,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
             </div>
           </ConfirmationDialogOverlay>
         </div>
+        <Toaster position="top-right" richColors />
       </Overlay>
     </>
   );

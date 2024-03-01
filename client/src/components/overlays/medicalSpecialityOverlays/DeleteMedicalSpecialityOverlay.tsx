@@ -6,6 +6,7 @@ import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
 import { Tooltip } from "../../design/Tooltip";
+import { Toaster, toast } from "sonner";
 
 export const DeleteMedicalSpecialityOverlay: FC<
   DeleteMedicalSpecialityOverlayPros
@@ -22,7 +23,12 @@ export const DeleteMedicalSpecialityOverlay: FC<
         withCredentials: true,
       });
 
-      console.log(response);
+      if (response.data.success) {
+        setIsDeleteMedicalSpecialityConfirmationDialogOverlayVisible(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -99,6 +105,7 @@ export const DeleteMedicalSpecialityOverlay: FC<
             </div>
           </div>
         </div>
+        <Toaster position="top-right" richColors />
       </ConfirmationDialogOverlay>
     </div>
   );

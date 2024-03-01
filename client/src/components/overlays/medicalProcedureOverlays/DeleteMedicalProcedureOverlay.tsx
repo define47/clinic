@@ -6,6 +6,7 @@ import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { medicalProceduresAPI } from "../../../utils/dotenv";
+import { Toaster, toast } from "sonner";
 
 export const DeleteMedicalProcedureOverlay: FC<
   DeleteMedicalProcedureOverlayProps
@@ -33,11 +34,18 @@ export const DeleteMedicalProcedureOverlay: FC<
     try {
       const response = await axios.delete(medicalProceduresAPI, {
         data: {
-          medicalSpecialityId,
+          medicalSpecialityId: medicalSpecialityId.substring(1),
           medicalProcedureId: medicalProcedure.medicalProcedureId,
         },
         withCredentials: true,
       });
+
+      if (response.data.success) {
+        setIsDeleteMedicalProcedureConfirmationDialogOverlayVisible(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -99,6 +107,7 @@ export const DeleteMedicalProcedureOverlay: FC<
             </div>
           </div>
         </div>
+        <Toaster position="top-right" richColors />
       </ConfirmationDialogOverlay>
     </div>
   );

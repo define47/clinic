@@ -22,6 +22,12 @@ import { LanguageService } from "../services/language.service";
 import { UserPreferencesMappingService } from "../services/userPreferencesMapping.service";
 import { MedicalSpeciality } from "../models/medicalSpeciality.model";
 import { PatientService } from "../services/patient.service";
+import {
+  ServerLanguageCollection,
+  getEntityMessage,
+} from "../utils/serverLanguages";
+import { getCurrentSessionData } from "../utils/utils";
+import { AppointmentService } from "../services/appointment.service";
 
 export class UserController {
   private readonly _userService: UserService;
@@ -32,6 +38,7 @@ export class UserController {
   private readonly _languageService: LanguageService;
   private readonly _userPreferencesMappingService: UserPreferencesMappingService;
   private readonly _patientService: PatientService;
+  private readonly _appointmentService: AppointmentService;
 
   public constructor() {
     this._userService = new UserService();
@@ -43,6 +50,7 @@ export class UserController {
     this._languageService = new LanguageService();
     this._userPreferencesMappingService = new UserPreferencesMappingService();
     this._patientService = new PatientService();
+    this._appointmentService = new AppointmentService();
   }
 
   private checkUserEmailValidity = async (userEmail: string) => {
@@ -321,91 +329,10 @@ export class UserController {
     } catch (error) {}
   };
 
-  // public postUser = async (request: FastifyRequest, reply: FastifyReply) => {
-  //   try {
-  //     const body: any = request.body;
-
-  //     console.log(body);
-
-  //     const roleNames: string[] = body.roleNames;
-
-  //     for (let i = 0; i < roleNames.length; i++) {
-  //       const role = await this._roleService.getRoleByName(roleNames[i]);
-  //       if (!role)
-  //         return reply.code(200).send({
-  //           success: false,
-  //           message: `role ${roleNames[i]} not found`,
-  //         });
-  //     }
-
-  //     const isUserEmailValid = await this.checkUserEmailValidity(
-  //       body.userEmail
-  //     );
-
-  //     const isUserPhoneNumberValid = await this.checkUserPhoneNumberValidity(
-  //       body.userPhoneNumber
-  //     );
-
-  //     if (!isUserEmailValid) reply.code(200).send({ success: false });
-  //     if (!isUserPhoneNumberValid) reply.code(200).send({ success: false });
-
-  //     let postUser = await this._userService.createUser({
-  //       userForename: body.userForename,
-  //       userSurname: body.userSurname,
-  //       userEmail: body.userEmail,
-  //       userPhoneNumber: body.userPhoneNumber,
-  //       userDateOfBirth: body.userDateOfBirth,
-  //       userAddress: body.userAddress,
-  //       userGender: body.userGender,
-  //       userEncryptedPassword: await argon2.hash(body.userEncryptedPassword),
-  //     });
-
-  //     postUser = postUser as User;
-
-  //     for (let i = 0; i < roleNames.length; i++) {
-  //       const role = await this._roleService.getRoleByName(roleNames[i]);
-  //       await this._userRoleMappingService.createUserRoleMapping({
-  //         userId: postUser.userId,
-  //         roleId: role?.roleId!,
-  //       });
-
-  //       if (role?.roleName === "doctor") {
-  //         const specialityNames = body.specialityNames;
-  //         for (let j = 0; j < specialityNames.length; j++) {
-  //           const currentSpeciality =
-  //             await this._medicalSpecialityService.getMedicalSpecialityByName(
-  //               specialityNames[j]
-  //             );
-
-  //           await this._doctorSpecialityMappingService.createMedicalDoctorSpecialityMapping(
-  //             {
-  //               userId: postUser.userId,
-  //               medicalSpecialityId: currentSpeciality?.medicalSpecialityId!,
-  //               isPrimaryMedicalSpeciality: j === 0,
-  //               isSecondaryMedicalSpeciality: j === 1,
-  //               isTertiaryMedicalSpeciality: j === 2,
-  //             }
-  //           );
-  //         }
-  //       }
-  //     }
-
-  //     const { redis } = fastifyServer;
-
-  //     await redis.publisher.publish(MESSAGE_CHANNEL, JSON.stringify(postUser));
-
-  //     return reply
-  //       .code(200)
-  //       .send({ success: postUser !== undefined, message: "" });
-  //   } catch (error) {
-  //     console.log(error);
-  //     return reply.code(400).send({ error: (error as Error).message });
-  //   }
-  // };
-
   public postUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body: any = request.body;
+      const currentSessionValue = await getCurrentSessionData(request);
       console.log("🚀 ~ UserController ~ postUser= ~ body:", body);
 
       const roleIds: string[] = body.roleIds;
@@ -463,8 +390,28 @@ export class UserController {
         body.userPhoneNumber
       );
 
-      if (!isUserEmailValid) reply.code(200).send({ success: false });
-      if (!isUserPhoneNumberValid) reply.code(200).send({ success: false });
+      if (!isUserEmailValid) {
+        reply.code(200).send({
+          success: false,
+          message: getEntityMessage(
+            currentSessionValue.language.languageCode,
+            foundRoles[0] as keyof ServerLanguageCollection,
+            "create",
+            "errorEmail"
+          ),
+        });
+      }
+      if (!isUserPhoneNumberValid) {
+        reply.code(200).send({
+          success: false,
+          message: getEntityMessage(
+            currentSessionValue.language.languageCode,
+            foundRoles[0] as keyof ServerLanguageCollection,
+            "create",
+            "errorPhoneNumber"
+          ),
+        });
+      }
 
       let postUser = await this._userService.createUser({
         userForename: body.userForename,
@@ -556,11 +503,17 @@ export class UserController {
           })
         );
 
-      return reply
-        .code(200)
-        .send({ success: postUser !== undefined, message: "" });
+      return reply.code(200).send({
+        success: postUser !== undefined,
+        message: getEntityMessage(
+          currentSessionValue.language.languageCode,
+          "patient",
+          "create",
+          postUser !== undefined ? "success" : "error"
+        ),
+      });
     } catch (error) {
-      console.log(error);
+      // console.log("myerror", error as Error);
 
       return reply.code(400).send({ error: (error as Error).message });
     }
@@ -569,12 +522,47 @@ export class UserController {
   public putUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body: any = request.body;
+      const currentSessionValue = await getCurrentSessionData(request);
       const { redis } = fastifyServer;
 
-      const userSessionData = await redis.sessionRedis.get(
-        `sessionId:${request.cookieData.value}`
-      );
       let foundMedicalSpecialities: string[] = [];
+
+      const isUserEmailValid = await this.checkUserEmailValidity(
+        body.userEmail
+      );
+
+      const isUserPhoneNumberValid = await this.checkUserPhoneNumberValidity(
+        body.userPhoneNumber
+      );
+
+      const foundRoles =
+        await this._userRoleMappingService.getUserRoleMappingsByUserId(
+          body.userId
+        );
+      const role = await this._roleService.getRoleById(foundRoles![0].roleId!);
+
+      if (!isUserEmailValid) {
+        reply.code(200).send({
+          success: false,
+          message: getEntityMessage(
+            currentSessionValue.language.languageCode,
+            role?.roleName as keyof ServerLanguageCollection,
+            "update",
+            "errorEmail"
+          ),
+        });
+      }
+      if (!isUserPhoneNumberValid) {
+        reply.code(200).send({
+          success: false,
+          message: getEntityMessage(
+            currentSessionValue.language.languageCode,
+            role?.roleName as keyof ServerLanguageCollection,
+            "update",
+            "errorPhoneNumber"
+          ),
+        });
+      }
 
       const putUser = await this._userService.updateUser(body.userId, {
         userForename: body.userForename,
@@ -762,9 +750,15 @@ export class UserController {
           })
         );
 
-      return reply
-        .code(200)
-        .send({ success: putUser !== undefined, message: "", userSessionData });
+      return reply.code(200).send({
+        success: putUser !== undefined,
+        message: getEntityMessage(
+          currentSessionValue.language.languageCode,
+          role?.roleName as keyof ServerLanguageCollection,
+          "update",
+          putUser !== undefined ? "success" : "error"
+        ),
+      });
     } catch (error) {
       console.log(error);
       return reply.code(400).send({ error: (error as Error).message });
@@ -775,8 +769,48 @@ export class UserController {
     try {
       const { redis } = fastifyServer;
       const body: any = request.body;
+      console.log("body delete user", body);
+
+      const currentSessionValue = await getCurrentSessionData(request);
 
       let user = await this._userService.getUserById(body.userId);
+
+      const foundRoles =
+        await this._userRoleMappingService.getUserRoleMappingsByUserId(
+          body.userId
+        );
+      const firstRole = await this._roleService.getRoleById(
+        foundRoles![0].roleId!
+      );
+      let secondRole;
+
+      if (foundRoles?.length === 2)
+        secondRole = await this._roleService.getRoleById(foundRoles[1].roleId!);
+
+      console.log("🚀 ~ UserController ~ publicdeleteUser ~ role:", firstRole);
+
+      if (
+        firstRole?.roleName === "doctor" ||
+        secondRole?.roleName === "doctor"
+      ) {
+        const hasDoctorAppointments =
+          await this._appointmentService.hasDoctorAppointments(body.userId);
+        console.log(
+          "🚀 ~ UserController ~ publicdeleteUser ~ hasDoctorAppointments:",
+          hasDoctorAppointments ? "true" : "false"
+        );
+
+        if (hasDoctorAppointments)
+          return reply.code(200).send({
+            success: false,
+            message: getEntityMessage(
+              currentSessionValue.language.languageCode,
+              "doctor",
+              "delete",
+              "errorDoctorWithAppointments"
+            ),
+          });
+      }
 
       let userRoleMappings =
         (await this._userRoleMappingService.getUserRoleMappingsByUserId(
@@ -817,7 +851,15 @@ export class UserController {
         })
       );
 
-      return reply.code(200).send({ success: true, message: "" });
+      return reply.code(200).send({
+        success: true,
+        message: getEntityMessage(
+          currentSessionValue.language.languageCode,
+          firstRole?.roleName as keyof ServerLanguageCollection,
+          "delete",
+          "success"
+        ),
+      });
     } catch (error) {}
   };
 }

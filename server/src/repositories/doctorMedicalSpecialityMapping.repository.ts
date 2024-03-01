@@ -189,4 +189,24 @@ export class DoctorMedicalSpecialityMappingRepository
         })
     )[0];
   }
+
+  public async hasDoctorSpeciality(specialityId: string) {
+    return (
+      (
+        await this._drizzle
+          .select({
+            doctorMedicalSpecialityMappingId:
+              doctorMedicalSpecialityMappingTable.doctorMedicalSpecialityMappingId,
+          })
+          .from(doctorMedicalSpecialityMappingTable)
+          .where(
+            eq(
+              doctorMedicalSpecialityMappingTable.medicalSpecialityId,
+              specialityId
+            )
+          )
+          .limit(1)
+      ).length > 0
+    );
+  }
 }

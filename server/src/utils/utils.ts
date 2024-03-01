@@ -1,3 +1,6 @@
+import { FastifyRequest } from "fastify";
+import { fastifyServer } from "../server";
+
 function getFirstDayOfWeek(d: any) {
   // 👇️ clone date object, so we don't mutate it
   const date = new Date(d);
@@ -109,4 +112,14 @@ export function getTimeFrame(period: string) {
   }
 
   return { startDate, endDate };
+}
+
+export async function getCurrentSessionData(request: FastifyRequest) {
+  const { redis } = fastifyServer;
+  const currentCookie = request.cookieData;
+  const currentSessionValue = JSON.parse(
+    (await redis.sessionRedis.get(`sessionId:${currentCookie.value}`)) ?? "null"
+  );
+
+  return currentSessionValue;
 }

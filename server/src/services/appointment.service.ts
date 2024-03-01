@@ -114,6 +114,10 @@ export class AppointmentService implements IAppointmentService {
     return this._appointmentRepository.deleteAppointment(appointmentId);
   }
 
+  public async hasDoctorAppointments(doctorId: string) {
+    return await this._appointmentRepository.hasDoctorAppointments(doctorId);
+  }
+
   public async getDoctorAppointmentBookedSlots(doctorId: string, date: string) {
     return this._appointmentRepository.getDoctorAppointmentBookedSlots(
       doctorId,

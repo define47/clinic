@@ -6,6 +6,7 @@ import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
 import axios from "axios";
 import { usersPath } from "../../../utils/dotenv";
 import { Tooltip } from "../../design/Tooltip";
+import { Toaster, toast } from "sonner";
 
 export const DeleteUserOverlay: FC<DeleteUserOverlayPros> = ({
   user,
@@ -36,6 +37,14 @@ export const DeleteUserOverlay: FC<DeleteUserOverlayPros> = ({
         data: { userId: user.userId },
         withCredentials: true,
       });
+
+      if (response.data.success) {
+        setIsDeleteUserConfirmationDialogOverlayVisible(false);
+
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -93,6 +102,7 @@ export const DeleteUserOverlay: FC<DeleteUserOverlayPros> = ({
             </div>
           </div>
         </div>
+        <Toaster position="top-right" richColors />
       </ConfirmationDialogOverlay>
     </div>
   );

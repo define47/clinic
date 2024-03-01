@@ -25,7 +25,7 @@ import {
   getEntityNamesByLanguage,
   getItemByLanguageAndCollection,
 } from "../../../utils/clientLanguages";
-import { toast } from "sonner";
+import { Toaster, toast } from "sonner";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -199,9 +199,9 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
       if (response.data.success) {
         setIsCreateUserConfirmationDialogOverlayVisible(false);
         setIsCreateUserOverlayVisible(false);
-        toast.success("Created User Successfully");
+        toast.success(response.data.message);
       } else {
-        toast.error("NOT Created User Successfully");
+        toast.error(response.data.message);
       }
 
       console.log(response);
@@ -938,6 +938,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
             </div>
           </ConfirmationDialogOverlay>
         </div>
+        <Toaster position="top-right" richColors />
       </Overlay>
     </>
   );

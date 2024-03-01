@@ -387,10 +387,23 @@ export const GeneralTable: FC<GeneralTableProps> = ({
         receivedEntity === entity
       ) {
         const medicalSpecialityId = receivedData.medicalSpecialityId as string;
+        console.log(
+          "createMedicalProcedure medicalSpecialityId",
+          medicalSpecialityId
+        );
+
         const medicalProcedure =
           receivedData.medicalProcedure as MedicalProcedure;
+        console.log(
+          "createMedicalProcedure medicalProcedure",
+          medicalProcedure
+        );
+        console.log(
+          "createMedicalProcedure selected specialityId",
+          selectedMedicalSpecialityId.substring(1)
+        );
 
-        if (medicalSpecialityId === selectedMedicalSpecialityId)
+        if (medicalSpecialityId === selectedMedicalSpecialityId.substring(1))
           setTableRows((prevMedicalProcedures: TableRow[]) => [
             {
               medicalProcedureId: medicalProcedure.medicalProcedureId,

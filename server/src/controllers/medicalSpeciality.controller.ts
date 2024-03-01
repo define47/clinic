@@ -1,12 +1,18 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { MedicalSpecialityService } from "../services/medicalSpeciality.service";
 import { MESSAGE_CHANNEL, fastifyServer } from "../server";
+import { getCurrentSessionData } from "../utils/utils";
+import { getEntityMessage } from "../utils/serverLanguages";
+import { DoctorMedicalSpecialityMappingService } from "../services/doctorMedicalSpecialityMapping.service";
 
 export class MedicalSpecialityController {
   private readonly _medicalSpecialityService: MedicalSpecialityService;
+  private readonly _doctorMedicalSpecialityMappingService: DoctorMedicalSpecialityMappingService;
 
   public constructor() {
     this._medicalSpecialityService = new MedicalSpecialityService();
+    this._doctorMedicalSpecialityMappingService =
+      new DoctorMedicalSpecialityMappingService();
   }
 
   public getAllMedicalSpecialities = async (
@@ -35,8 +41,25 @@ export class MedicalSpecialityController {
     reply: FastifyReply
   ) => {
     try {
-      const body: any = request.body;
       const { redis } = fastifyServer;
+      const currentSessionValue = await getCurrentSessionData(request);
+      const body: any = request.body;
+
+      const medicalSpeciality =
+        await this._medicalSpecialityService.getMedicalSpecialityByName(
+          body.medicalSpecialityName
+        );
+
+      if (medicalSpeciality)
+        return reply.code(200).send({
+          success: false,
+          message: getEntityMessage(
+            currentSessionValue.language.languageCode,
+            "medicalSpeciality",
+            "create",
+            "errorMedicalSpecialityName"
+          ),
+        });
 
       let medicalSpecialityToCreate =
         await this._medicalSpecialityService.createMedicalSpeciality({
@@ -55,7 +78,12 @@ export class MedicalSpecialityController {
 
       return reply.code(200).send({
         success: medicalSpecialityToCreate !== undefined,
-        message: "",
+        message: getEntityMessage(
+          currentSessionValue.language.languageCode,
+          "medicalSpeciality",
+          "create",
+          medicalSpecialityToCreate !== undefined ? "success" : "error"
+        ),
       });
     } catch (error) {
       console.log(error);
@@ -67,8 +95,25 @@ export class MedicalSpecialityController {
     reply: FastifyReply
   ) => {
     try {
-      const body: any = request.body;
       const { redis } = fastifyServer;
+      const currentSessionValue = await getCurrentSessionData(request);
+      const body: any = request.body;
+
+      const medicalSpeciality =
+        await this._medicalSpecialityService.getMedicalSpecialityByName(
+          body.medicalSpecialityName
+        );
+
+      if (medicalSpeciality)
+        return reply.code(200).send({
+          success: false,
+          message: getEntityMessage(
+            currentSessionValue.language.languageCode,
+            "medicalSpeciality",
+            "update",
+            "errorMedicalSpecialityName"
+          ),
+        });
 
       let medicalSpecialityToUpdate =
         await this._medicalSpecialityService.updateMedicalSpeciality(
@@ -86,7 +131,15 @@ export class MedicalSpecialityController {
         })
       );
 
-      return reply.code(200).send({ success: true, message: "" });
+      return reply.code(200).send({
+        success: medicalSpecialityToUpdate !== undefined,
+        message: getEntityMessage(
+          currentSessionValue.language.languageCode,
+          "medicalSpeciality",
+          "update",
+          medicalSpecialityToUpdate !== undefined ? "success" : "error"
+        ),
+      });
     } catch (error) {}
   };
 
@@ -95,14 +148,37 @@ export class MedicalSpecialityController {
     reply: FastifyReply
   ) => {
     try {
+      const { redis } = fastifyServer;
+      const currentSessionValue = await getCurrentSessionData(request);
       const body: any = request.body;
+
+      const medicalSpeciality =
+        await this._medicalSpecialityService.getMedicalSpecialityById(
+          body.medicalSpecialityId
+        );
+
+      if (medicalSpeciality) {
+        const hasDoctorSpeciality =
+          await this._doctorMedicalSpecialityMappingService.hasDoctorSpeciality(
+            body.medicalSpecialityId
+          );
+        if (hasDoctorSpeciality) {
+          return reply.code(200).send({
+            success: false,
+            message: getEntityMessage(
+              currentSessionValue.language.languageCode,
+              "medicalSpeciality",
+              "delete",
+              "errorInUseMedicalSpecialityByDoctor"
+            ),
+          });
+        }
+      }
 
       let medicalSpecialityToDelete =
         await this._medicalSpecialityService.deleteMedicalSpecialityById(
           body.medicalSpecialityId
         );
-
-      const { redis } = fastifyServer;
 
       await redis.publisher.publish(
         MESSAGE_CHANNEL,
@@ -112,7 +188,15 @@ export class MedicalSpecialityController {
         })
       );
 
-      return reply.code(200).send({ success: true, message: "" });
+      return reply.code(200).send({
+        success: medicalSpecialityToDelete !== undefined,
+        message: getEntityMessage(
+          currentSessionValue.language.languageCode,
+          "medicalSpeciality",
+          "delete",
+          medicalSpecialityToDelete !== undefined ? "success" : "error"
+        ),
+      });
     } catch (error) {}
   };
 }

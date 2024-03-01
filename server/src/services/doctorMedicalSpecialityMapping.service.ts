@@ -77,4 +77,10 @@ export class DoctorMedicalSpecialityMappingService
       doctorMedicalSpecialityMappingId
     );
   }
+
+  public async hasDoctorSpeciality(specialityId: string) {
+    return await this._doctorMedicalSpecialityMappingRepository.hasDoctorSpeciality(
+      specialityId
+    );
+  }
 }

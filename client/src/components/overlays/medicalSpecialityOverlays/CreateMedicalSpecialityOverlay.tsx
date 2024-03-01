@@ -7,6 +7,7 @@ import { medicalSpecialitiesPath } from "../../../utils/dotenv";
 import axios from "axios";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledInputV2 } from "../../design/StyledInputV2";
+import { Toaster, toast } from "sonner";
 
 export const CreateMedicalSpecialityOverlay: FC = () => {
   const [medicalSpecialityToCreate, setMedicalSpecialityToCreate] =
@@ -70,7 +71,13 @@ export const CreateMedicalSpecialityOverlay: FC = () => {
         { withCredentials: true }
       );
 
-      console.log(response);
+      if (response.data.success) {
+        setIsCreateMedicalSpecialityConfirmationDialogOverlayVisible(false);
+        setIsCreateMedicalSpecialityOverlayVisible(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -129,6 +136,13 @@ export const CreateMedicalSpecialityOverlay: FC = () => {
                     : isMedicalSpecialityValid
                     ? "focus:border-green-500"
                     : "focus:border-red-500"
+                }
+                focusedBorderColorIconArea={
+                  medicalSpecialityToCreate.medicalSpecialityName.length === 0
+                    ? "border-pink-500"
+                    : isMedicalSpecialityValid
+                    ? "border-green-500"
+                    : "border-red-500"
                 }
                 unfocusedLabelColor={
                   medicalSpecialityToCreate.medicalSpecialityName.length === 0
@@ -212,6 +226,7 @@ export const CreateMedicalSpecialityOverlay: FC = () => {
             </ConfirmationDialogOverlay>
           </div>
         </div>
+        <Toaster position="top-right" richColors />
       </Overlay>
     </>
   );

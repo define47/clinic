@@ -12,6 +12,7 @@ import axios from "axios";
 import { StyledInput } from "../../design/StyledInput";
 import { Tooltip } from "../../design/Tooltip";
 import { StyledInputV2 } from "../../design/StyledInputV2";
+import { Toaster, toast } from "sonner";
 
 export const UpdateMedicalSpeciality: FC<
   UpdateMedicalSpecialityOverlayProps
@@ -69,7 +70,13 @@ export const UpdateMedicalSpeciality: FC<
         { withCredentials: true }
       );
 
-      console.log(response);
+      if (response.data.success) {
+        setIsUpdateMedicalSpecialityConfirmationDialogOverlayVisible(false);
+        setIsUpdateMedicalSpecialityOverlayVisible(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -237,6 +244,7 @@ export const UpdateMedicalSpeciality: FC<
             </div>
           </ConfirmationDialogOverlay>
         </div>
+        <Toaster position="top-right" richColors />
       </Overlay>
     </>
   );

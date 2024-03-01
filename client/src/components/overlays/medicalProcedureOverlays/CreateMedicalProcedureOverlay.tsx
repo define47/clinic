@@ -7,6 +7,7 @@ import { StyledInput } from "../../design/StyledInput";
 import axios from "axios";
 import { medicalProceduresAPI } from "../../../utils/dotenv";
 import { StyledInputV2 } from "../../design/StyledInputV2";
+import { Toaster, toast } from "sonner";
 
 type CreateMedicalProcedureOverlayProps = {
   medicalSpecialityId: string;
@@ -62,6 +63,14 @@ export const CreateMedicalProcedureOverlay: FC<
         },
         { withCredentials: true }
       );
+
+      if (response.data.success) {
+        setIsCreateMedicalProcedureConfirmationDialogOverlayVisible(false);
+        setIsCreateMedicalProcedureOverlayVisible(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -293,6 +302,7 @@ export const CreateMedicalProcedureOverlay: FC<
             </div>
           </ConfirmationDialogOverlay>
         </div>
+        <Toaster position="top-right" richColors />
       </Overlay>
     </>
   );
