@@ -3,7 +3,6 @@ import { MedicalProcedure } from "../../../types";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import Overlay from "../base/Overlay";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
-import { StyledInput } from "../../design/StyledInput";
 import axios from "axios";
 import { medicalProceduresAPI } from "../../../utils/dotenv";
 import { StyledInputV2 } from "../../design/StyledInputV2";

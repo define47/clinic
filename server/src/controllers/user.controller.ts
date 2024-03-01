@@ -331,8 +331,9 @@ export class UserController {
 
   public postUser = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const body: any = request.body;
+      const { redis } = fastifyServer;
       const currentSessionValue = await getCurrentSessionData(request);
+      const body: any = request.body;
       console.log("🚀 ~ UserController ~ postUser= ~ body:", body);
 
       const roleIds: string[] = body.roleIds;
@@ -484,8 +485,6 @@ export class UserController {
         foundMedicalSpecialities
       );
       console.log("🚀 ~ UserController ~ postUser= ~ postUser:", postUser);
-
-      const { redis } = fastifyServer;
 
       if (postUser)
         await redis.publisher.publish(

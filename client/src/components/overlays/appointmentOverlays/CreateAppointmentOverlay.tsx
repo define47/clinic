@@ -25,6 +25,7 @@ import { SocketNotificationDataContext } from "../../../contexts/SocketNotificat
 import { StyledInputV2 } from "../../design/StyledInputV2";
 import { getItemByLanguageAndCollection } from "../../../utils/clientLanguages";
 import { AuthenticatedUserDataContext } from "../../../contexts/UserContext";
+import { Toaster, toast } from "sonner";
 
 export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   isCreateAppointmentOverlayVisible,
@@ -128,6 +129,14 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
         },
         { withCredentials: true }
       );
+
+      if (response.data.success) {
+        setIsCreateAppointmentConfirmationDialogOverlayVisible(false);
+        setIsCreateAppointmentOverlayVisible(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -521,6 +530,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
             </div>
           </ConfirmationDialogOverlay>
         </div>
+        <Toaster position="top-right" richColors />
       </Overlay>
     </>
   );

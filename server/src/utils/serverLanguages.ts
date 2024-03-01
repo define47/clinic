@@ -24,6 +24,11 @@ type MedicalProcedureSuccess = {
   errorMedicalProcedureName?: string;
 };
 
+type AppointmentActionSuccess = {
+  success: string;
+  error: string;
+};
+
 export type ServerLanguageCollection = {
   patient: {
     create: UserActionSuccess;
@@ -46,9 +51,9 @@ export type ServerLanguageCollection = {
     delete: UserActionSuccess;
   };
   appointment: {
-    create: EntityActionSuccess;
-    update: EntityActionSuccess;
-    delete: EntityActionSuccess;
+    create: AppointmentActionSuccess;
+    update: AppointmentActionSuccess;
+    delete: AppointmentActionSuccess;
   };
   medicalSpeciality: {
     create: MedicalSpecialitySuccess;
@@ -337,7 +342,6 @@ export function getEntityMessage(
   entity: keyof ServerLanguageCollection,
   entityAction: string,
   entitySuccess:
-    | keyof EntityActionSuccess
     | keyof UserActionSuccess
     | keyof MedicalSpecialitySuccess
     | keyof MedicalProcedureSuccess

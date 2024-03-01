@@ -14,6 +14,8 @@ import {
 } from "../models/appointment.model";
 import { sendSms } from "../utils/sms";
 import { User } from "../models/user.model";
+import { getCurrentSessionData } from "../utils/utils";
+import { getEntityMessage } from "../utils/serverLanguages";
 
 export class AppointmentController {
   private readonly _appointmentService: AppointmentService;
@@ -216,8 +218,9 @@ export class AppointmentController {
     reply: FastifyReply
   ) => {
     try {
-      const body: any = request.body;
+      const currentSessionValue = await getCurrentSessionData(request);
       const { redis } = fastifyServer;
+      const body: any = request.body;
 
       const appointmentToCreate =
         await this._appointmentService.createAppointment({
@@ -285,7 +288,15 @@ export class AppointmentController {
       //   `Programare ${appointmentToCreate?.appointmentDateTime} Iatropolis`
       // );
 
-      reply.code(200).send({ success: true, appointmentToCreate });
+      return reply.code(200).send({
+        success: appointmentToCreate !== undefined,
+        message: getEntityMessage(
+          currentSessionValue.language.languageCode,
+          "appointment",
+          "create",
+          appointmentToCreate !== undefined ? "success" : "error"
+        ),
+      });
     } catch (error) {}
   };
 
@@ -294,6 +305,8 @@ export class AppointmentController {
     reply: FastifyReply
   ) => {
     try {
+      const currentSessionValue = await getCurrentSessionData(request);
+      const { redis } = fastifyServer;
       const body: any = request.body;
       let appointmentToUpdate;
 
@@ -307,7 +320,6 @@ export class AppointmentController {
           appointmentPrice: body.appointmentPrice,
         }
       );
-      const { redis } = fastifyServer;
 
       const userSessionData = JSON.parse(
         (await redis.sessionRedis.get(`sessionId:${request.cookieData.value}`))!
@@ -395,7 +407,15 @@ export class AppointmentController {
           })
         );
 
-      reply.code(200).send({ success: true });
+      return reply.code(200).send({
+        success: appointmentToUpdate !== undefined,
+        message: getEntityMessage(
+          currentSessionValue.language.languageCode,
+          "appointment",
+          "update",
+          appointmentToUpdate !== undefined ? "success" : "error"
+        ),
+      });
     } catch (error) {
       console.log(error);
     }
@@ -406,8 +426,9 @@ export class AppointmentController {
     reply: FastifyReply
   ) => {
     try {
-      const body: any = request.body;
+      const currentSessionValue = await getCurrentSessionData(request);
       const { redis } = fastifyServer;
+      const body: any = request.body;
 
       await this._appointmentHistoryService.deleteAppointmentHistory(
         body.appointmentId
@@ -452,7 +473,15 @@ export class AppointmentController {
         })
       );
 
-      reply.code(200).send({ success: true, appointmentToDelete });
+      return reply.code(200).send({
+        success: appointmentToDelete !== undefined,
+        message: getEntityMessage(
+          currentSessionValue.language.languageCode,
+          "appointment",
+          "delete",
+          appointmentToDelete !== undefined ? "success" : "error"
+        ),
+      });
     } catch (error) {
       console.log(error);
     }

@@ -6,6 +6,7 @@ import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
 import { Tooltip } from "../../design/Tooltip";
+import { Toaster, toast } from "sonner";
 
 export const DeleteAppointmentOverlay: FC<DeleteAppointmentOverlayPros> = ({
   appointmentId,
@@ -35,6 +36,13 @@ export const DeleteAppointmentOverlay: FC<DeleteAppointmentOverlayPros> = ({
         data: { appointmentId },
         withCredentials: true,
       });
+
+      if (response.data.success) {
+        setIsDeleteAppointmentConfirmationDialogOverlayVisible(false);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -94,6 +102,7 @@ export const DeleteAppointmentOverlay: FC<DeleteAppointmentOverlayPros> = ({
             </div>
           </div>
         </div>
+        <Toaster position="top-right" richColors />
       </ConfirmationDialogOverlay>
     </div>
   );
