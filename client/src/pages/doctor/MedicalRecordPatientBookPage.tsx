@@ -1,6 +1,6 @@
 import axios from "axios";
 import { FC, useContext, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   appointmentsPath,
   medicalRecordPatientsPath,
@@ -11,12 +11,17 @@ import { StyledEntry } from "../../components/design/StyledEntry";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import IatropolisLogo from "../../assets/logo-iatropolis.png";
 
-export const MedicalRecordPatientView: FC = () => {
+type MedicalRecordPatientBookPage = {
+  appointmentId: string;
+};
+export const MedicalRecordPatientBookPage: FC<MedicalRecordPatientBookPage> = ({
+  appointmentId,
+}) => {
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState, authenticatedUserDataSetState } =
     authContext!;
   const navigate = useNavigate();
-  const { appointmentId } = useParams();
+
   const [appointment, setAppointment] = useState<AppointmentTableData>({
     appointment: {
       appointmentId: "",
@@ -117,9 +122,6 @@ export const MedicalRecordPatientView: FC = () => {
 
   return (
     <>
-      <button className="text-emerald-400" onClick={handlePrint}>
-        Print
-      </button>
       <div className="w-full h-screen flex items-center justify-center mt-7 mb-20">
         <div
           className="page p-4 w-full h-full flex flex-col rounded-xl"

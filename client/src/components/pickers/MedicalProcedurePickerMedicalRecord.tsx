@@ -4,7 +4,15 @@ import axios from "axios";
 import { medicalProceduresAPI } from "../../utils/dotenv";
 import { MedicalSpeciality } from "../../types";
 
-export const MedicalProcedurePickerMedicalRecord: FC = () => {
+type MedicalProcedurePickerMedicalRecordProps = {
+  foundConductedTests: any;
+  setFoundConductedTests: (foundConductedTests: any) => void;
+  price: number;
+  setPrice: (price: number) => void;
+};
+export const MedicalProcedurePickerMedicalRecord: FC<
+  MedicalProcedurePickerMedicalRecordProps
+> = ({ foundConductedTests, setFoundConductedTests, price, setPrice }) => {
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState, authenticatedUserDataSetState } =
     authContext!;
@@ -159,8 +167,8 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
     setIsDragging(false);
   };
 
-  const [foundConductedTests, setFoundConductedTests] = useState<any>([]);
-  const [price, setPrice] = useState<number>(-1);
+  // const [foundConductedTests, setFoundConductedTests] = useState<any>([]);
+  // const [price, setPrice] = useState<number>(-1);
   useEffect(() => {
     const foundConductedTests = medicalProcedures.filter(
       (medicalProcedure) => medicalProcedure.currentGroupId === "123456"
@@ -187,8 +195,8 @@ export const MedicalProcedurePickerMedicalRecord: FC = () => {
       {/* {foundConductedTests.length > 0 &&
         foundConductedTests?.map((foundConductedTest) => (
           <div>{foundConductedTest.medicalProcedureId}</div>
-        ))}
-      <div>final price:{price}</div> */}
+        ))} */}
+      {/* <div>final price:{price}</div> */}
       {medicalSpecialities.length > 0 &&
         medicalSpecialities.map((medicalSpeciality) => (
           <div

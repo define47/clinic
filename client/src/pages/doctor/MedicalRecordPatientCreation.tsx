@@ -22,6 +22,8 @@ import { useReactToPrint } from "react-to-print";
 import { MedicalProcedurePickerMedicalRecord } from "../../components/pickers/MedicalProcedurePickerMedicalRecord";
 
 export const MedicalRecordPatientCreation: FC = () => {
+  const [foundConductedTests, setFoundConductedTests] = useState<any>([]);
+  const [price, setPrice] = useState<number>(-1);
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState } = authContext!;
   const { appointmentId } = useParams();
@@ -100,7 +102,7 @@ export const MedicalRecordPatientCreation: FC = () => {
           appointmentId: appointment.appointment.appointmentId,
           symptoms: medicalRecordPatientToCreate.symptoms,
           diagnosis: medicalRecordPatientToCreate.diagnosis,
-          conductedTests: "medicalRecordPatientToCreate.conductedTests",
+          conductedTests: medicalRecordPatientToCreate.conductedTests,
           recommendations: medicalRecordPatientToCreate.recommendations,
         },
         { withCredentials: true }
@@ -130,11 +132,32 @@ export const MedicalRecordPatientCreation: FC = () => {
     onAfterPrint: () => console.log("print completed"),
   });
 
+  const [finalConductedTests, setFinalConductedTests] = useState<any>();
+  useEffect(() => {
+    const final = foundConductedTests.map((foundConductedTest) => ({
+      medicalProcedureName: foundConductedTest.medicalProcedureName,
+      medicalProcedurePrice: foundConductedTest.medicalProcedurePrice,
+    }));
+
+    setFinalConductedTests(final);
+  }, [foundConductedTests]);
+
+  useEffect(() => {
+    console.log("final foundConductedTests", finalConductedTests, price);
+    setMedicalRecordPatientToCreate((prevMedicalRecordPatient) => ({
+      ...prevMedicalRecordPatient,
+      conductedTests: finalConductedTests,
+    }));
+  }, [finalConductedTests, price]);
+
   return (
     <>
       {/* <button className="text-emerald-400" onClick={handlePrint}>
         Print
       </button> */}
+      <span className="text-black" onClick={onCreateMedicalRecordPatient}>
+        Create
+      </span>
       <div className="w-full h-full flex items-center justify-center">
         <div className="w-1/2 h-full bg-white overflow-y-scroll">
           <div
@@ -238,7 +261,12 @@ export const MedicalRecordPatientCreation: FC = () => {
               <div className="w-full flex flex-col">
                 <span className="font-bold text-lg">Conducted Tests</span>
                 {/* <MedicalProcedurePicker /> */}
-                <MedicalProcedurePickerMedicalRecord />
+                <MedicalProcedurePickerMedicalRecord
+                  foundConductedTests={foundConductedTests}
+                  setFoundConductedTests={setFoundConductedTests}
+                  price={price}
+                  setPrice={setPrice}
+                />
               </div>
 
               <div className="flex flex-col test">
