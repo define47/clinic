@@ -38,17 +38,22 @@ export const Notification: FC = () => {
 
       if (
         (receivedAction === "createAppointmentNotification" ||
-          receivedAction === "updateAppointmentNotification") &&
+          receivedAction === "updateAppointmentNotification" ||
+          receivedAction === "deleteAppointmentNotification") &&
         receivedEntity === "appointmentNotification"
       ) {
         const userNotification = receivedData as UserNotification;
         console.log("yupyyy");
-        setUserNotifications((prevUserNotifications: UserNotification[]) => [
-          {
-            ...userNotification,
-          } as UserNotification,
-          ...prevUserNotifications,
-        ]);
+        if (
+          receivedData.receiver.receiverDoctorId ===
+          authenticatedUserDataState.userId
+        )
+          setUserNotifications((prevUserNotifications: UserNotification[]) => [
+            {
+              ...userNotification,
+            } as UserNotification,
+            ...prevUserNotifications,
+          ]);
       }
     }
   }, [socketNotificationDataState]);

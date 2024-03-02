@@ -289,6 +289,10 @@ export class AppointmentController {
             action: "createAppointmentNotification",
             entity: "appointmentNotification",
             data: {
+              receiver: {
+                receiverDoctorId: doctor?.userId,
+                receiverPatientId: patient?.userId,
+              },
               notification: {
                 notificationId: notification?.notificationId,
                 notificationAction: notification?.notificationAction,
@@ -436,6 +440,7 @@ export class AppointmentController {
             action: "updateAppointmentNotification",
             entity: "appointmentNotification",
             data: {
+              receiver: { receiverId: doctor?.userId },
               notification: {
                 notificationId: notification?.notificationId,
                 notificationAction: notification?.notificationAction,
@@ -503,7 +508,7 @@ export class AppointmentController {
         appointment?.appointmentDoctorId!
       );
 
-      await this.sendAppointmentNotification(
+      const notification = await this.sendAppointmentNotification(
         request,
         "delete",
         appointment!,
@@ -516,6 +521,29 @@ export class AppointmentController {
         JSON.stringify({
           action: "deleteAppointment",
           data: appointmentToDelete,
+        })
+      );
+
+      await redis.publisher.publish(
+        MESSAGE_CHANNEL,
+        JSON.stringify({
+          action: "deleteAppointmentNotification",
+          entity: "appointmentNotification",
+          data: {
+            receiver: { receiverId: doctor?.userId },
+            notification: {
+              notificationId: notification?.notificationId,
+              notificationAction: notification?.notificationAction,
+              notificationEntity: notification?.notificationEntity,
+              notificationBody: notification?.notificationBody,
+              notificationDateTime: notification?.notificationDateTime,
+            },
+            sender: {
+              senderId: notification?.notificationSenderId,
+              senderForename: currentSessionValue.userForename,
+              senderSurname: currentSessionValue.userSurname,
+            },
+          },
         })
       );
 
