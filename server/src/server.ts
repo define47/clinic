@@ -38,6 +38,7 @@ import {
 import { communicationsRoutes } from "./routes/communications.routes.js";
 import { SerialPort } from "serialport";
 import { getEntityMessage } from "./utils/serverLanguages.js";
+import { convertUTCDateToLocalDate } from "./utils/utils.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -334,7 +335,23 @@ const buildServer = async () => {
 
   // await createAppointments(0, 150);
 
-  getEntityMessage("en", "patient", "create", "success");
+  // getEntityMessage("en", "patient", "create", "success");
+
+  const notificationDateTimeFromDB = "2024-03-01T04:21:21.102Z"; // Replace with the actual value from the database
+  var localDate = new Date(notificationDateTimeFromDB);
+  // console.log(
+  //   new Date(
+  //     Date.UTC(
+  //       localDate.getFullYear(),
+  //       localDate.getMonth(),
+  //       localDate.getDate(),
+  //       localDate.getHours(),
+  //       localDate.getMinutes(),
+  //       localDate.getSeconds()
+  //     )
+  //   )
+  // );
+  console.log(convertUTCDateToLocalDate(localDate).toISOString());
 
   return fastifyServer;
 };

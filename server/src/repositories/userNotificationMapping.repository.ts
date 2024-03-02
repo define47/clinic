@@ -143,12 +143,12 @@ export class UserNotificationMappingRepository extends BaseRepository<UserNotifi
       .set({ isNotificationRead: true })
       .where(
         and(
-          eq(userNotificationMappingTable.userId, userId),
+          eq(userNotificationMappingTable.receiverId, userId),
           eq(userNotificationMappingTable.notificationId, notificationId)
         )
       )
       .returning({
-        userId: userNotificationMappingTable.userId,
+        userId: userNotificationMappingTable.receiverId,
         notificationId: userNotificationMappingTable.notificationId,
       });
   }

@@ -23,3 +23,27 @@ export function capitalizeEachWord(inputString: string) {
 
   return resultString;
 }
+
+export function convertUTCDateToLocalDate(date: Date) {
+  return new Date(
+    Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours(),
+      date.getMinutes(),
+      date.getSeconds()
+    )
+  );
+}
+
+export function convertLocalDateToUTCDate(date: Date) {
+  return new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds()
+  );
+}

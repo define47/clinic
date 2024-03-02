@@ -5,20 +5,53 @@ import { notificationsPath } from "../utils/dotenv";
 import { AuthenticatedUserDataContext } from "../contexts/UserContext";
 import { UserNotification } from "../types";
 import { UserProfilePicture } from "./UserProfile/UserProfilePicture";
+import { convertUTCDateToLocalDate } from "../utils/utils";
+import { SocketNotificationDataContext } from "../contexts/SocketNotificationContext";
 
 export const Notification: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState, authenticatedUserDataSetState } =
     authContext!;
+  const socketContext = useContext(SocketNotificationDataContext);
+  const { socketNotificationDataState, socketNotificationDataSetState } =
+    socketContext!;
   const [areNotificationsVisible, setAreNotificationsVisible] =
     useState<boolean>(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const [userNotifications, setUserNotifications] = useState<
     UserNotification[]
   >([]);
-  const [isCursorOnBell, setIsCursorOnBell] = useState<boolean>(false);
-  const [isCursorOnFilledBell, setIsCursorOnFilledBell] =
-    useState<boolean>(false);
+
+  useEffect(() => {
+    if (socketNotificationDataState) {
+      const receivedSocketData = JSON.parse(socketNotificationDataState);
+      const receivedAction = receivedSocketData.action;
+      const receivedEntity = receivedSocketData.entity;
+      const receivedData = receivedSocketData.data;
+
+      console.log(
+        "socket data notifications",
+        receivedData,
+        "socket action",
+        receivedAction
+      );
+
+      if (
+        (receivedAction === "createAppointmentNotification" ||
+          receivedAction === "updateAppointmentNotification") &&
+        receivedEntity === "appointmentNotification"
+      ) {
+        const userNotification = receivedData as UserNotification;
+        console.log("yupyyy");
+        setUserNotifications((prevUserNotifications: UserNotification[]) => [
+          {
+            ...userNotification,
+          } as UserNotification,
+          ...prevUserNotifications,
+        ]);
+      }
+    }
+  }, [socketNotificationDataState]);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -51,49 +84,6 @@ export const Notification: FC = () => {
 
     fetchUserNotifications();
   }, []);
-
-  // const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(([entry]) => {
-  //     setIsIntersecting(entry.isIntersecting);
-  //   });
-
-  //   observer.observe(notificationRef.current!);
-  //   return () => observer.disconnect();
-  // }, []);
-
-  // const [isEndOfDiv, setIsEndOfDiv] = useState(false);
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const element = notificationRef.current;
-  //     if (element) {
-  //       // Calculate the difference between the total height of the content
-  //       // and the height of the container (scrollTop + clientHeight).
-  //       // If the difference is very small or negative, we are near the end.
-  //       const isNearEnd =
-  //         element.scrollHeight - (element.scrollTop + element.clientHeight) < 3;
-
-  //       setIsEndOfDiv(isNearEnd);
-  //     }
-  //   };
-
-  //   const element = notificationRef.current;
-  //   if (element) {
-  //     element.addEventListener("scroll", handleScroll);
-  //   }
-
-  //   return () => {
-  //     const element = notificationRef.current;
-  //     if (element) {
-  //       element.removeEventListener("scroll", handleScroll);
-  //     }
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("reached end");
-  // }, [isEndOfDiv]);
 
   const [scrollTop, setScrollTop] = useState<number>(0);
   const containerHeight = 256;
@@ -139,6 +129,10 @@ export const Notification: FC = () => {
   useEffect(() => {
     console.log(visibleItems);
   }, [visibleItems]);
+
+  useEffect(() => {
+    console.log("currentDateTime", userNotifications);
+  }, [userNotifications]);
 
   return (
     <>
@@ -189,6 +183,15 @@ export const Notification: FC = () => {
                   const appointment = parsedNotificationBodyData?.appointment;
                   const doctor = parsedNotificationBodyData?.doctor;
                   const patient = parsedNotificationBodyData?.patient;
+                  // const currentDateTime = convertUTCDateToLocalDate(
+                  //   new Date(appointment?.appointmentDateTime)
+                  // );
+                  // console.log(
+                  //   "currentDateTime",
+                  //   currentDateTime.toISOString(),
+                  //   appointment?.appointmentDateTime
+                  // );
+
                   const appointmentDateTime =
                     appointment?.appointmentDateTime?.split("T");
                   let appointmentDate, appointmentTime;
@@ -206,7 +209,12 @@ export const Notification: FC = () => {
                     >
                       <div className="w-full flex items-center justify-end">
                         <span>
-                          {userNotification.notification?.notificationDateTime
+                          {convertUTCDateToLocalDate(
+                            new Date(
+                              userNotification.notification?.notificationDateTime
+                            )
+                          )
+                            .toISOString()
                             ?.split("T")[1]
                             ?.substring(0, 5)}
                         </span>

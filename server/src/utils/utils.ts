@@ -14,25 +14,39 @@ function getFirstDayOfWeek(d: any) {
 
 export function getTimeFrame(period: string) {
   const currentDate = new Date();
+  console.log(currentDate);
+  var s =
+    currentDate.getMonth() +
+    1 +
+    "/" +
+    currentDate.getDate() +
+    "/" +
+    currentDate.getFullYear() +
+    " " +
+    currentDate.getHours() +
+    ":" +
+    currentDate.getMinutes();
+  console.log(s);
+
   let startDate, endDate;
 
   switch (period) {
     case "today":
-      const currentDayStartInUTC = new Date(
+      const currentDayStart = new Date(
         Date.UTC(
-          currentDate.getUTCFullYear(),
-          currentDate.getUTCMonth(),
-          currentDate.getUTCDate(),
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate(),
           0,
           0,
           0
         )
       );
-      const currentDayEndInUTC = new Date(
+      const currentDayEnd = new Date(
         Date.UTC(
-          currentDate.getUTCFullYear(),
-          currentDate.getUTCMonth(),
-          currentDate.getUTCDate(),
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate(),
           23,
           59,
           59,
@@ -40,11 +54,11 @@ export function getTimeFrame(period: string) {
         )
       );
 
-      console.log("current day start:", currentDayStartInUTC);
-      console.log("current day end:", currentDayEndInUTC);
+      console.log("current day start:", currentDayStart);
+      console.log("current day end:", currentDayEnd);
 
-      startDate = currentDayStartInUTC;
-      endDate = currentDayEndInUTC;
+      startDate = currentDayStart;
+      endDate = currentDayEnd;
       break;
     case "week":
       const firstDayOfCurrentWeek = getFirstDayOfWeek(new Date());
@@ -62,8 +76,8 @@ export function getTimeFrame(period: string) {
     case "month":
       const currentMonthStart = new Date(
         Date.UTC(
-          currentDate.getUTCFullYear(),
-          currentDate.getUTCMonth(),
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
           1,
           0,
           0,
@@ -73,8 +87,8 @@ export function getTimeFrame(period: string) {
       );
       const currentMonthEnd = new Date(
         Date.UTC(
-          currentDate.getUTCFullYear(),
-          currentDate.getUTCMonth() + 1,
+          currentDate.getFullYear(),
+          currentDate.getMonth() + 1,
           0,
           23,
           59,
@@ -91,18 +105,16 @@ export function getTimeFrame(period: string) {
       break;
     case "nextWeek":
       let startOfNextWeek = new Date(currentDate);
-      let daysUntilNextMonday = (8 - currentDate.getUTCDay()) % 7;
-      startOfNextWeek.setUTCDate(
-        currentDate.getUTCDate() + daysUntilNextMonday
-      );
+      let daysUntilNextMonday = (8 - currentDate.getDay()) % 7;
+      startOfNextWeek.setDate(currentDate.getDate() + daysUntilNextMonday);
       startOfNextWeek.setUTCHours(0, 0, 0, 0);
 
       let endOfNextWeek = new Date(startOfNextWeek);
-      endOfNextWeek.setUTCDate(startOfNextWeek.getUTCDate() + 6);
+      endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
       endOfNextWeek.setUTCHours(23, 59, 59, 999);
 
-      console.log("Start of next week (UTC):", startOfNextWeek);
-      console.log("End of next week (UTC):", endOfNextWeek);
+      console.log("Start of next week", startOfNextWeek);
+      console.log("End of next week", endOfNextWeek);
 
       startDate = startOfNextWeek;
       endDate = endOfNextWeek;
@@ -122,4 +134,28 @@ export async function getCurrentSessionData(request: FastifyRequest) {
   );
 
   return currentSessionValue;
+}
+
+export function convertUTCDateToLocalDate(date: Date) {
+  return new Date(
+    Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours(),
+      date.getMinutes(),
+      date.getSeconds()
+    )
+  );
+}
+
+export function convertLocalDateToUTCDate(date: Date) {
+  return new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds()
+  );
 }

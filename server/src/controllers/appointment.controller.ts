@@ -151,7 +151,7 @@ export class AppointmentController {
       isNotificationRead: false,
     });
 
-    console.log("Notification Sent");
+    return notification;
   }
 
   public getDoctorAppointmentBookedSlots = async (
@@ -265,7 +265,7 @@ export class AppointmentController {
         appointmentToCreate?.appointmentDoctorId!
       );
 
-      await this.sendAppointmentNotification(
+      const notification = await this.sendAppointmentNotification(
         request,
         "create",
         appointmentToCreate!,
@@ -273,7 +273,7 @@ export class AppointmentController {
         patient!
       );
 
-      if (appointmentData)
+      if (appointmentData) {
         await redis.publisher.publish(
           MESSAGE_CHANNEL,
           JSON.stringify({
@@ -282,6 +282,29 @@ export class AppointmentController {
             data: appointmentData,
           })
         );
+
+        await redis.publisher.publish(
+          MESSAGE_CHANNEL,
+          JSON.stringify({
+            action: "createAppointmentNotification",
+            entity: "appointmentNotification",
+            data: {
+              notification: {
+                notificationId: notification?.notificationId,
+                notificationAction: notification?.notificationAction,
+                notificationEntity: notification?.notificationEntity,
+                notificationBody: notification?.notificationBody,
+                notificationDateTime: notification?.notificationDateTime,
+              },
+              sender: {
+                senderId: notification?.notificationSenderId,
+                senderForename: currentSessionValue.userForename,
+                senderSurname: currentSessionValue.userSurname,
+              },
+            },
+          })
+        );
+      }
 
       // sendSms(
       //   patient?.userPhoneNumber!,
@@ -361,7 +384,7 @@ export class AppointmentController {
         appointmentToUpdate?.appointmentDoctorId!
       );
 
-      await this.sendAppointmentNotification(
+      const notification = await this.sendAppointmentNotification(
         request,
         "update",
         appointmentToUpdate!,
@@ -398,7 +421,7 @@ export class AppointmentController {
           appointmentToUpdate?.appointmentId!
         );
 
-      if (appointmentData)
+      if (appointmentData) {
         await redis.publisher.publish(
           MESSAGE_CHANNEL,
           JSON.stringify({
@@ -406,6 +429,29 @@ export class AppointmentController {
             data: appointmentData,
           })
         );
+
+        await redis.publisher.publish(
+          MESSAGE_CHANNEL,
+          JSON.stringify({
+            action: "updateAppointmentNotification",
+            entity: "appointmentNotification",
+            data: {
+              notification: {
+                notificationId: notification?.notificationId,
+                notificationAction: notification?.notificationAction,
+                notificationEntity: notification?.notificationEntity,
+                notificationBody: notification?.notificationBody,
+                notificationDateTime: notification?.notificationDateTime,
+              },
+              sender: {
+                senderId: notification?.notificationSenderId,
+                senderForename: currentSessionValue.userForename,
+                senderSurname: currentSessionValue.userSurname,
+              },
+            },
+          })
+        );
+      }
 
       return reply.code(200).send({
         success: appointmentToUpdate !== undefined,
