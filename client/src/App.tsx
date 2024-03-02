@@ -34,6 +34,7 @@ import { ReceptionistsAppointments } from "./pages/receptionist/ReceptionistsApp
 import { DoctorAppointments } from "./pages/doctor/DoctorAppointments";
 import { SignUp } from "./pages/common/SignUp/SignUp";
 import { MedicalRecordPatientCreation } from "./pages/doctor/MedicalRecordPatientCreation";
+import { MedicalRecordsPatientView } from "./pages/doctor/MedicalRecordsPatientView";
 
 // function useSocket() {
 //   const [socket, setSocket] = useState<Socket | null>(null);
@@ -193,6 +194,10 @@ const App: FC = () => {
                   path="/doctors/medical-record-patient-creation/:appointmentId"
                   element={<MedicalRecordPatientCreation />}
                 />
+                <Route
+                  path="/doctors/medical-records-patient-view/"
+                  element={<MedicalRecordsPatientView />}
+                />
                 <Route path="*" element={<p>Path not resolved</p>} />
               </Route>
             </>
@@ -269,6 +274,10 @@ const App: FC = () => {
                 <Route
                   path="/doctors/medical-record-patient-creation/:appointmentId"
                   element={<MedicalRecordPatientCreation />}
+                />
+                <Route
+                  path="/doctors/medical-records-patient-view/"
+                  element={<MedicalRecordsPatientView />}
                 />
 
                 <Route

@@ -76,6 +76,7 @@ import {
   isMedicalSpecialityRow,
   isUserRow,
 } from "../../utils/typeGuards";
+import { MedicalProcedureBody } from "./bodies/MedicalProcedureBody";
 
 export const GeneralTable: FC<GeneralTableProps> = ({
   URL,
@@ -941,6 +942,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     clickedTableRow={clickedTableRow}
                     setClickedTableRow={setClickedTableRow}
                     currentPage={currentPage}
+                    tableLimit={tableLimit}
                   />
                 ) : isMedicalSpecialityRow(tableRow) ? (
                   <MedicalSpecialityBody
@@ -949,6 +951,7 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     tableRowIndex={tableRowIndex}
                     clickedTableRow={clickedTableRow}
                     setClickedTableRow={setClickedTableRow}
+                    tableLimit={tableLimit}
                   />
                 ) : isAppointmentRow(tableRow) ? (
                   <AppointmentBody
@@ -957,37 +960,18 @@ export const GeneralTable: FC<GeneralTableProps> = ({
                     tableRowIndex={tableRowIndex}
                     clickedTableRow={clickedTableRow}
                     setClickedTableRow={setClickedTableRow}
+                    tableLimit={tableLimit}
                   />
                 ) : isMedicalProcedureRow(tableRow) ? (
-                  <tr
-                    key={tableRow.medicalProcedureId}
-                    className={`border-b border-lightMode-borderColor dark:border-darkMode-borderColor odd:bg-lightMode-oddRowTable even:bg-lightMode-evenRowTable odd:dark:bg-darkMode-oddRowTable even:dark:bg-darkMode-evenRowTable transition duration-300 ease-in-out hover:bg-lightMode-hoverRowTable hover:dark:bg-darkMode-hoverRowTable ${
-                      (clickedTableRow as MedicalProcedure)
-                        ?.medicalProcedureId === tableRow.medicalProcedureId &&
-                      "!bg-lightMode-selectedTableRow dark:!bg-darkMode-selectedTableRow"
-                    }`}
-                    onClick={() => setClickedTableRow(tableRow)}
-                  >
-                    <td>{tableRowIndex}</td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.medicalProcedureId}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.medicalProcedureName}
-                    </td>
-                    <td className="px-6 py-4 text-xs">
-                      {tableRow.medicalProcedurePrice}
-                    </td>
-                    <td className="h-14 flex items-center justify-center space-x-2 px-6 py-4 text-xs">
-                      <UpdateMedicalProcedureOverlay
-                        medicalProcedure={tableRow}
-                      />
-                      <DeleteMedicalProcedureOverlay
-                        medicalSpecialityId={selectedMedicalSpecialityId}
-                        medicalProcedure={tableRow}
-                      />
-                    </td>
-                  </tr>
+                  <MedicalProcedureBody
+                    tableRow={tableRow}
+                    currentPage={currentPage}
+                    tableRowIndex={tableRowIndex}
+                    clickedTableRow={clickedTableRow}
+                    setClickedTableRow={setClickedTableRow}
+                    tableLimit={tableLimit}
+                    selectedMedicalSpecialityId={selectedMedicalSpecialityId}
+                  />
                 ) : (
                   ""
                 )

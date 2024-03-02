@@ -9,6 +9,7 @@ export const MedicalSpecialityBody: FC<MedicalSpecialityBodyProps> = ({
   clickedTableRow,
   setClickedTableRow,
   currentPage,
+  tableLimit,
 }) => {
   return (
     <tr
@@ -20,7 +21,7 @@ export const MedicalSpecialityBody: FC<MedicalSpecialityBodyProps> = ({
       }`}
       onClick={() => setClickedTableRow(tableRow)}
     >
-      <td>{tableRowIndex}</td>
+      <td>{tableRowIndex + 1 + currentPage * tableLimit}</td>
       <td className="px-6 py-4 text-xs">{tableRow.medicalSpecialityId}</td>
       <td className="px-6 py-4 text-xs">{tableRow.medicalSpecialityName}</td>
       <td className="h-14 flex items-center justify-center space-x-2">

@@ -18,6 +18,7 @@ export const AppointmentBody: FC<AppointmentBodyProps> = ({
   clickedTableRow,
   setClickedTableRow,
   currentPage,
+  tableLimit,
 }) => {
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState } = authContext!;
@@ -32,7 +33,7 @@ export const AppointmentBody: FC<AppointmentBodyProps> = ({
       }`}
       onClick={() => setClickedTableRow(tableRow)}
     >
-      <td>{tableRowIndex}</td>
+      <td>{tableRowIndex + 1 + currentPage * tableLimit}</td>
       <td className="px-6 py-4 text-xs">
         {tableRow.appointment.appointmentId}
       </td>

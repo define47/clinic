@@ -20,11 +20,11 @@ export const UserHeader: FC<UserHeaderProps> = ({
   return (
     <tr>
       <td>Index</td>
-      <td className="px-6 py-4 font-bold">
+      {/* <td className="px-6 py-4 font-bold">
         <div className="flex items-center justify-center">userId</div>
-      </td>
+      </td> */}
       {entity === "patient" && (
-        <td className="px-6 py-4 font-bold">
+        <td className="px-6 py-4 font-bold w-24">
           <div className="flex items-center justify-center">CNP</div>
         </td>
       )}
@@ -41,18 +41,6 @@ export const UserHeader: FC<UserHeaderProps> = ({
             setOrderByIndicator={setOrderByIndicator}
             orderByColumn="userForename"
           />
-          {/* {orderBy !== "asc:userForename" && (
-          <RiArrowUpSFill
-            className="text-sm cursor-pointer"
-            onClick={() => setOrderBy("asc:userForename")}
-          />
-        )}
-        {orderBy === "asc:userForename" && (
-          <RiArrowDownSFill
-            className="text-sm cursor-pointer"
-            onClick={() => setOrderBy("desc:userForename")}
-          />
-        )} */}
         </div>
       </td>
       <td className="px-6 py-4 font-bold">
@@ -68,18 +56,6 @@ export const UserHeader: FC<UserHeaderProps> = ({
             setOrderByIndicator={setOrderByIndicator}
             orderByColumn="userSurname"
           />
-          {/* {orderBy !== "asc:userSurname" && (
-          <RiArrowUpSFill
-            className="text-sm cursor-pointer"
-            onClick={() => setOrderBy("asc:userSurname")}
-          />
-        )}
-        {orderBy === "asc:userSurname" && (
-          <RiArrowDownSFill
-            className="text-sm cursor-pointer"
-            onClick={() => setOrderBy("desc:userSurname")}
-          />
-        )} */}
         </div>
       </td>
       <td className="px-6 py-4 font-bold">

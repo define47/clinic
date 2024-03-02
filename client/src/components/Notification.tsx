@@ -43,10 +43,12 @@ export const Notification: FC = () => {
         receivedEntity === "appointmentNotification"
       ) {
         const userNotification = receivedData as UserNotification;
-        console.log("yupyyy");
+
         if (
           receivedData.receiver.receiverDoctorId ===
-          authenticatedUserDataState.userId
+            authenticatedUserDataState.userId ||
+          receivedData.receiver.receiverPatientId ===
+            authenticatedUserDataState.userId
         )
           setUserNotifications((prevUserNotifications: UserNotification[]) => [
             {

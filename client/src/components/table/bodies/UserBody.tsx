@@ -16,6 +16,7 @@ export const UserBody: FC<UserBodyProps> = ({
   clickedTableRow,
   setClickedTableRow,
   currentPage,
+  tableLimit,
 }) => {
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState } = authContext!;
@@ -29,8 +30,8 @@ export const UserBody: FC<UserBodyProps> = ({
       }`}
       onClick={() => setClickedTableRow(tableRow)}
     >
-      <td>{tableRowIndex + 1 + currentPage * 5}</td>
-      <td className="px-6 py-4 text-xs">{tableRow.userId}</td>
+      <td>{tableRowIndex + 1 + currentPage * tableLimit}</td>
+      {/* <td className="px-6 py-4 text-xs">{tableRow.userId}</td> */}
       {entity === "patient" && (
         <td className="px-6 py-4 text-xs">{tableRow.userCNP}</td>
       )}

@@ -417,6 +417,7 @@ export type UserBodyProps = {
   clickedTableRow: TableRow | undefined;
   setClickedTableRow: (clickedTableRow: TableRow) => void;
   currentPage: number;
+  tableLimit: number;
 };
 
 export type MedicalSpecialityBodyProps = {
@@ -425,6 +426,7 @@ export type MedicalSpecialityBodyProps = {
   clickedTableRow: TableRow | undefined;
   setClickedTableRow: (clickedTableRow: TableRow) => void;
   currentPage: number;
+  tableLimit: number;
 };
 
 export type AppointmentBodyProps = {
@@ -433,4 +435,15 @@ export type AppointmentBodyProps = {
   clickedTableRow: TableRow | undefined;
   setClickedTableRow: (clickedTableRow: TableRow) => void;
   currentPage: number;
+  tableLimit: number;
+};
+
+export type MedicalProcedureBodyProps = {
+  tableRow: MedicalProcedure;
+  tableRowIndex: number;
+  clickedTableRow: TableRow | undefined;
+  setClickedTableRow: (clickedTableRow: TableRow) => void;
+  currentPage: number;
+  tableLimit: number;
+  selectedMedicalSpecialityId: string;
 };
