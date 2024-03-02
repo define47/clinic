@@ -9,9 +9,10 @@ export interface IMedicalRecordPatientService {
     appointmentId: string
   ): Promise<MedicalRecordPatient | undefined>;
 
-  getMedicalRecordsByPatientId(
+  getMedicalRecordsByPatientIdAndDoctorId(
+    doctorId: string,
     patientId: string
-  ): Promise<MedicalRecordPatient[] | undefined>;
+  ): Promise<any>;
 
   createMedicalRecordPatient(
     medicalRecordPatientCreationAttributes: MedicalRecordPatientCreationAttributes

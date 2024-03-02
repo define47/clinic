@@ -32,6 +32,28 @@ export class MedicalRecordPatientController {
     }
   };
 
+  public getMedicalRecordsByPatientIdAndDoctorId = async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const query: any = request.query;
+
+      const medicalRecordsByPatientIdAndDoctorId =
+        await this._medicalRecordPatientService.getMedicalRecordsByPatientIdAndDoctorId(
+          query.doctorId,
+          query.patientId
+        );
+
+      reply.code(200).send({
+        success: medicalRecordsByPatientIdAndDoctorId !== undefined,
+        payload: medicalRecordsByPatientIdAndDoctorId,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   public postMedicalRecordPatient = async (
     request: FastifyRequest,
     reply: FastifyReply
@@ -52,7 +74,7 @@ export class MedicalRecordPatientController {
         await this._appointmentService.getAppointmentById(body.appointmentId);
       console.log(currentAppointment);
 
-      const appointmentToUpdated =
+      const appointmentToUpdate =
         await this._appointmentService.updateAppointment(body.appointmentId, {
           appointmentDateTime: currentAppointment.appointmentDateTime,
           appointmentReason: currentAppointment.appointmentReason,

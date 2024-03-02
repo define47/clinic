@@ -56,6 +56,7 @@ export const MedicalRecordPatientView: FC = () => {
 
       const response = await axios.get(medicalRecordPatientsPath, {
         params: {
+          message: "medicalRecordPatient",
           appointmentId,
         },
         withCredentials: true,

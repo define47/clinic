@@ -61,6 +61,7 @@ export const MedicalRecordPatientBookPage: FC<MedicalRecordPatientBookPage> = ({
 
       const response = await axios.get(medicalRecordPatientsPath, {
         params: {
+          message: "medicalRecordPatient",
           appointmentId,
         },
         withCredentials: true,

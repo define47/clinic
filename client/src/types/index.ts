@@ -109,7 +109,7 @@ export type UpdateUserOverlayPros = {
 };
 
 export type DeleteUserOverlayPros = {
-  user: User | Patient;
+  user: User;
   roleName: string;
 };
 
@@ -446,4 +446,9 @@ export type MedicalProcedureBodyProps = {
   currentPage: number;
   tableLimit: number;
   selectedMedicalSpecialityId: string;
+};
+
+export type MedicalRecordPatientBookPageData = {
+  appointment: AppointmentTableData;
+  medicalRecordPatient: MedicalRecordPatient;
 };

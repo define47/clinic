@@ -28,10 +28,14 @@ export class MedicalRecordPatientService
     );
   }
 
-  public async getMedicalRecordsByPatientId(
+  public async getMedicalRecordsByPatientIdAndDoctorId(
+    doctorId: string,
     patientId: string
   ): Promise<MedicalRecordPatient[] | undefined> {
-    throw new Error("Method not implemented.");
+    return await this._medicalRecordPatientRepository.getMedicalRecordsByPatientIdAndDoctorId(
+      doctorId,
+      patientId
+    );
   }
 
   public async createMedicalRecordPatient(
