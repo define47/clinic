@@ -6,6 +6,12 @@ import { medicalRecordPatientsPath } from "../../utils/dotenv";
 
 export const MedicalRecordsPatientView: FC = () => {
   const [data, setData] = useState<MedicalRecordPatientBookPageData[]>([]);
+  const [firstHalf, setFirstHalf] = useState<
+    MedicalRecordPatientBookPageData[]
+  >([]);
+  const [secondHalf, setSecondHalf] = useState<
+    MedicalRecordPatientBookPageData[]
+  >([]);
   const [currentLocation, setCurrentLocation] = useState<number>(0);
   const [numOfPapers, setNumOfPapers] = useState<number>(5);
 
@@ -20,7 +26,12 @@ export const MedicalRecordsPatientView: FC = () => {
           },
           withCredentials: true,
         });
-        if (response.data.success) setData(response.data.payload);
+        if (response.data.success) {
+          setData(response.data.payload);
+          const halfIndex = Math.ceil(response.data.payload.length / 2);
+          setFirstHalf(response.data.payload.slice(0, halfIndex));
+          setSecondHalf(response.data.payload.slice(halfIndex));
+        }
       } catch (error) {
         console.log(error);
       }
@@ -31,6 +42,7 @@ export const MedicalRecordsPatientView: FC = () => {
   useEffect(() => {
     setCurrentLocation(0);
     setNumOfPapers(data.length);
+    console.log("data.length", data.length);
   }, [data]);
 
   function goNextPage() {
@@ -42,6 +54,8 @@ export const MedicalRecordsPatientView: FC = () => {
   function goPrevPage() {
     if (currentLocation >= 0) setCurrentLocation(currentLocation - 1);
   }
+
+  const indices = [];
   return (
     <div className="w-full h-full flex items-center justify-center">
       <span className="absolute top-0">
@@ -64,129 +78,78 @@ export const MedicalRecordsPatientView: FC = () => {
         </button>
 
         <div id="book" className="book">
-          {data.length > 0 &&
-            data.map(
-              (piece: MedicalRecordPatientBookPageData, index: number) => (
-                <div
-                  id="p1"
-                  className={`paper ${
-                    currentLocation >= index + 1 ? "flipped" : ""
-                  }`}
-                  style={{
-                    zIndex: `${
-                      currentLocation >= index + 1
-                        ? currentLocation
-                        : numOfPapers - currentLocation - index
-                    }`,
-                  }}
-                >
-                  <div className="front">
-                    <div id="f1" className="front-content">
-                      <h1>Front {index}</h1>
+          {firstHalf.length > 0 &&
+            firstHalf.map(
+              (piece: MedicalRecordPatientBookPageData, index: number) => {
+                if (!indices.includes(index)) {
+                  // indices.push(index);
+                  return (
+                    <div
+                      id="p1"
+                      className={`paper ${
+                        currentLocation >= index + 1 ? "flipped" : ""
+                      }`}
+                      style={{
+                        zIndex: `${
+                          currentLocation >= index + 1
+                            ? currentLocation
+                            : numOfPapers - currentLocation - index + 10
+                        }`,
+                      }}
+                    >
+                      <div className={`front overflow-y-scroll`}>
+                        <div id="f1" className={`front-content`}>
+                          {/* Front {index} {numOfPapers - index} */}
+
+                          <MedicalRecordPatientBookPage
+                            appointmentT={firstHalf[index].appointment}
+                            medicalRecordPatientT={
+                              firstHalf[index].medicalRecordPatient
+                            }
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="back overflow-y-scroll">
-                    <div id="b1" className="back-content">
-                      <h1>Back {index}</h1>
-                      {/* <MedicalRecordPatientBookPage appointmentId="c2b45ff9-6639-50f7-8c36-7a0679012011" /> */}
-                    </div>
-                  </div>
-                </div>
-              )
+                  );
+                }
+              }
             )}
+          {secondHalf.length > 0 &&
+            secondHalf.map(
+              (piece: MedicalRecordPatientBookPageData, index: number) => {
+                if (!indices.includes(index)) {
+                  // indices.push(index);
+                  return (
+                    <div
+                      id="p1"
+                      className={`paper ${
+                        currentLocation >= index + 1 ? "flipped" : ""
+                      }`}
+                      style={{
+                        zIndex: `${
+                          currentLocation >= index + 1
+                            ? currentLocation
+                            : numOfPapers - currentLocation - index
+                        }`,
+                      }}
+                    >
+                      <div className={`back overflow-y-scroll`}>
+                        <div id="b1" className={`back-content`}>
+                          {/* Front {index} {numOfPapers - index} */}
 
-          {/* <div
-            id="p2"
-            className={`paper ${currentLocation >= 2 ? "flipped" : ""}`}
-            style={{
-              zIndex: `${
-                currentLocation >= 2
-                  ? currentLocation
-                  : numOfPapers - currentLocation
-              }`,
-            }}
-          >
-            <div className="front overflow-y-scroll">
-              <div id="f2" className="front-content">
-                <h1>Front 2</h1>
-                <MedicalRecordPatientBookPage appointmentId="c2b45ff9-6639-50f7-8c36-7a0679012011" />
-              </div>
-            </div>
-            <div className="back">
-              <div id="b2" className="back-content">
-                <h1>Back 2</h1>
-              </div>
-            </div>
-          </div>
-
-          <div
-            id="p3"
-            className={`paper ${currentLocation >= 3 ? "flipped" : ""}`}
-            style={{
-              zIndex: `${
-                currentLocation >= 3
-                  ? currentLocation
-                  : numOfPapers - currentLocation - 1
-              }`,
-            }}
-          >
-            <div className="front">
-              <div id="f3" className="front-content">
-                <h1>Front 3</h1>
-              </div>
-            </div>
-            <div className="back">
-              <div id="b3" className="back-content">
-                <h1>Back 3</h1>
-              </div>
-            </div>
-          </div>
-
-          <div
-            id="p4"
-            className={`paper ${currentLocation >= 4 ? "flipped" : ""}`}
-            style={{
-              zIndex: `${
-                currentLocation >= 4
-                  ? currentLocation
-                  : numOfPapers - currentLocation - 2
-              }`,
-            }}
-          >
-            <div className="front">
-              <div id="f4" className="front-content">
-                <h1>Front 4</h1>
-              </div>
-            </div>
-            <div className="back">
-              <div id="b4" className="back-content">
-                <h1>Back 4</h1>
-              </div>
-            </div>
-          </div>
-
-          <div
-            id="p5"
-            className={`paper ${currentLocation >= 5 ? "flipped" : ""}`}
-            style={{
-              zIndex: `${
-                currentLocation >= 5
-                  ? currentLocation
-                  : numOfPapers - currentLocation - 3
-              }`,
-            }}
-          >
-            <div className="front">
-              <div id="f5" className="front-content">
-                <h1>Front 5</h1>
-              </div>
-            </div>
-            <div className="back">
-              <div id="b5" className="back-content">
-                <h1>Back 5</h1>
-              </div>
-            </div>
-          </div> */}
+                          <MedicalRecordPatientBookPage
+                            appointmentT={secondHalf[index].appointment}
+                            medicalRecordPatientT={
+                              secondHalf[index].medicalRecordPatient
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              }
+            )}
         </div>
 
         <button className="text-black" onClick={() => goNextPage()}>

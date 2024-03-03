@@ -362,10 +362,12 @@ h2 {
   z-index: 1;
   backface-visibility: hidden;
   border-left: 3px solid pink;
+  /* background-color: blue; */
 }
 
 .back {
   z-index: 0;
+  /* background-color: red; */
 }
 
 .front-content,
@@ -386,10 +388,4 @@ h2 {
 .flipped .back {
   transform: rotateY(-180deg);
 }
-
-.flipped .front,
-.flipped .back {
-  transform: rotateY(-180deg);
-}
-
 /* /book */

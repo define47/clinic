@@ -61,18 +61,19 @@ export class MedicalRecordPatientRepository
           appointmentCancellationReason:
             appointmentTable.appointmentCancellationReason,
           appointmentPrice: appointmentTable.appointmentPrice,
+          doctor: {
+            doctorId: doctor.userId,
+            doctorForename: doctor.userForename,
+            doctorSurname: doctor.userSurname,
+          },
+          patient: {
+            patientId: patient.userId,
+            patientForename: patient.userForename,
+            patientSurname: patient.userSurname,
+            patientEmail: patient.userEmail,
+          },
         },
-        doctor: {
-          doctorId: doctor.userId,
-          doctorForename: doctor.userForename,
-          doctorSurname: doctor.userSurname,
-        },
-        patient: {
-          patientId: patient.userId,
-          patientForename: patient.userForename,
-          patientSurname: patient.userSurname,
-          patientEmail: patient.userEmail,
-        },
+
         medicalRecordPatient: {
           medicalRecordPatientId:
             medicalRecordPatientTable.medicalRecordPatientId,
