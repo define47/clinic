@@ -440,7 +440,10 @@ export class AppointmentController {
             action: "updateAppointmentNotification",
             entity: "appointmentNotification",
             data: {
-              receiver: { receiverId: doctor?.userId },
+              receiver: {
+                receiverDoctorId: doctor?.userId,
+                receiverPatientId: patient?.userId,
+              },
               notification: {
                 notificationId: notification?.notificationId,
                 notificationAction: notification?.notificationAction,
@@ -530,7 +533,10 @@ export class AppointmentController {
           action: "deleteAppointmentNotification",
           entity: "appointmentNotification",
           data: {
-            receiver: { receiverId: doctor?.userId },
+            receiver: {
+              receiverDoctorId: doctor?.userId,
+              receiverPatientId: patient?.userId,
+            },
             notification: {
               notificationId: notification?.notificationId,
               notificationAction: notification?.notificationAction,
