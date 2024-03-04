@@ -3,7 +3,8 @@ import { FC, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   appointmentsAPIPath,
-  medicalRecordPatientsAPIPath,
+  medicalRecordPatientAPIPath,
+  medicalRecordsPatientsAPIPath,
 } from "../../utils/dotenv";
 import { AppointmentTableData, MedicalRecordPatient } from "../../types";
 import { useReactToPrint } from "react-to-print";
@@ -52,11 +53,10 @@ export const MedicalRecordPatientView: FC = () => {
 
   async function onViewMedicalRecordPatient() {
     try {
-      console.log(medicalRecordPatientsAPIPath);
+      console.log(medicalRecordsPatientsAPIPath);
 
-      const response = await axios.get(medicalRecordPatientsAPIPath, {
+      const response = await axios.get(medicalRecordPatientAPIPath, {
         params: {
-          message: "medicalRecordPatient",
           appointmentId,
         },
         withCredentials: true,
@@ -73,7 +73,7 @@ export const MedicalRecordPatientView: FC = () => {
 
   async function onGetAppointment() {
     try {
-      console.log(medicalRecordPatientsAPIPath);
+      console.log(medicalRecordsPatientsAPIPath);
 
       const response = await axios.get(appointmentsAPIPath, {
         params: {

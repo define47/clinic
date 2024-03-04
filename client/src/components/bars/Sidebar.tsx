@@ -40,7 +40,7 @@ import {
   receptionistsPathname,
   settingsPathname,
 } from "../../utils/consts";
-import { logoutUserPath } from "../../utils/dotenv";
+import { logoutUserAPIPath } from "../../utils/dotenv";
 import IatropolisLogo from "../../assets/logo-iatropolis.png";
 import { getItemByLanguageAndCollection } from "../../utils/clientLanguages";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
@@ -58,7 +58,7 @@ export const Sidebar: FC<SidebarProps> = ({
   async function onLogout() {
     try {
       const response = await axios.post(
-        logoutUserPath,
+        logoutUserAPIPath,
         {},
         { withCredentials: true }
       );

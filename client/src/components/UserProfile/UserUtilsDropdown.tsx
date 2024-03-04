@@ -18,7 +18,7 @@ import { TbLogout2 } from "react-icons/tb";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { LanguageSwitcher } from "../LanguageSwitcher";
-import { logoutUserPath, userPreferencesAPIPath } from "../../utils/dotenv";
+import { logoutUserAPIPath, userPreferencesAPIPath } from "../../utils/dotenv";
 import { ThemeSwitcher } from "../ThemeSwitcher";
 
 export const UserUtilsDropdown: FC = () => {
@@ -55,7 +55,7 @@ export const UserUtilsDropdown: FC = () => {
   const onLogout = async () => {
     try {
       const response = await axios.post(
-        logoutUserPath,
+        logoutUserAPIPath,
         {},
         { withCredentials: true }
       );

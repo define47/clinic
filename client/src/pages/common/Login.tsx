@@ -3,7 +3,7 @@ import ParticlesBackground from "../../components/design/ParticlesBackground";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { verifyUserPath } from "../../utils/dotenv";
+import { verifyUserAPIPath } from "../../utils/dotenv";
 
 import { LoginUser } from "./LoginUser";
 
@@ -17,7 +17,7 @@ export const Login: FC = () => {
   useEffect(() => {
     async function verifyUser() {
       const response = await axios.post(
-        `${verifyUserPath}`,
+        `${verifyUserAPIPath}`,
         {},
         { withCredentials: true }
       );

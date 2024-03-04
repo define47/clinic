@@ -4,7 +4,7 @@ import {
   ViewMedicalRecordPatientOverlayProps,
 } from "../../../types";
 import axios from "axios";
-import { medicalRecordPatientsAPIPath } from "../../../utils/dotenv";
+import { medicalRecordsPatientsAPIPath } from "../../../utils/dotenv";
 import { RiEyeFill, RiEyeLine } from "react-icons/ri";
 import { Tooltip } from "../../design/Tooltip";
 import { useNavigate } from "react-router-dom";

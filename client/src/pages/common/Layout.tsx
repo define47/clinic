@@ -5,7 +5,7 @@ import { Sidebar } from "../../components/bars/Sidebar";
 import { TopBar } from "../../components/bars/TopBar";
 import { Socket, io } from "socket.io-client";
 import { SocketNotificationDataContext } from "../../contexts/SocketNotificationContext";
-import { serverURL, verifyUserPath } from "../../utils/dotenv";
+import { serverURL, verifyUserAPIPath } from "../../utils/dotenv";
 import axios from "axios";
 import useDeviceDetection from "../../utils/useDeviceDetection";
 import { BottomBar } from "../../components/bars/BottomBar";

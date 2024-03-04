@@ -22,7 +22,7 @@ import { Settings } from "./pages/admin/Settings";
 import { AdminGuide } from "./pages/admin/AdminGuide";
 import { ThemeContext } from "./contexts/ThemeContext";
 import { MedicalProcedures } from "./pages/admin/MedicalProcedures";
-import { authPath, verifyUserPath } from "./utils/dotenv";
+import { authAPIPath, verifyUserAPIPath } from "./utils/dotenv";
 import { AppointmentHistoryCards } from "./pages/common/AppointmentHistoryCards";
 import useDeviceDetection from "./utils/useDeviceDetection";
 import { DoctorDashboard } from "./pages/doctor/DoctorDashboard";
@@ -112,7 +112,7 @@ const App: FC = () => {
   useEffect(() => {
     async function verifyUser() {
       const response = await axios.post(
-        `${verifyUserPath}`,
+        `${verifyUserAPIPath}`,
         {},
         { withCredentials: true }
       );

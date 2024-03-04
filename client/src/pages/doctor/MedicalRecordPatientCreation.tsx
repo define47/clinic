@@ -12,7 +12,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import {
   appointmentsAPIPath,
-  medicalRecordPatientsAPIPath,
+  medicalRecordPatientAPIPath,
+  medicalRecordsPatientsAPIPath,
 } from "../../utils/dotenv";
 import IatropolisLogo from "../../assets/logo-iatropolis.png";
 import { StyledEntry } from "../../components/design/StyledEntry";
@@ -97,7 +98,7 @@ export const MedicalRecordPatientCreation: FC = () => {
   async function onCreateMedicalRecordPatient() {
     try {
       const response = await axios.post(
-        medicalRecordPatientsAPIPath,
+        medicalRecordPatientAPIPath,
         {
           appointmentId: appointment.appointment.appointmentId,
           symptoms: medicalRecordPatientToCreate.symptoms,

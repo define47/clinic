@@ -5,7 +5,10 @@ import { Tooltip } from "../../design/Tooltip";
 import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
-import { medicalProceduresAPIPath } from "../../../utils/dotenv";
+import {
+  medicalProcedureAPIPath,
+  medicalProceduresAPIPath,
+} from "../../../utils/dotenv";
 import { Toaster, toast } from "sonner";
 
 export const DeleteMedicalProcedureOverlay: FC<
@@ -32,7 +35,7 @@ export const DeleteMedicalProcedureOverlay: FC<
 
   async function onDeleteMedicalProcedure() {
     try {
-      const response = await axios.delete(medicalProceduresAPIPath, {
+      const response = await axios.delete(medicalProcedureAPIPath, {
         data: {
           medicalSpecialityId: medicalSpecialityId.substring(1),
           medicalProcedureId: medicalProcedure.medicalProcedureId,

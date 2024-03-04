@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import ParticlesBackground from "../../../components/design/ParticlesBackground";
 import { useNavigate } from "react-router-dom";
-import { verifyUserPath } from "../../../utils/dotenv";
+import { verifyUserAPIPath } from "../../../utils/dotenv";
 import axios from "axios";
 import { SignUpUser } from "./SignUpUser";
 
@@ -10,7 +10,7 @@ export const SignUp: FC = () => {
   useEffect(() => {
     async function verifyUser() {
       const response = await axios.post(
-        `${verifyUserPath}`,
+        `${verifyUserAPIPath}`,
         {},
         { withCredentials: true }
       );

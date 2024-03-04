@@ -39,6 +39,11 @@ import { communicationsRoutes } from "./routes/communications.routes.js";
 import { SerialPort } from "serialport";
 import { getEntityMessage } from "./utils/serverLanguages.js";
 import { convertUTCDateToLocalDate } from "./utils/utils.js";
+import { usersRoutes } from "./routes/users.routes.js";
+import { medicalSpecialitiesRoutes } from "./routes/medicalSpecialities.routes.js";
+import { medicalProceduresRoutes } from "./routes/medicalProcedures.routes.js";
+import { appointmentsRoutes } from "./routes/appointments.routes.js";
+import { medicalRecordsPatientsRoutes } from "./routes/medicalRecordsPatients.routes.js";
 
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
@@ -196,22 +201,35 @@ const buildServer = async () => {
 
   await fastifyServer.register(authRoutes, { prefix: "api/auth" });
 
-  await fastifyServer.register(userRoutes, { prefix: "api/users" });
+  await fastifyServer.register(userRoutes, { prefix: "api/user" });
+  await fastifyServer.register(usersRoutes, { prefix: "api/users" });
 
-  await fastifyServer.register(medicalSpecialityRoutes, {
+  await fastifyServer.register(medicalSpecialitiesRoutes, {
     prefix: "api/medical-specialities",
+  });
+  await fastifyServer.register(medicalSpecialityRoutes, {
+    prefix: "api/medical-speciality",
   });
 
   await fastifyServer.register(medicalProcedureRoutes, {
+    prefix: "api/medical-procedure",
+  });
+  await fastifyServer.register(medicalProceduresRoutes, {
     prefix: "api/medical-procedures",
   });
 
   await fastifyServer.register(appointmentRoutes, {
+    prefix: "api/appointment",
+  });
+  await fastifyServer.register(appointmentsRoutes, {
     prefix: "api/appointments",
   });
 
   await fastifyServer.register(medicalRecordPatientRoutes, {
-    prefix: "api/medical-record-patients",
+    prefix: "api/medical-record-patient",
+  });
+  await fastifyServer.register(medicalRecordsPatientsRoutes, {
+    prefix: "api/medical-records-patients",
   });
 
   await fastifyServer.register(userPreferencesRoutes, {

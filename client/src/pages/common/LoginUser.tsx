@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserToLogin } from "../../types";
-import { loginUserPath } from "../../utils/dotenv";
+import { loginUserAPIPath } from "../../utils/dotenv";
 import { StyledInput } from "../../components/design/StyledInput";
 import axios from "axios";
 import { StyledInputV2 } from "../../components/design/StyledInputV2";
@@ -22,7 +22,7 @@ export const LoginUser: FC = () => {
   async function onLogin() {
     try {
       const response = await axios.post(
-        `${loginUserPath}`,
+        `${loginUserAPIPath}`,
         { ...userToLogin },
         { withCredentials: true }
       );

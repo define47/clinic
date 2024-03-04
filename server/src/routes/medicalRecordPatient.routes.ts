@@ -7,16 +7,10 @@ export async function medicalRecordPatientRoutes(
   fastifyServer.get(
     "/",
     async (request: FastifyRequest, reply: FastifyReply) => {
-      if (request.query.message === "medicalRecordPatient")
-        await medicalRecordPatientController.getMedicalRecordPatient(
-          request,
-          reply
-        );
-      else if (request.query.message === "medicalRecordsPatient")
-        await medicalRecordPatientController.getMedicalRecordsByPatientIdAndDoctorId(
-          request,
-          reply
-        );
+      await medicalRecordPatientController.getMedicalRecordPatient(
+        request,
+        reply
+      );
     }
   );
 

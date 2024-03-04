@@ -19,6 +19,7 @@ import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import {
   appointmentsDoctorAvailabilityAPIPath,
   appointmentsAPIPath,
+  appointmentAPIPath,
 } from "../../../utils/dotenv";
 import axios from "axios";
 import { SocketNotificationDataContext } from "../../../contexts/SocketNotificationContext";
@@ -119,7 +120,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   async function onCreateAppointment() {
     try {
       const response = await axios.post(
-        appointmentsAPIPath,
+        appointmentAPIPath,
         {
           appointmentDoctorId: selectedDoctorId,
           appointmentPatientId: selectedPatientId,

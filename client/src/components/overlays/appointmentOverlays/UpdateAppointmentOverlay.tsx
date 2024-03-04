@@ -16,7 +16,7 @@ import { AppointmentStatusPicker } from "../../pickers/AppointmentStatusPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import axios from "axios";
-import { appointmentsAPIPath } from "../../../utils/dotenv";
+import { appointmentAPIPath, appointmentsAPIPath } from "../../../utils/dotenv";
 import { Tooltip } from "../../design/Tooltip";
 import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
 import {
@@ -114,7 +114,7 @@ export const UpdateAppointmentOverlay: FC<UpdateAppointmentOverlayProps> = ({
   async function onUpdateAppointment() {
     try {
       const response = await axios.put(
-        appointmentsAPIPath,
+        appointmentAPIPath,
         {
           appointmentId: appointment.appointmentId,
           appointmentReason: appointmentToUpdate.appointmentReason,
