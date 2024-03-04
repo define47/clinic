@@ -17,8 +17,8 @@ import { UserPicker } from "../../pickers/UserPicker";
 import { DateTimePicker } from "../../pickers/DateTimePicker";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import {
-  appointmentsDoctorAvailabilityPath,
-  appointmentsPath,
+  appointmentsDoctorAvailabilityAPIPath,
+  appointmentsAPIPath,
 } from "../../../utils/dotenv";
 import axios from "axios";
 import { SocketNotificationDataContext } from "../../../contexts/SocketNotificationContext";
@@ -119,7 +119,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   async function onCreateAppointment() {
     try {
       const response = await axios.post(
-        appointmentsPath,
+        appointmentsAPIPath,
         {
           appointmentDoctorId: selectedDoctorId,
           appointmentPatientId: selectedPatientId,
@@ -146,7 +146,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
     async function getDoctorAppointmentAvailability() {
       try {
         if (selectedDoctorId) {
-          const response = await axios.get(appointmentsPath, {
+          const response = await axios.get(appointmentsAPIPath, {
             params: {
               message: "bookedDoctorAppointmentsSlots",
               doctorId: selectedDoctorId,

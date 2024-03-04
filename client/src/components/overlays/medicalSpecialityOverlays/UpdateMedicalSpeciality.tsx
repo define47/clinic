@@ -3,7 +3,7 @@ import {
   MedicalSpeciality,
   UpdateMedicalSpecialityOverlayProps,
 } from "../../../types";
-import { medicalSpecialitiesPath } from "../../../utils/dotenv";
+import { medicalSpecialitiesAPIPath } from "../../../utils/dotenv";
 import { PiPencil, PiPencilLineFill } from "react-icons/pi";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
@@ -61,7 +61,7 @@ export const UpdateMedicalSpeciality: FC<
   async function onUpdateMedicalSpeciality() {
     try {
       const response = await axios.put(
-        medicalSpecialitiesPath,
+        medicalSpecialitiesAPIPath,
         {
           medicalSpecialityId: medicalSpeciality.medicalSpecialityId,
           medicalSpecialityName:

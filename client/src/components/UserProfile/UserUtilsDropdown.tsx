@@ -18,7 +18,7 @@ import { TbLogout2 } from "react-icons/tb";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { LanguageSwitcher } from "../LanguageSwitcher";
-import { logoutUserPath, userPreferencesPath } from "../../utils/dotenv";
+import { logoutUserPath, userPreferencesAPIPath } from "../../utils/dotenv";
 import { ThemeSwitcher } from "../ThemeSwitcher";
 
 export const UserUtilsDropdown: FC = () => {
@@ -72,7 +72,7 @@ export const UserUtilsDropdown: FC = () => {
     try {
       setThemeValue("light");
       const response = await axios.put(
-        userPreferencesPath,
+        userPreferencesAPIPath,
         {
           languageId: authenticatedUserDataState.language.languageId,
           languageCode: authenticatedUserDataState.language.languageCode,
@@ -90,7 +90,7 @@ export const UserUtilsDropdown: FC = () => {
     try {
       setThemeValue("dark");
       const response = await axios.put(
-        userPreferencesPath,
+        userPreferencesAPIPath,
         {
           languageId: authenticatedUserDataState.language.languageId,
           languageCode: authenticatedUserDataState.language.languageCode,

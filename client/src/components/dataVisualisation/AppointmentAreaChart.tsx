@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { generalDataPath } from "../../utils/dotenv";
+import { generalDataAPIPath } from "../../utils/dotenv";
 
 export const AppointmentAreaChart: FC = () => {
   const [data, setData] = useState<any>([]);
@@ -18,7 +18,7 @@ export const AppointmentAreaChart: FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(generalDataPath, {
+        const response = await axios.get(generalDataAPIPath, {
           params: {
             choice: "getTotalNumberOfAppointmentsPerPeriodPerEachDate",
             entity: "appointment",

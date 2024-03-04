@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import axios from "axios";
-import { medicalProceduresAPI } from "../../utils/dotenv";
+import { medicalProceduresAPIPath } from "../../utils/dotenv";
 import { MedicalSpeciality } from "../../types";
 
 type MedicalProcedurePickerMedicalRecordProps = {
@@ -40,7 +40,7 @@ export const MedicalProcedurePickerMedicalRecord: FC<
       console.log("medicalSpecialityIds", medicalSpecialityIds);
 
       try {
-        const response = await axios.get(medicalProceduresAPI, {
+        const response = await axios.get(medicalProceduresAPIPath, {
           params: {
             message: "medicalProceduresByMedicalSpecialities",
             medicalSpecialityIds: medicalSpecialityIds?.join(","),

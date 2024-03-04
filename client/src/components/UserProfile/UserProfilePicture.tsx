@@ -3,7 +3,7 @@ import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import axios from "axios";
 import { Buffer } from "buffer";
 import { UserProfilePictureProps } from "../../types";
-import { userProfilePicturePath } from "../../utils/dotenv";
+import { userProfilePictureAPIPath } from "../../utils/dotenv";
 
 export const UserProfilePicture: FC<UserProfilePictureProps> = ({
   userProfilePictureWidth,
@@ -18,7 +18,7 @@ export const UserProfilePicture: FC<UserProfilePictureProps> = ({
   useEffect(() => {
     async function fetchProfilePicture() {
       try {
-        const response = await axios(userProfilePicturePath, {
+        const response = await axios(userProfilePictureAPIPath, {
           responseType: "arraybuffer",
           params: { userId },
           withCredentials: true,

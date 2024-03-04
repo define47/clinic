@@ -5,7 +5,7 @@ import { AppointmentHistory } from "../../types";
 import { CardEntry } from "../../components/design/card/CardEntry";
 import { VscDash } from "react-icons/vsc";
 import { IoArrowUndoOutline } from "react-icons/io5";
-import { appointmentHistoryPath } from "../../utils/dotenv";
+import { appointmentHistoryAPIPath } from "../../utils/dotenv";
 
 export const AppointmentHistoryCards: FC = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export const AppointmentHistoryCards: FC = () => {
 
   async function getAppointmentHistory() {
     try {
-      const response = await axios.get(appointmentHistoryPath, {
+      const response = await axios.get(appointmentHistoryAPIPath, {
         params: {
           appointmentId,
         },

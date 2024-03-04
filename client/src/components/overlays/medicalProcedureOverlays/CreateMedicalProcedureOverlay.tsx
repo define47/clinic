@@ -4,7 +4,7 @@ import { StyledRippleButton } from "../../design/StyledRippleButton";
 import Overlay from "../base/Overlay";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import axios from "axios";
-import { medicalProceduresAPI } from "../../../utils/dotenv";
+import { medicalProceduresAPIPath } from "../../../utils/dotenv";
 import { StyledInputV2 } from "../../design/StyledInputV2";
 import { Toaster, toast } from "sonner";
 
@@ -54,7 +54,7 @@ export const CreateMedicalProcedureOverlay: FC<
   async function onCreateMedicalProcedure() {
     try {
       const response = await axios.post(
-        medicalProceduresAPI,
+        medicalProceduresAPIPath,
         {
           medicalSpecialityId: medicalSpecialityId.slice(1),
           medicalProcedureName: medicalProcedureToCreate.medicalProcedureName,

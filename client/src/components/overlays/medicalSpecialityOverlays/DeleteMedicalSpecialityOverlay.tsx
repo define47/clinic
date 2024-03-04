@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { DeleteMedicalSpecialityOverlayPros } from "../../../types";
-import { medicalSpecialitiesPath } from "../../../utils/dotenv";
+import { medicalSpecialitiesAPIPath } from "../../../utils/dotenv";
 import axios from "axios";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
@@ -18,7 +18,7 @@ export const DeleteMedicalSpecialityOverlay: FC<
 
   async function onDeleteMedicalSpeciality() {
     try {
-      const response = await axios.delete(medicalSpecialitiesPath, {
+      const response = await axios.delete(medicalSpecialitiesAPIPath, {
         data: { medicalSpecialityId: medicalSpeciality.medicalSpecialityId },
         withCredentials: true,
       });

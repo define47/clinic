@@ -2,7 +2,7 @@ import { FC, useContext, useEffect, useState } from "react";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import axios from "axios";
 import { Group, MedicalProcedure, MedicalSpeciality } from "../../types";
-import { medicalProceduresAPI } from "../../utils/dotenv";
+import { medicalProceduresAPIPath } from "../../utils/dotenv";
 import { VscDash } from "react-icons/vsc";
 
 export const MedicalProcedurePicker: FC = () => {
@@ -123,7 +123,7 @@ export const MedicalProcedurePicker: FC = () => {
       //     }
       //   }
 
-      const response = await axios.get(medicalProceduresAPI, {
+      const response = await axios.get(medicalProceduresAPIPath, {
         params: {
           medicalSpecialityId:
             authenticatedUserDataState?.medicalSpecialities![0]
@@ -158,7 +158,7 @@ export const MedicalProcedurePicker: FC = () => {
 
       // //////
 
-      const response1 = await axios.get(medicalProceduresAPI, {
+      const response1 = await axios.get(medicalProceduresAPIPath, {
         params: {
           medicalSpecialityId:
             authenticatedUserDataState?.medicalSpecialities![1]
@@ -194,7 +194,7 @@ export const MedicalProcedurePicker: FC = () => {
         }
       }
 
-      const response2 = await axios.get(medicalProceduresAPI, {
+      const response2 = await axios.get(medicalProceduresAPIPath, {
         params: {
           medicalSpecialityId:
             authenticatedUserDataState?.medicalSpecialities![2]

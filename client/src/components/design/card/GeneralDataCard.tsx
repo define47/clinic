@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { GeneralDataCardProps } from "../../../types";
 import axios from "axios";
-import { appointmentsPath, generalDataPath } from "../../../utils/dotenv";
+import { appointmentsAPIPath, generalDataAPIPath } from "../../../utils/dotenv";
 import { RiUserHeartLine } from "react-icons/ri";
 import { MdOutlinePersonalInjury } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
@@ -28,14 +28,14 @@ export const GeneralDataCard: FC<GeneralDataCardProps> = ({
         entity === "patient" ||
         entity === "receptionist"
       ) {
-        response = await axios.get(generalDataPath, {
+        response = await axios.get(generalDataAPIPath, {
           params: { entity },
           withCredentials: true,
         });
 
         if (response?.data.success) setResult(response.data.payload);
       } else if (entity === "appointment") {
-        response = await axios.get(generalDataPath, {
+        response = await axios.get(generalDataAPIPath, {
           params: {
             entity,
             choice,
@@ -56,7 +56,7 @@ export const GeneralDataCard: FC<GeneralDataCardProps> = ({
         //   withCredentials: true,
         // });
 
-        const completedResp = await axios.get(appointmentsPath, {
+        const completedResp = await axios.get(appointmentsAPIPath, {
           params: {
             message: "appointmentCountByPeriodAndStatus",
             period,

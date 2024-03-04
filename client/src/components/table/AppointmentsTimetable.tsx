@@ -1,6 +1,6 @@
 import axios from "axios";
 import { FC, useContext, useEffect, useState } from "react";
-import { appointmentsPath } from "../../utils/dotenv";
+import { appointmentsAPIPath } from "../../utils/dotenv";
 import { AppointmentTableData } from "../../types";
 import { CardEntry } from "../design/card/CardEntry";
 import { UpdateAppointmentOverlay } from "../overlays/appointmentOverlays/UpdateAppointmentOverlay";
@@ -67,7 +67,7 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
           patientId: "",
         };
 
-        const response = await axios.get(appointmentsPath, {
+        const response = await axios.get(appointmentsAPIPath, {
           params: {
             ...queryParams,
           },

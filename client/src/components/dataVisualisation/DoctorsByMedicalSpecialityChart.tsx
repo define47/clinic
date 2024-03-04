@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { generalDataPath } from "../../utils/dotenv";
+import { generalDataAPIPath } from "../../utils/dotenv";
 
 export const DoctorsByMedicalSpecialityChart: FC = () => {
   const [dbData, setDbData] = useState<any>();
@@ -71,7 +71,7 @@ export const DoctorsByMedicalSpecialityChart: FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(generalDataPath, {
+        const response = await axios.get(generalDataAPIPath, {
           params: {
             entity: "doctorMedicalSpecialityMappingsCountByMedicalSpeciality",
           },

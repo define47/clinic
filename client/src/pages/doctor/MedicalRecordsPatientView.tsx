@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { MedicalRecordPatientBookPage } from "./MedicalRecordPatientBookPage";
 import { MedicalRecordPatientBookPageData } from "../../types";
 import axios from "axios";
-import { medicalRecordPatientsPath } from "../../utils/dotenv";
+import { medicalRecordPatientsAPIPath } from "../../utils/dotenv";
 
 export const MedicalRecordsPatientView: FC = () => {
   const [data, setData] = useState<MedicalRecordPatientBookPageData[]>([]);
@@ -18,7 +18,7 @@ export const MedicalRecordsPatientView: FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(medicalRecordPatientsPath, {
+        const response = await axios.get(medicalRecordPatientsAPIPath, {
           params: {
             doctorId: "c390e5d2-0c85-5e45-92eb-5486c7a564a1",
             patientId: "1557eff8-89ef-583d-854e-bbb262025bbe",

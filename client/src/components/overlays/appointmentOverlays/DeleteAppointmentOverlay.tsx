@@ -1,6 +1,6 @@
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
-import { appointmentsPath } from "../../../utils/dotenv";
+import { appointmentsAPIPath } from "../../../utils/dotenv";
 import { DeleteAppointmentOverlayPros } from "../../../types";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
@@ -32,7 +32,7 @@ export const DeleteAppointmentOverlay: FC<DeleteAppointmentOverlayPros> = ({
 
   async function onDeleteAppointment() {
     try {
-      const response = await axios.delete(appointmentsPath, {
+      const response = await axios.delete(appointmentsAPIPath, {
         data: { appointmentId },
         withCredentials: true,
       });

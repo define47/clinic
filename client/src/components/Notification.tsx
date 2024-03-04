@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FC, useContext, useEffect, useRef, useState } from "react";
 import { IoNotificationsOutline, IoNotificationsSharp } from "react-icons/io5";
-import { notificationsPath } from "../utils/dotenv";
+import { notificationsAPIPath } from "../utils/dotenv";
 import { AuthenticatedUserDataContext } from "../contexts/UserContext";
 import { UserNotification } from "../types";
 import { UserProfilePicture } from "./UserProfile/UserProfilePicture";
@@ -78,7 +78,7 @@ export const Notification: FC = () => {
 
   useEffect(() => {
     async function fetchUserNotifications() {
-      const response = await axios.get(notificationsPath, {
+      const response = await axios.get(notificationsAPIPath, {
         params: {
           userId: authenticatedUserDataState.userId,
         },

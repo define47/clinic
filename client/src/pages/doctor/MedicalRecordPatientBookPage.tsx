@@ -2,8 +2,8 @@ import axios from "axios";
 import { FC, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  appointmentsPath,
-  medicalRecordPatientsPath,
+  appointmentsAPIPath,
+  medicalRecordPatientsAPIPath,
 } from "../../utils/dotenv";
 import { AppointmentTableData, MedicalRecordPatient } from "../../types";
 import { useReactToPrint } from "react-to-print";

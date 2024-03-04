@@ -12,7 +12,7 @@ import Overlay from "../base/Overlay";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import axios from "axios";
-import { usersPath } from "../../../utils/dotenv";
+import { usersAPIPath } from "../../../utils/dotenv";
 import { PiPencil, PiPencilLineFill } from "react-icons/pi";
 import { MedicalSpecialityPicker } from "../../pickers/MedicalSpecialityPicker";
 import {
@@ -259,7 +259,7 @@ export const UpdateUserOverlay: FC<UpdateUserOverlayPros> = ({
       // }
 
       const response = await axios.put(
-        usersPath,
+        usersAPIPath,
         {
           userId: user.userId,
           userForename: userToUpdate.userForename,

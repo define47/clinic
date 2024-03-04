@@ -4,7 +4,7 @@ import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { DeleteUserOverlayPros, Patient, User } from "../../../types";
 import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
 import axios from "axios";
-import { usersPath } from "../../../utils/dotenv";
+import { usersAPIPath } from "../../../utils/dotenv";
 import { Tooltip } from "../../design/Tooltip";
 import { Toaster, toast } from "sonner";
 
@@ -33,7 +33,7 @@ export const DeleteUserOverlay: FC<DeleteUserOverlayPros> = ({
 
   async function onDeleteUser() {
     try {
-      const response = await axios.delete(usersPath, {
+      const response = await axios.delete(usersAPIPath, {
         data: { userId: user.userId },
         withCredentials: true,
       });

@@ -2,8 +2,8 @@ import axios from "axios";
 import { FC, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  appointmentsPath,
-  medicalRecordPatientsPath,
+  appointmentsAPIPath,
+  medicalRecordPatientsAPIPath,
 } from "../../utils/dotenv";
 import { AppointmentTableData, MedicalRecordPatient } from "../../types";
 import { useReactToPrint } from "react-to-print";
@@ -52,9 +52,9 @@ export const MedicalRecordPatientView: FC = () => {
 
   async function onViewMedicalRecordPatient() {
     try {
-      console.log(medicalRecordPatientsPath);
+      console.log(medicalRecordPatientsAPIPath);
 
-      const response = await axios.get(medicalRecordPatientsPath, {
+      const response = await axios.get(medicalRecordPatientsAPIPath, {
         params: {
           message: "medicalRecordPatient",
           appointmentId,
@@ -73,9 +73,9 @@ export const MedicalRecordPatientView: FC = () => {
 
   async function onGetAppointment() {
     try {
-      console.log(medicalRecordPatientsPath);
+      console.log(medicalRecordPatientsAPIPath);
 
-      const response = await axios.get(appointmentsPath, {
+      const response = await axios.get(appointmentsAPIPath, {
         params: {
           message: "appointment",
           appointmentId,

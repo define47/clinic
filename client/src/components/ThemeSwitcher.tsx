@@ -10,7 +10,7 @@ import {
 import { ThemeContext } from "../contexts/ThemeContext";
 import { AuthenticatedUserDataContext } from "../contexts/UserContext";
 import axios from "axios";
-import { userPreferencesPath } from "../utils/dotenv";
+import { userPreferencesAPIPath } from "../utils/dotenv";
 
 export const ThemeSwitcher: FC = () => {
   const { themeValue, setThemeValue } = useContext(ThemeContext);
@@ -33,7 +33,7 @@ export const ThemeSwitcher: FC = () => {
     try {
       setThemeValue("light");
       const response = await axios.put(
-        userPreferencesPath,
+        userPreferencesAPIPath,
         {
           languageId: authenticatedUserDataState.language.languageId,
           languageCode: authenticatedUserDataState.language.languageCode,
@@ -53,7 +53,7 @@ export const ThemeSwitcher: FC = () => {
     try {
       setThemeValue("dark");
       const response = await axios.put(
-        userPreferencesPath,
+        userPreferencesAPIPath,
         {
           languageId: authenticatedUserDataState.language.languageId,
           languageCode: authenticatedUserDataState.language.languageCode,

@@ -1,7 +1,7 @@
 import { FC, useContext } from "react";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
 import { GeneralTable } from "../../components/table/GeneralTable";
-import { usersPath } from "../../utils/dotenv";
+import { usersAPIPath } from "../../utils/dotenv";
 
 export const PatientDashboard: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);

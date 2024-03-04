@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FC, useEffect, useRef, useState } from "react";
 import { User, UserPickerProps } from "../../types";
-import { doctorRoleId, patientRoleId, usersPath } from "../../utils/dotenv";
+import { doctorRoleId, patientRoleId, usersAPIPath } from "../../utils/dotenv";
 import { StyledInput } from "../design/StyledInput";
 import { TiTick } from "react-icons/ti";
 import { RiArrowUpSLine } from "react-icons/ri";
@@ -58,7 +58,7 @@ export const UserPicker: FC<UserPickerProps> = ({
   async function fetchTableData() {
     try {
       if (shouldDataBeFetched) {
-        const response = await axios.get(usersPath, {
+        const response = await axios.get(usersAPIPath, {
           params: {
             roleId:
               roleName === "patient"

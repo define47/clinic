@@ -15,41 +15,49 @@ export const logoutUserPath = `${serverURL}${
   import.meta.env.VITE_SERVER_AUTH_PATH
 }/logout`;
 
-export const usersPath = `${import.meta.env.VITE_SERVER_SCHEME}${
+export const usersAPIPath = `${import.meta.env.VITE_SERVER_SCHEME}${
   import.meta.env.VITE_SERVER_HOST_AND_PORT
 }${import.meta.env.VITE_SERVER_USERS_PATH}`;
-export const medicalSpecialitiesPath = `${import.meta.env.VITE_SERVER_SCHEME}${
-  import.meta.env.VITE_SERVER_HOST_AND_PORT
-}${import.meta.env.VITE_SERVER_MEDICAL_SPECIALITIES_PATH}`;
-export const appointmentsPath = `${serverURL}${
+
+export const medicalSpecialitiesAPIPath = `${
+  import.meta.env.VITE_SERVER_SCHEME
+}${import.meta.env.VITE_SERVER_HOST_AND_PORT}${
+  import.meta.env.VITE_SERVER_MEDICAL_SPECIALITIES_PATH
+}`;
+
+export const appointmentsAPIPath = `${serverURL}${
   import.meta.env.VITE_SERVER_APPOINTMENTS_PATH
 }`;
-export const medicalProceduresAPI = `${serverURL}${
+
+export const medicalProceduresAPIPath = `${serverURL}${
   import.meta.env.VITE_SERVER_MEDICAL_PROCEDURES_PATH
 }`;
-export const appointmentsDoctorAvailabilityPath = `${serverURL}${
+
+export const appointmentsDoctorAvailabilityAPIPath = `${serverURL}${
   import.meta.env.VITE_SERVER_APPOINTMENTS_DOCTOR_AVAILABILITY
 }`;
-export const appointmentHistoryPath = `${serverURL}${
+
+export const appointmentHistoryAPIPath = `${serverURL}${
   import.meta.env.VITE_SERVER_APPOINTMENTS_HISTORY_PATH
 }`;
-export const userPreferencesPath = `${serverURL}${
+
+export const userPreferencesAPIPath = `${serverURL}${
   import.meta.env.VITE_SERVER_USER_PREFERENCES_PATH
 }`;
 
-export const notificationsPath = `${serverURL}${
+export const notificationsAPIPath = `${serverURL}${
   import.meta.env.VITE_SERVER_NOTIFICATIONS_PATH
 }`;
 
-export const userProfilePicturePath = `${serverURL}${
+export const userProfilePictureAPIPath = `${serverURL}${
   import.meta.env.VITE_SERVER_USER_PROFILE_PICTURE_PATH
 }`;
 
-export const generalDataPath = `${serverURL}${
+export const generalDataAPIPath = `${serverURL}${
   import.meta.env.VITE_SERVER_GENERAL_DATA_PATH
 }`;
 
-export const medicalRecordPatientsPath = `${serverURL}${
+export const medicalRecordPatientsAPIPath = `${serverURL}${
   import.meta.env.VITE_SERVER_MEDICAL_RECORD_PATIENTS_PATH
 }`;
 

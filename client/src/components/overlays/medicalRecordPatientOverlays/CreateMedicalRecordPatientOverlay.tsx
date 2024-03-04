@@ -11,7 +11,7 @@ import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { MedicalProcedurePicker } from "../../pickers/MedicalProcedurePicker";
 import { StyledTextArea } from "../../design/StyledTextArea";
 import axios from "axios";
-import { medicalRecordPatientsPath } from "../../../utils/dotenv";
+import { medicalRecordPatientsAPIPath } from "../../../utils/dotenv";
 import { useNavigate } from "react-router-dom";
 
 export const CreateMedicalRecordPatientOverlay: FC<
@@ -59,7 +59,7 @@ export const CreateMedicalRecordPatientOverlay: FC<
   async function onCreateMedicalRecordPatient() {
     try {
       const response = await axios.post(
-        medicalRecordPatientsPath,
+        medicalRecordPatientsAPIPath,
         {
           appointmentId: appointment.appointment.appointmentId,
           symptoms: medicalRecordPatientToCreate.symptoms,

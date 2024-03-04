@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { MedicalSpeciality, MedicalSpecialityPickerProps } from "../../types";
 import axios from "axios";
-import { medicalSpecialitiesPath } from "../../utils/dotenv";
+import { medicalSpecialitiesAPIPath } from "../../utils/dotenv";
 import { StyledInput } from "../design/StyledInput";
 import { RiArrowUpSLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
@@ -37,7 +37,7 @@ export const MedicalSpecialityPicker: FC<MedicalSpecialityPickerProps> = ({
 
   async function getMedicalSpecialities() {
     try {
-      const response = await axios.get(medicalSpecialitiesPath, {
+      const response = await axios.get(medicalSpecialitiesAPIPath, {
         params: {
           searchQuery: "",
           limit: 9999999,

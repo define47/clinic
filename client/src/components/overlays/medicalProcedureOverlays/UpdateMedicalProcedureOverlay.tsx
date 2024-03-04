@@ -10,7 +10,7 @@ import { PiPencil, PiPencilLineFill } from "react-icons/pi";
 import { StyledRippleButton } from "../../design/StyledRippleButton";
 import { ConfirmationDialogOverlay } from "../base/ConfirmationDialogOverlay";
 import { StyledInput } from "../../design/StyledInput";
-import { medicalProceduresAPI } from "../../../utils/dotenv";
+import { medicalProceduresAPIPath } from "../../../utils/dotenv";
 import { StyledInputV2 } from "../../design/StyledInputV2";
 import { Toaster, toast } from "sonner";
 
@@ -94,7 +94,7 @@ export const UpdateMedicalProcedureOverlay: FC<
   async function onUpdateMedicalProcedure() {
     try {
       const response = await axios.put(
-        medicalProceduresAPI,
+        medicalProceduresAPIPath,
         {
           medicalProcedureId: medicalProcedure.medicalProcedureId,
           medicalProcedureName: medicalProcedureToUpdate.medicalProcedureName,

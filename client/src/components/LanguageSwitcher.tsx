@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import RippleButton from "./design/RippleButton";
 import { AuthenticatedUserDataContext } from "../contexts/UserContext";
 import { TiTick } from "react-icons/ti";
-import { userPreferencesPath } from "../utils/dotenv";
+import { userPreferencesAPIPath } from "../utils/dotenv";
 
 interface LanguageSwitcherProps {
   languageId: string;
@@ -26,7 +26,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
     try {
       // ${process.env.REACT_APP_SERVER_SCHEME}${process.env.REACT_APP_SERVER_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/${process.env.REACT_APP_SERVER_USERS_PATH}
       const response = await axios.put(
-        userPreferencesPath,
+        userPreferencesAPIPath,
 
         {
           languageId,
