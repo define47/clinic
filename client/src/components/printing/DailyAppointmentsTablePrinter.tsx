@@ -6,6 +6,7 @@ import { AppointmentHeader } from "../table/headers/AppointmentHeader";
 import { AppointmentBody } from "../table/bodies/AppointmentBody";
 import { useReactToPrint } from "react-to-print";
 import { json } from "stream/consumers";
+import IatropolisLogo from "../../assets/logo-iatropolis.png";
 
 export const DailyAppointmentsTablePrinter: FC = () => {
   const [tableRows, setTableRows] = useState<AppointmentTableData[]>([]);
@@ -68,42 +69,56 @@ export const DailyAppointmentsTablePrinter: FC = () => {
       </button>
       <div ref={componentRef}>
         {/* Iterate over each doctorId and create a table */}
-        {Object.keys(tableRowsByDoctorId).map((doctorId) => (
-          <div key={doctorId}>
-            <h4 className=" doctorIdPrintingSeparator">
-              {/* Doctor ID: {doctorId} */}
-              Dr. {}
-            </h4>
-            <table
-              className="w-full text-center text-xs font-light border rounded-xl"
-              style={{ pageBreakInside: "auto" }}
+        {Object.keys(tableRowsByDoctorId).map((doctorId) => {
+          const doctor = tableRowsByDoctorId[doctorId][0].doctor;
+          return (
+            <div
+              key={doctorId}
+              className="dailyAppointmentsTablePrinterContent"
             >
-              <thead className="w-full border-b border-lightMode-borderColor dark:border-darkMode-borderColor bg-lightMode-tableHeaderBackgroundColor dark:bg-darkMode-tableHeaderBackgroundColor font-medium">
-                <AppointmentHeader
-                  orderByIndicator={orderByIndicator}
-                  setOrderByIndicator={setOrderByIndicator}
-                  isPrinting
+              <div className="w-full flex items-center justify-between dailyAppointmentsTablePrinterHeader doctorIdPrintingSeparator">
+                <h4 className="">
+                  {/* Doctor ID: {doctorId} */}
+                  Dr. {doctor.doctorForename} {doctor.doctorSurname}
+                </h4>
+                <img
+                  src={IatropolisLogo}
+                  alt="Iatropolis, Botosani"
+                  className="object-contain h-8 w-44"
                 />
-              </thead>
-              <tbody>
-                {tableRowsByDoctorId[doctorId].map(
-                  (tableRow: AppointmentTableData, tableRowIndex: number) => (
-                    <AppointmentBody
-                      key={tableRowIndex}
-                      tableRow={tableRow}
-                      currentPage={0}
-                      tableRowIndex={tableRowIndex}
-                      clickedTableRow={clickedTableRow}
-                      setClickedTableRow={setClickedTableRow}
-                      tableLimit={99999}
-                      isPrinting
-                    />
-                  )
-                )}
-              </tbody>
-            </table>
-          </div>
-        ))}
+              </div>
+              <table
+                className="w-full text-center text-xs font-light border rounded-xl"
+                style={{ pageBreakInside: "auto" }}
+              >
+                <thead className="w-full border-b border-lightMode-borderColor dark:border-darkMode-borderColor bg-lightMode-tableHeaderBackgroundColor dark:bg-darkMode-tableHeaderBackgroundColor font-medium">
+                  <AppointmentHeader
+                    orderByIndicator={orderByIndicator}
+                    setOrderByIndicator={setOrderByIndicator}
+                    isPrinting
+                  />
+                </thead>
+                <tbody>
+                  {tableRowsByDoctorId[doctorId].map(
+                    (tableRow: AppointmentTableData, tableRowIndex: number) => (
+                      <AppointmentBody
+                        key={tableRowIndex}
+                        tableRow={tableRow}
+                        currentPage={0}
+                        tableRowIndex={tableRowIndex}
+                        clickedTableRow={clickedTableRow}
+                        setClickedTableRow={setClickedTableRow}
+                        tableLimit={99999}
+                        isPrinting
+                      />
+                    )
+                  )}
+                </tbody>
+              </table>
+              <footer className="footer"></footer>
+            </div>
+          );
+        })}
       </div>
     </>
   );
