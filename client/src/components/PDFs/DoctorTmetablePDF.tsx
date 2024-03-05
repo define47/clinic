@@ -7,10 +7,21 @@ export const DoctorTimetablePDF: FC<DoctorTimetablePDFProps> = ({
   appointments,
 }) => {
   const [currentDate, setCurrentDate] = useState<Date>();
+  const [currentHour, setCurrentHour] = useState<number>();
+  const [currentMinute, setCurrentMinute] = useState<number>();
+  const [currentSecond, setCurrentSecond] = useState<number>();
 
   useEffect(() => {
     setCurrentDate(new Date());
   }, []);
+
+  useEffect(() => {
+    if (currentDate) {
+      setCurrentHour(currentDate.getHours());
+      setCurrentMinute(currentDate.getMinutes());
+      setCurrentSecond(currentDate.getSeconds());
+    }
+  }, [currentDate]);
 
   return (
     <Document>
@@ -40,20 +51,34 @@ export const DoctorTimetablePDF: FC<DoctorTimetablePDFProps> = ({
           style={{
             flexDirection: "row",
             alignItems: "center",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
           }}
           fixed
         >
           <View style={{ width: "200px" }}>
             <Image src={IatropolisLogo} style={{ objectFit: "contain" }} />
           </View>
+          <View>
+            <Text style={{ fontSize: 8 }}>
+              generated at {currentHour}:{currentMinute}:{currentSecond} on{" "}
+              {currentDate
+                ?.toISOString()
+                .split("T")[0]
+                .split("-")
+                .reverse()
+                .join("-")}
+            </Text>
+          </View>
         </View>
 
         <View
           style={{
+            marginTop: 15,
+            marginBottom: 15,
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
+            fontSize: 12,
           }}
           fixed
         >
@@ -101,6 +126,7 @@ export const DoctorTimetablePDF: FC<DoctorTimetablePDFProps> = ({
               alignItems: "center",
               justifyContent: "center",
               borderRight: 1,
+              borderColor: "black",
             }}
           >
             <Text style={{ fontSize: 10 }}>Patient</Text>
@@ -109,6 +135,7 @@ export const DoctorTimetablePDF: FC<DoctorTimetablePDFProps> = ({
             style={{
               width: "15%",
               borderRight: 1,
+              borderColor: "black",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
@@ -149,6 +176,7 @@ export const DoctorTimetablePDF: FC<DoctorTimetablePDFProps> = ({
                     borderLeft: 1,
                     borderRight: 1,
                     borderBottom: 1,
+                    borderColor: "black",
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
@@ -164,6 +192,7 @@ export const DoctorTimetablePDF: FC<DoctorTimetablePDFProps> = ({
                     width: "15%",
                     borderRight: 1,
                     borderBottom: 1,
+                    borderColor: "black",
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
@@ -187,11 +216,26 @@ export const DoctorTimetablePDF: FC<DoctorTimetablePDFProps> = ({
                     textAlign: "center",
                     borderBottom: 1,
                     borderRight: 1,
+                    borderColor: "black",
                   }}
                 ></View>
               </View>
             )
           )}
+
+        <View
+          style={{
+            marginRight: 150,
+            marginTop: 65,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "flex-end",
+
+            fontSize: 10,
+          }}
+        >
+          <Text>Signature:</Text>
+        </View>
 
         <Text
           style={{
