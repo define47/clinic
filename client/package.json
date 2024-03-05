@@ -22,6 +22,7 @@
     "flag-icons": "^7.1.0",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.312.0",
+    "pdf-merger-js": "^5.1.1",
     "phone": "^3.1.42",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
