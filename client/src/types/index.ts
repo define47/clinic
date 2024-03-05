@@ -459,3 +459,7 @@ export type MedicalRecordPatientBookPageData = {
   appointment: AppointmentTableData;
   medicalRecordPatient: MedicalRecordPatient;
 };
+
+export type DoctorTimetablePDFProps = {
+  appointments: AppointmentTableData[];
+};

@@ -20,14 +20,14 @@ export const DailyAppointmentsTablePrinter: FC = () => {
           params: {
             message: "appointments",
             searchInTable: "doctor",
-            orderInTable: "doctor",
+            orderInTable: "appointment",
             searchBy: "userForename",
             searchQuery: "",
             scheduleFilter: "today",
 
             customStartDate: "2024-02-09",
             customEndDate: "2024-02-09",
-            orderBy: "desc:userForename",
+            orderBy: "asc:appointmentDateTime",
             limit: 9999999,
             page: 0,
             doctorId: "",
@@ -59,6 +59,7 @@ export const DailyAppointmentsTablePrinter: FC = () => {
   const componentRef = useRef<any>();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+
     onAfterPrint: () => console.log("print completed"),
   });
 
@@ -74,7 +75,7 @@ export const DailyAppointmentsTablePrinter: FC = () => {
           return (
             <div
               key={doctorId}
-              className="dailyAppointmentsTablePrinterContent"
+              className="dailyAppointmentsTablePrinterContent "
             >
               <div className="w-full flex items-center justify-between dailyAppointmentsTablePrinterHeader doctorIdPrintingSeparator">
                 <h4 className="">
@@ -88,8 +89,8 @@ export const DailyAppointmentsTablePrinter: FC = () => {
                 />
               </div>
               <table
-                className="w-full text-center text-xs font-light border rounded-xl"
-                style={{ pageBreakInside: "auto" }}
+                className="w-full text-center text-xs font-light border rounded-xl testTable"
+                // style={{ pageBreakInside: "auto" }}
               >
                 <thead className="w-full border-b border-lightMode-borderColor dark:border-darkMode-borderColor bg-lightMode-tableHeaderBackgroundColor dark:bg-darkMode-tableHeaderBackgroundColor font-medium">
                   <AppointmentHeader
@@ -115,7 +116,7 @@ export const DailyAppointmentsTablePrinter: FC = () => {
                   )}
                 </tbody>
               </table>
-              <footer className="footer"></footer>
+              {/* <footer className="footer"></footer> */}
             </div>
           );
         })}

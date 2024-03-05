@@ -34,10 +34,10 @@ export const AppointmentBody: FC<AppointmentBodyProps> = ({
           tableRow.appointment.appointmentId &&
         "!bg-lightMode-selectedTableRow dark:!bg-darkMode-selectedTableRow"
       }`}
-      style={{
-        pageBreakInside: "avoid",
-        pageBreakAfter: "auto",
-      }}
+      // style={{
+      //   pageBreakInside: "avoid",
+      //   pageBreakAfter: "auto",
+      // }}
       onClick={() => setClickedTableRow(tableRow)}
     >
       <td>{tableRowIndex + 1 + currentPage * tableLimit}</td>
