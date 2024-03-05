@@ -250,7 +250,7 @@ h2 {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-@media print {
+/* @media print {
   html,
   body {
     width: 210mm;
@@ -265,28 +265,13 @@ h2 {
     min-height: initial;
     box-shadow: initial;
     background: initial;
-    /* page-break-after: always; */
+    page-break-after: always;
     overflow-y: visible;
   }
   footer::after {
     content: counter(page);
   }
-
-  .wrapper-test {
-    /* display: table; */
-    /* page-break-inside: auto; */
-  }
-  .test {
-    display: table;
-    /* break-before: avoid; */
-    /* break-after: avoid; */
-    /* break-inside: avoid; */
-  }
-
-  /* .test2 {
-    break-inside: avoid;
-  } */
-}
+} */
 
 :root {
   --font-size: 15px;
@@ -389,3 +374,34 @@ h2 {
   transform: rotateY(-180deg);
 }
 /* /book */
+
+@media print {
+  html,
+  body {
+    /* width: 210mm;
+    height: 297mm; */
+  }
+  .page {
+    margin: 0;
+    padding: 10mm;
+    border: initial;
+    border-radius: initial;
+    width: initial;
+    min-height: initial;
+    box-shadow: initial;
+    background: initial;
+    page-break-after: always;
+    overflow-y: visible;
+  }
+  footer::after {
+    content: counter(page);
+  }
+
+  @page {
+    margin: 0.2cm;
+  }
+
+  .doctorIdPrintingSeparator {
+    page-break-before: always;
+  }
+}

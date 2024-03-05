@@ -429,6 +429,12 @@ export type MedicalSpecialityBodyProps = {
   tableLimit: number;
 };
 
+export type AppointmentHeaderProps = {
+  orderByIndicator: string;
+  setOrderByIndicator: (orderByIndicator: string) => void;
+  isPrinting: boolean;
+};
+
 export type AppointmentBodyProps = {
   tableRow: AppointmentTableData;
   tableRowIndex: number;
@@ -436,6 +442,7 @@ export type AppointmentBodyProps = {
   setClickedTableRow: (clickedTableRow: TableRow) => void;
   currentPage: number;
   tableLimit: number;
+  isPrinting: boolean;
 };
 
 export type MedicalProcedureBodyProps = {

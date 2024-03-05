@@ -1,15 +1,12 @@
 import { FC, useContext } from "react";
 import { AuthenticatedUserDataContext } from "../../../contexts/UserContext";
 import { getItemByLanguageAndCollection } from "../../../utils/clientLanguages";
-
-type AppointmentHeaderProps = {
-  orderByIndicator: string;
-  setOrderByIndicator: (orderByIndicator: string) => void;
-};
+import { AppointmentHeaderProps } from "../../../types";
 
 export const AppointmentHeader: FC<AppointmentHeaderProps> = ({
   orderByIndicator,
   setOrderByIndicator,
+  isPrinting,
 }) => {
   const authContext = useContext(AuthenticatedUserDataContext);
   const { authenticatedUserDataState } = authContext!;
@@ -65,18 +62,30 @@ export const AppointmentHeader: FC<AppointmentHeaderProps> = ({
           5
         )}
       </td>
-      <td className="px-6 py-4 font-bold">
-        {/* Actions */}
-        Price
-      </td>
-      <td className="px-6 py-4 font-bold">
-        {/* Actions */}
-        {getItemByLanguageAndCollection(
-          authenticatedUserDataState.language.languageCode,
-          "appointmentTableColumnNames",
-          6
-        )}
-      </td>
+
+      {isPrinting && (
+        <td className="px-6 py-4 font-bold">
+          {/* Actions */}
+          Comments
+        </td>
+      )}
+
+      {!isPrinting && (
+        <td className="px-6 py-4 font-bold">
+          {/* Actions */}
+          Price
+        </td>
+      )}
+      {!isPrinting && (
+        <td className="px-6 py-4 font-bold">
+          {/* Actions */}
+          {getItemByLanguageAndCollection(
+            authenticatedUserDataState.language.languageCode,
+            "appointmentTableColumnNames",
+            6
+          )}
+        </td>
+      )}
     </tr>
   );
 };

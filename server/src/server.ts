@@ -30,6 +30,7 @@ import { appointmentDoctorBookedSlotsRoutes } from "./routes/appointmentDoctorAv
 import { generalDataRoutes } from "./routes/generalData.routes.js";
 import { notificationRoutes } from "./routes/notification.routes.js";
 import {
+  createAppointments,
   createLanguages,
   createMedicalProcedures,
   createRoles,
@@ -351,7 +352,7 @@ const buildServer = async () => {
   // performDoctorInteractions(true);
   // createPatients(0, 100);
 
-  // await createAppointments(0, 150);
+  // await createAppointments(0, 3);
 
   // getEntityMessage("en", "patient", "create", "success");
 

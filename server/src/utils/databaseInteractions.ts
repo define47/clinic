@@ -354,7 +354,7 @@ export const createLanguages = async () => {
   });
 };
 
-function getRandomDate(
+function getRandomDateTime(
   year: number,
   month: number,
   day: number,
@@ -373,6 +373,16 @@ function getRandomDate(
   const randomDate = new Date(year, month - 1, day, randomHour, randomMinute);
 
   return randomDate;
+}
+
+function getRandomTime(minHour: number, maxHour: number) {
+  const randomHour =
+    Math.floor(Math.random() * (maxHour - minHour + 1)) + minHour;
+  const minutes = [0, 15, 30, 45];
+  // const randomMinute = Math.floor(Math.random() * 60);
+  const randomMinute = minutes[Math.floor(Math.random() * minutes.length)];
+
+  return { randomHour, randomMinute };
 }
 
 export const createAppointments = async (start: number, end: number) => {
@@ -396,15 +406,22 @@ export const createAppointments = async (start: number, end: number) => {
   ))!.tableData;
 
   // console.log(doctors);
-  const randomDoctor = doctors[Math.floor(Math.random() * doctors.length)];
-  const randomPatient = doctors[Math.floor(Math.random() * doctors.length)];
 
   for (let start = 0; start < end; start++) {
-    let randomAppointmentDateTime = getRandomDate(2024, 2, 9, 8, 18);
+    const randomDoctor = doctors[Math.floor(Math.random() * doctors.length)];
+    const randomPatient = doctors[Math.floor(Math.random() * doctors.length)];
+    // let randomAppointmentDateTime = getRandomDateTime(2024, 2, 9, 8, 18);
+    let randomAppointmentTime = getRandomTime(8, 17);
     await appointmentService.createAppointment({
-      appointmentDoctorId: randomDoctor.userId,
+      appointmentDoctorId: "fe11da6e-91d7-54bd-b9f8-6714cb986df3",
       appointmentPatientId: randomPatient.userId,
-      appointmentDateTime: randomAppointmentDateTime,
+      appointmentDateTime: new Date(
+        2024,
+        2,
+        5,
+        randomAppointmentTime.randomHour,
+        randomAppointmentTime.randomMinute
+      ),
       appointmentReason: `${randomDoctor.userForename} ${randomDoctor.userSurname} - ${randomPatient.userForename} ${randomPatient.userSurname}`,
       appointmentStatus: "scheduled",
     });
