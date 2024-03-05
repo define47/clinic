@@ -409,7 +409,7 @@ export const createAppointments = async (start: number, end: number) => {
 
   for (let start = 0; start < end; start++) {
     const randomDoctor = doctors[Math.floor(Math.random() * doctors.length)];
-    const randomPatient = doctors[Math.floor(Math.random() * doctors.length)];
+    const randomPatient = patients[Math.floor(Math.random() * patients.length)];
     // let randomAppointmentDateTime = getRandomDateTime(2024, 2, 9, 8, 18);
     let randomAppointmentTime = getRandomTime(8, 17);
     await appointmentService.createAppointment({
