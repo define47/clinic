@@ -7,7 +7,7 @@ import { appointmentsAPIPath } from "../../utils/dotenv";
 import { AppointmentTableData } from "../../types";
 import PDFMerger from "pdf-merger-js/browser";
 import { Document, Page, pdfjs } from "react-pdf";
-import { Spinner } from "../../Spinners/Spinner";
+import { Spinner } from "../../Loaders/Spinner";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -16,9 +16,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 export const AdminGuide: FC = () => {
   const [tableRows, setTableRows] = useState<AppointmentTableData[]>([]);
+  const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
   useEffect(() => {
     async function fetchTableData() {
       try {
+        setIsDataLoading(true);
         const response = await axios.get(appointmentsAPIPath, {
           params: {
             message: "appointments",
@@ -44,6 +46,8 @@ export const AdminGuide: FC = () => {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsDataLoading(false);
       }
     }
 
@@ -54,6 +58,7 @@ export const AdminGuide: FC = () => {
   const [pdfLinks, setPdfLinks] = useState<JSX.Element[]>([]);
 
   async function generatePDFsAllDoctors() {
+    setIsDataLoading(true);
     const files: JSX.Element[] = [];
     let tests = [];
     const tableRowsByDoctorId: Record<string, AppointmentTableData[]> = {};
@@ -79,7 +84,7 @@ export const AdminGuide: FC = () => {
           fileName="doctor_timetable.pdf"
         >
           {({ blob, url, loading, error }) =>
-            loading ? "Loading document..." : "Download now!"
+            loading ? <Spinner /> : "Download now!"
           }
         </PDFDownloadLink>
       );
@@ -110,6 +115,7 @@ export const AdminGuide: FC = () => {
     setMergedPdfUrl(url);
 
     setPdfLinks(files);
+    setIsDataLoading(false);
   }
 
   useEffect(() => {
@@ -118,6 +124,8 @@ export const AdminGuide: FC = () => {
 
   return (
     <div>
+      {isDataLoading && <Spinner />}
+
       {/* {Object.keys(tableRowsByDoctorId).map((doctorId) =>
         tableRowsByDoctorId[doctorId].map(
           (tableRow: AppointmentTableData, tableRowIndex: number) => (
@@ -138,43 +146,42 @@ export const AdminGuide: FC = () => {
         )
       )} */}
 
-      <Spinner />
-
       {/* <PDFViewer width="100%" height="900px">
         <DoctorTimetablePDF appointments={tableRows} />
       </PDFViewer> */}
-      <div className="w-full">
-        {/* <div className="w-full grid grid-cols-5">
-          {pdfLinks.map((pdfLink: JSX.Element) => (
-            <div className="col-span-1">{pdfLink}</div>
-          ))}
-        </div> */}
+      {!isDataLoading && (
+        <div className="w-full">
+          <div className="w-full grid grid-cols-5">
+            {pdfLinks.map((pdfLink: JSX.Element) => (
+              <div className="col-span-1">{pdfLink}</div>
+            ))}
+          </div>
 
-        {/* <button
-          className="text-black"
-          onClick={() => {
-            if (mergedPdfUrl) {
-              const link = document.createElement("a");
-              link.href = mergedPdfUrl;
-              link.download = "downloaded_file.pdf";
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
-          }}
-        >
-          Download Merged PDF
-        </button> */}
+          <button
+            className="text-black"
+            onClick={() => {
+              if (mergedPdfUrl) {
+                const link = document.createElement("a");
+                link.href = mergedPdfUrl;
+                link.download = "downloaded_file.pdf";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }
+            }}
+          >
+            Download Merged PDF
+          </button>
 
-        {/* <iframe
-          style={{ backgroundColor: "white" }}
-          height={700}
-          src={`${mergedPdfUrl}`}
-          title="pdf-viewer"
-          width="100%"
-        ></iframe> */}
+          <iframe
+            style={{ backgroundColor: "white" }}
+            height={700}
+            src={`${mergedPdfUrl}`}
+            title="pdf-viewer"
+            width="100%"
+          ></iframe>
 
-        {/* <embed
+          {/* <embed
           style={{ backgroundColor: "white" }}
           height={700}
           src={`${mergedPdfUrl}`}
@@ -183,10 +190,11 @@ export const AdminGuide: FC = () => {
           type="application/pdf"
         ></embed> */}
 
-        {/* <Document file={mergedPdfUrl}>
+          {/* <Document file={mergedPdfUrl}>
           <Page pageNumber={5} />
         </Document> */}
-      </div>
+        </div>
+      )}
     </div>
 
     // <div>
