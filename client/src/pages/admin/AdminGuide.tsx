@@ -8,6 +8,7 @@ import { AppointmentTableData } from "../../types";
 import PDFMerger from "pdf-merger-js/browser";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Spinner } from "../../Loaders/Spinner";
+import { NumberPicker } from "../../components/pickers/NumberPicker";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -16,7 +17,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 export const AdminGuide: FC = () => {
   return (
-    <div></div>
+    <div className="w-48">
+      <NumberPicker />
+    </div>
 
     // <div>
     //   <PDFDownloadLink
