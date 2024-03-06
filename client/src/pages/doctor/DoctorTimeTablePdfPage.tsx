@@ -1,4 +1,8 @@
-import ReactPDF, { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import ReactPDF, {
+  PDFDownloadLink,
+  PDFViewer,
+  usePDF,
+} from "@react-pdf/renderer";
 import { FC, useContext, useEffect, useState } from "react";
 import { DoctorTimetablePDF } from "../../components/PDFs/DoctorTmetablePDF";
 import PDFMerger from "pdf-merger-js/browser";
@@ -9,6 +13,7 @@ import { Spinner } from "../../Loaders/Spinner";
 import { UserPicker } from "../../components/pickers/UserPicker";
 import { getItemByLanguageAndCollection } from "../../utils/clientLanguages";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
+import Overlay from "../../components/overlays/base/Overlay";
 
 export const DoctorTimetablePDFPage: FC = () => {
   const authContext = useContext(AuthenticatedUserDataContext);
@@ -16,11 +21,15 @@ export const DoctorTimetablePDFPage: FC = () => {
     authContext!;
   const [tableRows, setTableRows] = useState<AppointmentTableData[]>([]);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
-  const [isIFrameLoading, setIsIFrameLoading] = useState<boolean>(false);
+  const [isData2Loading, setIsData2Loading] = useState<boolean>(false);
+  const [isIFrameLoading, setIsIFrameLoading] = useState<boolean>(true);
   const [selectedDoctorId, setSelectedDoctorId] = useState<string>("");
   const [selectedDoctorName, setSelectedDoctorName] = useState<string>("");
   const [shouldMergedPDFBeFetched, setShouldMergedPDFBeFetched] =
     useState<boolean>(false);
+  const [isPDFBeingGenerated, setIsPDFBeingGenerated] =
+    useState<boolean>(false);
+  const [instance, updateInstance] = usePDF();
 
   useEffect(() => {
     async function fetchTableData() {
@@ -65,68 +74,77 @@ export const DoctorTimetablePDFPage: FC = () => {
 
   useEffect(() => {
     async function generatePDFsAllDoctors() {
-      setIsDataLoading(true);
-      const files: JSX.Element[] = [];
-      let tests = [];
-      const tableRowsByDoctorId: Record<string, AppointmentTableData[]> = {};
-      tableRows.forEach((tableRow) => {
-        const doctorId = tableRow.doctor.doctorId;
-        if (!tableRowsByDoctorId[doctorId]) {
-          tableRowsByDoctorId[doctorId] = [];
+      try {
+        setIsData2Loading(true);
+        const files: JSX.Element[] = [];
+        let tests = [];
+        const tableRowsByDoctorId: Record<string, AppointmentTableData[]> = {};
+        tableRows.forEach((tableRow) => {
+          const doctorId = tableRow.doctor.doctorId;
+          if (!tableRowsByDoctorId[doctorId]) {
+            tableRowsByDoctorId[doctorId] = [];
+          }
+          tableRowsByDoctorId[doctorId].push(tableRow);
+        });
+
+        const doctorIds = Object.keys(tableRowsByDoctorId);
+
+        for (let i = 0; i < doctorIds.length; i++) {
+          const pdf = (
+            <PDFDownloadLink
+              key={`${doctorIds[i]}`} // Make sure to provide a unique key
+              document={
+                <DoctorTimetablePDF
+                  appointments={tableRowsByDoctorId[doctorIds[i]]}
+                />
+              }
+              fileName="doctor_timetable.pdf"
+            >
+              {({ blob, url, loading, error }) =>
+                loading ? (
+                  <Spinner />
+                ) : (
+                  `${
+                    tableRowsByDoctorId[doctorIds[i]][0].doctor.doctorForename
+                  } ${
+                    tableRowsByDoctorId[doctorIds[i]][0].doctor.doctorSurname
+                  }`
+                )
+              }
+            </PDFDownloadLink>
+          );
+          const blob = await ReactPDF.pdf(
+            <DoctorTimetablePDF
+              appointments={tableRowsByDoctorId[doctorIds[i]]}
+            />
+          ).toBlob();
+          tests.push(blob);
+          files.push(pdf);
         }
-        tableRowsByDoctorId[doctorId].push(tableRow);
-      });
 
-      const doctorIds = Object.keys(tableRowsByDoctorId);
+        const merger = new PDFMerger();
+        await merger.setMetadata({
+          //   producer: "Custom Producer",
+          //   author: "Custom Author",
+          //   creator: "Custom Creator",
+          title: "Doctors Timetable",
+        });
+        for (const file of tests) {
+          await merger.add(file);
+        }
 
-      for (let i = 0; i < doctorIds.length; i++) {
-        const pdf = (
-          <PDFDownloadLink
-            key={`${doctorIds[i]}`} // Make sure to provide a unique key
-            document={
-              <DoctorTimetablePDF
-                appointments={tableRowsByDoctorId[doctorIds[i]]}
-              />
-            }
-            fileName="doctor_timetable.pdf"
-          >
-            {({ blob, url, loading, error }) =>
-              loading ? <Spinner /> : "Download now!"
-            }
-          </PDFDownloadLink>
-        );
-        const blob = await ReactPDF.pdf(
-          <DoctorTimetablePDF
-            appointments={tableRowsByDoctorId[doctorIds[i]]}
-          />
-        ).toBlob();
-        tests.push(blob);
-        files.push(pdf);
+        const mergedPdf = await merger.saveAsBlob();
+
+        const url = URL.createObjectURL(mergedPdf);
+
+        setMergedPdfUrl(url);
+
+        setPdfLinks(files);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsData2Loading(false);
       }
-
-      const merger = new PDFMerger();
-      await merger.setMetadata({
-        //   producer: "Custom Producer",
-        //   author: "Custom Author",
-        //   creator: "Custom Creator",
-        title: "Doctors Timetable",
-      });
-      // await merger.save("this is the name of the pdf");
-
-      // await merger.save("merged.pdf");
-
-      for (const file of tests) {
-        await merger.add(file);
-      }
-
-      const mergedPdf = await merger.saveAsBlob();
-
-      const url = URL.createObjectURL(mergedPdf);
-
-      setMergedPdfUrl(url);
-
-      setPdfLinks(files);
-      setIsDataLoading(false);
     }
 
     if (shouldMergedPDFBeFetched) generatePDFsAllDoctors();
@@ -150,6 +168,7 @@ export const DoctorTimetablePDFPage: FC = () => {
 
       const url = URL.createObjectURL(blob);
 
+      updateInstance(<DoctorTimetablePDF appointments={tableRows} />);
       setDoctorPdfURL(url);
     }
 
@@ -158,6 +177,18 @@ export const DoctorTimetablePDFPage: FC = () => {
 
   return (
     <div className="w-full h-full">
+      <Overlay
+        className={`fixed inset-0 flex justify-center items-center bg-black/30 transition-opacity z-50  ${
+          isDataLoading || isData2Loading || instance.loading
+            ? "visible"
+            : "invisible"
+        }`}
+        // closeModal={() => setIsCreateUserOverlayVisible(false)}
+        closeModal={() => {}}
+      >
+        <div></div>
+      </Overlay>
+
       {/* {Object.keys(tableRowsByDoctorId).map((doctorId) =>
         tableRowsByDoctorId[doctorId].map(
           (tableRow: AppointmentTableData, tableRowIndex: number) => (
@@ -179,7 +210,13 @@ export const DoctorTimetablePDFPage: FC = () => {
       )} */}
 
       <div className="flex items-center justify-center mb-10">
-        <div className="w-full lg:w-1/4">
+        <div
+          className="w-full lg:w-1/4"
+          onClick={() => {
+            setShouldMergedPDFBeFetched(false);
+            setMergedPdfUrl("");
+          }}
+        >
           <UserPicker
             shouldDataBeFetched={true}
             label={getItemByLanguageAndCollection(
@@ -200,6 +237,8 @@ export const DoctorTimetablePDFPage: FC = () => {
           className="text-black"
           onClick={() => {
             setShouldMergedPDFBeFetched(true);
+            setSelectedDoctorName("");
+            setDoctorPdfURL("");
           }}
         >
           All
@@ -216,17 +255,24 @@ export const DoctorTimetablePDFPage: FC = () => {
               loading ? <Spinner /> : `${selectedDoctorName}`
             }
           </PDFDownloadLink> */}
+
+          {!instance.loading && (
+            <a href={instance.url} download="test.pdf">
+              Download
+            </a>
+          )}
+
           {/* <PDFViewer width="100%">
             <DoctorTimetablePDF appointments={tableRows} />
           </PDFViewer> */}
 
-          {isIFrameLoading && <Spinner />}
+          {/* {isIFrameLoading && <Spinner />}
 
           {doctorPdfURL && (
             <div
-            //   className={`${
-            //     isIFrameLoading || isDataLoading ? "invisible" : "block"
-            //   }`}
+              className={`${
+                isIFrameLoading || isDataLoading ? "invisible" : "block"
+              }`}
             >
               <div className="">
                 <iframe
@@ -241,7 +287,7 @@ export const DoctorTimetablePDFPage: FC = () => {
                     setIsIFrameLoading(false);
                   }}
                 ></iframe>
-                {/* <embed
+                <embed
                   style={{ backgroundColor: "white" }}
                   height={700}
                   src={`${doctorPdfURL}`}
@@ -254,10 +300,10 @@ export const DoctorTimetablePDFPage: FC = () => {
                   onError={() => {
                     setIsIFrameLoading(false);
                   }}
-                ></embed> */}
+                ></embed>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       )}
 
@@ -267,49 +313,52 @@ export const DoctorTimetablePDFPage: FC = () => {
 
           {!isDataLoading && (
             <div className="w-full">
-              {/* <div className="w-full grid grid-cols-5">
+              <div className="w-full grid grid-cols-5">
                 {pdfLinks.map((pdfLink: JSX.Element) => (
                   <div className="col-span-1">{pdfLink}</div>
                 ))}
-              </div> */}
+              </div>
 
-              {/* <button
-                className="text-black"
-                onClick={() => {
-                  if (mergedPdfUrl) {
-                    const link = document.createElement("a");
-                    link.href = mergedPdfUrl;
-                    link.download = "downloaded_file.pdf";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                  }
-                }}
-              >
-                Download Merged PDF
-              </button> */}
+              {mergedPdfUrl !== "" && (
+                <button
+                  className="text-black"
+                  onClick={() => {
+                    if (mergedPdfUrl) {
+                      const link = document.createElement("a");
+                      link.href = mergedPdfUrl;
+                      link.download = "downloaded_file.pdf";
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }
+                  }}
+                >
+                  Download Merged PDF
+                </button>
+              )}
 
+              {/* 
               {isIFrameLoading && <Spinner />}
 
-              <div
-                className={`${
-                  isIFrameLoading || isDataLoading ? "invisible" : "block"
-                }`}
-              >
-                <iframe
-                  style={{ backgroundColor: "white" }}
-                  height={700}
-                  src={`${mergedPdfUrl}`}
-                  title="pdf-viewer"
-                  width="100%"
-                  onLoad={() => {
-                    setIsIFrameLoading(false);
-                  }}
-                  onError={() => {
-                    setIsIFrameLoading(false);
-                  }}
-                ></iframe>
-                {/* <embed
+              {mergedPdfUrl !== "" && (
+                <div
+                  className={`${
+                    isIFrameLoading || isDataLoading ? "invisible" : "block"
+                  }`}
+                >
+                  <iframe
+                    height={700}
+                    src={`${mergedPdfUrl}`}
+                    title="pdf-viewer"
+                    width="100%"
+                    onLoad={() => {
+                      setIsIFrameLoading(false);
+                    }}
+                    onError={() => {
+                      setIsIFrameLoading(false);
+                    }}
+                  ></iframe>
+                  <embed
                   style={{ backgroundColor: "white" }}
                   height={700}
                   src={`${mergedPdfUrl}`}
@@ -322,8 +371,9 @@ export const DoctorTimetablePDFPage: FC = () => {
                   onError={() => {
                     setIsIFrameLoading(false);
                   }}
-                ></embed> */}
-              </div>
+                ></embed>
+                </div>
+              )} */}
             </div>
           )}
         </>

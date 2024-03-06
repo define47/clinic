@@ -135,7 +135,7 @@ export const Layout: FC = () => {
         // select-none
         device === "Desktop" ? (
           <div className="w-screen h-screen flex dark:bg-black">
-            <div className="lg:fixed h-full hidden lg:block z-10">
+            <div className="lg:fixed h-full hidden lg:block lg:z-10">
               <Sidebar
                 isSidebarExpanded={isSidebarExpanded}
                 setIsSidebarExpanded={setIsSidebarExpanded}
@@ -153,7 +153,7 @@ export const Layout: FC = () => {
                 // md:static
                 // left-20 top-14
                 // flex justify-center
-                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0  lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-layoutColor`}
+                className={`p-4 lg:fixed lg:left-20 lg:top-14 lg:z-0 lg:h-[calc(100%-56px)] w-full h-full overflow-y-auto lg:w-[calc(100%-80px)] transition-all bg-lightMode-layoutColor dark:bg-darkMode-layoutColor`}
               >
                 {/* connected? {isSocketConnected.toString()} here: {welcome} */}
                 <Outlet />
