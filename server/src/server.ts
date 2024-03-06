@@ -352,7 +352,7 @@ const buildServer = async () => {
   // performDoctorInteractions(true);
   // createPatients(0, 100);
 
-  // await createAppointments(0, 300);
+  // await createAppointments(0, 100);
 
   // getEntityMessage("en", "patient", "create", "success");
 

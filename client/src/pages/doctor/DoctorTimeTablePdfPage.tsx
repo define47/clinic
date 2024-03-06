@@ -78,14 +78,23 @@ export const DoctorTimetablePDFPage: FC = () => {
         setIsData2Loading(true);
         const files: JSX.Element[] = [];
         let tests = [];
-        const tableRowsByDoctorId: Record<string, AppointmentTableData[]> = {};
-        tableRows.forEach((tableRow) => {
+        // const tableRowsByDoctorId: Record<string, AppointmentTableData[]> = {};
+        // tableRows.forEach((tableRow) => {
+        //   const doctorId = tableRow.doctor.doctorId;
+        //   if (!tableRowsByDoctorId[doctorId]) {
+        //     tableRowsByDoctorId[doctorId] = [];
+        //   }
+        //   tableRowsByDoctorId[doctorId].push(tableRow);
+        // });
+        const tableRowsByDoctorId = tableRows.reduce((acc, tableRow) => {
           const doctorId = tableRow.doctor.doctorId;
-          if (!tableRowsByDoctorId[doctorId]) {
-            tableRowsByDoctorId[doctorId] = [];
-          }
-          tableRowsByDoctorId[doctorId].push(tableRow);
-        });
+
+          // Use the logical OR operator to initialize an empty array if it doesn't exist
+          acc[doctorId] = acc[doctorId] || [];
+
+          acc[doctorId].push(tableRow);
+          return acc;
+        }, {});
 
         const doctorIds = Object.keys(tableRowsByDoctorId);
 
@@ -150,9 +159,9 @@ export const DoctorTimetablePDFPage: FC = () => {
     if (shouldMergedPDFBeFetched) generatePDFsAllDoctors();
   }, [shouldMergedPDFBeFetched, tableRows]);
 
-  useEffect(() => {
-    if (selectedDoctorId === "") setTableRows([]);
-  }, [selectedDoctorId]);
+  // useEffect(() => {
+  //   if (selectedDoctorId === "") setTableRows([]);
+  // }, [selectedDoctorId]);
 
   const [doctorPdfURL, setDoctorPdfURL] = useState<string>("");
 
@@ -186,7 +195,9 @@ export const DoctorTimetablePDFPage: FC = () => {
         // closeModal={() => setIsCreateUserOverlayVisible(false)}
         closeModal={() => {}}
       >
-        <div></div>
+        <div>
+          <Spinner />
+        </div>
       </Overlay>
 
       {/* {Object.keys(tableRowsByDoctorId).map((doctorId) =>
@@ -313,11 +324,11 @@ export const DoctorTimetablePDFPage: FC = () => {
 
           {!isDataLoading && (
             <div className="w-full">
-              <div className="w-full grid grid-cols-5">
+              {/* <div className="w-full grid grid-cols-5">
                 {pdfLinks.map((pdfLink: JSX.Element) => (
                   <div className="col-span-1">{pdfLink}</div>
                 ))}
-              </div>
+              </div> */}
 
               {!isData2Loading && (
                 <button
