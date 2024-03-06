@@ -16,6 +16,38 @@ export const NumberPicker: FC = () => {
     console.log("price", price);
   }, [price]);
 
+  const cursorPosition = () => {
+    const sel = window.getSelection();
+    sel.modify("extend", "backward", "paragraphboundary");
+    const pos = sel.toString().length;
+
+    if (sel.anchorNode !== undefined) sel.collapseToEnd();
+
+    return pos;
+  };
+
+  const printCaretPosition = () => {
+    console.log(
+      cursorPosition(),
+      "length:",
+      contentEditableRef.current.textContent.trim().length
+    );
+  };
+
+  useEffect(() => {
+    const div = contentEditableRef.current;
+
+    if (div) {
+      div.addEventListener("click", printCaretPosition);
+      div.addEventListener("keydown", printCaretPosition);
+
+      return () => {
+        div.removeEventListener("click", printCaretPosition);
+        div.removeEventListener("keydown", printCaretPosition);
+      };
+    }
+  }, [contentEditableRef]);
+
   return (
     <div className="relative">
       <div className="w-full h-16 flex items-center justify-center space-x-2 bg-white border rounded-tl-xl rounded-tr-xl">
