@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
+import { Page, Text, View, Document, Image, Font } from "@react-pdf/renderer";
 import { AppointmentTableData, DoctorTimetablePDFProps } from "../../types";
 import IatropolisLogo from "../../assets/logo-iatropolis.png";
 
@@ -23,9 +23,17 @@ export const DoctorTimetablePDF: FC<DoctorTimetablePDFProps> = ({
     }
   }, [currentDate]);
 
+  Font.register({
+    family: "Roboto",
+    src: "http://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf",
+  });
+
   return (
     <Document>
-      <Page size="A4" style={{ flexDirection: "column", padding: "25" }}>
+      <Page
+        size="A4"
+        style={{ flexDirection: "column", padding: "25", fontFamily: "Roboto" }}
+      >
         {/* <View
           style={{
             flexDirection: "row",

@@ -31,6 +31,7 @@ import {
   appointmentsPathnameForDoctors,
   appointmentsPathnameForReceptionists,
   doctorsPathname,
+  doctorsTimetable,
   medicalProceduresPathname,
   medicalSpecialitiesPathname,
   nursesPathname,
@@ -44,6 +45,7 @@ import { logoutUserAPIPath } from "../../utils/dotenv";
 import IatropolisLogo from "../../assets/logo-iatropolis.png";
 import { getItemByLanguageAndCollection } from "../../utils/clientLanguages";
 import { AuthenticatedUserDataContext } from "../../contexts/UserContext";
+import { PiBooks, PiBooksFill } from "react-icons/pi";
 
 export const Sidebar: FC<SidebarProps> = ({
   isSidebarExpanded,
@@ -350,6 +352,15 @@ export const Sidebar: FC<SidebarProps> = ({
                 isSidebarExpanded={isSidebarExpanded}
               />
             )}
+            <SidebarItem
+              to={doctorsTimetable}
+              icon={
+                pathname === doctorsTimetable ? <PiBooksFill /> : <PiBooks />
+              }
+              title={"Doctors timetable PDF"}
+              active={pathname === doctorsTimetable}
+              isSidebarExpanded={isSidebarExpanded}
+            />
             <li className="border-b border-lightMode-borderColor dark:border-darkMode-borderColor"></li>
             <SidebarItem
               to={settingsPathname}

@@ -266,7 +266,7 @@ export const DoctorTimetablePDFPage: FC = () => {
             <DoctorTimetablePDF appointments={tableRows} />
           </PDFViewer> */}
 
-          {/* {isIFrameLoading && <Spinner />}
+          {isIFrameLoading && <Spinner />}
 
           {doctorPdfURL && (
             <div
@@ -287,7 +287,7 @@ export const DoctorTimetablePDFPage: FC = () => {
                     setIsIFrameLoading(false);
                   }}
                 ></iframe>
-                <embed
+                {/* <embed
                   style={{ backgroundColor: "white" }}
                   height={700}
                   src={`${doctorPdfURL}`}
@@ -300,10 +300,10 @@ export const DoctorTimetablePDFPage: FC = () => {
                   onError={() => {
                     setIsIFrameLoading(false);
                   }}
-                ></embed>
+                ></embed> */}
               </div>
             </div>
-          )} */}
+          )}
         </div>
       )}
 
@@ -319,7 +319,7 @@ export const DoctorTimetablePDFPage: FC = () => {
                 ))}
               </div>
 
-              {mergedPdfUrl !== "" && (
+              {!isData2Loading && (
                 <button
                   className="text-black"
                   onClick={() => {
@@ -337,7 +337,6 @@ export const DoctorTimetablePDFPage: FC = () => {
                 </button>
               )}
 
-              {/* 
               {isIFrameLoading && <Spinner />}
 
               {mergedPdfUrl !== "" && (
@@ -358,7 +357,7 @@ export const DoctorTimetablePDFPage: FC = () => {
                       setIsIFrameLoading(false);
                     }}
                   ></iframe>
-                  <embed
+                  {/* <embed
                   style={{ backgroundColor: "white" }}
                   height={700}
                   src={`${mergedPdfUrl}`}
@@ -371,9 +370,9 @@ export const DoctorTimetablePDFPage: FC = () => {
                   onError={() => {
                     setIsIFrameLoading(false);
                   }}
-                ></embed>
+                ></embed> */}
                 </div>
-              )} */}
+              )}
             </div>
           )}
         </>
