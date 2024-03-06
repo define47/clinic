@@ -6,6 +6,13 @@ import axios from "axios";
 import { appointmentsAPIPath } from "../../utils/dotenv";
 import { AppointmentTableData } from "../../types";
 import PDFMerger from "pdf-merger-js/browser";
+import { Document, Page, pdfjs } from "react-pdf";
+import { Spinner } from "../../Spinners/Spinner";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.js",
+  import.meta.url
+).toString();
 
 export const AdminGuide: FC = () => {
   const [tableRows, setTableRows] = useState<AppointmentTableData[]>([]);
@@ -19,7 +26,7 @@ export const AdminGuide: FC = () => {
             orderInTable: "appointment",
             searchBy: "userForename",
             searchQuery: "",
-            scheduleFilter: "today",
+            scheduleFilter: "month",
 
             customStartDate: "2024-02-09",
             customEndDate: "2024-02-09",
@@ -131,22 +138,54 @@ export const AdminGuide: FC = () => {
         )
       )} */}
 
+      <Spinner />
+
       {/* <PDFViewer width="100%" height="900px">
         <DoctorTimetablePDF appointments={tableRows} />
       </PDFViewer> */}
       <div className="w-full">
-        <div className="w-full grid grid-cols-5">
+        {/* <div className="w-full grid grid-cols-5">
           {pdfLinks.map((pdfLink: JSX.Element) => (
             <div className="col-span-1">{pdfLink}</div>
           ))}
-        </div>
+        </div> */}
 
-        <iframe
+        {/* <button
+          className="text-black"
+          onClick={() => {
+            if (mergedPdfUrl) {
+              const link = document.createElement("a");
+              link.href = mergedPdfUrl;
+              link.download = "downloaded_file.pdf";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+          }}
+        >
+          Download Merged PDF
+        </button> */}
+
+        {/* <iframe
+          style={{ backgroundColor: "white" }}
           height={700}
           src={`${mergedPdfUrl}`}
           title="pdf-viewer"
           width="100%"
-        ></iframe>
+        ></iframe> */}
+
+        {/* <embed
+          style={{ backgroundColor: "white" }}
+          height={700}
+          src={`${mergedPdfUrl}`}
+          title="pdf-viewer"
+          width="100%"
+          type="application/pdf"
+        ></embed> */}
+
+        {/* <Document file={mergedPdfUrl}>
+          <Page pageNumber={5} />
+        </Document> */}
       </div>
     </div>
 

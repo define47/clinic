@@ -413,7 +413,7 @@ export const createAppointments = async (start: number, end: number) => {
     // let randomAppointmentDateTime = getRandomDateTime(2024, 2, 9, 8, 18);
     let randomAppointmentTime = getRandomTime(8, 17);
     await appointmentService.createAppointment({
-      appointmentDoctorId: "fe11da6e-91d7-54bd-b9f8-6714cb986df3",
+      appointmentDoctorId: randomDoctor.userId,
       appointmentPatientId: randomPatient.userId,
       appointmentDateTime: new Date(
         2024,
