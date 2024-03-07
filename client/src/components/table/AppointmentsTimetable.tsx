@@ -341,7 +341,7 @@ export const AppointmentsTimetable: FC<AppointmentTimetableProps> = ({
       {doctorId !== "" && (
         <div className="w-full h-full">
           <table className="w-full h-full">
-            <thead>
+            <thead className="sticky top-0 z-50">
               <tr className="">
                 <th className="bg-white border border-gray-200 dark:bg-darkMode-sidebarColor dark:text-darkMode-tableHeaderTextColor text-xs">
                   Times

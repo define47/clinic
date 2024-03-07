@@ -41,9 +41,9 @@ export const AppointmentBody: FC<AppointmentBodyProps> = ({
       onClick={() => setClickedTableRow(tableRow)}
     >
       <td>{tableRowIndex + 1 + currentPage * tableLimit}</td>
-      <td className="px-6 py-4 text-xs">
+      {/* <td className="px-6 py-4 text-xs">
         {tableRow.appointment.appointmentId}
-      </td>
+      </td> */}
       <td className="px-6 py-4 text-xs">
         {tableRow.doctor.doctorForename}&nbsp;
         {tableRow.doctor.doctorSurname}&nbsp;&nbsp;&nbsp;

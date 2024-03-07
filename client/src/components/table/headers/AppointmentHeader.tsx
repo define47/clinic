@@ -13,7 +13,7 @@ export const AppointmentHeader: FC<AppointmentHeaderProps> = ({
   return (
     <tr>
       <td>Index</td>
-      <td className="px-6 py-4 font-bold">appointmentId</td>
+      {/* <td className="px-6 py-4 font-bold">appointmentId</td> */}
       <td className="px-6 py-4 font-bold">
         {/* doctor */}
         {getItemByLanguageAndCollection(

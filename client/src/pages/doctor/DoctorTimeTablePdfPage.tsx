@@ -42,7 +42,7 @@ export const DoctorTimetablePDFPage: FC = () => {
             orderInTable: "appointment",
             searchBy: "userForename",
             searchQuery: "",
-            scheduleFilter: "month",
+            scheduleFilter: "today",
 
             customStartDate: "2024-02-09",
             customEndDate: "2024-02-09",

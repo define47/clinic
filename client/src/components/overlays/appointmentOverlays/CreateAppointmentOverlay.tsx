@@ -79,7 +79,10 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
     if (timetableDoctorId) setSelectedDoctorId(timetableDoctorId);
 
     if (timetableDate) setDefaultDate(timetableDate);
-    if (timetableTime) setDefaultTime(timetableTime);
+    if (timetableTime) {
+      setDefaultTime(timetableTime);
+      console.log("timetableTime", timetableTime);
+    }
     console.log("selected", timetableDate, timetableTime);
   }, [timetableDoctorId, timetableDate, timetableTime]);
 
@@ -144,7 +147,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   }
 
   useEffect(() => {
-    async function getDoctorAppointmentAvailability() {
+    async function getDoctorBookedAppointmentSlots() {
       try {
         if (selectedDoctorId) {
           const response = await axios.get(appointmentsAPIPath, {
@@ -164,7 +167,7 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
       }
     }
 
-    getDoctorAppointmentAvailability();
+    getDoctorBookedAppointmentSlots();
   }, [selectedDoctorId, selectedAppointmentDateTime]);
 
   useEffect(() => {
@@ -274,40 +277,57 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
 
   useEffect(() => {
     function getFirstAvailableTimeSlots() {
-      const timeSlots = [];
-      let hour = 8; // Starting hour
-      let minute = 0; // Starting minute
+      console.log("forbidden yuhuu", forbiddenTimeSlots.length);
 
-      while (hour <= 17) {
-        timeSlots.push(
-          `${hour.toString().padStart(2, "0")}:${minute
-            .toString()
-            .padStart(2, "0")}`
-        );
+      if (forbiddenTimeSlots.length > 0) {
+        console.log("forbidden entered");
 
-        // Increment by 15 minutes
-        minute += 15;
-        if (minute === 60) {
-          minute = 0;
-          hour += 1;
+        const timeSlots = [];
+        let hour = 8;
+        let minute = 0;
+
+        while (hour <= 17) {
+          timeSlots.push(
+            `${hour.toString().padStart(2, "0")}:${minute
+              .toString()
+              .padStart(2, "0")}`
+          );
+
+          minute += 15;
+          if (minute === 60) {
+            minute = 0;
+            hour += 1;
+          }
         }
+
+        for (let i = 0; i < forbiddenTimeSlots.length; i++) {
+          // console.log("forbidden", forbiddenTimeSlots[i]);
+          timeSlots.splice(timeSlots.indexOf(forbiddenTimeSlots[i]), 1);
+        }
+
+        // console.log("timeSlots", timeSlots);
+
+        // setDefaultTime(timeSlots[0]);
+        // setDefaultTime("10:23");
+        setSelectedAppointmentDateTime(
+          `${selectedAppointmentDateTime.split("T")[0]}T${timeSlots[0]}:00.000Z`
+        );
+      } else {
+        // setDefaultTime("08:00");
+        console.log("forbidden", selectedAppointmentDateTime);
+        setSelectedAppointmentDateTime(
+          `${selectedAppointmentDateTime.split("T")[0]}T08:00:00.000Z`
+        );
+        // if (selectedAppointmentDateTime !== "0-01-00")
+        // setDefaultDate(selectedAppointmentDateTime.split("T")[0]);
       }
-
-      for (let i = 0; i < forbiddenTimeSlots.length; i++) {
-        timeSlots.splice(timeSlots.indexOf(forbiddenTimeSlots[i]), 1);
-      }
-
-      console.log("timeSlots", timeSlots);
-
-      setDefaultTime(timeSlots[0]);
     }
-
-    getFirstAvailableTimeSlots();
-  }, [forbiddenTimeSlots]);
+    if (!timetableTime) getFirstAvailableTimeSlots();
+  }, [forbiddenTimeSlots, timetableTime, selectedAppointmentDateTime]);
 
   useEffect(() => {
-    setDefaultTime("08:00");
-  }, [selectedDoctorId]);
+    if (!timetableTime) setDefaultTime("08:00");
+  }, [selectedDoctorId, timetableTime]);
 
   useEffect(() => {
     setSelectedDoctorId("");
