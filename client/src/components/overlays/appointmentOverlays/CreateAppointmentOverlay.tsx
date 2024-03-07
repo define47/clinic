@@ -78,10 +78,16 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   useEffect(() => {
     if (timetableDoctorId) setSelectedDoctorId(timetableDoctorId);
 
-    if (timetableDate) setDefaultDate(timetableDate);
-    if (timetableTime) {
-      setDefaultTime(timetableTime);
-      console.log("timetableTime", timetableTime);
+    // if (timetableDate) setDefaultDate(timetableDate);
+    // if (timetableTime) {
+    //   setDefaultTime(timetableTime);
+    //   console.log("timetableTime", timetableTime);
+    // }
+
+    if (timetableDate && timetableTime) {
+      setSelectedAppointmentDateTime(
+        `${timetableDate}T${timetableTime}:00.000Z`
+      );
     }
     console.log("selected", timetableDate, timetableTime);
   }, [timetableDoctorId, timetableDate, timetableTime]);
@@ -306,12 +312,12 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
         }
 
         // console.log("timeSlots", timeSlots);
-
-        // setDefaultTime(timeSlots[0]);
+        setDefaultDate(selectedAppointmentDateTime.split("T")[0]);
+        setDefaultTime(timeSlots[0]);
         // setDefaultTime("10:23");
-        setSelectedAppointmentDateTime(
-          `${selectedAppointmentDateTime.split("T")[0]}T${timeSlots[0]}:00.000Z`
-        );
+        // setSelectedAppointmentDateTime(
+        //   `${selectedAppointmentDateTime.split("T")[0]}T10:24`
+        // );
       } else {
         // setDefaultTime("08:00");
         console.log("forbidden", selectedAppointmentDateTime);
