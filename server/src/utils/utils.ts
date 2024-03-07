@@ -119,6 +119,7 @@ export function getTimeFrame(period: string) {
       startDate = startOfNextWeek;
       endDate = endOfNextWeek;
       break;
+
     default:
       break;
   }

@@ -486,7 +486,7 @@ export class AppointmentRepository
       //     break;
       // }
 
-      const timeFrame = getTimeFrame(scheduleFilter);
+      let timeFrame = getTimeFrame(scheduleFilter);
 
       // switch (scheduleFilter) {
       //   case "today":
@@ -579,17 +579,31 @@ export class AppointmentRepository
       //     startDate = startOfNextWeek;
       //     endDate = endOfNextWeek;
       //     break;
-      //   case "custom":
-      //     // console.log("customStartDate", customStartDate);
+      // case "custom":
+      //   // console.log("customStartDate", customStartDate);
 
-      //     startDate = new Date(customStartDate);
-      //     startDate.setUTCHours(0, 0, 0);
-      //     endDate = new Date(customEndDate);
-      //     endDate.setUTCHours(23, 59, 59);
+      //   startDate = new Date(customStartDate);
+      //   startDate.setUTCHours(0, 0, 0);
+      //   endDate = new Date(customEndDate);
+      //   endDate.setUTCHours(23, 59, 59);
       //     break;
       //   default:
       //     break;
       // }
+
+      if (scheduleFilter === "custom") {
+        // console.log("customStartDate", customStartDate);
+
+        startDate = new Date(customStartDate);
+        startDate.setUTCHours(0, 0, 0);
+        endDate = new Date(customEndDate);
+        endDate.setUTCHours(23, 59, 59);
+
+        timeFrame = {
+          startDate,
+          endDate,
+        };
+      }
 
       let columnToSearchBy1: PgColumn<any>;
       let columnToSearchBy2: PgColumn<any>;
