@@ -86,7 +86,7 @@ export const AdminDashboard: FC = () => {
       <div
         className={`w-full ${selectedDoctorId !== "" && "h-full"} space-y-10`}
       >
-        {JSON.stringify(authenticatedUserDataState)}
+        {/* {JSON.stringify(authenticatedUserDataState)} */}
         <div className="w-full flex flex-col items-center justify-center">
           <WeekPicker
             setDateWeekStart={setDashboardWeekStart}

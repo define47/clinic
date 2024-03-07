@@ -78,17 +78,17 @@ export const CreateAppointmentOverlay: FC<CreateAppointmentOverlayProps> = ({
   useEffect(() => {
     if (timetableDoctorId) setSelectedDoctorId(timetableDoctorId);
 
-    // if (timetableDate) setDefaultDate(timetableDate);
-    // if (timetableTime) {
-    //   setDefaultTime(timetableTime);
-    //   console.log("timetableTime", timetableTime);
-    // }
-
-    if (timetableDate && timetableTime) {
-      setSelectedAppointmentDateTime(
-        `${timetableDate}T${timetableTime}:00.000Z`
-      );
+    if (timetableDate) setDefaultDate(timetableDate);
+    if (timetableTime) {
+      setDefaultTime(timetableTime);
+      console.log("timetableTime", timetableTime);
     }
+
+    // if (timetableDate && timetableTime) {
+    //   setSelectedAppointmentDateTime(
+    //     `${timetableDate}T${timetableTime}:00.000Z`
+    //   );
+    // }
     console.log("selected", timetableDate, timetableTime);
   }, [timetableDoctorId, timetableDate, timetableTime]);
 
