@@ -373,6 +373,8 @@ export type Country = {
 
 export type PhoneExtensionPickerProps = {
   defaultPhoneExtension?: string;
+  selectedPhoneExtension: string;
+  setSelectedPhoneExtension: (selectedPhoneExtension: string) => void;
   z: string;
 };
 

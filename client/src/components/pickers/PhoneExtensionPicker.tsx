@@ -9,6 +9,8 @@ import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
   defaultPhoneExtension,
+  // selectedPhoneExtension,
+  // setSelectedPhoneExtension,
   z,
 }) => {
   const [countries, setCountries] = useState<Country[]>([]);
@@ -58,9 +60,12 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
   }, [isPhoneExtensionPickerVisible]);
 
   function handleCountryClick(country: Country) {
+    // setSearchTerm(`${country.countryName} (${country.phoneExtension})`);
+    // setSelectedPhoneExtension(country.phoneExtension);
+    // setSelectedCountryCode(country.countryCode);
+    // setSelectedCountryCode(country.countryCode);
+    // setSelectedPhoneExtension(country.phoneExtension);
     setSearchTerm(`${country.countryName} (${country.phoneExtension})`);
-    setSelectedPhoneExtension(country.phoneExtension);
-    setSelectedCountryCode(country.countryCode);
     setIsPhoneExtensionPickerVisible(false);
   }
 
@@ -103,9 +108,9 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
           filteredCountries[i].countryName.toLowerCase() &&
         searchTerm.toLowerCase() !==
           filteredCountries[i].phoneExtension.toLowerCase().substring(1) &&
+        // searchTerm.toLowerCase() !==
+        //     filteredCountries[i].countryCode.toLowerCase() &&
         searchTerm.toLowerCase() !==
-          //   filteredCountries[i].countryCode.toLowerCase() &&
-          // searchTerm.toLowerCase() !==
           `${filteredCountries[i].countryName.toLowerCase()} (${
             filteredCountries[i].phoneExtension
           })`
@@ -118,9 +123,9 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
           filteredCountries[i].countryName.toLowerCase() ||
         searchTerm.toLowerCase() ===
           filteredCountries[i].phoneExtension.toLowerCase().substring(1) ||
+        // searchTerm.toLowerCase() ===
+        //     filteredCountries[i].countryCode.toLowerCase() ||
         searchTerm.toLowerCase() ===
-          //   filteredCountries[i].countryCode.toLowerCase() ||
-          // searchTerm.toLowerCase() ===
           `${filteredCountries[i].countryName.toLowerCase()} (${
             filteredCountries[i].phoneExtension
           })`
@@ -191,12 +196,12 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
   }, [searchTerm, selectedCountryCode, selectedPhoneExtension]);
 
   useEffect(() => {
-    if (selectedCountryCode === "") {
+    if (selectedCountryCode === "" && selectedPhoneExtension === "") {
       setSelectedCountryCode("");
       setSelectedPhoneExtension("");
       setSearchTerm("");
     }
-  }, [selectedCountryCode]);
+  }, [selectedCountryCode, selectedPhoneExtension]);
 
   return (
     <div className="w-full flex">

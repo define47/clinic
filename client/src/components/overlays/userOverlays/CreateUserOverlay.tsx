@@ -95,6 +95,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   ] = useState<string>("");
   const [selectedGenderValue, setSelectedGenderValue] = useState<string>("");
   const [selectedGenderName, setSelectedGenderName] = useState<string>("");
+  const [selectedPhoneExtension, setSelectedPhoneExtension] =
+    useState<string>("");
 
   const [isUserForenameValid, setIsUserForenameValid] =
     useState<boolean>(false);
@@ -517,7 +519,12 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
             <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
               <div className="flex space-x-2">
                 <div className="w-10/12">
-                  <PhoneExtensionPicker defaultPhoneExtension="+40" z="z-50" />
+                  <PhoneExtensionPicker
+                    defaultPhoneExtension="+40"
+                    selectedPhoneExtension={selectedPhoneExtension}
+                    setSelectedPhoneExtension={setSelectedPhoneExtension}
+                    z="z-50"
+                  />
                 </div>
                 <StyledInputV2
                   styledInputWidth="w-full"
