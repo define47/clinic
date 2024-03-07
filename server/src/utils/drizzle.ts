@@ -1,5 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as pg from "pg";
+// import pg from "pg";
+
 const { Pool } = pg;
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { pgSchema } from "drizzle-orm/pg-core";

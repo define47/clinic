@@ -1,5 +1,5 @@
-import fastifyEnv from "@fastify/env";
 import Fastify, { FastifyReply, FastifyRequest } from "fastify";
+import fastifyEnv from "@fastify/env";
 import fastifyRedis from "@fastify/redis";
 import cluster from "node:cluster";
 import cookie, { FastifyCookieOptions } from "@fastify/cookie";
@@ -12,7 +12,7 @@ import {
   getServerPortEnv,
   options,
 } from "./utils/dotenv.js";
-import { drizzleInstance, migrateToDb } from "./utils/drizzle.js";
+
 import { BaseRepository } from "./repositories/base.repository.js";
 import { User, userTable } from "./models/user.model.js";
 import { authenticationMiddleware } from "./middlewares/auth.middleware.js";
@@ -29,23 +29,16 @@ import { appointmentHistoryRoutes } from "./routes/appointmentHistory.routes.js"
 import { appointmentDoctorBookedSlotsRoutes } from "./routes/appointmentDoctorAvailability.routes.js";
 import { generalDataRoutes } from "./routes/generalData.routes.js";
 import { notificationRoutes } from "./routes/notification.routes.js";
-import {
-  createAppointments,
-  createLanguages,
-  createMedicalProcedures,
-  createRoles,
-  createSpecialities,
-} from "./utils/databaseInteractions.js";
 import { communicationsRoutes } from "./routes/communications.routes.js";
-import { SerialPort } from "serialport";
-import { getEntityMessage } from "./utils/serverLanguages.js";
 import { convertUTCDateToLocalDate } from "./utils/utils.js";
 import { usersRoutes } from "./routes/users.routes.js";
 import { medicalSpecialitiesRoutes } from "./routes/medicalSpecialities.routes.js";
 import { medicalProceduresRoutes } from "./routes/medicalProcedures.routes.js";
 import { appointmentsRoutes } from "./routes/appointments.routes.js";
 import { medicalRecordsPatientsRoutes } from "./routes/medicalRecordsPatients.routes.js";
-
+import { UserRoleMappingRepository } from "./repositories/userRoleMapping.repository.js";
+import { userRoleMappingTable } from "./models/userRoleMapping.model.js";
+import { drizzleInstance, migrateToDb } from "./utils/drizzle.js";
 const redisChannel = "socketChannel";
 const countChannel = "countChannel";
 const CONNECTION_COUNT_CHANNEL = "chat:connection-count-updated";
@@ -371,6 +364,20 @@ const buildServer = async () => {
   //   )
   // );
   console.log(convertUTCDateToLocalDate(localDate).toISOString());
+
+  const userRoleMappingRepo = new UserRoleMappingRepository(
+    drizzleInstance,
+    userRoleMappingTable
+  );
+  console.log(
+    await userRoleMappingRepo.getAllPatients(
+      ["patientCNP"],
+      "33321",
+      "asc:userForename",
+      99999,
+      0
+    )
+  );
 
   return fastifyServer;
 };

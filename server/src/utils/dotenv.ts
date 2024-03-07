@@ -111,7 +111,7 @@ export const getDatabasePasswordEnv = async (): Promise<string> => {
   return fastifyServer.config.DATABASE_PASSWORD;
 };
 
-export const getDatabaseUsernameEnv = async (): Promise<string> => {
+export const getDatabaseUsernameEnv = (): string => {
   return fastifyServer.config.DATABASE_USERNAME;
 };
 

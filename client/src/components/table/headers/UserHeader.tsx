@@ -133,7 +133,7 @@ export const UserHeader: FC<UserHeaderProps> = ({
             <OrderByIndicator
               orderByIndicator={orderByIndicator}
               setOrderByIndicator={setOrderByIndicator}
-              orderByColumn="medicalSpecialityName"
+              orderByColumn="medicalSpecialityName:primary"
             />
           </div>
         </td>
