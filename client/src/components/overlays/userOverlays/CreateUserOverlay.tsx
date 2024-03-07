@@ -107,6 +107,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   const [isUserCNPvalid, setIsUserCNPValid] = useState<boolean>(false);
   const [isUserGenderValid, setIsUserGenderValid] = useState<boolean>(false);
   const [isUserAddressValid, setIsUserAddressValid] = useState<boolean>(false);
+  const [defaultPhoneExtension, setDefaultPhoneExtension] =
+    useState<string>("");
 
   useEffect(() => {
     function handleCloseOverlayEscapeKey(event: KeyboardEvent) {
@@ -225,6 +227,10 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
       setIsCreateUserOverlayVisible(false);
     }
   };
+
+  useEffect(() => {
+    setDefaultPhoneExtension("+40");
+  }, [isCreateUserOverlayVisible]);
 
   useEffect(() => {
     console.log(userToCreate);
@@ -526,7 +532,8 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
               <div className="flex space-x-2">
                 <div className="w-10/12">
                   <PhoneExtensionPicker
-                    defaultPhoneExtension="+40"
+                    isOverlayVisible={isCreateUserOverlayVisible}
+                    defaultPhoneExtension={defaultPhoneExtension}
                     selectedPhoneExtension={selectedPhoneExtension}
                     setSelectedPhoneExtension={setSelectedPhoneExtension}
                     z="z-50"

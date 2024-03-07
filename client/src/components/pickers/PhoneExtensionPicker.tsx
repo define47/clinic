@@ -8,6 +8,7 @@ import { TiTick } from "react-icons/ti";
 import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
+  isOverlayVisible,
   defaultPhoneExtension,
   selectedPhoneExtension,
   setSelectedPhoneExtension,
@@ -79,7 +80,7 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
         .startsWith(searchTerm.toLowerCase());
       const countryPhoneExtension = filteredCountry.phoneExtension
         .toLowerCase()
-        .substring(1)
+
         .startsWith(searchTerm.toLowerCase());
       const countryNameAndPhoneExtensionMatch =
         `${filteredCountry.countryName.toLowerCase()} (${filteredCountry.phoneExtension.toLowerCase()})`.startsWith(
@@ -101,78 +102,60 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
     setFilteredCountries(filterCountries());
   }, [searchTerm]);
 
-  useEffect(() => {
-    for (let i = 0; i < filteredCountries.length; i++) {
-      if (
-        searchTerm.toLowerCase() !==
-          filteredCountries[i].countryName.toLowerCase() &&
-        searchTerm.toLowerCase() !==
-          filteredCountries[i].phoneExtension.toLowerCase().substring(1) &&
-        // searchTerm.toLowerCase() !==
-        //     filteredCountries[i].countryCode.toLowerCase() &&
-        searchTerm.toLowerCase() !==
-          `${filteredCountries[i].countryName.toLowerCase()} (${
-            filteredCountries[i].phoneExtension
-          })`
-      ) {
-        setSelectedCountryCode("");
-        setSelectedPhoneExtension("");
-        break;
-      } else if (
-        searchTerm.toLowerCase() ===
-          filteredCountries[i].countryName.toLowerCase() ||
-        searchTerm.toLowerCase() ===
-          filteredCountries[i].phoneExtension.toLowerCase().substring(1) ||
-        // searchTerm.toLowerCase() ===
-        //     filteredCountries[i].countryCode.toLowerCase() ||
-        searchTerm.toLowerCase() ===
-          `${filteredCountries[i].countryName.toLowerCase()} (${
-            filteredCountries[i].phoneExtension
-          })`
-      ) {
-        setSelectedCountryCode(filteredCountries[i].countryCode);
-        setSelectedPhoneExtension(filteredCountries[i].phoneExtension);
-        setSearchTerm(
-          `${filteredCountries[i].countryName} (${filteredCountries[i].phoneExtension})`
-        );
-        break;
-        // setSearchTerm(
-        //   `${filteredCountries[i].countryName} ${filteredCountries[i].phoneExtension}`
-        // );
-      }
-    }
-
-    // if (
-    //   filteredCountries.length === 1 &&
-    //   !searchTerm.split(" ").includes(filteredCountries[0].countryName)
-    // ) {
-    //   console.log(
-    //     "logged",
-    //     filteredCountries[0].countryName,
-    //     searchTerm,
-    //     !searchTerm.split(" ").includes(filteredCountries[0].countryName),
-    //     searchTerm.split(" ")
-    //   );
-
-    //   setSelectedCountryCode(filteredCountries[0].countryCode);
-    //   setSelectedPhoneExtension(filteredCountries[0].phoneExtension);
-    // }
-
-    console.log(filteredCountries);
-  }, [filteredCountries, searchTerm, selectedCountryCode]);
+  // useEffect(() => {
+  //   for (let i = 0; i < filteredCountries.length; i++) {
+  //     if (
+  //       searchTerm.toLowerCase() !==
+  //         filteredCountries[i].countryName.toLowerCase() &&
+  //       searchTerm.toLowerCase() !==
+  //         filteredCountries[i].phoneExtension.toLowerCase() &&
+  //       // searchTerm.toLowerCase() !==
+  //       //     filteredCountries[i].countryCode.toLowerCase() &&
+  //       searchTerm.toLowerCase() !==
+  //         `${filteredCountries[i].countryName.toLowerCase()} (${
+  //           filteredCountries[i].phoneExtension
+  //         })`
+  //     ) {
+  //       setSelectedCountryCode("");
+  //       setSelectedPhoneExtension("");
+  //       break;
+  //     } else if (
+  //       searchTerm.toLowerCase() ===
+  //         filteredCountries[i].countryName.toLowerCase() ||
+  //       searchTerm.toLowerCase() ===
+  //         filteredCountries[i].phoneExtension.toLowerCase() ||
+  //       // searchTerm.toLowerCase() ===
+  //       //     filteredCountries[i].countryCode.toLowerCase() ||
+  //       searchTerm.toLowerCase() ===
+  //         `${filteredCountries[i].countryName.toLowerCase()} (${
+  //           filteredCountries[i].phoneExtension
+  //         })`
+  //     ) {
+  //       setSelectedCountryCode(filteredCountries[i].countryCode);
+  //       setSelectedPhoneExtension(filteredCountries[i].phoneExtension);
+  //       setSearchTerm(
+  //         `${filteredCountries[i].countryName} (${filteredCountries[i].phoneExtension})`
+  //       );
+  //       break;
+  //       // setSearchTerm(
+  //       //   `${filteredCountries[i].countryName} ${filteredCountries[i].phoneExtension}`
+  //       // );
+  //     }
+  //   }
+  // }, [filteredCountries, searchTerm, selectedCountryCode]);
 
   useEffect(() => {
     const foundCountry = countries.find(
       (country: Country) => country.phoneExtension === defaultPhoneExtension
     );
-    if (foundCountry) {
+    if (foundCountry && isOverlayVisible) {
       setSelectedPhoneExtension(foundCountry.phoneExtension);
       setSelectedCountryCode(foundCountry.phoneExtension);
       setSearchTerm(
         `${foundCountry.countryName} (${foundCountry.phoneExtension})`
       );
     }
-  }, [countries, defaultPhoneExtension]);
+  }, [countries, defaultPhoneExtension, isOverlayVisible]);
 
   // useEffect(() => {
   //   const foundCountry = countries.find(

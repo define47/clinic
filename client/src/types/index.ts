@@ -372,6 +372,7 @@ export type Country = {
 };
 
 export type PhoneExtensionPickerProps = {
+  isOverlayVisible: boolean;
   defaultPhoneExtension?: string;
   selectedPhoneExtension: string;
   setSelectedPhoneExtension: (selectedPhoneExtension: string) => void;
