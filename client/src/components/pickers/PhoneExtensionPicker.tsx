@@ -9,16 +9,16 @@ import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
   defaultPhoneExtension,
-  // selectedPhoneExtension,
-  // setSelectedPhoneExtension,
+  selectedPhoneExtension,
+  setSelectedPhoneExtension,
   z,
 }) => {
   const [countries, setCountries] = useState<Country[]>([]);
   const [isPhoneExtensionPickerVisible, setIsPhoneExtensionPickerVisible] =
     useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedPhoneExtension, setSelectedPhoneExtension] =
-    useState<string>("");
+  // const [selectedPhoneExtension, setSelectedPhoneExtension] =
+  //   useState<string>("");
   const [selectedCountryCode, setSelectedCountryCode] = useState<string>("");
   const phoneExtensionPickerRef = useRef<HTMLDivElement | null>(null);
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);

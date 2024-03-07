@@ -150,7 +150,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
     } else if (name === "userEmail") {
       setIsUserEmailValid(validator.isEmail(value));
     } else if (name === "userPhoneNumber") {
-      setIsUserPhoneNumberValid(phone("+40" + value).isValid);
+      setIsUserPhoneNumberValid(phone(selectedPhoneExtension + value).isValid);
     } else if (name === "userGender") {
       setIsUserGenderValid(regex.test(value));
     } else if (name === "userCNP") {
@@ -162,6 +162,12 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
       [name]: value,
     }));
   }
+
+  useEffect(() => {
+    setIsUserPhoneNumberValid(
+      phone(selectedPhoneExtension + userToCreate.userPhoneNumber).isValid
+    );
+  }, [selectedPhoneExtension, userToCreate.userPhoneNumber]);
 
   useEffect(() => {
     console.log("isUserForenameValid", isUserForenameValid);
