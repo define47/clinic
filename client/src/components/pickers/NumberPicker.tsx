@@ -6,6 +6,7 @@ export const NumberPicker: FC = () => {
   const [items, setItems] = useState<string[]>([]);
   const [price, setPrice] = useState<string>("");
   const contentEditableRef = useRef<HTMLDivElement>(null);
+  const [caretIndex, setCaretIndex] = useState<number>(-1);
 
   useEffect(() => {
     // setItems(["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."]);
@@ -18,20 +19,27 @@ export const NumberPicker: FC = () => {
 
   const cursorPosition = () => {
     const sel = window.getSelection();
-    sel.modify("extend", "backward", "paragraphboundary");
-    const pos = sel.toString().length;
+    if (sel) {
+      // Use sel.focusOffset to get the caret position
+      const pos = sel.focusOffset;
 
-    if (sel.anchorNode !== undefined) sel.collapseToEnd();
+      // Collapse to the end of the selection
+      if (sel.anchorNode !== undefined) sel.collapseToEnd();
 
-    return pos;
+      return pos;
+    }
+    return -1; // Return -1 if there is no selection
   };
 
   const printCaretPosition = () => {
-    console.log(
-      cursorPosition(),
-      "length:",
-      contentEditableRef.current.textContent.trim().length
-    );
+    const caretPos = cursorPosition();
+    const trimmedTextLength =
+      contentEditableRef.current.textContent.trim().length;
+
+    console.log(caretPos, "length:", trimmedTextLength);
+
+    // Update the caretIndex state
+    setCaretIndex(caretPos);
   };
 
   useEffect(() => {
@@ -47,6 +55,10 @@ export const NumberPicker: FC = () => {
       };
     }
   }, [contentEditableRef]);
+
+  useEffect(() => {
+    console.log("caretIndex", caretIndex);
+  }, [caretIndex]);
 
   return (
     <div className="relative">

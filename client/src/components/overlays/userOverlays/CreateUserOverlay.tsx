@@ -26,6 +26,7 @@ import {
   getItemByLanguageAndCollection,
 } from "../../../utils/clientLanguages";
 import { Toaster, toast } from "sonner";
+import { PhoneExtensionPicker } from "../../pickers/PhoneExtensionPicker";
 
 export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
   roleId,
@@ -514,74 +515,79 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
               />
             </div>
             <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6 mb-6 lg:mb-0">
-              <StyledInputV2
-                styledInputWidth="w-full"
-                unfocusedTextColor={
-                  userToCreate.userPhoneNumber.length === 0
-                    ? "text-black"
-                    : isUserPhoneNumberValid
-                    ? "text-green-700"
-                    : "text-red-700"
-                }
-                unfocusedBorderColor={
-                  userToCreate.userPhoneNumber.length === 0
-                    ? "border-black"
-                    : isUserPhoneNumberValid
-                    ? "border-green-700"
-                    : "border-red-700"
-                }
-                focusedTextColor={
-                  userToCreate.userPhoneNumber.length === 0
-                    ? "focus:text-pink-500"
-                    : isUserPhoneNumberValid
-                    ? "focus:text-green-500"
-                    : "focus:text-red-500"
-                }
-                focusedBorderColor={
-                  userToCreate.userPhoneNumber.length === 0
-                    ? "focus:border-pink-500"
-                    : isUserPhoneNumberValid
-                    ? "focus:border-green-500"
-                    : "focus:border-red-500"
-                }
-                focusedBorderColorIconArea={
-                  userToCreate.userPhoneNumber.length === 0
-                    ? "border-pink-500"
-                    : isUserPhoneNumberValid
-                    ? "border-green-500"
-                    : "border-red-500"
-                }
-                unfocusedLabelColor={
-                  userToCreate.userPhoneNumber.length === 0
-                    ? "text-black"
-                    : isUserPhoneNumberValid
-                    ? "text-green-700"
-                    : "text-red-700"
-                }
-                unfocusedLabelBackgroundColor="bg-white"
-                focusedLabelColor={
-                  userToCreate.userPhoneNumber.length === 0
-                    ? "text-pink-500"
-                    : isUserPhoneNumberValid
-                    ? "text-green-500"
-                    : "text-red-500"
-                }
-                focusedLabelBackgroundColor="bg-white"
-                isDisabled={false}
-                name="userPhoneNumber"
-                styledInputValue={userToCreate.userPhoneNumber}
-                onChangeStyledInput={handleStyledInputChange}
-                label={`
+              <div className="flex space-x-2">
+                <div className="w-10/12">
+                  <PhoneExtensionPicker defaultPhoneExtension="+40" z="z-50" />
+                </div>
+                <StyledInputV2
+                  styledInputWidth="w-full"
+                  unfocusedTextColor={
+                    userToCreate.userPhoneNumber.length === 0
+                      ? "text-black"
+                      : isUserPhoneNumberValid
+                      ? "text-green-700"
+                      : "text-red-700"
+                  }
+                  unfocusedBorderColor={
+                    userToCreate.userPhoneNumber.length === 0
+                      ? "border-black"
+                      : isUserPhoneNumberValid
+                      ? "border-green-700"
+                      : "border-red-700"
+                  }
+                  focusedTextColor={
+                    userToCreate.userPhoneNumber.length === 0
+                      ? "focus:text-pink-500"
+                      : isUserPhoneNumberValid
+                      ? "focus:text-green-500"
+                      : "focus:text-red-500"
+                  }
+                  focusedBorderColor={
+                    userToCreate.userPhoneNumber.length === 0
+                      ? "focus:border-pink-500"
+                      : isUserPhoneNumberValid
+                      ? "focus:border-green-500"
+                      : "focus:border-red-500"
+                  }
+                  focusedBorderColorIconArea={
+                    userToCreate.userPhoneNumber.length === 0
+                      ? "border-pink-500"
+                      : isUserPhoneNumberValid
+                      ? "border-green-500"
+                      : "border-red-500"
+                  }
+                  unfocusedLabelColor={
+                    userToCreate.userPhoneNumber.length === 0
+                      ? "text-black"
+                      : isUserPhoneNumberValid
+                      ? "text-green-700"
+                      : "text-red-700"
+                  }
+                  unfocusedLabelBackgroundColor="bg-white"
+                  focusedLabelColor={
+                    userToCreate.userPhoneNumber.length === 0
+                      ? "text-pink-500"
+                      : isUserPhoneNumberValid
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }
+                  focusedLabelBackgroundColor="bg-white"
+                  isDisabled={false}
+                  name="userPhoneNumber"
+                  styledInputValue={userToCreate.userPhoneNumber}
+                  onChangeStyledInput={handleStyledInputChange}
+                  label={`
                 ${getItemByLanguageAndCollection(
                   authenticatedUserDataState.language.languageCode,
                   "generalUserTableColumnNames",
                   3
                 )} ${getEntityNamesByLanguage(
-                  authenticatedUserDataState.language.languageCode,
-                  roleName
-                )}
+                    authenticatedUserDataState.language.languageCode,
+                    roleName
+                  )}
                 `}
-              />
+                />
+              </div>
               {/* <StyledInputV2
                 styledInputWidth="w-full"
                 unfocusedTextColor={
@@ -639,7 +645,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 selectedGenderValue={selectedGenderValue}
                 selectedGenderName={selectedGenderName}
                 setSelectedGenderName={setSelectedGenderName}
-                z="z-50"
+                z="z-40"
               />
               {/* <StyledInput
                 label="userDateOfBirth"
@@ -656,7 +662,7 @@ export const CreateUserOverlay: FC<CreateUserOverlayPros> = ({
                 setSelectedEntity={setUserDateOfBirth}
                 defaultDate={defaultDate}
                 isOverlayVisible={isCreateUserOverlayVisible}
-                z="z-40"
+                z="z-30"
               />
             </div>
             <div className="w-full lg:w-1/3 flex flex-col items-center lg:items-baseline space-y-6">

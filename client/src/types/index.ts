@@ -373,6 +373,7 @@ export type Country = {
 
 export type PhoneExtensionPickerProps = {
   defaultPhoneExtension?: string;
+  z: string;
 };
 
 export type GeneralDataCardProps = {

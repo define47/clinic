@@ -16,24 +16,23 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 export const AdminGuide: FC = () => {
-  return (
-    <div className="w-48">
-      <NumberPicker />
-    </div>
+  // <div className="w-48">
+  //   <NumberPicker />
+  // </div>
 
-    // <div>
-    //   <PDFDownloadLink
-    //     document={<DoctorTimetablePDF appointments={tableRows} />}
-    //     fileName="doctor_timetable.pdf"
-    //   >
-    //     {({ blob, url, loading, error }) =>
-    //       loading ? "Loading document..." : "Download now!"
-    //     }
-    //   </PDFDownloadLink>
+  // <div>
+  //   <PDFDownloadLink
+  //     document={<DoctorTimetablePDF appointments={tableRows} />}
+  //     fileName="doctor_timetable.pdf"
+  //   >
+  //     {({ blob, url, loading, error }) =>
+  //       loading ? "Loading document..." : "Download now!"
+  //     }
+  //   </PDFDownloadLink>
 
-    //   <PDFViewer width="100%" height="900px">
-    //     <DoctorTimetablePDF appointments={tableRows} />
-    //   </PDFViewer>
-    // </div>
-  );
+  //   <PDFViewer width="100%" height="900px">
+  //     <DoctorTimetablePDF appointments={tableRows} />
+  //   </PDFViewer>
+  // </div>
+  return <div></div>;
 };

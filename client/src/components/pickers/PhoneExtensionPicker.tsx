@@ -5,9 +5,11 @@ import { Country, PhoneExtensionPickerProps } from "../../types";
 import { StyledInput } from "../design/StyledInput";
 import { RiArrowUpSLine } from "react-icons/ri";
 import { TiTick } from "react-icons/ti";
+import { StyledInputV2 } from "../design/StyledInputV2";
 
 export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
   defaultPhoneExtension,
+  z,
 }) => {
   const [countries, setCountries] = useState<Country[]>([]);
   const [isPhoneExtensionPickerVisible, setIsPhoneExtensionPickerVisible] =
@@ -72,6 +74,7 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
         .startsWith(searchTerm.toLowerCase());
       const countryPhoneExtension = filteredCountry.phoneExtension
         .toLowerCase()
+        .substring(1)
         .startsWith(searchTerm.toLowerCase());
       const countryNameAndPhoneExtensionMatch =
         `${filteredCountry.countryName.toLowerCase()} (${filteredCountry.phoneExtension.toLowerCase()})`.startsWith(
@@ -99,10 +102,10 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
         searchTerm.toLowerCase() !==
           filteredCountries[i].countryName.toLowerCase() &&
         searchTerm.toLowerCase() !==
-          filteredCountries[i].phoneExtension.toLowerCase() &&
+          filteredCountries[i].phoneExtension.toLowerCase().substring(1) &&
         searchTerm.toLowerCase() !==
-          filteredCountries[i].countryCode.toLowerCase() &&
-        searchTerm.toLowerCase() !==
+          //   filteredCountries[i].countryCode.toLowerCase() &&
+          // searchTerm.toLowerCase() !==
           `${filteredCountries[i].countryName.toLowerCase()} (${
             filteredCountries[i].phoneExtension
           })`
@@ -114,16 +117,19 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
         searchTerm.toLowerCase() ===
           filteredCountries[i].countryName.toLowerCase() ||
         searchTerm.toLowerCase() ===
-          filteredCountries[i].phoneExtension.toLowerCase() ||
+          filteredCountries[i].phoneExtension.toLowerCase().substring(1) ||
         searchTerm.toLowerCase() ===
-          filteredCountries[i].countryCode.toLowerCase() ||
-        searchTerm.toLowerCase() ===
+          //   filteredCountries[i].countryCode.toLowerCase() ||
+          // searchTerm.toLowerCase() ===
           `${filteredCountries[i].countryName.toLowerCase()} (${
             filteredCountries[i].phoneExtension
           })`
       ) {
         setSelectedCountryCode(filteredCountries[i].countryCode);
         setSelectedPhoneExtension(filteredCountries[i].phoneExtension);
+        setSearchTerm(
+          `${filteredCountries[i].countryName} (${filteredCountries[i].phoneExtension})`
+        );
         break;
         // setSearchTerm(
         //   `${filteredCountries[i].countryName} ${filteredCountries[i].phoneExtension}`
@@ -131,14 +137,29 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
       }
     }
 
-    console.log(filteredCountries);
-  }, [filteredCountries, searchTerm]);
+    // if (
+    //   filteredCountries.length === 1 &&
+    //   !searchTerm.split(" ").includes(filteredCountries[0].countryName)
+    // ) {
+    //   console.log(
+    //     "logged",
+    //     filteredCountries[0].countryName,
+    //     searchTerm,
+    //     !searchTerm.split(" ").includes(filteredCountries[0].countryName),
+    //     searchTerm.split(" ")
+    //   );
 
-  const foundCountry = countries.find(
-    (country: Country) => country.phoneExtension === defaultPhoneExtension
-  );
+    //   setSelectedCountryCode(filteredCountries[0].countryCode);
+    //   setSelectedPhoneExtension(filteredCountries[0].phoneExtension);
+    // }
+
+    console.log(filteredCountries);
+  }, [filteredCountries, searchTerm, selectedCountryCode]);
 
   useEffect(() => {
+    const foundCountry = countries.find(
+      (country: Country) => country.phoneExtension === defaultPhoneExtension
+    );
     if (foundCountry) {
       setSelectedPhoneExtension(foundCountry.phoneExtension);
       setSelectedCountryCode(foundCountry.phoneExtension);
@@ -146,7 +167,18 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
         `${foundCountry.countryName} (${foundCountry.phoneExtension})`
       );
     }
-  }, [foundCountry, defaultPhoneExtension]);
+  }, [countries, defaultPhoneExtension]);
+
+  // useEffect(() => {
+  //   const foundCountry = countries.find(
+  //     (country: Country) => country.countryCode === selectedCountryCode
+  //   );
+  //   if (foundCountry && filteredCountries.length === 1) {
+  //     setSearchTerm(
+  //       `${foundCountry.countryName} (${foundCountry.phoneExtension})`
+  //     );
+  //   }
+  // }, [selectedCountryCode, filteredCountries, countries]);
 
   useEffect(() => {
     console.log(
@@ -158,10 +190,18 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
     );
   }, [searchTerm, selectedCountryCode, selectedPhoneExtension]);
 
+  useEffect(() => {
+    if (selectedCountryCode === "") {
+      setSelectedCountryCode("");
+      setSelectedPhoneExtension("");
+      setSearchTerm("");
+    }
+  }, [selectedCountryCode]);
+
   return (
-    <div className="flex">
-      <div className={`relative`} ref={phoneExtensionPickerRef}>
-        <StyledInput
+    <div className="w-full flex">
+      <div className={`w-full relative ${z}`} ref={phoneExtensionPickerRef}>
+        {/* <StyledInput
           styledInputWidth="w-42"
           label={"Phone Extension Picker"}
           inputValue={searchTerm}
@@ -188,6 +228,87 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
           }
           isPicker={true}
           isPickerVisible={isPhoneExtensionPickerVisible}
+        /> */}
+        <StyledInputV2
+          unfocusedTextColor={
+            searchTerm.length === 0
+              ? "text-black"
+              : selectedPhoneExtension.length > 0
+              ? "text-green-700"
+              : "text-red-700"
+          }
+          unfocusedBorderColor={
+            searchTerm.length === 0
+              ? "border-black"
+              : selectedPhoneExtension.length > 0
+              ? "border-green-700"
+              : "border-red-700"
+          }
+          focusedTextColor={
+            searchTerm.length === 0
+              ? "focus:text-pink-500"
+              : selectedPhoneExtension.length > 0
+              ? "focus:text-green-500"
+              : "focus:text-red-500"
+          }
+          focusedBorderColor={
+            searchTerm.length === 0
+              ? "focus:border-pink-500"
+              : selectedPhoneExtension.length > 0
+              ? "focus:border-green-500"
+              : "focus:border-red-500"
+          }
+          focusedBorderColorIconArea={
+            searchTerm.length === 0
+              ? "border-pink-500"
+              : selectedPhoneExtension.length > 0
+              ? "border-green-500"
+              : "border-red-500"
+          }
+          unfocusedLabelColor={
+            searchTerm.length === 0
+              ? "text-black"
+              : selectedPhoneExtension.length > 0
+              ? "text-green-700"
+              : "text-red-700"
+          }
+          unfocusedLabelBackgroundColor="bg-white"
+          focusedLabelColor={
+            searchTerm.length === 0
+              ? "text-pink-500"
+              : selectedPhoneExtension.length > 0
+              ? "text-green-500"
+              : "text-red-500"
+          }
+          focusedLabelBackgroundColor="bg-white"
+          icon={
+            <div
+              className={`transition-transform transform ${
+                !isPhoneExtensionPickerVisible ? "rotate-0" : "rotate-180"
+              }`}
+            >
+              <RiArrowUpSLine
+                onClick={() => {
+                  // setIsUserPickerVisible(!isUserPickerVisible);
+                }}
+              />
+            </div>
+          }
+          onClickIcon={() => {
+            setIsPhoneExtensionPickerVisible(!isPhoneExtensionPickerVisible);
+          }}
+          isDisabled={false}
+          label={"ExtP"}
+          name={"phoneExtensionPicker"}
+          onChangeStyledInput={(event) => {
+            setSearchTerm(event.target.value);
+            setIsPhoneExtensionPickerVisible(true);
+          }}
+          onClickInput={() => {
+            setIsPhoneExtensionPickerVisible(!isPhoneExtensionPickerVisible);
+          }}
+          styledInputValue={searchTerm}
+          styledInputWidth="w-full"
         />
         {selectedCountryCode && (
           <span
@@ -204,47 +325,65 @@ export const PhoneExtensionPicker: FC<PhoneExtensionPickerProps> = ({
           {searchTerm === ""
             ? countries.map((country) => (
                 <li
-                  className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
+                  className="p-2 text-left text-xs transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
                   key={country.countryCode}
                   onClick={() => handleCountryClick(country)}
                 >
                   <div className="flex items-center space-x-1">
-                    <span
-                      className={`fi fi-${country.countryCode.toLowerCase()}`}
-                    ></span>
+                    <div className="w-32 flex items-center space-x-2">
+                      <span
+                        className={`fi fi-${country.countryCode.toLowerCase()}`}
+                      ></span>
 
-                    <span>{country.countryName}</span>
-                    <span>({country.phoneExtension})</span>
+                      <span>{country.countryName}</span>
+                    </div>
+                    <span className="w-10 h-6 flex items-center justify-center text-xs rounded-full border">
+                      {country.phoneExtension}
+                    </span>
                   </div>
                 </li>
               ))
             : filteredCountries.map((filteredCountry) => (
                 <li
-                  className="p-2 text-left text-sm transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
+                  className="p-2 text-left text-xs transition duration-200 ease-in-out hover:bg-pink-200 cursor-pointer border-b border-gray-300"
                   key={filteredCountry.countryCode}
                   onClick={() => handleCountryClick(filteredCountry)}
                 >
-                  <div className="flex items-center justify-between space-x-1">
-                    <div>
+                  {/* <div className="flex items-center space-x-1">
                       <span
                         className={`fi fi-${filteredCountry.countryCode.toLowerCase()}`}
                       ></span>
                       &nbsp;
                       <span>{filteredCountry.countryName}</span>&nbsp;
-                      <span>({filteredCountry.phoneExtension})</span>
+                      <span className="w-10 h-6 flex items-center justify-center text-xs rounded-full border">
+                        {filteredCountry.phoneExtension}
+                      </span>
+                    </div> */}
+                  <div className="flex items-center space-x-1">
+                    <div className="w-32 flex items-center space-x-2">
+                      <span
+                        className={`fi fi-${filteredCountry.countryCode.toLowerCase()}`}
+                      ></span>
+
+                      <span>{filteredCountry.countryName}</span>
                     </div>
-                    <div>
-                      {(searchTerm.toLowerCase() ===
-                        filteredCountry.countryName.toLowerCase() ||
-                        searchTerm.toLowerCase() ===
-                          filteredCountry.phoneExtension.toLowerCase() ||
-                        searchTerm.toLowerCase() ===
-                          filteredCountry.countryCode.toLowerCase() ||
-                        searchTerm.toLowerCase() ===
-                          `${filteredCountry.countryName.toLowerCase()} (${
-                            filteredCountry.phoneExtension
-                          })`) && <TiTick />}
-                    </div>
+                    <span className="w-10 h-6 flex items-center justify-center text-xs rounded-full border">
+                      {filteredCountry.phoneExtension}
+                    </span>
+
+                    {/* <div>
+                      {filteredCountries.length === 1 &&
+                        (searchTerm.toLowerCase() ===
+                          filteredCountry.countryName.toLowerCase() ||
+                          searchTerm.toLowerCase() ===
+                            filteredCountry.phoneExtension.toLowerCase() ||
+                          searchTerm.toLowerCase() ===
+                            filteredCountry.countryCode.toLowerCase() ||
+                          searchTerm.toLowerCase() ===
+                            `${filteredCountry.countryName.toLowerCase()} (${
+                              filteredCountry.phoneExtension
+                            })`) && <TiTick />}
+                    </div> */}
                   </div>
                 </li>
               ))}
