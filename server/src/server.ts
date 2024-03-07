@@ -369,13 +369,22 @@ const buildServer = async () => {
     drizzleInstance,
     userRoleMappingTable
   );
+  // console.log(
+  //   await userRoleMappingRepo.getAllPatients(
+  //     ["patientCNP"],
+  //     "",
+  //     "desc:patientCNP",
+  //     0,
+  //     5
+  //   )
+  // );
   console.log(
-    await userRoleMappingRepo.getAllPatients(
-      ["patientCNP"],
-      "33321",
+    await userRoleMappingRepo.getAllDoctors(
+      ["medicalSpecialityName"],
+      "",
       "asc:userForename",
-      99999,
-      0
+      0,
+      500
     )
   );
 

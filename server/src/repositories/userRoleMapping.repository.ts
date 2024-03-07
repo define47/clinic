@@ -25,6 +25,7 @@ import { PgColumn } from "drizzle-orm/pg-core";
 import {
   getAdminRoleIdEnv,
   getDoctorRoleIdEnv,
+  getNurseRoleIdEnv,
   getPatientRoleIdEnv,
   getReceptionistRoleIdEnv,
 } from "../utils/dotenv";
@@ -131,10 +132,22 @@ export class UserRoleMappingRepository
     const columnToOrderByColumn = columnToOrderBy.split(":")[1];
     const columnToOrderByDirection = columnToOrderBy.split(":")[0];
 
-    if (columnToOrderByDirection === "asc") {
-      order = asc(userTable[columnToOrderByColumn as keyof User]);
-    } else if (columnToOrderByDirection === "desc")
-      order = desc(userTable[columnToOrderByColumn as keyof User]);
+    if (
+      columnToOrderByColumn === "userForename" ||
+      columnToOrderByColumn === "userSurname" ||
+      columnToOrderByColumn === "userEmail" ||
+      columnToOrderByColumn === "userPhoneNumber"
+    ) {
+      if (columnToOrderByDirection === "asc") {
+        order = asc(userTable[columnToOrderByColumn as keyof User]);
+      } else if (columnToOrderByDirection === "desc")
+        order = desc(userTable[columnToOrderByColumn as keyof User]);
+    } else if (columnToOrderByColumn === "patientCNP") {
+      if (columnToOrderByDirection === "asc") {
+        order = asc(patientTable[columnToOrderByColumn as keyof Patient]);
+      } else if (columnToOrderByDirection === "desc")
+        order = desc(patientTable[columnToOrderByColumn as keyof Patient]);
+    }
 
     const totalCountPatients = await this._drizzle
       .select({ totalCount: count() })
@@ -178,6 +191,326 @@ export class UserRoleMappingRepository
     return {
       tableData: patients,
       totalCount: totalCountPatients[0].totalCount,
+      totalPages: Math.ceil(totalCountPatients[0].totalCount / limit) - 1,
+    };
+  }
+
+  public async getAllReceptionists(
+    columnsToSearchIn: string[],
+    searchQuery: string,
+    columnToOrderBy: string,
+    page: number,
+    limit: number
+  ) {
+    let firstColumnToSearchIn: PgColumn<any>;
+    let secondColumnToSearchIn: PgColumn<any>;
+    firstColumnToSearchIn = userTable.userForename;
+    secondColumnToSearchIn = userTable.userForename;
+    if (columnsToSearchIn.length === 1) {
+      if (
+        columnsToSearchIn[0] === "userForename" ||
+        columnsToSearchIn[0] === "userSurname" ||
+        columnsToSearchIn[0] === "userEmail" ||
+        columnsToSearchIn[0] === "userPhoneNumber"
+      )
+        firstColumnToSearchIn = userTable[columnsToSearchIn[0] as keyof User];
+    } else if (columnsToSearchIn.length === 2) {
+      firstColumnToSearchIn = userTable[columnsToSearchIn[0] as keyof User];
+      secondColumnToSearchIn = userTable[columnsToSearchIn[1] as keyof User];
+    }
+
+    const filter = and(
+      eq(userRoleMappingTable.roleId, getReceptionistRoleIdEnv()),
+      columnsToSearchIn.length === 1
+        ? ilike(firstColumnToSearchIn, `${searchQuery}%`)
+        : columnsToSearchIn.length === 2
+        ? sql`CONCAT(${firstColumnToSearchIn}, ' ', ${secondColumnToSearchIn}) ILIKE ${`${searchQuery}%`}`
+        : sql`TRUE`
+    );
+
+    let order = asc(userTable.userForename);
+    const columnToOrderByColumn = columnToOrderBy.split(":")[1];
+    const columnToOrderByDirection = columnToOrderBy.split(":")[0];
+
+    if (
+      columnToOrderByColumn === "userForename" ||
+      columnToOrderByColumn === "userSurname" ||
+      columnToOrderByColumn === "userEmail" ||
+      columnToOrderByColumn === "userPhoneNumber"
+    ) {
+      if (columnToOrderByDirection === "asc") {
+        order = asc(userTable[columnToOrderByColumn as keyof User]);
+      } else if (columnToOrderByDirection === "desc")
+        order = desc(userTable[columnToOrderByColumn as keyof User]);
+    }
+
+    const totalCountReceptionists = await this._drizzle
+      .select({ totalCount: count() })
+      .from(this._table)
+      .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
+      .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
+      .where(filter);
+
+    const offset = page * limit;
+
+    const receptionists = await this._drizzle
+      .select({
+        userId: userTable.userId,
+        userForename: userTable.userForename,
+        userSurname: userTable.userSurname,
+        userEmail: userTable.userEmail,
+        userPhoneNumber: userTable.userPhoneNumber,
+        userGender: userTable.userGender,
+        userDateOfBirth: userTable.userDateOfBirth,
+        userAddress: userTable.userAddress,
+        userRoleId: userRoleMappingTable.roleId,
+        userRoleName: roleTable.roleName,
+      })
+      .from(this._table)
+      .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
+      .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
+      .where(filter)
+      .orderBy(order)
+      .offset(offset)
+      .limit(limit);
+
+    return {
+      tableData: receptionists,
+      totalCount: totalCountReceptionists[0].totalCount,
+      totalPages: Math.ceil(totalCountReceptionists[0].totalCount / limit) - 1,
+    };
+  }
+
+  public async getAllNurses(
+    columnsToSearchIn: string[],
+    searchQuery: string,
+    columnToOrderBy: string,
+    page: number,
+    limit: number
+  ) {
+    let firstColumnToSearchIn: PgColumn<any>;
+    let secondColumnToSearchIn: PgColumn<any>;
+    firstColumnToSearchIn = userTable.userForename;
+    secondColumnToSearchIn = userTable.userForename;
+    if (columnsToSearchIn.length === 1) {
+      if (
+        columnsToSearchIn[0] === "userForename" ||
+        columnsToSearchIn[0] === "userSurname" ||
+        columnsToSearchIn[0] === "userEmail" ||
+        columnsToSearchIn[0] === "userPhoneNumber"
+      )
+        firstColumnToSearchIn = userTable[columnsToSearchIn[0] as keyof User];
+    } else if (columnsToSearchIn.length === 2) {
+      firstColumnToSearchIn = userTable[columnsToSearchIn[0] as keyof User];
+      secondColumnToSearchIn = userTable[columnsToSearchIn[1] as keyof User];
+    }
+
+    const filter = and(
+      eq(userRoleMappingTable.roleId, getNurseRoleIdEnv()),
+      columnsToSearchIn.length === 1
+        ? ilike(firstColumnToSearchIn, `${searchQuery}%`)
+        : columnsToSearchIn.length === 2
+        ? sql`CONCAT(${firstColumnToSearchIn}, ' ', ${secondColumnToSearchIn}) ILIKE ${`${searchQuery}%`}`
+        : sql`TRUE`
+    );
+
+    let order = asc(userTable.userForename);
+    const columnToOrderByColumn = columnToOrderBy.split(":")[1];
+    const columnToOrderByDirection = columnToOrderBy.split(":")[0];
+
+    if (
+      columnToOrderByColumn === "userForename" ||
+      columnToOrderByColumn === "userSurname" ||
+      columnToOrderByColumn === "userEmail" ||
+      columnToOrderByColumn === "userPhoneNumber"
+    ) {
+      if (columnToOrderByDirection === "asc") {
+        order = asc(userTable[columnToOrderByColumn as keyof User]);
+      } else if (columnToOrderByDirection === "desc")
+        order = desc(userTable[columnToOrderByColumn as keyof User]);
+    }
+
+    const totalCountReceptionists = await this._drizzle
+      .select({ totalCount: count() })
+      .from(this._table)
+      .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
+      .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
+      .where(filter);
+
+    const offset = page * limit;
+
+    const receptionists = await this._drizzle
+      .select({
+        userId: userTable.userId,
+        userForename: userTable.userForename,
+        userSurname: userTable.userSurname,
+        userEmail: userTable.userEmail,
+        userPhoneNumber: userTable.userPhoneNumber,
+        userGender: userTable.userGender,
+        userDateOfBirth: userTable.userDateOfBirth,
+        userAddress: userTable.userAddress,
+        userRoleId: userRoleMappingTable.roleId,
+        userRoleName: roleTable.roleName,
+      })
+      .from(this._table)
+      .innerJoin(roleTable, eq(userRoleMappingTable.roleId, roleTable.roleId))
+      .innerJoin(userTable, eq(userRoleMappingTable.userId, userTable.userId))
+      .where(filter)
+      .orderBy(order)
+      .offset(offset)
+      .limit(limit);
+
+    return {
+      tableData: receptionists,
+      totalCount: totalCountReceptionists[0].totalCount,
+      totalPages: Math.ceil(totalCountReceptionists[0].totalCount / limit) - 1,
+    };
+  }
+
+  public async getAllDoctors(
+    columnsToSearchIn: string[],
+    searchQuery: string,
+    columnToOrderBy: string,
+    page: number,
+    limit: number
+  ) {
+    let firstColumnToSearchIn: PgColumn<any>;
+    let secondColumnToSearchIn: PgColumn<any>;
+    firstColumnToSearchIn = userTable.userForename;
+    secondColumnToSearchIn = userTable.userForename;
+    if (columnsToSearchIn.length === 1) {
+      if (
+        columnsToSearchIn[0] === "userForename" ||
+        columnsToSearchIn[0] === "userSurname" ||
+        columnsToSearchIn[0] === "userEmail" ||
+        columnsToSearchIn[0] === "userPhoneNumber"
+      )
+        firstColumnToSearchIn = userTable[columnsToSearchIn[0] as keyof User];
+      else if (columnsToSearchIn[0] === "medicalSpecialityName")
+        firstColumnToSearchIn =
+          medicalSpecialityTable[
+            columnsToSearchIn[0] as keyof MedicalSpeciality
+          ];
+    } else if (columnsToSearchIn.length === 2) {
+      firstColumnToSearchIn = userTable[columnsToSearchIn[0] as keyof User];
+      secondColumnToSearchIn = userTable[columnsToSearchIn[1] as keyof User];
+    }
+
+    const filter = and(
+      columnsToSearchIn.length === 1
+        ? ilike(firstColumnToSearchIn, `${searchQuery}%`)
+        : columnsToSearchIn.length === 2
+        ? sql`CONCAT(${firstColumnToSearchIn}, ' ', ${secondColumnToSearchIn}) ILIKE ${`${searchQuery}%`}`
+        : sql`TRUE`
+    );
+
+    let order = asc(userTable.userForename);
+    const columnToOrderByColumn = columnToOrderBy.split(":")[1];
+    const columnToOrderByDirection = columnToOrderBy.split(":")[0];
+    let medicalSpecialityRankOrder = desc(
+      doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality
+    );
+
+    if (
+      columnToOrderByColumn === "userForename" ||
+      columnToOrderByColumn === "userSurname" ||
+      columnToOrderByColumn === "userEmail" ||
+      columnToOrderByColumn === "userPhoneNumber"
+    ) {
+      if (columnToOrderByDirection === "asc")
+        order = asc(userTable[columnToOrderByColumn as keyof User]);
+      else if (columnToOrderByDirection === "desc")
+        order = desc(userTable[columnToOrderByColumn as keyof User]);
+    } else if (columnToOrderBy === "medicalSpecialityName") {
+      if (columnToOrderByDirection === "asc") {
+        order = asc(
+          medicalSpecialityTable[
+            columnToOrderByColumn as keyof MedicalSpeciality
+          ]
+        );
+      } else if (columnToOrderByDirection === "desc")
+        order = desc(
+          medicalSpecialityTable[
+            columnToOrderByColumn as keyof MedicalSpeciality
+          ]
+        );
+    }
+
+    const totalCountDoctors = await this._drizzle
+      .select({
+        totalCount: count(),
+      })
+      .from(doctorMedicalSpecialityMappingTable)
+      .innerJoin(
+        userTable,
+        eq(doctorMedicalSpecialityMappingTable.userId, userTable.userId)
+      )
+      .innerJoin(
+        medicalSpecialityTable,
+        eq(
+          doctorMedicalSpecialityMappingTable.medicalSpecialityId,
+          medicalSpecialityTable.medicalSpecialityId
+        )
+      )
+      .where(filter);
+
+    const offset = page * limit;
+
+    const doctors = await this._drizzle
+      .select({
+        userId: userTable.userId,
+        userForename: userTable.userForename,
+        userSurname: userTable.userSurname,
+        userEmail: userTable.userEmail,
+        userPhoneNumber: userTable.userPhoneNumber,
+        userGender: userTable.userGender,
+        userDateOfBirth: userTable.userDateOfBirth,
+        userAddress: userTable.userAddress,
+        medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
+        medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
+        isPrimaryMedicalSpeciality:
+          doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
+        isSecondaryMedicalSpeciality:
+          doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
+        isTertiaryMedicalSpeciality:
+          doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
+        // medicalSpeciality: {
+        //   medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
+        //   medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
+        //   isPrimaryMedicalSpeciality:
+        //     doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
+        //   isSecondaryMedicalSpeciality:
+        //     doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
+        //   isTertiaryMedicalSpeciality:
+        //     doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
+        // },
+      })
+      .from(doctorMedicalSpecialityMappingTable)
+      .innerJoin(
+        userTable,
+        eq(doctorMedicalSpecialityMappingTable.userId, userTable.userId)
+      )
+      .innerJoin(
+        medicalSpecialityTable,
+        eq(
+          doctorMedicalSpecialityMappingTable.medicalSpecialityId,
+          medicalSpecialityTable.medicalSpecialityId
+        )
+      )
+      .where(filter)
+      .orderBy(
+        // desc(doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality),
+        // asc(medicalSpecialityTable.medicalSpecialityName)
+        medicalSpecialityRankOrder,
+        order
+      )
+      .offset(offset)
+      .limit(limit);
+
+    return {
+      tableData: doctors,
+      totalCount: totalCountDoctors[0].totalCount,
+      totalPages: Math.ceil(totalCountDoctors[0].totalCount / limit) - 1,
     };
   }
 
