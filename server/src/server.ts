@@ -386,15 +386,25 @@ const buildServer = async () => {
     0,
     500
   );
-  console.log(doctors.tableData[0].userId);
-  console.log(doctors.tableData[0].userForename);
-  console.log(doctors.tableData[0].specialities);
-  console.log(doctors.tableData[1].userId);
-  console.log(doctors.tableData[1].userForename);
-  console.log(doctors.tableData[1].specialities);
-  console.log(doctors.tableData[2].userId);
-  console.log(doctors.tableData[2].userForename);
-  console.log(doctors.tableData[2].specialities);
+
+  // console.log(doctors);
+  for (let i = 0; i < doctors.tableData.length; i++) {
+    console.log(
+      `${doctors.tableData[i].userId} ${doctors.tableData[i].userForename} ${doctors.tableData[i].userSurname}`
+    );
+    console.log(doctors.tableData[i].specialities);
+    console.log(doctors.tableData[i].roles);
+  }
+
+  // console.log(doctors.tableData[0].userId);
+  // console.log(doctors.tableData[0].userForename);
+  // console.log(doctors.tableData[0].specialities);
+  // console.log(doctors.tableData[1].userId);
+  // console.log(doctors.tableData[1].userForename);
+  // console.log(doctors.tableData[1].specialities);
+  // console.log(doctors.tableData[2].userId);
+  // console.log(doctors.tableData[2].userForename);
+  // console.log(doctors.tableData[2].specialities);
 
   return fastifyServer;
 };

@@ -466,18 +466,40 @@ export class UserRoleMappingRepository
         userGender: userTable.userGender,
         userDateOfBirth: userTable.userDateOfBirth,
         userAddress: userTable.userAddress,
-        // medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
-        // medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
-        // isPrimaryMedicalSpeciality:
-        //   doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
-        // isSecondaryMedicalSpeciality:
-        //   doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
-        // isTertiaryMedicalSpeciality:
-        //   doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
 
         // specialities: sql`array_agg(${medicalSpecialityTable.medicalSpecialityName} ORDER BY ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality} DESC, ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality} DESC, ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality} DESC)`,
 
-        specialities: sql`json_agg(json_build_object('medicalSpecialityId', ${medicalSpecialityTable.medicalSpecialityId}, 'medicalSpecialityName',${medicalSpecialityTable.medicalSpecialityName}, 'isPrimaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality} , 'isSecondaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality} , 'isTertiaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality}) ORDER BY ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality} DESC, ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality} DESC, ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality} DESC)`,
+        // specialities: sql`json_agg(json_build_object('medicalSpecialityId', ${medicalSpecialityTable.medicalSpecialityId}, 'medicalSpecialityName',${medicalSpecialityTable.medicalSpecialityName}, 'isPrimaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality} , 'isSecondaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality} , 'isTertiaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality}) ORDER BY ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality} DESC, ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality} DESC, ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality} DESC)`,
+
+        // specialities: sql`
+        // json_agg(
+        //    json_build_object(
+        //   'doctorMedicalSpecialityMappingId', ${doctorMedicalSpecialityMappingTable.doctorMedicalSpecialityMappingId},
+        //   'medicalSpecialityId', ${medicalSpecialityTable.medicalSpecialityId},
+        //   'medicalSpecialityName',${medicalSpecialityTable.medicalSpecialityName},
+        //   'isPrimaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality},
+        //   'isSecondaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality},
+        //   'isTertiaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality}
+        //   )
+        // ORDER BY
+        // ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality} DESC,
+        // ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality} DESC,
+        // ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality} DESC
+        // )`,
+
+        specialities: sql`
+          CAST(
+            CONCAT('[', STRING_AGG(DISTINCT json_build_object(
+              'doctorMedicalSpecialityMappingId', ${doctorMedicalSpecialityMappingTable.doctorMedicalSpecialityMappingId},
+              'medicalSpecialityId', ${medicalSpecialityTable.medicalSpecialityId},
+              'medicalSpecialityName', ${medicalSpecialityTable.medicalSpecialityName},
+              'isPrimaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality},
+              'isSecondaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality},
+              'isTertiaryMedicalSpeciality', ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality}
+            )::TEXT, ','), ']') AS JSON)
+        `,
+
+        roles: sql`array_agg(DISTINCT ${roleTable.roleName})`,
       })
       .from(doctorMedicalSpecialityMappingTable)
       .innerJoin(
@@ -491,16 +513,26 @@ export class UserRoleMappingRepository
           medicalSpecialityTable.medicalSpecialityId
         )
       )
+      .innerJoin(
+        userRoleMappingTable,
+        eq(userRoleMappingTable.userId, userTable.userId)
+      )
+      .innerJoin(roleTable, eq(roleTable.roleId, userRoleMappingTable.roleId))
       .where(filter)
       .orderBy(
         // desc(doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality),
-        // asc(medicalSpecialityTable.medicalSpecialityName)
+        // asc(medicalSpecialityTable.medicalSpecialityName),
         // medicalSpecialityRankOrder,
         order
       )
       .offset(offset)
       .limit(limit)
-      .groupBy(userTable.userId);
+      .groupBy(
+        userTable.userId
+
+        // doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
+        // medicalSpecialityTable.medicalSpecialityName
+      );
 
     return {
       tableData: doctors,
