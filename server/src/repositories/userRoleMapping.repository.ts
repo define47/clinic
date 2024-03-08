@@ -466,14 +466,31 @@ export class UserRoleMappingRepository
         userGender: userTable.userGender,
         userDateOfBirth: userTable.userDateOfBirth,
         userAddress: userTable.userAddress,
-        medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
-        medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
-        isPrimaryMedicalSpeciality:
-          doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
-        isSecondaryMedicalSpeciality:
-          doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
-        isTertiaryMedicalSpeciality:
-          doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
+        // medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
+        // medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
+        // isPrimaryMedicalSpeciality:
+        //   doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality,
+        // isSecondaryMedicalSpeciality:
+        //   doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality,
+        // isTertiaryMedicalSpeciality:
+        //   doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality,
+
+        specialities: sql`array_agg(${medicalSpecialityTable.medicalSpecialityName} ORDER BY ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality} DESC, ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality} DESC, ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality} DESC)`,
+        //   specialities: sql`
+        // array_agg(
+        //   CASE
+        //     WHEN ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality} THEN 'primary'
+        //     WHEN ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality} THEN 'secondary'
+        //     WHEN ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality} THEN 'tertiary'
+        //   END
+        //   ORDER BY
+        //     CASE
+        //       WHEN ${doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality} THEN 1
+        //       WHEN ${doctorMedicalSpecialityMappingTable.isSecondaryMedicalSpeciality} THEN 2
+        //       WHEN ${doctorMedicalSpecialityMappingTable.isTertiaryMedicalSpeciality} THEN 3
+        //     END
+        // ) as specialities`,
+
         // medicalSpeciality: {
         //   medicalSpecialityId: medicalSpecialityTable.medicalSpecialityId,
         //   medicalSpecialityName: medicalSpecialityTable.medicalSpecialityName,
@@ -501,11 +518,12 @@ export class UserRoleMappingRepository
       .orderBy(
         // desc(doctorMedicalSpecialityMappingTable.isPrimaryMedicalSpeciality),
         // asc(medicalSpecialityTable.medicalSpecialityName)
-        medicalSpecialityRankOrder,
+        // medicalSpecialityRankOrder,
         order
       )
       .offset(offset)
-      .limit(limit);
+      .limit(limit)
+      .groupBy(userTable.userId);
 
     return {
       tableData: doctors,

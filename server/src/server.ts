@@ -378,15 +378,23 @@ const buildServer = async () => {
   //     5
   //   )
   // );
-  console.log(
-    await userRoleMappingRepo.getAllDoctors(
-      ["medicalSpecialityName"],
-      "",
-      "asc:userForename",
-      0,
-      500
-    )
+
+  const doctors = await userRoleMappingRepo.getAllDoctors(
+    ["medicalSpecialityName"],
+    "",
+    "asc:userForename",
+    0,
+    500
   );
+  console.log(doctors.tableData[0].userId);
+  console.log(doctors.tableData[0].userForename);
+  console.log(doctors.tableData[0].specialities);
+  console.log(doctors.tableData[1].userId);
+  console.log(doctors.tableData[1].userForename);
+  console.log(doctors.tableData[1].specialities);
+  console.log(doctors.tableData[2].userId);
+  console.log(doctors.tableData[2].userForename);
+  console.log(doctors.tableData[2].specialities);
 
   return fastifyServer;
 };
