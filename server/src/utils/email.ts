@@ -9,7 +9,7 @@ export const sendEmailFromReception = (
   html: string
 ) => {
   sgMail.setApiKey(
-    "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"
+    ""
   );
   const msg = {
     to: recipientEmail,
